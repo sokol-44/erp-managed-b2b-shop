@@ -109,8 +109,8 @@ class Framework_Data extends HTML {
       return $this->draw_pull_down_menu('type', $attrib_type_list, $selected, $parameters);
    }
 
-   function show_hotels_list($selected_in = '', $tochose = false, $parameters_in = array()) {
-      $hotels = Data::get_hotels_list();
+   function show_clients_list($selected_in = '', $tochose = false, $parameters_in = array()) {
+      $clients = Data::get_client_list();
       $Lang = Lang::g_global();
 
       $parameters = self::__prepare_params($parameters_in);
@@ -123,13 +123,13 @@ class Framework_Data extends HTML {
          	'text' => $Lang->_('CHOSE ONE'));
       }
 
-      foreach($hotels as $hotel) {
+      foreach($clients as $client) {
          $data[] = array(
-         	'id' => $hotel['id_hotel'],
-         	'text' => $this->output_string($hotel['name'] . ' - ' . $hotel['description']) );
+         	'id' => $client['id_client'],
+         	'text' => $this->output_string($client['name'] . ' - ' . $client['description']) );
       }
 
-      return $this->draw_pull_down_menu('id_hotel', $data, $selected, $parameters);
+      return $this->draw_pull_down_menu('id_client', $data, $selected, $parameters);
 
    }
 

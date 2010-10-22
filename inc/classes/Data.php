@@ -16,11 +16,10 @@ if( !defined('_I_INIT') ) die();
  * @author ms
  *
  */
-class Data {
+class Data extends Data_Person {
    static $result_array;
    static $result_size;
    static $page, $com;
-
 
 
    /**
