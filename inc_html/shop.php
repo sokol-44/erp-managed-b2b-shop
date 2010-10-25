@@ -26,7 +26,8 @@ if( !defined('_I_INIT') ) die();
 <?php $Page->put_head_js(); ?>
 </head>
 <body>
-<table border="1" cellspacing="2" cellpadding="2" width="975" height="100%" style="table-layout: fixed;" align="center">
+<!--  style="table-layout: fixed;"  -->
+<table border="1" cellspacing="2" cellpadding="2" width="975" height="100%" align="center">
 <tr>
 	<td width="975" colspan="3"><?php echo $Page->put_masterhead_html();?></td>
 </tr>

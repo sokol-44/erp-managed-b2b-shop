@@ -158,6 +158,8 @@ class Page {
       //TODO check if exist
       $F = Framework::g_global();
       $P = Person::g_global();
+      $Page = Page::g_global();
+      $Lang = Lang::g_global();
       switch( $type ) {
          case 'COM': include(DIR_INC_COMPONENTS . DS . $name . '.php');
          break;

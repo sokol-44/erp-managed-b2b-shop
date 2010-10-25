@@ -58,7 +58,7 @@ class SplitPage {
       } else {
          $count = db_fetch_array( db_query("select count(*) as total from (" . $query . " ) as count") );
       }
-
+echo " # $count[total] # ";
       if( $count ) {
          $this->number_of_rows = (int)$count['total'];
       } else {

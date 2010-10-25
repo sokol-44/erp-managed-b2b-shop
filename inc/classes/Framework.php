@@ -117,6 +117,7 @@ class Framework extends Framework_Data {
       } else {
          $this->RSA[$name] = array();
       }
+      return $this->RSA[$name];
    }
    
    function check_request_split_array($name, $value) {

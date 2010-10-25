@@ -61,6 +61,7 @@ include(DIR_INC_CLASSES . DS . 'Framework.php');
 include(DIR_INC_CLASSES . DS . 'Info.php');
 include(DIR_INC_CLASSES . DS . 'SplitPage.php');
 include(DIR_INC_CLASSES . DS . 'Page.php');
+include(DIR_INC_CLASSES . DS . 'Lang.php');
 
 
 $F = new Framework();

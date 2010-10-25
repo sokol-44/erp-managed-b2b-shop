@@ -23,6 +23,11 @@ foreach( $config['TABLES'] as $cnf_table => $local_table) {
 	define('TBL_' . $cnf_table, $local_table);
 }
 
+//COM names
+foreach( $config['CFG_COM'] as $cnf_com => $com_name) {
+	define('CFG_COM_' . $cnf_com, $com_name);
+}
+
 //directorie structure
 foreach( $config['DIRECTORIES'] as $cnf_dir => $local_dir) {
 	define('DIR_INC_' . $cnf_dir, _I_ROOT_DIR . DS . str_replace('#', DS, $local_dir) );
@@ -51,7 +56,7 @@ define('DIR_WWW_JS', $dir_www_inc . $dir_www['HTTP_JS_CATALOG']);
 define('DIR_WWW_IMG', $dir_www_inc . $dir_www['HTTP_IMG_CATALOG']);
 define('DIR_LOCAL_CSS',  '..\\' . $dir_www['HTTP_INC_CATALOG'] . $dir_www['HTTP_CSS_CATALOG']);
 define('DIR_LOCAL_JS', '..\\' . $dir_www['HTTP_INC_CATALOG'] . $dir_www['HTTP_JS_CATALOG']);
-define('DIR_LOCAL_IMG', '..\\' . $dir_www['HTTP_INC_CATALOG'] . $dir_www['HTTP_IMG_CATALOG']);
+define('DIR_LOCAL_IMG', $dir_www['HTTP_INC_CATALOG'] . $dir_www['HTTP_IMG_CATALOG']);
 
 unset($dir_www, $dir_www_inc);
 

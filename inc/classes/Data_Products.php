@@ -10,7 +10,32 @@ if( !defined('_I_INIT') ) die();
 
 class Data_Products {
 
-   function get_categories_list( array $filters ) {
+    
+   static function get_categories_product_list(array $filters = array(), array $sort = array()) {
+      global $category_tree;
+      $F = Framework::g_global();
+      $SP = SplitPage::g_global();
+      
+      if( false && SHOW_PRODUCTS_FROM_SUBCATEGORIES == 'true' ) {
+         // TODO
+         // Show products from subcategories
+      } else {
+         $catpath = $F->request_split_array('catpath', ',', 'GET');
+         $id_category = end($catpath);
+         //$query = 'select p.id_product, p.name, SUBSTR(p.description,45) as description, p.picture_small_url,
+			$query = 'select p.id_product, p.name, p.id_product as description, p.picture_small_url,
+         p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+         from ' . TBL_SHOP_PRODUCT . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+         ( p.id_product = p2c.id_product )
+         where p2c.id_category = ' . (int)$id_category;
+			$sp_query = $SP->prepare_sql( $query );
+      }
+      $res = db_query( $sp_query );
+      return db_result_array($res);
+   }
+    
+    
+   static function get_categories_list( array $filters ) {
 
       $query = 'SELECT c.id_category, c.name, c.description, c.id_category_parent, COUNT(p2c.id_category) AS products_in_category
    	FROM ' . TBL_SHOP_CATEGORY . ' c LEFT OUTER JOIN (
@@ -24,9 +49,10 @@ class Data_Products {
    }
 
    static function get_categorie_tree( $filters = array(), $purge_empty = false ) {
-      $category_list = self::get_categories_list( $filters );
-      $tree = __categories_make_tree('0', '0', '', $category_list);
+      $category_list = self::get_categories_list($filters);
+      $category_tree = self::__categories_make_tree($category_list);
       //if( $purge_empty )
+      return $category_tree;
 
    }
 
@@ -48,7 +74,7 @@ class Data_Products {
       return $tree;
    }
 
-   static function __categories_make_tree ($category_list, $level = 0, $id_category_parent = 0, $path = '') {
+   private static function __categories_make_tree ($category_list, $level = 0, $id_category_parent = 0, $path = '') {
 
       if( $id_category_parent > 0 ) {
          $path .= $id_category_parent . '_';

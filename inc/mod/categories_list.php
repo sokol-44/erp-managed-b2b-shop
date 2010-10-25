@@ -3,10 +3,8 @@ $filers = array();
 
 $F->request_split_array('catpath', ',', 'GET');
 
-$category_list = Data::get_categories_list($filers);
-$tree = Data::__categories_make_tree($category_list);
-echo show_category($tree);
-
+$category_tree = Data::get_categorie_tree();
+echo show_category($category_tree);
 
 function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
    $F = Framework::g_global();
@@ -26,7 +24,7 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
 
          $categories_string_tmp =
 			'<div class="cat_href">' . str_repeat('&nbsp;&nbsp;', $category['level']) .
-			'<a href="' . $F->make_link('catalog', $F->add_local_get('catpath', $category['path'], $GET_edit)) . '"';
+			'<a href="' . $F->make_link(CFG_COM_CATALOG, $F->add_local_get('catpath', $category['path'], $GET_edit)) . '"';
 
          if( $name_long != '') {
             $categories_string_tmp .= ' title="' . $category['name'] . ' # ' . $name_long . '">';

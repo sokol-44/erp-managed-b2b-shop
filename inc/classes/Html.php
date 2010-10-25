@@ -3,7 +3,7 @@
  * HTML.php Global initialization file
  * Copyright MichaÅ‚ SokoÅ‚owski 2010
  *
- * @author Micha³ Soko³owski <msokolowski@example.com>
+ * @author Michaï¿½ Sokoï¿½owski <msokolowski@example.com>
  */
 
 if( !defined('_I_INIT') ) die();
