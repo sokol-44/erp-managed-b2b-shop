@@ -1,6 +1,6 @@
 <?php
 /**
- * Data.php Global initialization file
+ * Page.php Global initialization file
  * Copyright Michał Sokołowski 2010
  *
  * @author Michał Sokołowski <msokolowski@example.com>
@@ -93,16 +93,6 @@ class Page {
          implode(NL, $this->js_body) . NL .
           '</script>' . NL;
       }
-   }
-
-   public function put_second_head_html() {
-      $Info = Info::g_global();
-      return $Info->output();
-   }
-
-   public function put_bottom_html() {
-      $SP = SplitPage::g_global();
-      return $SP->display_links();
    }
 
    public function add_jq_init($script) {

@@ -1,6 +1,6 @@
 <?php
 /**
- * Data.php Global initialization file
+ * Data_Rights.php
  * Copyright Michał Sokołowski 2010
  *
  * @author Michał Sokołowski <msokolowski@example.com>
@@ -16,7 +16,7 @@ if( !defined('_I_INIT') ) die();
  * @author ms
  *
  */
-class Data_Rights {
+class Data_Rights extends Data_Products {
 
    function get_rights_list($scope = '') {
       $F = Framework::g_global();

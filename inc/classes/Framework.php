@@ -3,7 +3,7 @@
  * Framework.php Global initialization file
  * Copyright MichaÅ‚ SokoÅ‚owski 2010
  *
- * @author Micha³ Soko³owski <msokolowski@example.com>
+ * @author Michaï¿½ Sokoï¿½owski <msokolowski@example.com>
  */
 
 if( !defined('_I_INIT') ) die();
@@ -19,6 +19,8 @@ class Framework extends Framework_Data {
    function __construct() {
       $this->GET = array();
       $this->POST = array();
+      $this->REQUEST = array();
+      $this->RSA = array();
       $this->form = 0;
 
       $this->_request_normalize();
@@ -65,7 +67,7 @@ class Framework extends Framework_Data {
       if( $this->not_null($component) ) {
          $parameters_array_raw = array('com' => $component);
       } else {
-         $parameters_array_raw = array('com' => DEFAULT_PAGE);
+         $parameters_array_raw = array('com' => DEFAULT_COM);
       }
 
       if ($this->not_null($arguments)) {
@@ -73,7 +75,7 @@ class Framework extends Framework_Data {
             unset($arguments['com']);
             $parameters_array_raw = array_merge($parameters_array_raw, $arguments);
          } else {
-            $parameters_array_raw[] = array($arguments => $arguments);
+            $parameters_array_raw[] = self::__prepare_params($arguments);
          }
       }
 
@@ -106,6 +108,26 @@ class Framework extends Framework_Data {
       return $this->GET_array;
    }
 
+
+   function request_split_array($name, $delimeter = ',', $method = 'REQUEST') {
+      if( $this->check_get($name) && $this->not_null( $delimeter ) &&
+      ( $method == 'GET' || $method == 'POST' || $method == 'REQUEST' ) ) {
+         $tmp_array = $this->${method};
+         $this->RSA[$name] = explode($delimeter, $tmp_array[$name]);
+      } else {
+         $this->RSA[$name] = array();
+      }
+   }
+   
+   function check_request_split_array($name, $value) {
+      if( isset($this->RSA[$name]) ) {
+         return in_array($value, $this->RSA[$name]);
+      } else {
+         return false;
+      }
+      
+   }
+
    /**
     * @param input elements or name of element $elements
     * @param element value $value
@@ -122,9 +144,9 @@ class Framework extends Framework_Data {
       }
 
       if( is_array($array) )
-         return array_merge($array, $elements);
+      return array_merge($array, $elements);
       else
-         return array_merge($this->GET_array, $elements);
+      return array_merge($this->GET_array, $elements);
    }
 
 
@@ -136,8 +158,12 @@ class Framework extends Framework_Data {
 
    function check_get($text, $translate = false) {
       if($translate) $text = Lang::_($text);
-
-      return self::not_null($this->GET[$text]);
+      
+//      if( isset($this->GET[$text]) ) {
+         return self::not_null($this->GET[$text]);
+//      } else {
+//         return false;
+//      }
    }
 
    function check_post($text, $translate = false) {
@@ -151,19 +177,6 @@ class Framework extends Framework_Data {
          return TRUE;
       }
       return FALSE;
-   }
-
-   function check_login($where = false) {
-
-      if( !self::not_null($where) ) return false;
-
-      if( $where != 'ADMIN' && $where != 'HOTEL' &&  $where != 'USER' ) return false;
-
-      if( $this->not_null($this->POST['lgn_' . $where]) &&
-      $this->not_null($this->POST['pswrd_' . $where]) ) {
-         return true;
-      }
-      return false;
    }
 
    //   function get_login_data($type) {

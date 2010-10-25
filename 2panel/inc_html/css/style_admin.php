@@ -55,7 +55,7 @@ h3 {
 	font-size:108%;
 }
 h1,h2,h3 {
-	/* top & bottom margin based on font size */
+	/* top and bottom margin based on font size */
 	margin:1em 0;
 }
 h1,h2,h3,h4,h5,h6,strong {

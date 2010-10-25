@@ -3,7 +3,7 @@
  * init.php Global initialization file
  * Copyright MichaÅ‚ SokoÅ‚owski 2010
  *
- * @author Micha³ Soko³owski <msokolowski@example.com>
+ * @author Michaï¿½ Sokoï¿½owski <msokolowski@example.com>
  */
 
 //deactivate magic GPC
@@ -50,17 +50,18 @@ gl_init();
  * Include global classes files:
  * database, session and other helpers
  */
+include(DIR_INC_CLASSES . DS . 'Data_Products.php');
+include(DIR_INC_CLASSES . DS . 'Data_Rights.php');
+include(DIR_INC_CLASSES . DS . 'Data_Person.php');
 include(DIR_INC_CLASSES . DS . 'Data.php');
 include(DIR_INC_CLASSES . DS . 'Person.php');
 include(DIR_INC_CLASSES . DS . 'Html.php');
 include(DIR_INC_CLASSES . DS . 'Framework_Data.php');
 include(DIR_INC_CLASSES . DS . 'Framework.php');
-
-/**
- * Include local classes files:
- * page
- */
+include(DIR_INC_CLASSES . DS . 'Info.php');
+include(DIR_INC_CLASSES . DS . 'SplitPage.php');
 include(DIR_INC_CLASSES . DS . 'Page.php');
+
 
 $F = new Framework();
 $Page = new Page();
