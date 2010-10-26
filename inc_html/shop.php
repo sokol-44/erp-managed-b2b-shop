@@ -35,9 +35,9 @@ if( !defined('_I_INIT') ) die();
 	<td width="975" colspan="3"><?php echo $Page->put_second_head_html(); ?></td>
 </tr>
 <tr>
-	<td><?php echo $Page->put_left_column_html(); ?></td>
-	<td><?php echo $Page->put_component_html(); ?></td>
-	<td><?php echo $Page->put_right_column_html(); ?></td>
+	<td width="160" valign="top"><?php echo $Page->put_left_column_html(); ?></td>
+	<td width="611" valign="top"><?php echo $Page->put_component_html(); ?></td>
+	<td width="160" valign="top"><?php echo $Page->put_right_column_html(); ?></td>
 </tr>
 
 <tr>

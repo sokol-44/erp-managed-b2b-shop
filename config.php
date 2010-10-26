@@ -51,6 +51,10 @@ foreach( $config['IMAGE'] as $cnf => $value) {
 
 $dir_www_inc = $dir_www['HTTP_SERVER'] . $dir_www['HTTP_ROOT_CATALOG'] . $dir_www['HTTP_INC_CATALOG'];
 
+define('URL_HTTP_SERVER', $dir_www['HTTP_SERVER']);
+define('URL_FULL', $dir_www['HTTP_SERVER'] . $dir_www['HTTP_ROOT_CATALOG']);
+
+define('DIR_HTTP_ROOT_CATALOG', $dir_www['HTTP_ROOT_CATALOG']);
 define('DIR_WWW_CSS', $dir_www_inc . $dir_www['HTTP_CSS_CATALOG']);
 define('DIR_WWW_JS', $dir_www_inc . $dir_www['HTTP_JS_CATALOG']);
 define('DIR_WWW_IMG', $dir_www_inc . $dir_www['HTTP_IMG_CATALOG']);

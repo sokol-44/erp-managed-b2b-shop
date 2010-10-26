@@ -33,7 +33,22 @@ class Data_Products {
       $res = db_query( $sp_query );
       return db_result_array($res);
    }
+   
+   static function get_product_image_path( $raw_img ) {
+      $img_arr = explode('/', $raw_img);
+      return '/product_image/' . end($img_arr);
+   }
     
+   static function get_product_info( $id_product = 0 ) {
+      $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
+         p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
+         group_concat(p2c.id_category) as id_category_list
+         from ' . TBL_SHOP_PRODUCT . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+         ( p.id_product = p2c.id_product )
+         where p.id_product = ' . (int)$id_product . ' group by p.id_product';
+      $result = db_query( $query );
+      return db_fetch_array( $result );
+   }
     
    static function get_categories_list( array $filters ) {
 

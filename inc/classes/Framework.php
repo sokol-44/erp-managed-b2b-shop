@@ -119,14 +119,14 @@ class Framework extends Framework_Data {
       }
       return $this->RSA[$name];
    }
-   
+    
    function check_request_split_array($name, $value) {
       if( isset($this->RSA[$name]) ) {
          return in_array($value, $this->RSA[$name]);
       } else {
          return false;
       }
-      
+
    }
 
    /**
@@ -144,10 +144,11 @@ class Framework extends Framework_Data {
          }
       }
 
-      if( is_array($array) )
-      return array_merge($array, $elements);
-      else
-      return array_merge($this->GET_array, $elements);
+      if( is_array($array) ) {
+         return array_merge($array, $elements);
+      } else {
+         return array_merge($this->GET_array, $elements);
+      }
    }
 
 
@@ -159,12 +160,12 @@ class Framework extends Framework_Data {
 
    function check_get($text, $translate = false) {
       if($translate) $text = Lang::_($text);
-      
-//      if( isset($this->GET[$text]) ) {
-         return self::not_null($this->GET[$text]);
-//      } else {
-//         return false;
-//      }
+
+      //      if( isset($this->GET[$text]) ) {
+      return self::not_null($this->GET[$text]);
+      //      } else {
+      //         return false;
+      //      }
    }
 
    function check_post($text, $translate = false) {
@@ -199,6 +200,13 @@ class Framework extends Framework_Data {
          $this->com = $this->GET['com'];
          //unset($this->GET['com']);
       }
+   }
+   
+   function js_escape( $str, $str_separator = '"') {
+      $search = array('\\', $str_separator);
+      $replace = array('\\\\', '\\' . $str_separator);
+      $str = str_replace($search, $replace, $str);
+      return $str;
    }
 
    private function _request_normalize_rec(array $array, $type = 'GET') {

@@ -13,9 +13,15 @@ class HTML {
 
    private function __create_image_paths($src, $admin = false) {
 
-      $local_src = str_replace('/', DS, DIR_LOCAL_IMG . $src);
-
-      $www_src = DIR_WWW_IMG . $src;
+      if( substr($src, 0, 1) == '/' ) {
+         $local_src = str_replace('/', DS, substr($src, 1));
+         
+         $www_src = URL_FULL . substr($src, 1);
+      } else {
+         $local_src = str_replace('/', DS, DIR_LOCAL_IMG . $src);
+   
+         $www_src = DIR_WWW_IMG . $src;
+      }
 
       return array($local_src, $www_src);
    }
@@ -83,7 +89,7 @@ class HTML {
 
       list($local_src, $www_src) = self::__create_image_paths($src, true);
 
-      //      echo "#SRC#$local_src#        #$www_src#<br>\r";
+            echo "#SRC#$local_src#        #$www_src#<br>\r";
 
       // alt is added to the img tag even if it is null to prevent browsers from outputting
       // the image filename as default
