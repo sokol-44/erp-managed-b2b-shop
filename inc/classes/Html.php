@@ -89,7 +89,7 @@ class HTML {
 
       list($local_src, $www_src) = self::__create_image_paths($src, true);
 
-            echo "#SRC#$local_src#        #$www_src#<br>\r";
+      //      echo "#SRC#$local_src#        #$www_src#<br>\r";
 
       // alt is added to the img tag even if it is null to prevent browsers from outputting
       // the image filename as default

@@ -1,5 +1,5 @@
 <?php
-$SP = new SplitPage('PRODUCTS_LIST');
+$SP = new SplitPage('BASKET_PRODUCT_LIST');
 $product_list = Data::get_categories_product_list();
 
 $Page->add_js_file('table.js');

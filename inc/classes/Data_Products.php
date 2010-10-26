@@ -8,14 +8,14 @@
 
 if( !defined('_I_INIT') ) die();
 
-class Data_Products {
+class Data_Products extends Data_Basket {
 
-    
+
    static function get_categories_product_list(array $filters = array(), array $sort = array()) {
       global $category_tree;
       $F = Framework::g_global();
       $SP = SplitPage::g_global();
-      
+
       if( false && SHOW_PRODUCTS_FROM_SUBCATEGORIES == 'true' ) {
          // TODO
          // Show products from subcategories
@@ -23,22 +23,38 @@ class Data_Products {
          $catpath = $F->request_split_array('catpath', ',', 'GET');
          $id_category = end($catpath);
          //$query = 'select p.id_product, p.name, SUBSTR(p.description,45) as description, p.picture_small_url,
-			$query = 'select p.id_product, p.name, p.id_product as description, p.picture_small_url,
+         $query = 'select p.id_product, p.name, p.id_product as description, p.picture_small_url,
          p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
          from ' . TBL_SHOP_PRODUCT . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
          ( p.id_product = p2c.id_product )
          where p2c.id_category = ' . (int)$id_category;
-			$sp_query = $SP->prepare_sql( $query );
+         $sp_query = $SP->prepare_sql( $query );
       }
       $res = db_query( $sp_query );
       return db_result_array($res);
    }
-   
+
    static function get_product_image_path( $raw_img ) {
       $img_arr = explode('/', $raw_img);
       return '/product_image/' . end($img_arr);
    }
-    
+
+   static function get_product_info_list( array $id_product_array ) {
+
+      if( Framwork::not_null($id_product_array) ) {
+         $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
+            p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
+            group_concat(p2c.id_category) as id_category_list
+            from ' . TBL_SHOP_PRODUCT . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+            ( p.id_product = p2c.id_product )
+            where p.id_product IN (' . implode(',', $id_product_array) . ') group by p.id_product';
+         $result = db_query( $query );
+         return db_result_array( $result );
+      } else {
+         return array();
+      }
+   }
+
    static function get_product_info( $id_product = 0 ) {
       $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
          p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
@@ -49,7 +65,7 @@ class Data_Products {
       $result = db_query( $query );
       return db_fetch_array( $result );
    }
-    
+
    static function get_categories_list( array $filters ) {
 
       $query = 'SELECT c.id_category, c.name, c.description, c.id_category_parent, COUNT(p2c.id_category) AS products_in_category
