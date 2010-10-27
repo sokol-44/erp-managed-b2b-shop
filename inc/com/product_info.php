@@ -12,7 +12,7 @@ $small_image_html = $F->static_image($small_image_path, Lang::_('add_to_basket')
 $big_image_path = Data::get_product_image_path( $product_info['picture_big_url'] );
 
 $price_html = $F->output_string_html( $product_info['price'] . ' (' . $product_info['vat'] . ')' );
-$description_html = nl2br( $F->output_string_html( $product_info['description'] ) );
+$description_html = nl2br( $F->output_string_html( substr($product_info['description'], 0, 256) ) );
 
 $GET_basket = array('mode' => 'add_to_basket', 'id_product' => $id_product);
 $link_basket = $F->make_link(CFG_COM_BASKET, $F->add_local_get($GET_basket, '', $GET_tmp) );

@@ -3,7 +3,7 @@
  * init.php Global initialization file
  * Copyright Michał Sokołowski 2010
  *
- * @author Micha� Soko�owski <msokolowski@example.com>
+ * @author Michał Sokołowski <msokolowski@example.com>
  */
 
 //deactivate magic GPC
@@ -38,18 +38,14 @@ include(_I_ROOT_DIR . DS . 'config.php');
  * database, session and other helpers
  */
 include(DIR_INC_FUNCTIONS . DS . 'database.php');
-db_init();
-
 include(DIR_INC_FUNCTIONS . DS . 'session.php');
-session_start();
-
 include(DIR_INC_FUNCTIONS . DS . 'global.php');
-gl_init();
 
 /**
  * Include global classes files:
  * database, session and other helpers
  */
+include(DIR_INC_CLASSES . DS . 'Data_Basket.php');
 include(DIR_INC_CLASSES . DS . 'Data_Products.php');
 include(DIR_INC_CLASSES . DS . 'Data_Rights.php');
 include(DIR_INC_CLASSES . DS . 'Data_Person.php');
@@ -64,8 +60,35 @@ include(DIR_INC_CLASSES . DS . 'Page.php');
 include(DIR_INC_CLASSES . DS . 'Lang.php');
 include(DIR_INC_CLASSES . DS . 'Shopping_Basket.php');
 
+/**
+ * initialize engine
+ */
+db_init();
+session_start();
+gl_init();
+
+/**
+ * Load data from session
+ */
+if ( function_exists('ini_get') && (ini_get('register_globals') == false) ) {
+   extract($_SESSION, EXTR_OVERWRITE+EXTR_REFS);
+}
 
 $F = new Framework();
 $Page = new Page();
 $Data = new Data();
+
+/**
+ * session objects
+ */
+$session_object = array('P' => 'Person', 'Info' => 'Info',
+		'Shopping_Basket' => 'Shopping_Basket');
+
+foreach($session_object as $var_name => $class_name ) {
+   if ( !session_check($var_name) || !is_object(${$var_name})) {
+      ${$var_name} = new ${class_name}();
+      session_put($var_name);
+   }
+}
+
 ?>

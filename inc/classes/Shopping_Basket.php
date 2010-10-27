@@ -25,7 +25,7 @@ class Shopping_Basket {
 
    static function g_global() {
       if(self::$class == false) {
-         self::$class = new Shopping_Basket;
+         self::$class = new Shopping_Basket();
       }
       return self::$class;
    }
@@ -46,7 +46,7 @@ class Shopping_Basket {
       }
    }
 
-   function add_to_cart($id_product, $quantity = 1) {
+   function add_to_basket($id_product, $quantity = 1) {
       $id_product = (int)$id_product;
       if( isset($this->contents[$id_product]) ) {
          $this->contents[$id_product]['quantity'] = $this->contents[$id_product]['quantity'] + (int)$quantity;
@@ -54,6 +54,12 @@ class Shopping_Basket {
          $this->contents[$id_product]['quantity'] = (int)$quantity;
       }
       return $this->contents[$id_product]['quantity'];
+   }
+
+   function update_basket_quantity_list($array) {
+      foreach($array as $id_product => $array_quantity) {
+         $this->update_product_quantity((int)$id_product, (int)$array_quantity['quantity']);
+      }
    }
 
    function update_product_quantity($id_product, $quantity = 0) {
@@ -82,7 +88,7 @@ class Shopping_Basket {
       }
    }
 
-   function remove_product($id_product) {
+   function remove_from_basket($id_product) {
       if (isset($this->contents[$id_product])) {
          unset( $this->contents[$id_product] );
       }
@@ -96,6 +102,12 @@ class Shopping_Basket {
       return array_keys($this->contents);
    }
 
+   function get_quantity($id_product) {
+      if (isset($this->contents[$id_product])) {
+         return $this->contents[$id_product]['quantity'];
+      }
+   }
+
    function get_all_product() {
 
       if (!is_array($this->contents)) return false;
@@ -107,15 +119,17 @@ class Shopping_Basket {
       $products_array = array();
       foreach($product_info_array as $product_info ) {
          if ( Framework::not_null($this->contents[$product_info['id_product']]) ) {
-            $product_array[] = array('id' => $product_info['id_product'],
-                                    'name' => $product_info['products_name'],
-                                    'image' => $product_info['products_image'],
+            $product_array[] = array('id_product' => $product_info['id_product'],
+                                    'name' => $product_info['name'],
+                                    'description' => $product_info['description'],
+                                    'picture_small_url' => $product_info['picture_small_url'],
+                                    'picture_big_url' => $product_info['picture_big_url'],
+                                    'picture_id' => $product_info['picture_id'],
                                     'price' => $product_info['price'],
             								'vat' => $product_info['vat'],
                                     'quantity' => $this->contents[$product_info['id_product']]['quantity']
             );
          }
-
       }
       //      foreach ($product_array as $key => $row) {
       //         $customers_username[$key] = strtolower($row['customers_username']);
@@ -139,12 +153,12 @@ class Shopping_Basket {
       						'product_count' => $sums_product_count);
 
    }
-    
+
    function count_contents() {  // get total number of items in cart
 
       return $this->total;
    }
-    
+
    function show_total() {
       $this->calculate();
 
@@ -155,6 +169,10 @@ class Shopping_Basket {
       unset($this->sellers);
       unset($this->delivery_opt);
       return( array_keys( get_object_vars( $this ) ) );
+   }
+
+   function __wakeup() {
+      self::$class = $this;
    }
 
 }

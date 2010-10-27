@@ -11,7 +11,7 @@ if( !defined('_I_INIT') ) die();
 class Data_Products extends Data_Basket {
 
 
-   static function get_categories_product_list(array $filters = array(), array $sort = array()) {
+   static function get_categories_product_list($id_category, array $filters = array(), array $sort = array()) {
       global $category_tree;
       $F = Framework::g_global();
       $SP = SplitPage::g_global();
@@ -20,8 +20,6 @@ class Data_Products extends Data_Basket {
          // TODO
          // Show products from subcategories
       } else {
-         $catpath = $F->request_split_array('catpath', ',', 'GET');
-         $id_category = end($catpath);
          //$query = 'select p.id_product, p.name, SUBSTR(p.description,45) as description, p.picture_small_url,
          $query = 'select p.id_product, p.name, p.id_product as description, p.picture_small_url,
          p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
@@ -41,7 +39,7 @@ class Data_Products extends Data_Basket {
 
    static function get_product_info_list( array $id_product_array ) {
 
-      if( Framwork::not_null($id_product_array) ) {
+      if( Framework::not_null($id_product_array) ) {
          $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
             p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
             group_concat(p2c.id_category) as id_category_list

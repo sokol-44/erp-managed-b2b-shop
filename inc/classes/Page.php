@@ -13,7 +13,7 @@ class Page {
    //   static $head_title, $head_keywords, $head_description, $head_js;
    //   static $masterhead_html, $second_head_html, $component_html, $bottom_html, $footer_html;
    //   static $com, $com_model_inc, $com_viewer_inc;
-   //   static $target_com;v
+   //   static $target_com;
    //   static $js_jq_init, $js_jq_body;
    //   static $js_body, $jq_files;
    static $F;

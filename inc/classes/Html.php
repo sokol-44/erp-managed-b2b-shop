@@ -15,11 +15,11 @@ class HTML {
 
       if( substr($src, 0, 1) == '/' ) {
          $local_src = str_replace('/', DS, substr($src, 1));
-         
+
          $www_src = URL_FULL . substr($src, 1);
       } else {
          $local_src = str_replace('/', DS, DIR_LOCAL_IMG . $src);
-   
+
          $www_src = DIR_WWW_IMG . $src;
       }
 
@@ -27,12 +27,13 @@ class HTML {
    }
 
    private function __getimagesize($src) {
-      $image_size = getimagesize($src);
-      if( $image_size ) {
-         return array('width' => $image_size[0], 'height' => $image_size[1]);
-      } else {
-         return false;
+      if( is_file( $src ) && is_readable( $src )  ) {
+         $image_size = getimagesize($src);
+         if( $image_size ) {
+            return array('width' => $image_size[0], 'height' => $image_size[1]);
+         }
       }
+      return false;
    }
 
 

@@ -39,7 +39,7 @@ switch($F->GET['type']) {
             require 'user_management' . DS . 'hotel_person_edit.php';
             break;
          default:
-            $SP = new SplitPage('HOTEL');
+            $SP = new SplitPage('CLIENT');
             $hotels_list = $Data->get_hotels_list();
 
             require 'user_management' . DS . 'hotel_list_viewer.php';

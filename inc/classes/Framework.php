@@ -50,8 +50,9 @@ class Framework extends Framework_Data {
    }
 
    static function not_null($input) {
-      if (is_array($input) && sizeof($input) > 0) {
-         return true;
+      if (is_array($input)) {
+        if (sizeof($input) > 0) return true;
+        else return false;
       } elseif (($input != '') && (strlen(trim($input)) > 0) && (strtolower($input) != 'null')) {
          return true;
       }
