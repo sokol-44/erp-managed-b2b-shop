@@ -33,13 +33,15 @@ class Shopping_Basket {
 
 
    function restore_contents() {
+      //FIXME
+      //DB stuff
    }
 
    function reset($reset_database = false) {
       global $customer_id;
 
       $this->contents = array();
-      $this->total = array('product_total' => 0, 'product_count' => 0, 'sum_gross' => 0, 'sum_netto' => 0);
+      $this->total = array('product_total' => 0, 'product_types' => 0, 'sum_gross' => 0, 'sum_netto' => 0);
 
       if ( $reset_database == true ) {
          //remove from DB
@@ -112,14 +114,17 @@ class Shopping_Basket {
 
       if (!is_array($this->contents)) return false;
 
-      $product_id_array = $this->get_product_id_list();
+      if( !Framework::not_null($this->product_array) ) {
 
-      $product_info_array = Data::get_product_info_list( $product_id_array );
+         $product_id_array = $this->get_product_id_list();
 
-      $products_array = array();
-      foreach($product_info_array as $product_info ) {
-         if ( Framework::not_null($this->contents[$product_info['id_product']]) ) {
-            $product_array[] = array('id_product' => $product_info['id_product'],
+         $product_info_array = Data::get_product_info_list( $product_id_array );
+
+         $products_array = array();
+         foreach($product_info_array as $product_info ) {
+            $id_product = (int)$product_info['id_product'];
+            if ( Framework::not_null($this->contents[$id_product]) ) {
+               $product_array[$id_product] = array('id_product' => $id_product,
                                     'name' => $product_info['name'],
                                     'description' => $product_info['description'],
                                     'picture_small_url' => $product_info['picture_small_url'],
@@ -127,47 +132,44 @@ class Shopping_Basket {
                                     'picture_id' => $product_info['picture_id'],
                                     'price' => $product_info['price'],
             								'vat' => $product_info['vat'],
-                                    'quantity' => $this->contents[$product_info['id_product']]['quantity']
-            );
+                                    'quantity' => $this->contents[$id_product]['quantity']
+               );
+            }
          }
+         //      foreach ($product_array as $key => $row) {
+         //         $customers_username[$key] = strtolower($row['customers_username']);
+         //         $products_name[$key] = strtolower($row['name']);
+         //      }
+         //      @array_multisort($customers_username, SORT_ASC, $products_name, SORT_ASC, $product_array);
+         $this->product_array = $product_array;
       }
-      //      foreach ($product_array as $key => $row) {
-      //         $customers_username[$key] = strtolower($row['customers_username']);
-      //         $products_name[$key] = strtolower($row['name']);
-      //      }
-      //      @array_multisort($customers_username, SORT_ASC, $products_name, SORT_ASC, $product_array);
 
-      return $product_array;
+      return $this->product_array;
    }
 
-   function calculate() {
-      $sums_product_total = 0;
-      $sums_product_count = 0;
+   function calculate_total() {
+      $this->total = array('product_total' => 0, 'product_types' => 0, 'sum_gross' => 0, 'sum_netto' => 0);
+
       if ( Framework::not_null($this->contents) ) {
-         foreach($this->contents as $id_product => $product_data ) {
-            $sums_product_total = $sums_product_total + $product_data['quantity'];
-            $sums_product_count++;
+         $this->get_all_product();
+         foreach($this->product_array as $id_product => $product ) {
+            $this->total['product_total'] += $product['quantity'];
+            $this->total['product_types'] ++;
+            $this->total['sum_gross'] += Tax::add_vat($product['price'], $product['vat'], $product['quantity']);
+            $this->total['sum_netto'] += ($product['price'] * $product['quantity']);
          }
       }
-      $this->total = array('product_total' => $sums_product_total,
-      						'product_count' => $sums_product_count);
-
-   }
-
-   function count_contents() {  // get total number of items in cart
-
       return $this->total;
    }
 
-   function show_total() {
+   function get_total() {
       $this->calculate();
 
       return $this->total;
    }
 
    function __sleep() {
-      unset($this->sellers);
-      unset($this->delivery_opt);
+      unset($this->product_array);
       return( array_keys( get_object_vars( $this ) ) );
    }
 

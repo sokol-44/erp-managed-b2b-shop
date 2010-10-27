@@ -125,7 +125,7 @@ class Page {
          'second_head_html' => array('script' => '', 'type' => 'MOD'),
          'left_column_html' => array('script' => 'categories_list', 'type' => 'MOD'),
          'component_html' => array('script' => '', 'type' => 'COM'),
-         'right_column_html' => array('script' => '', 'type' => 'MOD'),
+         'right_column_html' => array('script' => 'basket_list', 'type' => 'MOD'),
          'bottom_html' => array('script' => '', 'type' => 'MOD'),
          'footer_html' => array('script' => '', 'type' => 'MOD'),
       );

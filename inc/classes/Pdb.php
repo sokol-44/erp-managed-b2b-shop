@@ -3,7 +3,7 @@
  * Pdb.php Global initialization file
  * Copyright Michał Sokołowski 2010
  *
- * @author Micha� Soko�owski <msokolowski@example.com>
+ * @author Michał Sokołowski <msokolowski@example.com>
  */
 
 if( !defined('_I_INIT') ) die();
