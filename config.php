@@ -58,6 +58,7 @@ define('DIR_HTTP_ROOT_CATALOG', $dir_www['HTTP_ROOT_CATALOG']);
 define('DIR_WWW_CSS', $dir_www_inc . $dir_www['HTTP_CSS_CATALOG']);
 define('DIR_WWW_JS', $dir_www_inc . $dir_www['HTTP_JS_CATALOG']);
 define('DIR_WWW_IMG', $dir_www_inc . $dir_www['HTTP_IMG_CATALOG']);
+define('DIR_WWW_TEMPLATE', $dir_www_inc . $dir_www['HTTP_TEMPLATES_CATALOG']);
 define('DIR_LOCAL_CSS',  '..\\' . $dir_www['HTTP_INC_CATALOG'] . $dir_www['HTTP_CSS_CATALOG']);
 define('DIR_LOCAL_JS', '..\\' . $dir_www['HTTP_INC_CATALOG'] . $dir_www['HTTP_JS_CATALOG']);
 define('DIR_LOCAL_IMG', $dir_www['HTTP_INC_CATALOG'] . $dir_www['HTTP_IMG_CATALOG']);

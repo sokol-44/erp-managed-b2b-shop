@@ -3,7 +3,7 @@
  * Person.php Class for any person in the system (logged in or not)
  * Copyright MichaÅ‚ SokoÅ‚owski 2010
  *
- * @author Micha³ Soko³owski <msokolowski@example.com>
+ * @author Michaï¿½ Sokoï¿½owski <msokolowski@example.com>
  */
 
 if( !defined('_I_INIT') ) die();
@@ -51,7 +51,7 @@ class Person {
 
       $this->logged_in = true;
 
-      $this->id = $P_data['id_admin'];
+      $this->id = $P_data['id_table'];
       $this->login = $P_data['login'];
 
       $this->data = $P_data;
@@ -66,7 +66,7 @@ class Person {
          $res = gl_check_password($password, $P_data['password']);
          if( $res ) {
             $res_rights = Data::get_login_rights($P_data['id_admin'], $type);
-            $this->set_person_data($P_data, $res_rights);
+            $this->set_person_data($P_data, $res_rights, $type);
             return true;
          } else {
             return false;

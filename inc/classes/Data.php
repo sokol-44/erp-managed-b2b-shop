@@ -3,7 +3,7 @@
  * Data.php Global initialization file
  * Copyright Michał Sokołowski 2010
  *
- * @author Micha� Soko�owski <msokolowski@example.com>
+ * @author Michał Sokołowski <msokolowski@example.com>
  */
 
 if( !defined('_I_INIT') ) die();
@@ -174,11 +174,11 @@ class Data extends Data_Person {
 
       if( $table == 'ADMIN' ) {
          $table_id = 'id_admin';
-      } else if( $table == 'HOTEL' ) {
-         $table_id = 'id_hotel_user';
+      } else if( $table == 'CLIENT' ) {
+         $table_id = 'id_client_user';
       }
 
-      $res = db_query('select r.* from ' .
+      $res = db_query('select r.*, p.' . $table_id . ' as id_table from ' .
       $tbl_person . ' p,  ' . $tbl_glue . ' gl,  ' . $tbl_rights . ' r ' .
       'where p.' . $table_id . ' = gl.' . $table_id . ' and gl.id_rights = r.id_rights and ' .
       ' p.' . $table_id . ' = "' . db_escape($id) . '"');

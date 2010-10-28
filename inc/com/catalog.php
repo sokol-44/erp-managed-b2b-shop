@@ -43,6 +43,8 @@ $GET_tmp = $F->make_get();
 	<?php
 	}
 	?>
+</table>
+<table style="border: 0">
 	<tr>
 		<td colspan="5"><?php echo $SP->display_links(); ?></td>
 	</tr>

@@ -146,7 +146,6 @@ class Page {
    function render_places() {
       foreach($this->list_places as $place_name => $place) {
          if( Framework::not_null($place['script']) ) {
-            echo 'saa' . $place['script'];
             ob_start();
             $this->include_element($place['script'], $place['type']);
             $this->${place_name} = ob_get_clean();
@@ -159,7 +158,6 @@ class Page {
       $F = Framework::g_global();
       $P = Person::g_global();
       $Page = Page::g_global();
-      $Lang = Lang::g_global();
       switch( $type ) {
          case 'COM': include(DIR_INC_COMPONENTS . DS . $name . '.php');
          break;

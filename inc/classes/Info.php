@@ -15,7 +15,6 @@ class Info {
 
    function __construct() {
       self::$class = $this;
-       var_dump(self::$class);
       $this->reset();
    }
 

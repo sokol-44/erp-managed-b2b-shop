@@ -1,6 +1,14 @@
 <?php
 $filers = array();
 
+$Page->add_js_file('table.js');
+$Page->add_js_file('toolbox.js');
+$Page->add_js_file('jquery.tooltip.js');
+$Page->add_jq_init('colorize_table(".tableBox");');
+$Page->add_jq_init('$(\'.cat_href a\').tooltip({
+		track: false, delay: 0, showURL: false, fixPNG: true, showBody: " # "
+	});');
+
 $F->request_split_array('catpath', ',', 'GET');
 
 $category_tree = Data::get_categorie_tree();
@@ -19,11 +27,16 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
          }
 
          $name_long = trim(str_replace( array("\r\n", "\r", "\n"), '<br>', $category['description']));
-   
+
          $GET_tmp = $F->make_get();
 
+         $id_select ='';
+         if ( $F->check_request_split_array('catpath', $current_id) ) {
+            $id_select = 'id="category_selected"';
+         }
+
          $categories_string_tmp =
-			'<div class="cat_href">' . str_repeat('&nbsp;&nbsp;', $category['level']) .
+			'<div class="cat_href" ' . $id_select . '>' . str_repeat('&nbsp;&nbsp;', $category['level']) .
 			'<a href="' . $F->make_link(CFG_COM_CATALOG, $F->add_local_get('catpath', $category['path'], $GET_edit)) . '"';
 
          if( $name_long != '') {
@@ -32,11 +45,7 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
             $categories_string_tmp .= ' title="' . $category['name'] . '">';
          }
           
-         if ( $F->check_request_split_array('catpath', $current_id) ) {
-            $categories_string_tmp .= '<b>' . $category['name'] . '</b>';
-         } else {
-            $categories_string_tmp .= $category['name'];
-         }
+         $categories_string_tmp .= $category['name'];
           
          if ( count($category['children']) > 0 ) $categories_string_tmp .= '-&gt;';
 
@@ -51,7 +60,7 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
          }
       }
    }
-   
+
    return $categories_string;
 
 }

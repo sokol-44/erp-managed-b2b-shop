@@ -22,17 +22,18 @@ $Page->render_places();
 //$M->add_to_page();
 
 //display it in template
-$filename = $config['TEMPLATES']['shop'];
+$template_dir = DIR_INC_TEMPLATES . DS . $config['TEMPLATES']['shop'] . DS;
+$template =  $template_dir . $config['TEMPLATES']['shop'] . '.php';
 
-if( $filename != '' && is_file($filename) ) {
-   include_once($filename);
+if( $template != '' && is_file($template) ) {
+   include_once($template);
 } else {
    //FIXME
    //throw error
 }
 
 print_debug($query_log);
-print_debug($Page);
+//print_debug($Page);
 print_debug($F);
 print_debug($P);
 print_debug($Info);

@@ -182,6 +182,19 @@ class Framework extends Framework_Data {
       return FALSE;
    }
 
+   function check_login($where = false) {
+
+      if( !self::not_null($where) ) return false;
+
+      if( $where != 'ADMIN' && $where != 'HOTEL' &&  $where != 'USER' ) return false;
+
+      if( $this->not_null($this->POST['lgn_' . $where]) &&
+      $this->not_null($this->POST['pswrd_' . $where]) ) {
+         return true;
+      }
+      return false;
+   }
+
    //   function get_login_data($type) {
    //      return ($this->POST['lgn_' . $type], )
    //
