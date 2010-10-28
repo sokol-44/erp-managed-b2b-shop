@@ -20,7 +20,6 @@ class Info {
 
    static function g_global() {
       if( !is_object(self::$class) ) {
-         echo 'G1';
          self::$class = new Info;
       }
       return self::$class;

@@ -1,8 +1,12 @@
 <?php
 $SP = new SplitPage('PRODUCTS_LIST');
 
-$catpath = $F->request_split_array('catpath', ',', 'GET');
-$id_category = end($catpath);
+if( $F->check_get('catpath') ) {
+   $catpath = $F->request_split_array('catpath', ',', 'GET');
+   $id_category = (int)end($catpath);
+} else {
+   $id_category = 0;
+}
 $product_list = Data::get_categories_product_list($id_category);
 
 $Page->add_js_file('table.js');

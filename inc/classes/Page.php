@@ -121,10 +121,11 @@ class Page {
       //TODO more generic obj
 
       $list_places = array(
-         'masterhead_html' => array('script' => '', 'type' => 'MOD'),
-         'second_head_html' => array('script' => '', 'type' => 'MOD'),
-         'left_column_html' => array('script' => 'categories_list', 'type' => 'MOD'),
          'component_html' => array('script' => '', 'type' => 'COM'),
+         'masterhead_html' => array('script' => 'masterhead', 'type' => 'MOD'),
+         'mastermenu_html' => array('script' => 'master_menu', 'type' => 'MOD'),
+         'second_head_html' => array('script' => 'breadcrumbs', 'type' => 'MOD'),
+         'left_column_html' => array('script' => 'categories_list', 'type' => 'MOD'),
          'right_column_html' => array('script' => 'basket_list', 'type' => 'MOD'),
          'bottom_html' => array('script' => '', 'type' => 'MOD'),
          'footer_html' => array('script' => '', 'type' => 'MOD'),
@@ -158,6 +159,7 @@ class Page {
       $F = Framework::g_global();
       $P = Person::g_global();
       $Page = Page::g_global();
+      $BC = Breadcrumbs::g_global();
       switch( $type ) {
          case 'COM': include(DIR_INC_COMPONENTS . DS . $name . '.php');
          break;

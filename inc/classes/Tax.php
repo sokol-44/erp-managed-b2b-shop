@@ -16,7 +16,6 @@ if( !defined('_I_INIT') ) die();
 class Tax {
    
    static function add_vat($price, $vat, $quantity = 1) {
-      echo "VAT: $price, $vat, $quantity";
          return ($price + self::calculate_tax($price, $vat)) * $quantity;
    }
    

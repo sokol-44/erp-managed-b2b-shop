@@ -5,6 +5,8 @@ if( DEBUG_DB_QUERIES == 'false' && false) $Shopping_Basket = new Shopping_Basket
 else $Shopping_Basket = Shopping_Basket::g_global();
 //STR: end
 
+$BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_COM_BASKET) ) );
+
 if( $F->check_get('mode') ) {
    switch($F->GET['mode']) {
       //   case 'add_basket':

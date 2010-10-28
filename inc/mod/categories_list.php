@@ -9,7 +9,7 @@ $Page->add_jq_init('$(\'.cat_href a\').tooltip({
 		track: false, delay: 0, showURL: false, fixPNG: true, showBody: " # "
 	});');
 
-$F->request_split_array('catpath', ',', 'GET');
+$F->request_split_array('catpath', '_', 'GET');
 
 $category_tree = Data::get_categorie_tree();
 echo show_category($category_tree);
@@ -51,7 +51,7 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
 
          $categories_string_tmp .= '</a>';
 
-         if (SHOW_COUNTS == 'true' && $all_products > 0 ) $categories_string_tmp .= '&nbsp;(' . $all_products . ')';
+         if ($all_products > 0 ) $categories_string_tmp .= '&nbsp;(' . $all_products . ')';
 
          $categories_string .= $categories_string_tmp . '</div>' . "\r\n";
          if( is_array($category['children']) && count($category['children']) > 0 &&

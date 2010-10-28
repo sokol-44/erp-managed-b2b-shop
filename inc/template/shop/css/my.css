@@ -1,5 +1,24 @@
 
 /*
+Basket list
+*/
+.basket {
+	background-color: lightblue;
+	padding: 5px;
+}
+.basket #nr {
+	text-decoration: underline;
+	padding: 2px;
+	}
+	
+	/*
+basket_number
+basket_product_total
+basket_product_types
+basket_sum_gross
+basket_sum_netto
+*/
+/*
 Menu
 */
 
@@ -13,10 +32,10 @@ Menu
 }
 .cat_href#category_selected { font-weight: bolder; }
 
-.cat_href A:link {text-decoration: none; color: darkbrown;}
-.cat_href A:visited {text-decoration: none; color: darkbrown;}
-.cat_href A:active {text-decoration: none; color: darkbrown;}
-.cat_href A:hover {text-decoration: none; font-style:italic; color: darkbrown;}
+.cat_href a:link {text-decoration: none; color: grey;}
+.cat_href a:visited {text-decoration: none; color: grey;}
+.cat_href a:active {text-decoration: none; color: grey;}
+.cat_href a:hover {text-decoration: none; color: darkred;}
 
 #tooltip {
 	position: absolute;
@@ -25,7 +44,7 @@ Menu
 	background-color: #9a9a9a;
 	padding: 5px;
 	opacity: 0.95;
-	color: white;
+	color: red;
 	font-family: Verdana, Arial, sans-serif;
 	font-size: 14px;
 }

@@ -10,6 +10,30 @@ if( !defined('_I_INIT') ) die();
 
 class Data_Products extends Data_Basket {
 
+   static function get_categories_from_list( $list_in = false ) {
+      $F = Framework::g_global();
+      
+      if( $list_in ) {
+         if( is_array($list_in) ) {
+            foreach($list_in as $val) { $list[] = (int)$val; }
+         } else {
+            $list_tmp = explode(',', $list_in);
+            foreach($list_tmp as $val) { $list[] = (int)$val; }
+         }
+      } elseif( isset($F->GET['catpath']) ) {
+         $list_tmp = $F->request_split_array('catpath', '_', 'GET');
+         foreach($list_tmp as $val) { $list[] = (int)$val; }
+      } else {
+         $list = array(0);
+      }
+
+      $query =  'select * from ' . TBL_SHOP_CATEGORY . '
+      	where id_category IN (' . implode(',', $list) . ')
+			order by FIND_IN_SET(id_category,"' . implode(',', $list) . '")';
+
+      $result = db_query( $query );
+      return db_result_array($result);
+   }
 
    static function get_categories_product_list($id_category, array $filters = array(), array $sort = array()) {
       global $category_tree;
@@ -20,12 +44,14 @@ class Data_Products extends Data_Basket {
          // TODO
          // Show products from subcategories
       } else {
+         if( $id_category == 0 ) $where = '';
+         else $where = 'where p2c.id_category = ' . (int)$id_category;
+         
          //$query = 'select p.id_product, p.name, SUBSTR(p.description,45) as description, p.picture_small_url,
          $query = 'select p.id_product, p.name, p.id_product as description, p.picture_small_url,
          p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
          from ' . TBL_SHOP_PRODUCT . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
-         ( p.id_product = p2c.id_product )
-         where p2c.id_category = ' . (int)$id_category;
+         ( p.id_product = p2c.id_product ) ' . $where;
          $sp_query = $SP->prepare_sql( $query );
       }
       $res = db_query( $sp_query );

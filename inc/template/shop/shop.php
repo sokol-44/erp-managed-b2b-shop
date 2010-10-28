@@ -39,7 +39,7 @@ if( !defined('_I_INIT') ) die();
           <!-- start: skip link navigation -->
           <a class="skip" title="skip link" href="#navigation">Skip to the navigation</a><span class="hideme">.</span>
           <a class="skip" title="skip link" href="#content">Skip to the content</a><span class="hideme">.</span>
-          <!-- end: skip link navigation --><?php echo $Page->put_mastermenu_html();?><a href="#L">Login</a> | <a href="#C">Contact</a> | <a href="#I">Imprint</a>
+          <!-- end: skip link navigation --><?php echo $Page->put_mastermenu_html();?>
         </div>
       </div>
       <div id="nav">
@@ -48,13 +48,6 @@ if( !defined('_I_INIT') ) die();
         <div class="hlist">
           <!-- main navigation: horizontal list -->
           <?php echo $Page->put_second_head_html(); ?>
-          <ul>
-            <li><a href="#1">Button 1</a></li>
-            <li><a href="#2">Button 2</a></li>
-            <li><a href="#3">Button 3</a></li>
-            <li><a href="#4">Button 4</a></li>
-            <li><a href="#5">Button 5</a></li>
-          </ul>
         </div>
       </div>
       <div id="main">

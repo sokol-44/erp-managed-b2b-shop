@@ -60,6 +60,7 @@ include(DIR_INC_CLASSES . DS . 'Page.php');
 include(DIR_INC_CLASSES . DS . 'Lang.php');
 include(DIR_INC_CLASSES . DS . 'Shopping_Basket.php');
 include(DIR_INC_CLASSES . DS . 'Tax.php');
+include(DIR_INC_CLASSES . DS . 'Breadcrumbs.php');
 
 /**
  * initialize engine

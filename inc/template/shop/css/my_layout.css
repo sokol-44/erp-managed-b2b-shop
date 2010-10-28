@@ -20,5 +20,5 @@
 /* import print layout | Druck-Layout einbinden */
 @import url(../yaml/print/print_draft.css);
 
-@import url(my.css);
 @import url(colorbox.css);
+@import url(my.css);
