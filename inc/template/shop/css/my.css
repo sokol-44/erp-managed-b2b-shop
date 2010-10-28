@@ -164,8 +164,13 @@ div.SplitPageContainer {
 	display: block;
 	height: 50px;
 	overflow: hidden;
-	padding: 0 7 0 7;
+	padding: 0 7px 0 7px;
 }
+
+.SplitPageContainer a:link {text-decoration: none; color: grey;}
+.SplitPageContainer a:visited {text-decoration: none; color: grey;}
+.SplitPageContainer a:active {text-decoration: none; color: grey;}
+.SplitPageContainer a:hover {text-decoration: none; color: darkred;}
 
 /*
 SplitPageContainer

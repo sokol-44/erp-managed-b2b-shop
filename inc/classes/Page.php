@@ -122,13 +122,13 @@ class Page {
 
       $list_places = array(
          'component_html' => array('script' => '', 'type' => 'COM'),
-         'masterhead_html' => array('script' => 'masterhead', 'type' => 'MOD'),
+         'masterhead_html' => array('script' => 'empty', 'type' => 'MOD'),
          'mastermenu_html' => array('script' => 'master_menu', 'type' => 'MOD'),
          'second_head_html' => array('script' => 'breadcrumbs', 'type' => 'MOD'),
          'left_column_html' => array('script' => 'categories_list', 'type' => 'MOD'),
          'right_column_html' => array('script' => 'basket_list', 'type' => 'MOD'),
-         'bottom_html' => array('script' => '', 'type' => 'MOD'),
-         'footer_html' => array('script' => '', 'type' => 'MOD'),
+         'bottom_html' => array('script' => 'empty', 'type' => 'MOD'),
+         'footer_html' => array('script' => 'empty', 'type' => 'MOD'),
       );
 
       $list_places['component_html']['script'] = $this->com;

@@ -37,4 +37,5 @@ print_debug($query_log);
 print_debug($F);
 print_debug($P);
 print_debug($Info);
+print_debug(Lang::$STR);
 ?>

@@ -41,7 +41,7 @@ $GET_tmp = $F->make_get();
 		. $cell_product_info; ?></td>
 		<td><?php echo $description_html; ?></td>
 		<td><?php echo $small_image_html; ?></td>
-		<td><?php echo $F->output_string_html( $product['price'] . ' (' . $product['vat'] . ')' ); ?></td>
+		<td><?php echo $F->output_string_html( Price::val( $product['price'] ) . ' (' . Price::tax( $product['vat'] ) . ')' ); ?></td>
 		<td><?php echo $cell_basket; ?></td>
 	</tr>
 	<?php

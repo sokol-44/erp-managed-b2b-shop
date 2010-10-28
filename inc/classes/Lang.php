@@ -10,9 +10,7 @@ if( !defined('_I_INIT') ) die();
 
 class Lang {
    static $class = false;
-   static $POST = array(), $GET = array(), $REQUEST = array();
-   static $com = '';
-   static $GET_array = array();
+   static $STR = array();
 
    function __construct() {
 
@@ -28,9 +26,14 @@ class Lang {
    }
 
    function load_translation() {
+      define('TEXT_SPLITPAGE_BUTTON_PREV', '<<');
+      define('TEXT_SPLITPAGE_BUTTON_NEXT', '>>');
+      $F = Framework::g_global();
 
-      define('TEXT_SPLITPAGE_BUTTON_PREV', '<');
-      define('TEXT_SPLITPAGE_BUTTON_NEXT', '>');
+      $arr_translation = Data::get_translation($F->com);
+      foreach($arr_translation as $translation) {
+         define($translation['definition'], $translation['translation']);
+      }
    }
 
    function _($string_in, $js = false) {
@@ -41,6 +44,7 @@ class Lang {
          $string = constant($key);
       } else {
          $string = '#' . $string_in . '#';
+         if( !in_array($key, Lang::$STR) ) Lang::$STR[] = $key;
       }
 
       if ($js) {

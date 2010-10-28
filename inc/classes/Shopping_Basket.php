@@ -155,7 +155,7 @@ class Shopping_Basket {
          foreach($this->product_array as $id_product => $product ) {
             $this->total['product_total'] += $product['quantity'];
             $this->total['product_types'] ++;
-            $this->total['sum_gross'] += Tax::add_vat($product['price'], $product['vat'], $product['quantity']);
+            $this->total['sum_gross'] += Price::add_vat($product['price'], $product['vat'], $product['quantity']);
             $this->total['sum_netto'] += ($product['price'] * $product['quantity']);
          }
       }

@@ -59,7 +59,7 @@ include(DIR_INC_CLASSES . DS . 'SplitPage.php');
 include(DIR_INC_CLASSES . DS . 'Page.php');
 include(DIR_INC_CLASSES . DS . 'Lang.php');
 include(DIR_INC_CLASSES . DS . 'Shopping_Basket.php');
-include(DIR_INC_CLASSES . DS . 'Tax.php');
+include(DIR_INC_CLASSES . DS . 'Price.php');
 include(DIR_INC_CLASSES . DS . 'Breadcrumbs.php');
 
 /**
@@ -79,6 +79,7 @@ if ( function_exists('ini_get') && (ini_get('register_globals') == false) ) {
 $F = new Framework();
 $Page = new Page();
 $Data = new Data();
+$Lang = new Lang();
 
 /**
  * session objects

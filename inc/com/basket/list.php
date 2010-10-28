@@ -39,7 +39,7 @@ function remove_from_basked() { return true; }
 		. $cell_product_info; ?></td>
 		<td><?php echo $description_html; ?></td>
 		<td><?php echo $small_image_html; ?></td>
-		<td><?php echo $F->output_string_html( $product['price'] . ' (' . $product['vat'] . ')' ); ?></td>
+		<td><?php echo Price::val( $product['price'] ) . ' (' . Price::tax( $product['vat'] ) . ')'; ?></td>
 		<td><?php echo $F->draw_input_field('product_quantity[' . $product['id_product'] . ']', $product['quantity']); ?></td>
 		<td><?php echo $cell_remove_from_basket; ?></td>
 	</tr>

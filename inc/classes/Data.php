@@ -27,6 +27,13 @@ class Data extends Data_Person {
     */
    function __construct() {
    }
+   
+   function get_translation($com_str) {
+      $query = 'select definition, translation from ' . CORE_TRANSLATION . '
+      	where com is NULL or com = "' . db_escape($com_str) . '"';
+      return db_result_array( db_query($query) );
+   }
+   
 
    /**
     * autoload magic object & method

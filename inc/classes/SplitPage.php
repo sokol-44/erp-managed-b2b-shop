@@ -113,7 +113,7 @@ class SplitPage {
       //prev bunch
       if ($cur_window_num > 1) {
          $display_links_string .= '<div class="SplitPageGroup">';
-         $get = $F->add_local_get($this->page_holder, (($cur_window_num - 1) * $max_page_links));
+         $get = $F->add_local_get($this->page_holder, (($cur_window_num - 1) * $this->rows_per_page) - 1);
          $display_links = $F->make_link($F->com, $get);
          $display_links_string .= $F->draw_link($display_links, $link_param, '...') . '</div>';
       }
@@ -136,7 +136,7 @@ class SplitPage {
       //next bunch
       if ($cur_window_num < $max_window_num) {
          $display_links_string .= '<div class="SplitPageGroup">';
-         $get = $F->add_local_get($this->page_holder, (($cur_window_num) * $max_page_links + 1));
+         $get = $F->add_local_get($this->page_holder, (($cur_window_num) * $this->rows_per_page + 2));
          $display_links = $F->make_link($F->com, $get);
          $display_links_string .= $F->draw_link($display_links, $link_param, '...') . '</div>';
       }
