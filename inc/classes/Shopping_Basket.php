@@ -120,7 +120,7 @@ class Shopping_Basket {
 
          $product_info_array = Data::get_product_info_list( $product_id_array );
 
-         $products_array = array();
+         $product_array = array();
          foreach($product_info_array as $product_info ) {
             $id_product = (int)$product_info['id_product'];
             if ( Framework::not_null($this->contents[$id_product]) ) {

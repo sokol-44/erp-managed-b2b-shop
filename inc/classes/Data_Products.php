@@ -12,7 +12,7 @@ class Data_Products extends Data_Basket {
 
    static function get_categories_from_list( $list_in = false ) {
       $F = Framework::g_global();
-      
+
       if( $list_in ) {
          if( is_array($list_in) ) {
             foreach($list_in as $val) { $list[] = (int)$val; }
@@ -46,9 +46,8 @@ class Data_Products extends Data_Basket {
       } else {
          if( $id_category == 0 ) $where = '';
          else $where = 'where p2c.id_category = ' . (int)$id_category;
-         
-         //$query = 'select p.id_product, p.name, SUBSTR(p.description,45) as description, p.picture_small_url,
-         $query = 'select p.id_product, p.name, p.id_product as description, p.picture_small_url,
+          
+         $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
          p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
          from ' . TBL_SHOP_PRODUCT . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
          ( p.id_product = p2c.id_product ) ' . $where;

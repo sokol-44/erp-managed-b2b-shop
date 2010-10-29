@@ -35,8 +35,14 @@ class Framework extends Framework_Data {
       return self::$class;
    }
 
-   static function output_string_html($string) {
-      return htmlspecialchars($string);
+   static function output_string_html($string, $lenght = false) {
+      if( $lenght ) {
+         $substring = substr($string,0, $lenght);
+         $substring = substr($substring,0,strrpos($substring,' '));
+         return $substring;
+      } else {
+         return htmlspecialchars($string);
+      }
    }
 
    static function output_string($string) {
@@ -51,8 +57,8 @@ class Framework extends Framework_Data {
 
    static function not_null($input) {
       if (is_array($input)) {
-        if (sizeof($input) > 0) return true;
-        else return false;
+         if (sizeof($input) > 0) return true;
+         else return false;
       } elseif (($input != '') && (strlen(trim($input)) > 0) && (strtolower($input) != 'null')) {
          return true;
       }
@@ -120,7 +126,7 @@ class Framework extends Framework_Data {
       }
       return $this->RSA[$name];
    }
-    
+
    function check_request_split_array($name, $value) {
       if( isset($this->RSA[$name]) ) {
          return in_array($value, $this->RSA[$name]);
@@ -215,7 +221,7 @@ class Framework extends Framework_Data {
          //unset($this->GET['com']);
       }
    }
-   
+
    function js_escape( $str, $str_separator = '"') {
       $search = array('\\', $str_separator);
       $replace = array('\\\\', '\\' . $str_separator);

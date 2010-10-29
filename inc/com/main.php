@@ -1,4 +1,7 @@
 <?php
+$Page->head_title = Lang::_('MAIN_PAGE');
+echo nl2br('Witamy na stronie głównej sklepu!
 
-echo 'main co cos cos';
+Możesz zapoznać się z naszą ofermą i przetestowadz działanie katalogu i koszyka.
+');
 ?>

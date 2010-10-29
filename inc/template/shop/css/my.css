@@ -1,17 +1,80 @@
 
 /*
+Global
+*/
+
+input { padding: 3px; }
+
+/*
+Product Info
+*/
+.product_info {}
+.product_image { 
+	float: right;
+	border: 1px solid grey;
+	cursor: pointer;
+	padding: 1px;
+	background-color: black;
+	margin: 10px;
+	vertical-align: top;
+	clear: none;
+}
+.product_add_basket {
+	float: right;
+	margin: 10px;
+	border: 1px dotted green;
+	text-align: justify;
+	padding: 2px;
+}
+.product_add_basket img {
+	margin-left: 5px;
+}
+.product_name {
+	text-transform: uppercase;
+	font-weight: bolder;
+	font-size: large;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.product_description {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.catalog_product_name {
+	font-size: small;
+	font-weight: bolder;
+	padding-bottom: 10px;
+}
+.catalog_product_description {
+	padding-top: 10px;
+}
+/*
+product_info
+product_name
+product_image
+product_price
+product_description
+product_add_basket
+*/
+/*
 Basket list
 */
 .basket {
-	background-color: lightblue;
+	background-color: lightgrey;
 	padding: 5px;
+}
+.basket_number {
+	padding: 0px 0 5px 0;
+	border-bottom: 1px dotted brown;
+	margin:  0px 0 5px 0;
 }
 .basket #nr {
 	text-decoration: underline;
 	padding: 2px;
-	}
+}
 	
-	/*
+/*
 basket_number
 basket_product_total
 basket_product_types
@@ -90,10 +153,14 @@ TD.headerNavigation {
 
 .tableBox td {
 	padding: 5px;
+	border: 1px solid white;
+	border-collapse: collapse;
 }
 
 .tableBox th {
 	padding: 5px;
+	border: 1px solid white;
+	border-collapse: collapse;
 }
 
 .tableBoxContents {

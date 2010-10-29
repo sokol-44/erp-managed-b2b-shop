@@ -32,10 +32,10 @@ if( $template != '' && is_file($template) ) {
    //throw error
 }
 
-print_debug($query_log);
+//print_debug($query_log);
 //print_debug($Page);
-print_debug($F);
-print_debug($P);
-print_debug($Info);
-print_debug(Lang::$STR);
+//print_debug($F);
+//print_debug($P);
+//print_debug($Info);
+//print_debug(Lang::$STR);
 ?>

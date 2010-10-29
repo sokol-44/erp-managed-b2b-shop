@@ -30,7 +30,7 @@ class SplitPage {
       } elseif ( defined('DEFAULT_MAX_ROWS') && (int)constant('DEFAULT_MAX_ROWS') > 0 ) {
          $this->rows_per_page = (int)constant('DEFAULT_MAX_ROWS');
       } else {
-         $this->rows_per_page = 20;
+         $this->rows_per_page = 10;
       }
 
       self::$class = $this;
