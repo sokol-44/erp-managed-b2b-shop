@@ -3,7 +3,7 @@
  * Person.php Class for any person in the system (logged in or not)
  * Copyright Michał Sokołowski 2010
  *
- * @author Micha� Soko�owski <msokolowski@example.com>
+ * @author Michał Sokołowski <msokolowski@example.com>
  */
 
 if( !defined('_I_INIT') ) die();
@@ -45,6 +45,8 @@ class Person {
       $this->id = 0;
       $this->roles = array();
       $this->data = array();
+      $BackTrail = BackTrail::g_global();
+      $BackTrail->reset();
    }
 
    public function set_person_data(array $P_data, array $P_rights) {

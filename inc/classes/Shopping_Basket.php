@@ -15,12 +15,18 @@ if( !defined('_I_INIT') ) die();
 class Shopping_Basket {
    static $class = false;
    public $contents = array();
-
+   public $id_nr_shopping_basket = 0;
+   public $params = array(
+      	'id_client' => 0, 'description' => 0, 'using_id_client_user' => 0,
+      	'using_id_client_user' => 0, 'using_session_id' => 0, 'using_date' => 0
+      );
    //   static $GET_raw = '', $GET_array = array();
 
-   function __construct() {
+   function __construct($id_nr_shopping_basket = 0, $id_client = 0) {
       $this->reset();
       self::$class = $this;
+      $this->id_nr_shopping_basket = (int)$id_nr_shopping_basket;
+      $this->id_client = (int)$id_client;
    }
 
    static function g_global() {
@@ -32,9 +38,22 @@ class Shopping_Basket {
 
 
 
-   function restore_contents() {
+   function restore_contents_db() {
       //FIXME
       //DB stuff
+      // and merge with DB
+
+   }
+    
+   function save_contents_db() {
+      //DB SAVE
+      //Data::
+      
+
+   }
+   
+   function clean_contents_db() {
+      
    }
 
    function reset($reset_database = false) {

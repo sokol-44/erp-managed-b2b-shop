@@ -228,6 +228,11 @@ class Framework extends Framework_Data {
       $str = str_replace($search, $replace, $str);
       return $str;
    }
+   
+   static function array_recursive_compare() {
+      //FIXME
+      
+   }
 
    private function _request_normalize_rec(array $array, $type = 'GET') {
       //$_GET, $_POST
