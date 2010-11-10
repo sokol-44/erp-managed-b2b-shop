@@ -79,7 +79,6 @@ if ( function_exists('ini_get') && (ini_get('register_globals') == false) ) {
 
 $F = new Framework();
 $Page = new Page();
-$Data = new Data();
 $Lang = new Lang();
 
 /**
@@ -94,5 +93,10 @@ foreach($session_object as $var_name => $class_name ) {
       session_put($var_name);
    }
 }
+
+/*
+ * Needs Person
+ */
+$Data = new Data();
 
 ?>

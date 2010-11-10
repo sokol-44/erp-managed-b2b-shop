@@ -201,10 +201,6 @@ class Data extends Data_Person {
       $tbl_person . ' p,  ' . $tbl_glue . ' gl,  ' . $tbl_rights . ' r ' .
       'where p.' . $table_id . ' = gl.' . $table_id . ' and gl.id_rights = r.id_rights and ' .
       ' p.' . $table_id . ' = "' . db_escape($id) . '"');
-      echo 'select r.*, p.' . $table_id . ' as id_table from ' .
-      $tbl_person . ' p,  ' . $tbl_glue . ' gl,  ' . $tbl_rights . ' r ' .
-      'where p.' . $table_id . ' = gl.' . $table_id . ' and gl.id_rights = r.id_rights and ' .
-      ' p.' . $table_id . ' = "' . db_escape($id) . '"';
       $ret_array = array();
       if( db_rows($res)>0 ) {
          while( $row = db_fetch_array($res) ) $ret_array[$row['name']] = $row['name'];

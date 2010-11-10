@@ -17,8 +17,8 @@ class Data_Basket {
    
    static function put_basket_data($basket_params, $person_data) {
       $F = Framework::g_global();
-      print_r($basket_params);
-      print_r($person_data);
+      print_debug($basket_params);
+      print_debug($person_data);
       die();
    }
    
