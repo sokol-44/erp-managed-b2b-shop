@@ -1,6 +1,6 @@
 <?php
 /**
- * Szhopping_Cart.php Global initialization file
+ * Shopping_Basket.php Global initialization file
  * Copyright Michał Sokołowski 2010
  *
  * @author Micha� Soko�owski <msokolowski@example.com>
@@ -18,15 +18,15 @@ class Shopping_Basket {
    public $id_nr_shopping_basket = 0;
    public $params = array(
       	'id_client' => 0, 'description' => 0, 'using_id_client_user' => 0,
-      	'using_id_client_user' => 0, 'using_session_id' => 0, 'using_date' => 0
-      );
+      	'using_id_client_user' => 0, 'using_session_id' => 0, 'using_date' => 0,
+         'description' => '');
    //   static $GET_raw = '', $GET_array = array();
 
    function __construct($id_nr_shopping_basket = 0, $id_client = 0) {
       $this->reset();
       self::$class = $this;
       $this->id_nr_shopping_basket = (int)$id_nr_shopping_basket;
-      $this->id_client = (int)$id_client;
+      $this->params['id_client'] = (int)$id_client;
    }
 
    static function g_global() {
@@ -44,16 +44,19 @@ class Shopping_Basket {
       // and merge with DB
 
    }
-    
+
    function save_contents_db() {
       //DB SAVE
-      //Data::
-      
-
+      $F = Framework::g_global();
+      $P = Person::g_global();
+      if( $P->logged_in ) {
+         Data::put_basket_data($this->params, $P->data);
+         //      Data::put_basket_product_list();
+      }
    }
-   
+
    function clean_contents_db() {
-      
+
    }
 
    function reset($reset_database = false) {
@@ -74,6 +77,7 @@ class Shopping_Basket {
       } else {
          $this->contents[$id_product]['quantity'] = (int)$quantity;
       }
+      self::save_contents_db();
       return $this->contents[$id_product]['quantity'];
    }
 
@@ -81,12 +85,14 @@ class Shopping_Basket {
       foreach($array as $id_product => $array_quantity) {
          $this->update_product_quantity((int)$id_product, (int)$array_quantity['quantity']);
       }
+      self::save_contents_db();
    }
 
    function update_product_quantity($id_product, $quantity = 0) {
       $id_product = (int)$id_product;
       if( isset($this->contents[$id_product]) ) {
          $this->contents[$id_product]['quantity'] = (int)$quantity;
+         self::save_contents_db();
          return $this->contents[$id_product]['quantity'];
       } else {
          return 0;
@@ -113,6 +119,7 @@ class Shopping_Basket {
       if (isset($this->contents[$id_product])) {
          unset( $this->contents[$id_product] );
       }
+      self::save_contents_db();
    }
 
    function remove_all_product() {

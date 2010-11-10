@@ -10,7 +10,18 @@ if( !defined('_I_INIT') ) die();
 
 class Data_Basket {
 
-
+   function __construct() {
+      //echo 'Data_Basket';
+      //parent::__construct();
+   }
+   
+   static function put_basket_data($basket_params, $person_data) {
+      $F = Framework::g_global();
+      print_r($basket_params);
+      print_r($person_data);
+      die();
+   }
+   
    static function get_basket_product_list( $id_shopping_basket = 0, $id_client = 0 ) {
       $F = Framework::g_global();
       

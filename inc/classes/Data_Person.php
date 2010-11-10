@@ -25,7 +25,10 @@ class Data_Person extends Data_Rights {
    //		 $F->show_rights_list('ADMIN', $person_data['rights_ids']);
    //		 $F->show_person_account_state('ADMIN', $person_data['state']);
 
-
+   function __construct() {
+      parent::__construct();
+   }
+    
    static function remove_person($table, $id_in) {
 
       $id = (int)$id_in;
@@ -41,8 +44,8 @@ class Data_Person extends Data_Rights {
             break;
          case 'CLIENT':
             return (
-               db_query('update ' . TBL_GLOBAL_CLIENT . " set state = 'ERASED' where id_client=" . $id) &&
-               db_query('update ' . TBL_GLOBAL_CLIENT_USER . " set state = 'ERASED' where id_client=" . $id) );
+            db_query('update ' . TBL_GLOBAL_CLIENT . " set state = 'ERASED' where id_client=" . $id) &&
+            db_query('update ' . TBL_GLOBAL_CLIENT_USER . " set state = 'ERASED' where id_client=" . $id) );
             break;
          default:
             return 'TABLE_ERROR';
@@ -183,7 +186,7 @@ class Data_Person extends Data_Rights {
 
       return db_result_array($res);
    }
-   
+    
    static function insert_client_data($data) {
       $F = Framework::g_global();
       $data_main_sql['name'] =  $data['name'];
@@ -191,14 +194,14 @@ class Data_Person extends Data_Rights {
       $data_main_sql['email'] =  $data['email'];
       $data_main_sql['phone'] =  $data['phone'];
       $data_main_sql['state'] =  $data['state'];
-      
+
       db_transaction_start();
       db_perform(TBL_GLOBAL_CLIENT, $data_main_sql, 'INSERT');
       $id_client = db_insert_id();
       db_transaction_end();
       return $id_client;
    }
-   
+    
    static function update_client_data($id, $data, $data_org) {
       $F = Framework::g_global();
       $data_main_sql['name'] =  $data['name'];
@@ -211,6 +214,15 @@ class Data_Person extends Data_Rights {
       db_perform(TBL_GLOBAL_CLIENT, $data_main_sql, 'UPDATE', "id_client=" . (int)$data_org['id_client']);
    }
 
+   static function get_client_attribute( $id, $attribute_type) {
+      
+      $result = db_query('select value
+         	from ' . TBL_GLOBAL_CLIENT_ATTRIBUTES . ' ca ,
+         	' . TBL_GLOBAL_CLIENT . ' c
+         	where ca.id_client = c.id_client and ca.id_client = "' . db_escape($attribute_type) . '"');
+      if( db_rows($result) ) return db_fetch_result('val');
+      else return false;
+   }
 
    static function get_client_data($id) {
       $res = db_query('select distinct h.id_client, h.name, h.description, h.email, h.phone, h.created, h.state, count(hu.id_client_user) as count_users

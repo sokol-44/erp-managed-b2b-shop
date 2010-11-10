@@ -85,7 +85,7 @@ class BackTrail {
 
       if( !$F->going_back || !$back_index ) {
          $trail = end($this->trails);
-         if( $F->array_recursive_compare($trail['GET'], $F->GET) == 0  ) {
+         if( $F->is_null($this->trails) || $F->array_recursive_compare($trail['GET'], $F->GET) == 0  ) {
             if( !$going_back  ) {
                $this->trails[] = array('GET' => $F->GET , 'POST' => $F->POST, 'com' => $F->com,
          		'PERSON_LOGGED_IN' => $P->logged_in, 'PAGE_TITLE' => '');

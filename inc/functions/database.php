@@ -225,6 +225,8 @@ function db_fetch_array($result, $idx = '', $link = 'db_link') {
    return $result_data;
 }
 
-
-
+function db_fetch_result($name, $idx = 0) {
+   global $$link;
+   return mysql_result($result, (int)$idx, $name);
+}
 ?>

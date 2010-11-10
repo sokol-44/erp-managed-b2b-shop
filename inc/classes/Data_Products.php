@@ -9,6 +9,23 @@
 if( !defined('_I_INIT') ) die();
 
 class Data_Products extends Data_Basket {
+   static $Data_Products_params = array('id_client' => 0, 'client_view' => false);
+
+   function __construct() {
+      parent::__construct();
+      self::_load_client_params();
+   }
+
+   static function _load_client_params() {
+      $P = Person::g_global();
+      if( $P->logged_in ) {
+         self::$Data_Products_params['id_client'] = (int)$P->data['id_client'];
+         $view_name = Data_Person::get_client_attribute((int)$P->data['id_client'], 'PRODUCT_VIEW_NAME');
+         if( $view_name ) {
+            self::$Data_Products_params['client_view'] = $view_name;
+         }
+      }
+   }
 
    static function get_categories_from_list( $list_in = false ) {
       $F = Framework::g_global();
@@ -44,13 +61,23 @@ class Data_Products extends Data_Basket {
          // TODO
          // Show products from subcategories
       } else {
-         if( $id_category == 0 ) $where = '';
-         else $where = 'where p2c.id_category = ' . (int)$id_category;
-          
+         $where = array();
+
+         if( $id_category != 0 ) $where['p2c.id_category'] = (int)$id_category;
+
+         if( $F->not_null(self::$Data_Products_params['client_view']) ) {
+            $where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
+            $product_from = self::$Data_Products_params['client_view'];
+         } else {
+            $product_from = TBL_SHOP_PRODUCT;
+         }
+
+         if( $F->not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
+
          $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
          p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
-         from ' . TBL_SHOP_PRODUCT . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
-         ( p.id_product = p2c.id_product ) ' . $where;
+         from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+         ( p.id_product = p2c.id_product ) ' . $where_str;
          $sp_query = $SP->prepare_sql( $query );
       }
       $res = db_query( $sp_query );
@@ -63,14 +90,24 @@ class Data_Products extends Data_Basket {
    }
 
    static function get_product_info_list( array $id_product_array ) {
+      $F = Framework::g_global();
+
+      if( $F->not_null(self::$Data_Products_params['client_view']) ) {
+         $where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
+         $product_from = self::$Data_Products_params['client_view'];
+      } else {
+         $where = '';
+         $product_from = TBL_SHOP_PRODUCT;
+      }
 
       if( Framework::not_null($id_product_array) ) {
          $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
             p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
             group_concat(p2c.id_category) as id_category_list
-            from ' . TBL_SHOP_PRODUCT . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+            from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
             ( p.id_product = p2c.id_product )
-            where p.id_product IN (' . implode(',', $id_product_array) . ') group by p.id_product';
+            where p.id_product IN (' . implode(',', $id_product_array) . ')' . $where . '
+            group by p.id_product';
          $result = db_query( $query );
          return db_result_array( $result );
       } else {
@@ -79,22 +116,41 @@ class Data_Products extends Data_Basket {
    }
 
    static function get_product_info( $id_product = 0 ) {
+      $F = Framework::g_global();
+       
+      if( $F->not_null(self::$Data_Products_params['client_view']) ) {
+         $where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
+         $product_from = self::$Data_Products_params['client_view'];
+      } else {
+         $where = '';
+         $product_from = TBL_SHOP_PRODUCT;
+      }
+
       $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
          p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
          group_concat(p2c.id_category) as id_category_list
-         from ' . TBL_SHOP_PRODUCT . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+         from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
          ( p.id_product = p2c.id_product )
-         where p.id_product = ' . (int)$id_product . ' group by p.id_product';
+         where p.id_product = ' . (int)$id_product . $where . ' group by p.id_product';
       $result = db_query( $query );
       return db_fetch_array( $result );
    }
 
    static function get_categories_list( array $filters ) {
-
+      $F = Framework::g_global();
+      
+      if( $F->not_null(self::$Data_Products_params['client_view']) ) {
+         $where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
+         $product_from = self::$Data_Products_params['client_view'];
+      } else {
+         $where = '';
+         $product_from = TBL_SHOP_PRODUCT;
+      }
+      
       $query = 'SELECT c.id_category, c.name, c.description, c.id_category_parent, COUNT(p2c.id_category) AS products_in_category
    	FROM ' . TBL_SHOP_CATEGORY . ' c LEFT OUTER JOIN (
-   		SELECT p2c.id_category FROM ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c, ' . TBL_SHOP_PRODUCT . ' p
-         WHERE  p2c.id_product = p.id_product AND p.status = \'ACTIVE\' AND p.quantity > 0) p2c
+   		SELECT p2c.id_category FROM ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c, ' . $product_from . ' p
+         WHERE p2c.id_product = p.id_product AND p.status = \'ACTIVE\' AND p.quantity > 0 ' . $where . ') p2c
          ON (c.id_category = p2c.id_category)
    	GROUP BY c.id_category ORDER  BY c.sort_order, c.name';
        

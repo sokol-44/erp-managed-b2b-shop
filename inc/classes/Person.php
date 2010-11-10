@@ -36,6 +36,7 @@ class Person {
 
    function __wakeup() {
       self::$class = $this;
+      $this->session_id = session_id();
    }
 
 
@@ -43,6 +44,7 @@ class Person {
       $this->login = false;
       $this->logged_in = false;
       $this->id = 0;
+      $this->session_id = session_id();
       $this->roles = array();
       $this->data = array();
       $BackTrail = BackTrail::g_global();
@@ -60,15 +62,20 @@ class Person {
       unset($this->data['password']);
 
       $this->roles = $P_rights;
+      $this->session_id = session_id();
    }
 
    public function check_person_login($login, $password, $type) {
       $P_data = Data::get_login_data($login, $type);
       if( $P_data ) {
+         echo '3';
          $res = gl_check_password($password, $P_data['password']);
+         echo '4';
          if( $res ) {
+            echo '5';
             $res_rights = Data::get_login_rights($P_data['id_admin'], $type);
-            $this->set_person_data($P_data, $res_rights, $type);
+            print_r($res_rights);
+            $this->set_person_data($P_data, $res_rights);
             return true;
          } else {
             return false;

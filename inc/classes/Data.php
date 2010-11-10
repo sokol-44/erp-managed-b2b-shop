@@ -26,14 +26,16 @@ class Data extends Data_Person {
     *
     */
    function __construct() {
+      parent::__construct();
    }
-   
+
+
    function get_translation($com_str) {
       $query = 'select definition, translation from ' . TBL_CORE_TRANSLATION . '
       	where com is NULL or com = "' . db_escape($com_str) . '"';
       return db_result_array( db_query($query) );
    }
-   
+
 
    /**
     * autoload magic object & method
@@ -157,8 +159,13 @@ class Data extends Data_Person {
     */
    function get_login_data($login, $table) {
 
-      if( defined('TBL_GLOBAL_' . $table) ) $tbl_name = constant('TBL_GLOBAL_' . $table);
-      else return false;
+      if( $table == 'CLIENT' ) {
+         if( defined('TBL_GLOBAL_CLIENT_USER') ) $tbl_name = TBL_GLOBAL_CLIENT_USER;
+      } elseif( $table == 'ADMIN' ) {
+         if( defined('TBL_GLOBAL_ADMIN') ) $tbl_name = TBL_GLOBAL_ADMIN;
+      } else {
+         return false;
+      }
 
       if( $tbl_name != '' ) {
          $res = db_query('select * from ' . $tbl_name . ' where login = "' . db_escape($login) . '"');
@@ -170,8 +177,13 @@ class Data extends Data_Person {
 
    function get_login_rights($id, $table) {
 
-      if( defined('TBL_GLOBAL_' . $table) ) $tbl_person = constant('TBL_GLOBAL_' . $table);
-      else return false;
+      if( $table == 'CLIENT' ) {
+         if( defined('TBL_GLOBAL_CLIENT_USER') ) $tbl_person = TBL_GLOBAL_CLIENT_USER;
+      } elseif( $table == 'ADMIN' ) {
+         if( defined('TBL_GLOBAL_ADMIN') ) $tbl_person = TBL_GLOBAL_ADMIN;
+      } else {
+         return false;
+      }
 
       if( defined('TBL_GLOBAL_RIGHTS2' . $table) ) $tbl_glue = constant('TBL_GLOBAL_RIGHTS2' . $table);
       else return false;
@@ -189,14 +201,17 @@ class Data extends Data_Person {
       $tbl_person . ' p,  ' . $tbl_glue . ' gl,  ' . $tbl_rights . ' r ' .
       'where p.' . $table_id . ' = gl.' . $table_id . ' and gl.id_rights = r.id_rights and ' .
       ' p.' . $table_id . ' = "' . db_escape($id) . '"');
-
+      echo 'select r.*, p.' . $table_id . ' as id_table from ' .
+      $tbl_person . ' p,  ' . $tbl_glue . ' gl,  ' . $tbl_rights . ' r ' .
+      'where p.' . $table_id . ' = gl.' . $table_id . ' and gl.id_rights = r.id_rights and ' .
+      ' p.' . $table_id . ' = "' . db_escape($id) . '"';
       $ret_array = array();
       if( db_rows($res)>0 ) {
          while( $row = db_fetch_array($res) ) $ret_array[$row['name']] = $row['name'];
-   }
+      }
 
-   return $ret_array;
-}
+      return $ret_array;
+   }
 
 
 

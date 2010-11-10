@@ -193,7 +193,7 @@ class Framework extends Framework_Data {
 
       if( !self::not_null($where) ) return false;
 
-      if( $where != 'ADMIN' && $where != 'HOTEL' &&  $where != 'USER' ) return false;
+      if( $where != 'ADMIN' && $where != 'CLIENT' ) return false;
 
       if( $this->not_null($this->POST['lgn_' . $where]) &&
       $this->not_null($this->POST['pswrd_' . $where]) ) {
@@ -312,6 +312,7 @@ class Framework extends Framework_Data {
       }
 
       if( sizeof($ret_array) > 0 )  return $ret_array;
+      else return array();
    }
 
 }

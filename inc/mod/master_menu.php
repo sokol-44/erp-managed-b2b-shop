@@ -2,7 +2,11 @@
 
 $array_mastermenu = array();
 
-//$array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_LOGIN),'', Lang::_('Login') );
+if( $P->logged_in ) {
+   $array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_LOGOUT),'', Lang::_('Logout') );
+} else {
+   $array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_LOGIN),'', Lang::_('Login') );
+}
 $array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_CATALOG),'', Lang::_('Catalog') );
 $array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_BASKET),'', Lang::_('Basket') );
 

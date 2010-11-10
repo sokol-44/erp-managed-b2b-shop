@@ -18,6 +18,10 @@ if( !defined('_I_INIT') ) die();
  */
 class Data_Rights extends Data_Products {
 
+   function __construct() {
+      parent::__construct();
+   }
+    
    function get_rights_list($scope = '') {
       $F = Framework::g_global();
       if( $F->not_null( $scope ) ) $where = ' where scope = "' . db_escape($scope) . '"';

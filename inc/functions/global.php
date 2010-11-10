@@ -14,7 +14,7 @@ function gl_init() {
 }
 
 function __autoload($name) {
-   echo '<pre>' . print_r(debug_backtrace(FALSE), TRUE). '</pre>';
+   //echo '<pre>' . print_r(debug_backtrace(FALSE), TRUE). '</pre>';
 }
 
 
