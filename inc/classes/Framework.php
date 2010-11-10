@@ -12,6 +12,7 @@ class Framework extends Framework_Data {
    static $class = false;
    static $POST = array(), $GET = array(), $REQUEST = array();
    static $com = '';
+   static $going_back = false;
    static $GET_array = array();
 
    //   static $GET_raw = '', $GET_array = array();
@@ -220,6 +221,11 @@ class Framework extends Framework_Data {
          $this->com = $this->GET['com'];
          //unset($this->GET['com']);
       }
+      
+      if( self::not_null($this->GET['going_back']) ) {
+         $this->going_back = (($this->GET['going_back']==1)?true:false);
+         unset($this->GET['going_back']);
+      }
    }
 
    function js_escape( $str, $str_separator = '"') {
@@ -228,10 +234,64 @@ class Framework extends Framework_Data {
       $str = str_replace($search, $replace, $str);
       return $str;
    }
-   
-   static function array_recursive_compare() {
+
+   static function array_recursive_compare($array1, $array2) {
       //FIXME
-      
+      $diff_count = 0;
+      foreach($array1 as $key1 => $val1) {
+         if( isset($array2[$key1]) ) {
+            if( is_array( $val1 ) ) {
+               if( count($val1) == 0 ) {
+                  $diff_count++;
+                  // echo "a1= $val1 != $array2[$key1]\n";
+               } else {
+                  $diff_count += $this->array_recursive_compare($val1, $array2[$key1]);
+                  // echo "b1= $val1 != $array2[$key1]\n";
+               }
+            } else {
+               if( $val1 != $array2[$key1] ) {
+                  $diff_count++;
+                  // echo "c1= $val1 != $array2[$key1]\n";
+               }
+
+            }
+         } else {
+            if( is_array( $val1 ) ) {
+               if( count($val1) == 0 ) {
+                  $diff_count++;
+                  // echo "d1= $val1 != $array2[$key1]\n";
+               } else {
+                  $diff_count += $this->array_recursive_compare($val1, array());
+                  // echo "e1= $val1 != $array2[$key1]\n";
+               }
+            } else {
+               if( $val1 != $array2[$key1] ) {
+                  $diff_count++;
+                  // echo "f1= $val1 != $array2[$key1]\n";
+               }
+            }
+         }
+      }
+      foreach($array2 as $key2 => $val2) {
+         if( !isset($array1[$key2]) ) {
+            //count all
+            if( is_array( $val2 ) ) {
+               if( count($val2) == 0 ) {
+                  $diff_count++;
+                  // echo "a2= $val2 != $array1[$key2]\n";
+               } else {
+                  $diff_count += $this->array_recursive_compare(array(), $val2);
+                  // echo "b2= $val2 != $array1[$key2]\n";
+               }
+            } else {
+               $diff_count++;
+               // echo "c2= $val2 != $array1[$key2]\n";
+            }
+         }
+      }
+      // echo "$diff_count \n";
+      return $diff_count;
+      //array_diff
    }
 
    private function _request_normalize_rec(array $array, $type = 'GET') {

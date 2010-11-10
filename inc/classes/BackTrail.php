@@ -31,13 +31,13 @@ class BackTrail {
    function __wakeup() {
       self::$class = $this;
    }
-   
+
    function reset() {
-       $this->trails = array();
+      $this->trails = array();
    }
-   
+
    function last_get() {
-      
+
       if( count($this->trails) > 0 ) {
          return false;
       } else {
@@ -51,37 +51,52 @@ class BackTrail {
       }
 
    }
-   
-   function prune() {
+
+   function prune_trail() {
       if( count($this->trails) > 128 ) array_shift($this->trails);
    }
-   
+
+   function add_title( $title ) {
+      $this->trails[(count($this->trails)-1)]['PAGE_TITLE'] = $title;
+   }
+
    function add_trail() {
       $F = Framework::g_global();
       $P = Person::g_global();
-      
+
       $trail = end($this->trails);
+      $back_index = false;
       
-      if( $trail['GET']  )
-      
-      $this->trails[] = array('GET' => $F->GET , 'POST' => $F->POST, 'com' => $F->com,
-      'PERSON_LOGGED_IN' => $P->logged_in);
-      $this->prune();
+      if( $F->going_back ) {
+         while( $trail = prev($this->trails) ) {
+            if($F->array_recursive_compare($trail['GET'], $F->GET) == 0 && count( $trail['POST'] ) == 0) {
+               $back_index = key($this->trails);
+               break;
+            }
+         }
+         if( $back_index ) {
+            $idx_start = $back_index+1;
+            $idx_end = count($this->trails);
+            for( $idx=$idx_start; $idx<$idx_end; $idx++ ) {
+               unset($this->trails[$idx]);
+            }
+         }
+      }
+
+      if( !$F->going_back || !$back_index ) {
+         $trail = end($this->trails);
+         if( $F->array_recursive_compare($trail['GET'], $F->GET) == 0  ) {
+            if( !$going_back  ) {
+               $this->trails[] = array('GET' => $F->GET , 'POST' => $F->POST, 'com' => $F->com,
+         		'PERSON_LOGGED_IN' => $P->logged_in, 'PAGE_TITLE' => '');
+               $this->prune_trail();
+            }
+         }
+      }
+
    }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 ?>
