@@ -53,7 +53,7 @@ function db_perform($table, $data_array, $action = 'insert', $where = '', $link 
             $query_array[] = $col_name . '=now()';
             break;
          case 'NULL':
-            $query_array[] = $col_name .= '=null';
+            $query_array[] = $col_name . '=null';
             break;
          default:
             $query_array[] = $col_name . '=\'' . db_escape($value) . '\'';
@@ -64,8 +64,13 @@ function db_perform($table, $data_array, $action = 'insert', $where = '', $link 
    $action = strtoupper($action);
 
    if ($action == 'INSERT') {
-      $query = 'insert into ' . $table . ' set ' . implode(', ',  $query_array);
-	  $res = db_query($query, $link);
+      if( is_array($where) && Framework::not_null($where) ) {
+          //INSERT on duplikate key - update
+          //FIXME
+      } else {
+         $query = 'insert into ' . $table . ' set ' . implode(', ',  $query_array);
+         $res = db_query($query, $link);
+      }
    } elseif ($action == 'UPDATE') {
       if( is_array($where) ) $where = db_unroll_conditions($where);
       $query = 'update ' . $table . ' set ' . implode(', ',  $query_array) . ' where ' . $where;
@@ -113,8 +118,8 @@ function db_insert_id($link = 'db_link') {
 }
 
 function db_int($value){
-	if( strtoupper($value) == 'NULL' ) return 'null';
-	else return (int)$value;
+   if( strtoupper($value) == 'NULL' ) return 'null';
+   else return (int)$value;
 
 }
 
@@ -128,7 +133,7 @@ function db_escape($string, $link = 'db_link') {
    } elseif (function_exists('mysql_escape_string')) {
       $ret = mysql_escape_string($string);
    } else {
-	  $ret = addslashes($string);
+      $ret = addslashes($string);
    }
 
    return $ret;

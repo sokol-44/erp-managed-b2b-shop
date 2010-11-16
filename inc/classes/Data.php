@@ -159,16 +159,18 @@ class Data extends Data_Person {
     */
    function get_login_data($login, $table) {
 
-      if( $table == 'CLIENT' ) {
-         if( defined('TBL_GLOBAL_CLIENT_USER') ) $tbl_name = TBL_GLOBAL_CLIENT_USER;
-      } elseif( $table == 'ADMIN' ) {
-         if( defined('TBL_GLOBAL_ADMIN') ) $tbl_name = TBL_GLOBAL_ADMIN;
+      if( $table == 'CLIENT' && defined('TBL_GLOBAL_CLIENT_USER') ) {
+         $tbl_name = TBL_GLOBAL_CLIENT_USER;
+         $table_id = 'id_client_user';
+      } elseif( $table == 'ADMIN' && defined('TBL_GLOBAL_ADMIN') ) {
+         $tbl_name = TBL_GLOBAL_ADMIN;
+         $table_id = 'id_admin';
       } else {
          return false;
       }
 
       if( $tbl_name != '' ) {
-         $res = db_query('select * from ' . $tbl_name . ' where login = "' . db_escape($login) . '"');
+         $res = db_query('select *, ' . $table_id . ' as id_table from ' . $tbl_name . ' where login = "' . db_escape($login) . '"');
          return db_fetch_array($res);
       } else {
          return false;

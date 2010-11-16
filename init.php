@@ -99,4 +99,11 @@ foreach($session_object as $var_name => $class_name ) {
  */
 $Data = new Data();
 
+
+/*
+ * TMP
+ */
+
+$Shopping_Basket->update_person();
+
 ?>

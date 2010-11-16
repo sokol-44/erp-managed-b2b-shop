@@ -25,6 +25,7 @@ class Person {
       $this->roles = array();
       $this->data = array();
       self::$class = $this;
+      $this->session_id = session_id();
    }
 
    static function g_global() {

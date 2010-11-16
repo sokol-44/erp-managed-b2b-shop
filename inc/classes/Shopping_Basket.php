@@ -17,15 +17,16 @@ class Shopping_Basket {
    public $contents = array();
    public $id_nr_shopping_basket = 0;
    public $params = array(
-      	'id_client' => 0, 'description' => 0, 'using_id_client_user' => 0,
-      	'using_id_client_user' => 0, 'using_session_id' => 0, 'using_date' => 0,
-         'description' => '');
+      	'id_client' => 0, 'id_nr_shopping_basket' => 0, 'description' => 0,
+      	'using_id_client_user' => 0, 'using_id_client_user' => 0, 'using_session_id' => 0,
+   		'using_date' => 0, 'description' => '');
    //   static $GET_raw = '', $GET_array = array();
 
    function __construct($id_nr_shopping_basket = 0, $id_client = 0) {
       $this->reset();
       self::$class = $this;
       $this->id_nr_shopping_basket = (int)$id_nr_shopping_basket;
+      $this->params['id_nr_shopping_basket'] = '1';//(int)$id_nr_shopping_basket;
       $this->params['id_client'] = (int)$id_client;
    }
 
@@ -36,6 +37,10 @@ class Shopping_Basket {
       return self::$class;
    }
 
+   function update_person() {
+      $P = Person::g_global();
+      $this->params['id_client'] = (int)$P->data['id_client'];
+   }
 
 
    function restore_contents_db() {
@@ -49,9 +54,10 @@ class Shopping_Basket {
       //DB SAVE
       $F = Framework::g_global();
       $P = Person::g_global();
-      if( $P->logged_in ) {
-         Data::put_basket_data($this->params, $P->data);
-         //      Data::put_basket_product_list();
+
+      if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
+         Data::put_basket_data($this->params);
+         Data::put_basket_product_list($this->contents, $this->params);
       }
    }
 
@@ -85,6 +91,8 @@ class Shopping_Basket {
       foreach($array as $id_product => $array_quantity) {
          $this->update_product_quantity((int)$id_product, (int)$array_quantity['quantity']);
       }
+      //TODO
+      //only update in DB
       self::save_contents_db();
    }
 
@@ -119,11 +127,16 @@ class Shopping_Basket {
       if (isset($this->contents[$id_product])) {
          unset( $this->contents[$id_product] );
       }
+      //TODO
+      //only delete 1 row
       self::save_contents_db();
    }
 
    function remove_all_product() {
       $this->reset();
+      //TODO
+      //only delete
+      self::save_contents_db();
    }
 
    function get_product_id_list() {
