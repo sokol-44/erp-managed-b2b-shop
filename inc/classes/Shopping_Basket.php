@@ -18,16 +18,23 @@ class Shopping_Basket {
    public $id_nr_shopping_basket = 0;
    public $params = array(
       	'id_client' => 0, 'id_nr_shopping_basket' => 0, 'description' => 0,
-      	'using_id_client_user' => 0, 'using_id_client_user' => 0, 'using_session_id' => 0,
-   		'using_date' => 0, 'description' => '');
+         'date_create' => null, 'date_modified' => null, 'ts_create' => 0, 'ts_modified' => 0,
+      	'using_id_client_user' => 0, 'using_session_id' => 0, 'using_date' => 0);
    //   static $GET_raw = '', $GET_array = array();
 
-   function __construct($id_nr_shopping_basket = 0, $id_client = 0) {
+   function __construct($params = false, $create = false) {
       $this->reset();
       self::$class = $this;
-      $this->id_nr_shopping_basket = (int)$id_nr_shopping_basket;
-      $this->params['id_nr_shopping_basket'] = '1';//(int)$id_nr_shopping_basket;
-      $this->params['id_client'] = (int)$id_client;
+      if( $params ) {
+         if( $create ) {
+            $this->params = $params;
+            Data::put_basket_data($this->params);
+         } else {
+            $this->params = $params;
+            $this->restore_contents_db();
+         }
+      }
+      $this->id_nr_shopping_basket = $this->params['id_nr_shopping_basket'];
    }
 
    static function g_global() {
@@ -47,7 +54,13 @@ class Shopping_Basket {
       //FIXME
       //DB stuff
       // and merge with DB
+      $F = Framework::g_global();
+      $P = Person::g_global();
 
+      if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
+         $this->params = Data::get_basket_data($this->params);
+         $this->contents = Data::get_basket_product_list($this->params);
+      }
    }
 
    function save_contents_db() {

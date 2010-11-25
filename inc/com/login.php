@@ -6,8 +6,8 @@ echo '212sasa';
    $status = $P->check_person_login($F->POST['lgn_CLIENT'], $F->POST['pswrd_CLIENT'], 'CLIENT');
    if( $status ) {
       //login
+      $Shopping_Basket_Chain->set_user();
       $Page->redirect( $F->make_link('main') );
-      echo 'sasa';
    } else {
    }
    die();

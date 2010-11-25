@@ -59,6 +59,7 @@ include(DIR_INC_CLASSES . DS . 'SplitPage.php');
 include(DIR_INC_CLASSES . DS . 'Page.php');
 include(DIR_INC_CLASSES . DS . 'Lang.php');
 include(DIR_INC_CLASSES . DS . 'Shopping_Basket.php');
+include(DIR_INC_CLASSES . DS . 'Shopping_Basket_Chain.php');
 include(DIR_INC_CLASSES . DS . 'Price.php');
 include(DIR_INC_CLASSES . DS . 'Breadcrumbs.php');
 include(DIR_INC_CLASSES . DS . 'BackTrail.php');
@@ -85,7 +86,7 @@ $Lang = new Lang();
  * session objects
  */
 $session_object = array('P' => 'Person', 'Info' => 'Info',
-		'Shopping_Basket' => 'Shopping_Basket', 'BackTrail' => 'BackTrail');
+		'Shopping_Basket_Chain' => 'Shopping_Basket_Chain', 'BackTrail' => 'BackTrail');
 
 foreach($session_object as $var_name => $class_name ) {
    if ( !session_check($var_name) || !is_object(${$var_name}) ) {
@@ -103,7 +104,8 @@ $Data = new Data();
 /*
  * TMP
  */
-
-$Shopping_Basket->update_person();
+//
+//$Shopping_Basket->update_person();
+//$Shopping_Basket->restore_contents_db();
 
 ?>

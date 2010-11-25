@@ -160,6 +160,7 @@ class Page {
       $P = Person::g_global();
       $Page = Page::g_global();
       $BC = Breadcrumbs::g_global();
+      $Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
       switch( $type ) {
          case 'COM': include(DIR_INC_COMPONENTS . DS . $name . '.php');
          break;

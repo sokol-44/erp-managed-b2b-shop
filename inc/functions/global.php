@@ -25,7 +25,7 @@ function print_debug($var, $vd = false ) {
       $res = print_r($var, true);
    }
 
-   echo '<p align="left">' .
+   echo '<p align="left" style="background-color: white; color: #606060;">' .
    str_replace('  ', '&nbsp;', nl2br($res)) .
    '</p>';
 }

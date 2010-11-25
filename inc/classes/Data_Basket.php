@@ -15,6 +15,43 @@ class Data_Basket {
       //parent::__construct();
    }
 
+   //
+   //   $this->params = Data::get_basket_data($this->params);
+   //   $this->contents = Data::get_basket_product_list($this->params);
+
+   static function get_basket_data($basket_params) {
+      $query = 'select id_client, id_nr_shopping_basket, description, date_create, date_modified,
+     	UNIX_TIMESTAMP(date_create) as ts_create, UNIX_TIMESTAMP(date_modified) as ts_create,
+      using_id_client_user, using_session_id, using_date
+      from ' . TBL_SHOP_SHOPPING_BASKET . ' where
+      id_client = ' . db_int($basket_params['id_client']) . ' and
+      id_nr_shopping_basket = ' . db_int($basket_params['id_nr_shopping_basket']);
+      return db_fetch_array( db_query( $query ) );
+   }
+
+   static function get_basket_chain_basket_list( $id_client ) {
+      $query = 'select id_client, id_nr_shopping_basket, description, date_create, date_modified,
+      	UNIX_TIMESTAMP(date_create) as ts_create, UNIX_TIMESTAMP(date_modified) as ts_create,
+      	using_id_client_user, using_session_id, using_date
+         from ' . TBL_SHOP_SHOPPING_BASKET . '
+      	where id_client = ' . db_int($id_client) . '';
+      return db_result_array( db_query( $query ) );
+   }
+
+
+   static function get_basket_product_list($basket_params) {
+      $query = ' select id_product, quantity, date_added
+      from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
+      id_client = ' . db_int($basket_params['id_client']) . ' and
+      id_nr_shopping_basket = ' . db_int($basket_params['id_nr_shopping_basket']);
+      $product_array = db_result_array( db_query( $query ) );
+      $contents = array();
+      foreach( $product_array as $product ) {
+         $contents[$product['id_product']] = array('quantity' => (int)$product['quantity']);
+      }
+      return $contents;
+   }
+
    static function put_basket_data($basket_params) {
       $F = Framework::g_global();
       $P = Person::g_global();
@@ -56,38 +93,13 @@ class Data_Basket {
       	set id_client = ' . db_int($basket_params['id_client']) . ',
       	id_nr_shopping_basket = ' . db_int($basket_params['id_nr_shopping_basket']) . ',
       	id_product = ' . db_int($id_product) . ',
-      	product_count = ' . db_int($details['quantity']) . ', date_added = now()';
+      	quantity = ' . db_int($details['quantity']) . ', date_added = now()';
          print_debug( $insert_query);
          db_query( $insert_query );
       }
-//      print_debug($basket_params);
-//      print_debug($basket_contents);
+      //      print_debug($basket_params);
+      //      print_debug($basket_contents);
       db_transaction_end();
-   }
-
-   static function get_basket_product_list( $id_shopping_basket = 0, $id_client = 0 ) {
-      $F = Framework::g_global();
-
-      $query = 'select sbp.id_product, sbp.product_count
-         from ' . TBL_SHOP_SHOPPING_BASKET . ' sb left join ' . TBL_SHOP_SHOPPING_BASKET_PRODUCTS . ' sbp on
-         ( sbp.id_shopping_basket = p2c.id_shopping_basket )
-         where sbp.id_shopping_basket = ' . db_int($id_shopping_basket) . ' and
-         sb.id_client = ' . db_int($id_client);
-
-      $res = db_query( $query );
-      return db_result_array($res);
-   }
-
-   static function set_basket_contents($params_array, $contents) {
-      $F = Framework::g_global();
-      $P = Person::g_global();
-
-      $params_array = array(
-      	'id_client' => 0, 'description' => 0, 'using_id_client_user' => 0,
-      	'using_id_client_user' => 0, 'using_session_id' => 0, 'using_date' => 0
-      );
-
-
    }
 
 }

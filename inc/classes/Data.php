@@ -29,7 +29,6 @@ class Data extends Data_Person {
       parent::__construct();
    }
 
-
    function get_translation($com_str) {
       $query = 'select definition, translation from ' . TBL_CORE_TRANSLATION . '
       	where com is NULL or com = "' . db_escape($com_str) . '"';

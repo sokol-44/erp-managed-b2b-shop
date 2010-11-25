@@ -1,8 +1,7 @@
 <?php
 //STR: tmp
 //FIXME
-if( DEBUG_DB_QUERIES == 'false' && false) $Shopping_Basket = new Shopping_Basket();
-else $Shopping_Basket = Shopping_Basket::g_global();
+$Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
 //STR: end
 
 $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_COM_BASKET) ) );
