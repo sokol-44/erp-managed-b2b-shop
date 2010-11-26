@@ -21,18 +21,37 @@ class Data_Basket {
 
    static function get_basket_data($basket_params) {
       $query = 'select id_client, id_nr_shopping_basket, description, date_create, date_modified,
-     	UNIX_TIMESTAMP(date_create) as ts_create, UNIX_TIMESTAMP(date_modified) as ts_create,
-      using_id_client_user, using_session_id, using_date
+     	UNIX_TIMESTAMP(date_create) as ts_create, UNIX_TIMESTAMP(date_modified) as ts_modified,
+      using_id_client_user, using_session_id, using_date, UNIX_TIMESTAMP(using_date) as ts_using
       from ' . TBL_SHOP_SHOPPING_BASKET . ' where
       id_client = ' . db_int($basket_params['id_client']) . ' and
       id_nr_shopping_basket = ' . db_int($basket_params['id_nr_shopping_basket']);
       return db_fetch_array( db_query( $query ) );
    }
 
+   static function remove_basket( $id_client, $id_nr_shopping_basket ) {
+      //      self::remove_basket_product_list($id_nr_shopping_basket);
+      //      self::remove_basket_pdata($id_nr_shopping_basket);
+      db_transaction_start();
+
+      $clear_products_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
+      id_client = ' . db_int($id_client) . ' and
+      id_nr_shopping_basket = ' . db_int($id_nr_shopping_basket);
+      db_query( $clear_products_query );
+
+      $delete_basket_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET . '
+      	where id_client = ' . db_int($id_client) . ' and
+      	id_nr_shopping_basket = ' . db_int($id_nr_shopping_basket) . '';
+      db_query( $delete_basket_query );
+
+      db_transaction_end();
+
+   }
+
    static function get_basket_chain_basket_list( $id_client ) {
       $query = 'select id_client, id_nr_shopping_basket, description, date_create, date_modified,
-      	UNIX_TIMESTAMP(date_create) as ts_create, UNIX_TIMESTAMP(date_modified) as ts_create,
-      	using_id_client_user, using_session_id, using_date
+      	UNIX_TIMESTAMP(date_create) as ts_create, UNIX_TIMESTAMP(date_modified) as ts_modified,
+      	using_id_client_user, using_session_id, using_date, UNIX_TIMESTAMP(using_date) as ts_using
          from ' . TBL_SHOP_SHOPPING_BASKET . '
       	where id_client = ' . db_int($id_client) . '';
       return db_result_array( db_query( $query ) );
@@ -72,7 +91,7 @@ class Data_Basket {
       	using_date = now()';
       //      print_debug($basket_params);
       //      print_debug($P);
-      //      echo $query;
+      echo $query;
       $res = db_query( $query );
    }
 
@@ -83,10 +102,10 @@ class Data_Basket {
 
       db_transaction_start();
 
-      $cleare_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
+      $clear_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
       id_client = ' . db_int($basket_params['id_client']) . ' and
       id_nr_shopping_basket = ' . db_int($basket_params['id_nr_shopping_basket']);
-      db_query( $cleare_query );
+      db_query( $clear_query );
 
       foreach( $basket_contents as $id_product => $details ) {
          $insert_query = 'insert into ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . '

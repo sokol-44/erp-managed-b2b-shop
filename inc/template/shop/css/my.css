@@ -63,7 +63,15 @@ Basket list
 .basket {
 	background-color: lightgrey;
 	padding: 5px;
+	margin-bottom: 5px;
 }
+.mainbasket {
+	background-color: lightblue;
+}
+.usedbasket {
+	background-color: moccasin;
+}
+
 .basket_number {
 	padding: 0px 0 5px 0;
 	border-bottom: 1px dotted brown;
@@ -72,7 +80,16 @@ Basket list
 .basket #nr {
 	text-decoration: underline;
 	padding: 2px;
+	margin-left: 3px;
 }
+
+.basket_menu {
+	float: right;
+}
+.basket_menu img{
+	margin-left: 5px;
+}
+
 	
 /*
 basket_number
@@ -81,6 +98,18 @@ basket_product_types
 basket_sum_gross
 basket_sum_netto
 */
+
+/*
+usedbasket
+basket_add_icon
+*/
+
+.basket_add {
+	background-color: lightgreen;
+	padding: 5px;
+}
+
+
 /*
 Menu
 */

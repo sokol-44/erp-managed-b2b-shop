@@ -19,19 +19,19 @@ class Shopping_Basket {
    public $params = array(
       	'id_client' => 0, 'id_nr_shopping_basket' => 0, 'description' => 0,
          'date_create' => null, 'date_modified' => null, 'ts_create' => 0, 'ts_modified' => 0,
-      	'using_id_client_user' => 0, 'using_session_id' => 0, 'using_date' => 0);
+      	'using_id_client_user' => 0, 'using_session_id' => 0, 'using_date' => 0,  'ts_using' => 0);
    //   static $GET_raw = '', $GET_array = array();
 
    function __construct($params = false, $create = false) {
       $this->reset();
       self::$class = $this;
+//      echo '$params'.(($params)?'_t_':'_f_') . ' $create'.(($create)?'_t_':'_f_')."<br>";
       if( $params ) {
+         $this->params = $params;
          if( $create ) {
-            $this->params = $params;
-            Data::put_basket_data($this->params);
+            $this->db_save_contents();
          } else {
-            $this->params = $params;
-            $this->restore_contents_db();
+            $this->db_restore_contents();
          }
       }
       $this->id_nr_shopping_basket = $this->params['id_nr_shopping_basket'];
@@ -44,13 +44,30 @@ class Shopping_Basket {
       return self::$class;
    }
 
-   function update_person() {
+   function update_person( $id_nr_shopping_basket = 0 ) {
       $P = Person::g_global();
       $this->params['id_client'] = (int)$P->data['id_client'];
+      if( $id_nr_shopping_basket > 0 ) {
+         $this->params['id_nr_shopping_basket'] = (int)$id_nr_shopping_basket;
+      }
    }
 
+   function currently_other_using( $params = array() ) {
+      $P = Person::g_global();
+      //global param
+      $time_diff_ok = time()-1800;
 
-   function restore_contents_db() {
+      //FIXME
+      //check in db
+      //echo $this->params['using_id_client_user']." != ".$P->id.' && '.$this->params['ts_using'].'  > '.$time_diff_ok;
+      if( $this->params['using_id_client_user'] != $P->id && $this->params['ts_using'] > $time_diff_ok ) {
+         return true;
+      }
+
+      return false;
+   }
+
+   function db_restore_contents() {
       //FIXME
       //DB stuff
       // and merge with DB
@@ -63,18 +80,18 @@ class Shopping_Basket {
       }
    }
 
-   function save_contents_db() {
+   function db_save_contents() {
       //DB SAVE
       $F = Framework::g_global();
       $P = Person::g_global();
-
+      
       if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
          Data::put_basket_data($this->params);
          Data::put_basket_product_list($this->contents, $this->params);
       }
    }
 
-   function clean_contents_db() {
+   function db_clean_contents() {
 
    }
 
@@ -96,7 +113,7 @@ class Shopping_Basket {
       } else {
          $this->contents[$id_product]['quantity'] = (int)$quantity;
       }
-      self::save_contents_db();
+      self::db_save_contents();
       return $this->contents[$id_product]['quantity'];
    }
 
@@ -106,14 +123,14 @@ class Shopping_Basket {
       }
       //TODO
       //only update in DB
-      self::save_contents_db();
+      self::db_save_contents();
    }
 
    function update_product_quantity($id_product, $quantity = 0) {
       $id_product = (int)$id_product;
       if( isset($this->contents[$id_product]) ) {
          $this->contents[$id_product]['quantity'] = (int)$quantity;
-         self::save_contents_db();
+         self::db_save_contents();
          return $this->contents[$id_product]['quantity'];
       } else {
          return 0;
@@ -142,14 +159,14 @@ class Shopping_Basket {
       }
       //TODO
       //only delete 1 row
-      self::save_contents_db();
+      self::db_save_contents();
    }
 
    function remove_all_product() {
       $this->reset();
       //TODO
       //only delete
-      self::save_contents_db();
+      self::db_save_contents();
    }
 
    function get_product_id_list() {

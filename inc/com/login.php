@@ -1,12 +1,14 @@
 <?php
 
+
+$Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
+
 if( $F->check_login('CLIENT') ) {
 //   list($login, $password) = $F->get_login_data(PERSON_TYPE);
-echo '212sasa';
    $status = $P->check_person_login($F->POST['lgn_CLIENT'], $F->POST['pswrd_CLIENT'], 'CLIENT');
    if( $status ) {
       //login
-      $Shopping_Basket_Chain->set_user();
+      $Shopping_Basket_Chain->switch_user();
       $Page->redirect( $F->make_link('main') );
    } else {
    }

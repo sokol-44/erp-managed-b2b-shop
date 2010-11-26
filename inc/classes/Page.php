@@ -135,6 +135,8 @@ class Page {
 
       //$list_places['component_html']['script'] = 'sasa';
 
+      //FIXME
+      //add rights to coponent
       if( $F->check_get('com') ) {
          $list_places['component_html']['script'] = $F->com;
       } else {
@@ -145,10 +147,21 @@ class Page {
    }
 
    function render_places() {
+      $F = Framework::g_global();
+      $P = Person::g_global();
+      $Page = Page::g_global();
+      $BC = Breadcrumbs::g_global();
       foreach($this->list_places as $place_name => $place) {
          if( Framework::not_null($place['script']) ) {
             ob_start();
-            $this->include_element($place['script'], $place['type']);
+            //$this->include_element($place['script'], $place['type']);
+            switch( $place['type']) {
+               case 'COM': include(DIR_INC_COMPONENTS . DS . $place['script'] . '.php');
+               break;
+               case 'MOD': include(DIR_INC_MODULES . DS . $place['script'] . '.php');
+               break;
+               default: break;
+            }
             $this->${place_name} = ob_get_clean();
          }
       }
@@ -160,7 +173,6 @@ class Page {
       $P = Person::g_global();
       $Page = Page::g_global();
       $BC = Breadcrumbs::g_global();
-      $Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
       switch( $type ) {
          case 'COM': include(DIR_INC_COMPONENTS . DS . $name . '.php');
          break;
