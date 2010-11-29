@@ -1,7 +1,7 @@
 <?php
 
 $P->logout();
-echo nl2br('Wylogowany!
-');
+$Shopping_Basket_Chain = new Shopping_Basket_Chain();
+echo nl2br('Wylogowany!');
 ?>
 

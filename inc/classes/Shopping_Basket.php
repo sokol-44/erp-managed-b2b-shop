@@ -44,7 +44,7 @@ class Shopping_Basket {
       return self::$class;
    }
 
-   function _check_valid_basket( $Shopping_Basket ) {
+   static function _check_valid_basket( $Shopping_Basket ) {
       if ( is_a($Shopping_Basket, 'Shopping_Basket') ) {
          return true;
       } else {
@@ -111,6 +111,7 @@ class Shopping_Basket {
       $F = Framework::g_global();
       $P = Person::g_global();
       
+//     print_debug($this); die();
 
       if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
          Data::put_basket_data($this->params);

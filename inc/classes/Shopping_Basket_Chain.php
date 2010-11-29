@@ -66,8 +66,7 @@ class Shopping_Basket_Chain {
       }
    }
 
-   function add_basket() {
-      echo '#' . sizeof($this->Basket_List) . '#';
+   function add_basket( ) {
       if( sizeof($this->Basket_List) <= self::$max_basket ) {
          for( $id_sb = 1; $id_sb <= self::$max_basket ; $id_sb++ ){
             if( !$this->_check_valid_basket($id_sb) ) {
@@ -187,11 +186,23 @@ class Shopping_Basket_Chain {
    }
 
 
-   function switch_user() {
-      $P = Person::g_global();
-
-      $this->id_client = (int)$P->data['id_client'];
-      $this->id_client_user = (int)$P->id;
+   function login_user() {
+      $Shopping_Basket_tmp = reset($this->Basket_List);
+      $Shopping_Basket = clone $Shopping_Basket_tmp;
+      
+      $this->_reload_data();
+      
+      //adding nonlogin basket - upt to 2 times baskets
+      if( Shopping_Basket::_check_valid_basket($Shopping_Basket) &&
+         sizeof($Shopping_Basket->contents) > 0 ) {
+         for( $id_sb = 1; $id_sb <= (self::$max_basket*2-1) ; $id_sb++ ){
+            if( !$this->_check_valid_basket($id_sb) ) {
+               $Shopping_Basket->update_person( $id_sb );
+               $this->Basket_List[$id_sb] = $Shopping_Basket;
+               return true;
+            }
+         }
+      }
 
    }
 

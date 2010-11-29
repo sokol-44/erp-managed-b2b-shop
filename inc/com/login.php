@@ -8,7 +8,7 @@ if( $F->check_login('CLIENT') ) {
    $status = $P->check_person_login($F->POST['lgn_CLIENT'], $F->POST['pswrd_CLIENT'], 'CLIENT');
    if( $status ) {
       //login
-      $Shopping_Basket_Chain->switch_user();
+      $Shopping_Basket_Chain->login_user();
       $Page->redirect( $F->make_link('main') );
    } else {
    }

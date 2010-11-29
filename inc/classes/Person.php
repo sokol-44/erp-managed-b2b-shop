@@ -69,13 +69,9 @@ class Person {
    public function check_person_login($login, $password, $type) {
       $P_data = Data::get_login_data($login, $type);
       if( $P_data ) {
-         echo '3';
          $res = gl_check_password($password, $P_data['password']);
-         echo '4';
          if( $res ) {
-            echo '5';
             $res_rights = Data::get_login_rights($P_data['id_admin'], $type);
-            print_r($res_rights);
             $this->set_person_data($P_data, $res_rights);
             return true;
          } else {
