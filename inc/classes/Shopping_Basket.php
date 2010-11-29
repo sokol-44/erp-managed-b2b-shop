@@ -25,7 +25,7 @@ class Shopping_Basket {
    function __construct($params = false, $create = false) {
       $this->reset();
       self::$class = $this;
-//      echo '$params'.(($params)?'_t_':'_f_') . ' $create'.(($create)?'_t_':'_f_')."<br>";
+      //      echo '$params'.(($params)?'_t_':'_f_') . ' $create'.(($create)?'_t_':'_f_')."<br>";
       if( $params ) {
          $this->params = $params;
          if( $create ) {
@@ -44,12 +44,38 @@ class Shopping_Basket {
       return self::$class;
    }
 
-   function update_person( $id_nr_shopping_basket = 0 ) {
+   function _check_valid_basket( $Shopping_Basket ) {
+      if ( is_a($Shopping_Basket, 'Shopping_Basket') ) {
+         return true;
+      } else {
+         return false;
+      }
+   }
+
+   function add_from_basket( $Shopping_Basket ) {
+      if( $this->_check_valid_basket($Shopping_Basket) ) {
+         $in_contents = $Shopping_Basket->contents;
+         foreach( $in_contents as $id_product => $product_array ) {
+            $this->add_to_basket($id_product, $product_array['quantity'], false);
+         }
+         $in_description = $Shopping_Basket->params['description'];
+         if( Framework::not_null($in_description) ) {
+            $this->params['description'] .= "\n" . $in_description;
+         }
+         self::db_save_contents();
+         return true;
+      } else {
+         return false;
+      }
+   }
+
+   function update_person( $id_nr_shopping_basket = 0 , $save = true) {
       $P = Person::g_global();
       $this->params['id_client'] = (int)$P->data['id_client'];
       if( $id_nr_shopping_basket > 0 ) {
          $this->params['id_nr_shopping_basket'] = (int)$id_nr_shopping_basket;
       }
+      if( $save ) self::db_save_contents();
    }
 
    function currently_other_using( $params = array() ) {
@@ -85,9 +111,18 @@ class Shopping_Basket {
       $F = Framework::g_global();
       $P = Person::g_global();
       
+
       if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
          Data::put_basket_data($this->params);
          Data::put_basket_product_list($this->contents, $this->params);
+      }
+   }
+    
+   function db_remove_product( $id_product = 0 ) {
+      $P = Person::g_global();
+
+      if( $P->logged_in && $P->data['id_client'] == $this->params['id_client'] && $id_product > 0 ) {
+         Data::remove_basket_product( (int)$id_product, $this->params);
       }
    }
 
@@ -106,31 +141,32 @@ class Shopping_Basket {
       }
    }
 
-   function add_to_basket($id_product, $quantity = 1) {
+   function add_to_basket($id_product, $quantity = 1, $save = true) {
       $id_product = (int)$id_product;
       if( isset($this->contents[$id_product]) ) {
          $this->contents[$id_product]['quantity'] = $this->contents[$id_product]['quantity'] + (int)$quantity;
       } else {
          $this->contents[$id_product]['quantity'] = (int)$quantity;
       }
-      self::db_save_contents();
+      if( $save ) self::db_save_contents();
       return $this->contents[$id_product]['quantity'];
    }
 
-   function update_basket_quantity_list($array) {
+   function update_basket_quantity_list($array, $description = false) {
       foreach($array as $id_product => $array_quantity) {
-         $this->update_product_quantity((int)$id_product, (int)$array_quantity['quantity']);
+         $this->update_product_quantity((int)$id_product, (int)$array_quantity['quantity'], false);
       }
+      if( $description ) $this->params['description'] = $description;
       //TODO
       //only update in DB
       self::db_save_contents();
    }
 
-   function update_product_quantity($id_product, $quantity = 0) {
+   function update_product_quantity($id_product, $quantity = 0, $save = true) {
       $id_product = (int)$id_product;
       if( isset($this->contents[$id_product]) ) {
          $this->contents[$id_product]['quantity'] = (int)$quantity;
-         self::db_save_contents();
+         if( $save ) self::db_save_contents();
          return $this->contents[$id_product]['quantity'];
       } else {
          return 0;
@@ -159,7 +195,7 @@ class Shopping_Basket {
       }
       //TODO
       //only delete 1 row
-      self::db_save_contents();
+      self::db_remove_product( $id_product );
    }
 
    function remove_all_product() {

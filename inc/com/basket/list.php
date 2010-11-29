@@ -16,6 +16,17 @@ echo $F->draw_form('basket_edit', $form_link);
 <script>
 function remove_from_basked() { return true; }
 </script>
+<table width="100%" style="border: 0">
+	<tr>
+		<td colspan="5"><?php echo Lang::_('description'); ?></td>
+	</tr>
+	<tr>
+		<td colspan="5"><?php echo $F->draw_textarea_field('description', 'auto', '95%', 10, $Shopping_Basket->params['description']); ?></td>
+	</tr>
+	<tr>
+		<td colspan="5" align="right"><?php echo $F->draw_submit(Lang::_('UPDATE_BASKET')); ?></td>
+	</tr>
+</table>
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('PICTURE') ?></th>

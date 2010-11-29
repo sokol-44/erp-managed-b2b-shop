@@ -47,6 +47,21 @@ class Data_Basket {
       db_transaction_end();
 
    }
+    
+    
+   static function remove_basket_product( $id_product, $basket_params) {
+      $clear_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
+      id_client = ' . db_int($basket_params['id_client']) . ' and
+      id_nr_shopping_basket = ' . db_int($basket_params['id_nr_shopping_basket']) . ' and
+      id_product = ' . db_int($id_product);
+      
+      db_transaction_start();
+      db_query( $clear_query );
+      $res = db_affected_rows();
+      db_transaction_end();
+      
+      return $res;
+   }
 
    static function get_basket_chain_basket_list( $id_client ) {
       $query = 'select id_client, id_nr_shopping_basket, description, date_create, date_modified,

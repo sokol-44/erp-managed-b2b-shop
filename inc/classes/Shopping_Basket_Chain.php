@@ -52,6 +52,19 @@ class Shopping_Basket_Chain {
       }
    }
 
+   function add_to_mainbasket( $id_nr_shopping_basket = 0 ) {
+      if( $this->_check_valid_basket($id_nr_shopping_basket) ) {
+         $status = $this->Basket_List[$this->id_basket_current]->add_from_basket($this->Basket_List[$id_nr_shopping_basket]);
+         if( $status ) {
+            unset( $this->Basket_List[$id_nr_shopping_basket] );
+            Data::remove_basket( $this->id_client, $id_nr_shopping_basket );
+         } else {
+            return false;
+         }
+      } else {
+         return false;
+      }
+   }
 
    function add_basket() {
       echo '#' . sizeof($this->Basket_List) . '#';
@@ -179,7 +192,7 @@ class Shopping_Basket_Chain {
 
       $this->id_client = (int)$P->data['id_client'];
       $this->id_client_user = (int)$P->id;
-      
+
    }
 
    static function g_global() {

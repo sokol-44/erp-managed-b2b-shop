@@ -18,7 +18,7 @@ if( $F->check_get('mode') ) {
          $Shopping_Basket->remove_from_basket($F->GET['id_product']);
          break;
       case 'update_basket':
-         $Shopping_Basket->update_basket_quantity_list($F->POST['product_quantity']);
+         $Shopping_Basket->update_basket_quantity_list($F->POST['product_quantity'], $F->POST['description']);
       default:
 
          break;
@@ -47,6 +47,14 @@ if( $F->check_get('mode') ) {
          else
          ;
          break;
+      case 'add_to_mainbasket':
+         //FIXME
+         //trow some error
+         if( $F->check_get('id_nr_shopping_basket') )
+            $Shopping_Basket_Chain->add_to_mainbasket($F->GET['id_nr_shopping_basket']);
+         else
+         ;
+         break;
       case 'switch_basket':
          //FIXME
          //trow some error
@@ -58,7 +66,7 @@ if( $F->check_get('mode') ) {
       default:
          break;
    }
-   $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('action')));
+   $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('action,id_nr_shopping_basket', false)) );
 } else {
    //display basket
    require 'basket' . DS . 'list.php';

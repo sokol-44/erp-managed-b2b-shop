@@ -103,7 +103,13 @@ class Framework extends Framework_Data {
    //FIXME for arrays in GET
    function make_get ($elements = '', $mode = false) {
 
-      if ( !is_array($elements)) $elements = array($elements);
+      if ( !is_array($elements)) {
+         if( $mode ) {
+            $elements = array($elements);
+         } else {
+            $elements = explode(',', $elements);
+         }
+      }
 
       $elements = array_merge($elements, array('com'));
 
@@ -221,7 +227,7 @@ class Framework extends Framework_Data {
          $this->com = $this->GET['com'];
          //unset($this->GET['com']);
       }
-      
+
       if( self::not_null($this->GET['going_back']) ) {
          $this->going_back = (($this->GET['going_back']==1)?true:false);
          unset($this->GET['going_back']);

@@ -40,10 +40,12 @@ while( $Shopping_Basket = $Shopping_Basket_Chain->return_basket_next( true ) ) {
    $clean_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'clean_basket', $GET_id));
    $clean_basket = $F->draw_link($clean_basket_link, 'title="' . Lang::_('clean product in BASKET') . '"', $F->static_image('icon/trash_16.png', Lang::_('clean product in BASKET')));
    $switch_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'switch_basket', $GET_id));
-   $switch_basket = $F->draw_link($switch_basket_link, 'title="' . Lang::_('switch BASKET') . '"', $F->static_image('icon/up_16.png', Lang::_('switch BASKET')));
+   $switch_basket = $F->draw_link($switch_basket_link, 'title="' . Lang::_('switch working BASKET') . '"', $F->static_image('icon/up_16.png', Lang::_('switch working BASKET')));
+   $addup_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'add_to_mainbasket', $GET_id));
+   $addup_basket = $F->draw_link($addup_basket_link, 'title="' . Lang::_('add to main BASKET') . '"', $F->static_image('icon/add_up_16.png', Lang::_('add to main BASKET')));
 ?>
 <div class="basket<?php echo $class_add; ?>" id="basket_prev_<?php echo $Shopping_Basket->id_nr_shopping_basket ?>">
-<div class="basket_menu"><?php echo $remove_basket . $clean_basket . $switch_basket; ?></div>
+<div class="basket_menu"><?php echo $addup_basket . $remove_basket . $clean_basket . $switch_basket; ?></div>
 <div class="basket_number"><?php echo Lang::_('BASKET'); // echo Lang::_('NUMBER'); ?><span id="nr"><?php echo $Shopping_Basket->id_nr_shopping_basket; ?></span></div>
 <div class="basket_product_total"><?php echo Lang::_('TOTAL PRODUCTS'); ?><span id="nr"><?php echo $total['product_total']; ?></span></div>
 <div class="basket_product_types"><?php echo Lang::_('PRODUCTS TYPES'); ?><span id="nr"><?php echo $total['product_types']; ?></span></div>

@@ -165,6 +165,11 @@ function db_rows($result, $link = 'db_link') {
    }
 }
 
+function db_affected_rows() {
+   global $$link;
+   return mysql_affected_rows();
+}
+
 
 function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link = 'db_link') {
    global $$link;
