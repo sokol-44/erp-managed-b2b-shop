@@ -138,6 +138,7 @@ class Page {
       //FIXME
       //add rights to coponent
       if( $F->check_get('com') ) {
+         //check if component exist
          $list_places['component_html']['script'] = $F->com;
       } else {
          $list_places['component_html']['script'] = DEFAULT_COM;

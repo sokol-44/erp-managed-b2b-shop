@@ -66,12 +66,29 @@ class Person {
       $this->session_id = session_id();
    }
 
+   public function check_roles($roles) {
+
+      if( Framework::not_null($roles) ) {
+         if( !is_array($roles) ) {
+            $roles = explode(',', $roles);
+         }
+          
+         foreach($roles as $role) {
+            if( array_search($role, $this->roles) ) {
+               return true;
+            }
+         }
+      }
+      
+      return false;
+   }
+
    public function check_person_login($login, $password, $type) {
       $P_data = Data::get_login_data($login, $type);
       if( $P_data ) {
          $res = gl_check_password($password, $P_data['password']);
          if( $res ) {
-            $res_rights = Data::get_login_rights($P_data['id_admin'], $type);
+            $res_rights = Data::get_login_rights($P_data['id_table'], $type);
             $this->set_person_data($P_data, $res_rights);
             return true;
          } else {

@@ -38,10 +38,16 @@ class Breadcrumbs {
    function get_list() {
       return $this->crumb;
    }
+   
     
-    
-   function add_crumb( array $in_crumb ) {
-      $this->crumb[] = $in_crumb;
+   function add_crumb( $in_crumb, $path = false ) {
+      if( $path && !is_array($in_crumb)) {
+         $this->crumb[] = array('name' => $in_crumb, 'path' => $path );
+      } elseif( is_array($in_crumb) ) {
+         $this->crumb[] = $in_crumb;
+      } else {
+      ;
+      }
    }
 
 
