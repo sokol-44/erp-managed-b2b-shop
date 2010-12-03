@@ -15,7 +15,7 @@ if( !$P->logged_in ) $F->redirect(  );
 		<td><?php echo $F->output_string_html($P->id); ?></td>
 	</tr>
 	<tr>
-		<td><?php echo Lang::_('Login') ?></td>
+		<td><?php echo Lang::_('User') ?></td>
 		<td><?php echo $F->output_string_html($P->data['login']); ?></td>
 	</tr>
 	<tr>

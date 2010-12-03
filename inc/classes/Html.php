@@ -248,6 +248,7 @@ class HTML {
                if(isset($param_rt[1])) {
                   $key = trim($param_rt[0]);
                   $val = trim( str_replace(array('"','\''), '', $param_rt[1]) );
+                  $params[$key] = $val;
                } else {
                   $kv = trim($param_rt[0]);
                   $params[$kv] = $kv;
@@ -480,12 +481,14 @@ class HTML {
     * @param int $width = 20
     * @param int $height = 5
     * @param string $text = ''
-    * @param string $parameters = ''
+    * @param array/string $parameters = ''
     * @param string $reinsert_value = false
     * @return string
     */
    function draw_textarea_field($name, $wrap, $width = 20, $height = 5, $text = '', $parameters = '', $reinsert_value = true) {
 
+      $parameters = self::__prepare_params($parameters);
+      
       $field = '<textarea name="' . $this->output_string($name) . '" id="' . $this->output_string($name) .
       '" wrap="' . $this->output_string($wrap) . '" cols="' . $this->output_string($width) .
       '" rows="' . $this->output_string($height) . '"' . self::__unroll_params($parameters) . '>';

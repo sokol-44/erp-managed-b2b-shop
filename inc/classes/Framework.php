@@ -60,6 +60,8 @@ class Framework extends Framework_Data {
       if (is_array($input)) {
          if (sizeof($input) > 0) return true;
          else return false;
+      } elseif ( is_object($input) ) {
+         return true;
       } elseif (($input != '') && (strlen(trim($input)) > 0) && (strtolower($input) != 'null')) {
          return true;
       }
@@ -161,7 +163,11 @@ class Framework extends Framework_Data {
       if( is_array($array) ) {
          return array_merge($array, $elements);
       } else {
-         return array_merge($this->GET_array, $elements);
+         if( self::not_null($this->GET_array) ) {
+            return array_merge($this->GET_array, $elements);
+         } else {
+            return $elements;
+         }
       }
    }
 

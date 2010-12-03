@@ -9,32 +9,35 @@ $Page->add_jq_init('set_toolbox_table(".tableBox");');
 
 $Page->head_title = Lang::_('BASKET');
 
+$id_nr_shopping_basket = $Shopping_Basket->id_nr_shopping_basket;
+
 $GET_tmp = $F->make_get();
-$form_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('mode', 'update_basket', $GET_tmp));
+$get_form_link =$F->add_local_get(array('mode' => 'order_basket', 'id_nr_shopping_basket' => (int)$id_nr_shopping_basket));
+print_debug($get_form_link);
+$form_link = $F->make_link(CFG_COM_ORDER_BASKET, $get_form_link, $GET_tmp);
 
-$GET_id  = $F->add_local_get('id_nr_shopping_basket', (int)$Shopping_Basket->id_nr_shopping_basket, $GET_tmp);
-$order_basket_param = array('onClick' => 'go_to_href(\'' . $F->make_link(CFG_COM_ORDER_BASKET, $GET_id) . '\')');
-
-echo $F->draw_form('basket_edit', $form_link);
+echo $F->draw_form('basket_order', $form_link);
 ?>
-<script>
-function remove_from_basked() { return true; }
-</script>
 <table width="100%" style="border: 0">
 	<tr>
-		<td colspan="5"><?php //print_debug($product_list); ?></td>
+		<td colspan="5"></td>
+	</tr>
+	<tr>
+		<td colspan="5">
+      <?php echo Lang::_('order description'); ?><br>
+      <?php echo $F->draw_textarea_field('order_description', 'auto', '95%', 6, ''); ?>
+      </td>
+   </tr>
+	<tr>
+		<td width="100%" colspan="4"></td>
+		<td align="right"><?php echo $F->draw_submit(Lang::_('ORDER_BASKET')); ?></td>
 	</tr>
 	<tr>
 		<td colspan="5">
       <?php echo Lang::_('basket description'); ?><br>
-      <?php echo $F->draw_textarea_field('description', 'auto', '95%', 6, $Shopping_Basket->params['description']); ?>
+      <?php echo $F->draw_textarea_field('description', 'auto', '95%', 6, $Shopping_Basket->params['description'], 'readOnly="readOnly"'); ?>
       </td>
-	</tr>
-	<tr>
-		<td width="100%" colspan="3"></td>
-		<td align="right"><?php echo $F->draw_button(Lang::_('PREPARE ORDER_BASKET'), $order_basket_param); ?></td>
-		<td align="right"><?php echo $F->draw_submit(Lang::_('UPDATE_BASKET')); ?></td>
-	</tr>
+   </tr>
 </table>
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
@@ -42,7 +45,6 @@ function remove_from_basked() { return true; }
 		<th><?php echo Lang::_('NAME') . ', ' . Lang::_('DESCRIPTION')?></th>
 		<th><?php echo Lang::_('PRICE') ?></th>
 		<th><?php echo Lang::_('quantity') ?></th>
-		<th><?php echo Lang::_('remove from BASKET') ?></th>
 	</tr>
 	<?php
 	foreach( $product_list as $product ) {
@@ -65,8 +67,7 @@ function remove_from_basked() { return true; }
 		. $small_image_html; ?></td>
 		<td valign="top"><?php echo $cell_product_info; ?></td>
 		<td width="10%"><?php echo Price::val( $product['price'] ) . '<br>(' . Price::tax( $product['vat'] ) . ')'; ?></td>
-		<td width="10%"><?php echo $F->draw_input_field('product_quantity[' . $product['id_product'] . ']', $product['quantity'], array('size' => '5')); ?></td>
-		<td><?php echo $cell_remove_from_basket; ?></td>
+		<td width="10%"><?php echo $product['quantity']; ?></td>
 	</tr>
 	<?php
 	}
@@ -75,8 +76,7 @@ function remove_from_basked() { return true; }
 <table width="100%" style="border: 0">
 	<tr>
 		<td width="100%" colspan="5"></td>
-		<td align="right"><?php echo $F->draw_button(Lang::_('PREPARE ORDER_BASKET'), $order_basket_param); ?></td>
-		<td align="right"><?php echo $F->draw_submit(Lang::_('UPDATE_BASKET')); ?></td>
+		<td align="right"><?php echo $F->draw_submit(Lang::_('ORDER_BASKET')); ?></td>
 	</tr>
 	<tr>
 		<td colspan="5"><?php //echo $SP->display_links(); ?></td>

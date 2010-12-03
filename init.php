@@ -45,6 +45,7 @@ include(DIR_INC_FUNCTIONS . DS . 'global.php');
  * Include global classes files:
  * database, session and other helpers
  */
+include(DIR_INC_CLASSES . DS . 'Data_Order.php');
 include(DIR_INC_CLASSES . DS . 'Data_Basket.php');
 include(DIR_INC_CLASSES . DS . 'Data_Products.php');
 include(DIR_INC_CLASSES . DS . 'Data_Rights.php');
@@ -63,6 +64,7 @@ include(DIR_INC_CLASSES . DS . 'Shopping_Basket_Chain.php');
 include(DIR_INC_CLASSES . DS . 'Price.php');
 include(DIR_INC_CLASSES . DS . 'Breadcrumbs.php');
 include(DIR_INC_CLASSES . DS . 'BackTrail.php');
+include(DIR_INC_CLASSES . DS . 'Order.php');
 
 /**
  * initialize engine

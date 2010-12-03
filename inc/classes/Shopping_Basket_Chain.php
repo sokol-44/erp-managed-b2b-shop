@@ -170,6 +170,14 @@ class Shopping_Basket_Chain {
       return $this->Basket_List[ $this->id_basket_current ];
    }
 
+   function return_basket( $id_nr_shopping_basket = 0 ) {
+      if( $this->_check_valid_basket($id_nr_shopping_basket) ) {
+         return $this->Basket_List[ $id_nr_shopping_basket ];
+      } else {
+         return false;
+      }
+   }
+    
    function reset_basket_list() {
       reset($this->Basket_List);
    }
@@ -189,12 +197,12 @@ class Shopping_Basket_Chain {
    function login_user() {
       $Shopping_Basket_tmp = reset($this->Basket_List);
       $Shopping_Basket = clone $Shopping_Basket_tmp;
-      
+
       $this->_reload_data();
-      
+
       //adding nonlogin basket - upt to 2 times baskets
       if( Shopping_Basket::_check_valid_basket($Shopping_Basket) &&
-         sizeof($Shopping_Basket->contents) > 0 ) {
+      sizeof($Shopping_Basket->contents) > 0 ) {
          for( $id_sb = 1; $id_sb <= (self::$max_basket*2-1) ; $id_sb++ ){
             if( !$this->_check_valid_basket($id_sb) ) {
                $Shopping_Basket->update_person( $id_sb );

@@ -14,9 +14,11 @@ $remove_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 
 $remove_basket = $F->draw_link($remove_basket_link, 'title="' . Lang::_('remove BASKET') . '"', $F->static_image('icon/delete_16.png', Lang::_('remove BASKET')));
 $clean_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'clean_basket', $GET_id));
 $clean_basket = $F->draw_link($clean_basket_link, 'title="' . Lang::_('clean BASKET') . '"', $F->static_image('icon/trash_16.png', Lang::_('clean BASKET')));
+$show_basket_link = $F->make_link(CFG_COM_BASKET, $GET_tmp);
+$show_basket = $F->draw_link($show_basket_link, 'title="' . Lang::_('show BASKET') . '"', $F->static_image('icon/folder_16.png', Lang::_('show BASKET')));
 ?>
 <div class="basket mainbasket" id="basket_prev_<?php echo $Shopping_Basket->id_nr_shopping_basket ?>">
-<div class="basket_menu"><?php echo $remove_basket . $clean_basket; ?></div>
+<div class="basket_menu"><?php echo $show_basket . $remove_basket . $clean_basket; ?></div>
 <div class="basket_number"><?php echo Lang::_('BASKET'); // echo Lang::_('NUMBER'); ?><span id="nr"><?php echo $Shopping_Basket->id_nr_shopping_basket; ?></span></div>
 <div class="basket_product_total"><?php echo Lang::_('TOTAL PRODUCTS'); ?><span id="nr"><?php echo $total['product_total']; ?></span></div>
 <div class="basket_product_types"><?php echo Lang::_('PRODUCTS TYPES'); ?><span id="nr"><?php echo $total['product_types']; ?></span></div>

@@ -8,11 +8,11 @@
 
 if( !defined('_I_INIT') ) die();
 
-class Data_Basket {
+class Data_Basket extends Data_Order {
 
    function __construct() {
       //echo 'Data_Basket';
-      //parent::__construct();
+      parent::__construct();
    }
 
    //
@@ -112,8 +112,6 @@ class Data_Basket {
 
 
    static function put_basket_product_list($basket_contents, $basket_params) {
-      $F = Framework::g_global();
-      $P = Person::g_global();
 
       db_transaction_start();
 
@@ -128,7 +126,6 @@ class Data_Basket {
       	id_nr_shopping_basket = ' . db_int($basket_params['id_nr_shopping_basket']) . ',
       	id_product = ' . db_int($id_product) . ',
       	quantity = ' . db_int($details['quantity']) . ', date_added = now()';
-         print_debug( $insert_query);
          db_query( $insert_query );
       }
       //      print_debug($basket_params);
