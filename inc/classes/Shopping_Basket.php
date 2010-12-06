@@ -85,8 +85,8 @@ class Shopping_Basket {
 
       //FIXME
       //check in db
-      //echo $this->params['using_id_client_user']." != ".$P->id.' && '.$this->params['ts_using'].'  > '.$time_diff_ok;
-      if( $this->params['using_id_client_user'] != $P->id && $this->params['ts_using'] > $time_diff_ok ) {
+      //echo $this->params['using_id_client_user']." != ".$P->id.' && '.$this->params['ts_using'].'  < '.$time_diff_ok . "<br>\n";
+      if( $this->params['using_id_client_user'] != $P->id && $this->params['ts_using'] < $time_diff_ok ) {
          return true;
       }
 
@@ -256,7 +256,7 @@ class Shopping_Basket {
    function calculate_total() {
       $this->total = array('product_total' => 0, 'product_types' => 0, 'sum_gross' => 0, 'sum_netto' => 0);
 
-      if ( Framework::not_null($this->contents) ) {
+      if ( Framework::not_null($this->contents) && $this->total['product_total'] == 0 ) {
          $this->get_all_product();
          foreach($this->product_array as $id_product => $product ) {
             $this->total['product_total'] += $product['quantity'];

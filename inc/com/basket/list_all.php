@@ -8,10 +8,32 @@ $Price = Price::g_global();
 
 $total = $Shopping_Basket->calculate_total();
 
-
-$all_basket = $F->draw_link( $F->make_link(CFG_COM_BASKET, array('show' => 'all')), 'title="' . Lang::_('show all BASKETS') . '"', Lang::_('show all BASKETS') . ' ' . $F->static_image('icon/folder_16.png', Lang::_('show all BASKETS')));
+echo Lang::_('Basket help for icons');
 ?>
-<div class="basket basket_show_all"><?php echo $all_basket; ?></div>
+<ul>
+<li><?php echo $F->static_image('icon/delete_16.png', Lang::_('remove BASKET')) . ' - ' . Lang::_('remove BASKET'); ?></li>
+<li><?php echo $F->static_image('icon/trash_16.png', Lang::_('clean product in BASKET')) . ' - ' . Lang::_('clean product in BASKET'); ?></li>
+<li><?php echo $F->static_image('icon/up_16.png', Lang::_('switch working BASKET to this basket')) . ' - ' . Lang::_('switch working BASKET to this basket'); ?></li>
+<li><?php echo $F->static_image('icon/add_up_16.png', Lang::_('add this basket to working BASKET')) . ' - ' . Lang::_('add this basket to working BASKET'); ?></li>
+</ul>
+<?php echo Lang::_('Basket help for colors');?>
+<ul>
+<li><p class="basket mainbasket"><?php echo Lang::_('current working basket');?></p></li>
+<li><p class="basket"><?php echo Lang::_('normal basket');?></p></li>
+<li><p class="basket usedbasket"><?php echo Lang::_('basket used by somebody else');?></p></li>
+</ul>
+
+
+<?php echo Lang::_('Basket list');?>
+<table class="tableBox" style="border: 0">
+	<tr class="tableBoxHeading">
+		<th><?php echo Lang::_('BASKET NUMBER'); ?></th>
+		<th><?php echo Lang::_('TOTAL PRODUCTS'); ?></th>
+		<th><?php echo Lang::_('PRODUCTS TYPES'); ?></th>
+		<th><?php echo Lang::_('sum gross'); ?></th>
+		<th><?php echo Lang::_('sum netto'); ?></th>
+		<th><?php echo Lang::_('avaiable actions'); ?></th>
+	</tr>
 <?php
 $GET_tmp = $F->make_get();
 $GET_id = $F->add_local_get('id_nr_shopping_basket', (int)$Shopping_Basket->id_nr_shopping_basket, $GET_tmp);
@@ -22,14 +44,14 @@ $clean_basket = $F->draw_link($clean_basket_link, 'title="' . Lang::_('clean BAS
 $show_basket_link = $F->make_link(CFG_COM_BASKET, $GET_tmp);
 $show_basket = $F->draw_link($show_basket_link, 'title="' . Lang::_('show BASKET') . '"', $F->static_image('icon/folder_16.png', Lang::_('show BASKET')));
 ?>
-<div class="basket mainbasket" id="basket_prev_<?php echo $Shopping_Basket->id_nr_shopping_basket ?>">
-<div class="basket_menu"><?php echo $show_basket . $remove_basket . $clean_basket; ?></div>
-<div class="basket_number"><?php echo Lang::_('BASKET'); // echo Lang::_('NUMBER'); ?><span id="nr"><?php echo $Shopping_Basket->id_nr_shopping_basket; ?></span></div>
-<div class="basket_product_total"><?php echo Lang::_('TOTAL PRODUCTS'); ?><span id="nr"><?php echo $total['product_total']; ?></span></div>
-<div class="basket_product_types"><?php echo Lang::_('PRODUCTS TYPES'); ?><span id="nr"><?php echo $total['product_types']; ?></span></div>
-<div class="basket_sum_gross"><?php echo Lang::_('sum gross'); ?><span id="nr"><?php echo Price::val($total['sum_gross']); ?></span></div>
-<div class="basket_sum_netto"><?php echo Lang::_('sum_netto'); ?><span id="nr"><?php echo Price::val($total['sum_netto']); ?></span></div>
-</div>
+	<tr>
+		<td class="mainbasket"><?php echo $Shopping_Basket->id_nr_shopping_basket; ?></td>
+		<td><?php echo $total['product_total']; ?></td>
+		<td><?php echo $total['product_types']; ?></td>
+		<td><?php echo Price::val($total['sum_gross']); ?></td>
+		<td><?php echo Price::val($total['sum_netto']); ?></td>
+		<td><div class="basket_menu"><?php echo $addup_basket . $remove_basket . $clean_basket; ?></div></td>
+	</tr>
 <?php
 $Shopping_Basket_Chain->reset_basket_list();
 
@@ -38,7 +60,7 @@ while( $Shopping_Basket = $Shopping_Basket_Chain->return_basket_next( true ) ) {
    
    $currently_other_using = $Shopping_Basket->currently_other_using();
    
-   if( $currently_other_using ) $class_add = ' usedbasket';
+   if( $currently_other_using ) $class_add = ' class="usedbasket"';
    else $class_add = '';
    
    $GET_id = $F->add_local_get('id_nr_shopping_basket', (int)$Shopping_Basket->id_nr_shopping_basket, $GET_tmp);
@@ -51,24 +73,15 @@ while( $Shopping_Basket = $Shopping_Basket_Chain->return_basket_next( true ) ) {
    $addup_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'add_to_mainbasket', $GET_id));
    $addup_basket = $F->draw_link($addup_basket_link, 'title="' . Lang::_('add this basket to working BASKET') . '"', $F->static_image('icon/add_up_16.png', Lang::_('add this basket to working BASKET')));
 ?>
-<div class="basket<?php echo $class_add; ?>" id="basket_prev_<?php echo $Shopping_Basket->id_nr_shopping_basket ?>">
-<div class="basket_menu"><?php echo $addup_basket . $remove_basket . $clean_basket . $switch_basket; ?></div>
-<div class="basket_number"><?php echo Lang::_('BASKET'); // echo Lang::_('NUMBER'); ?><span id="nr"><?php echo $Shopping_Basket->id_nr_shopping_basket; ?></span></div>
-<div class="basket_product_total"><?php echo Lang::_('TOTAL PRODUCTS'); ?><span id="nr"><?php echo $total['product_total']; ?></span></div>
-<div class="basket_product_types"><?php echo Lang::_('PRODUCTS TYPES'); ?><span id="nr"><?php echo $total['product_types']; ?></span></div>
-<div class="basket_sum_gross"><?php echo Lang::_('sum gross'); ?><span id="nr"><?php echo Price::val($total['sum_gross']); ?></span></div>
-<div class="basket_sum_netto"><?php echo Lang::_('sum_netto'); ?><span id="nr"><?php echo Price::val($total['sum_netto']); ?></span></div>
-</div>
-<?php
-}
-
-if( $P->logged_in && $Shopping_Basket_Chain->get_can_add_basket() ) {
-   $add_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'add_basket', $GET_tmp));
-   $add_basket = $F->draw_link($add_basket_link, 'title="' . Lang::_('add BASKET') . '"', Lang::_('add BASKET') . ' ' . $F->static_image('icon/plus_16.png', Lang::_('add BASKET')));
-?>
-<div class="basket_add">
-<div class="basket_add_icon"><?php echo $add_basket; ?></div>
-</div>
+	<tr>
+		<td<?php echo $class_add; ?>><?php echo $Shopping_Basket->id_nr_shopping_basket; ?></td>
+		<td><?php echo $total['product_total']; ?></td>
+		<td><?php echo $total['product_types']; ?></td>
+		<td><?php echo Price::val($total['sum_gross']); ?></td>
+		<td><?php echo Price::val($total['sum_netto']); ?></td>
+		<td><div class="basket_menu"><?php echo $addup_basket . $remove_basket . $clean_basket . $switch_basket; ?></div></td>
+	</tr>
 <?php
 }
 ?>
+</table>

@@ -8,6 +8,7 @@ $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
 $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_COM_BASKET) ) );
 
 if( $F->check_get('mode') ) {
+   //single basket mode
    switch($F->GET['mode']) {
       //   case 'add_basket':
       //   case 'remove_basket':
@@ -25,17 +26,17 @@ if( $F->check_get('mode') ) {
    }
    $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode')));
 } elseif( $F->check_get('action') ) {
-   
+   //group basket action
    switch($F->GET['action']) {
       case 'add_basket':
          if( $P->logged_in )
-            $Shopping_Basket_Chain->add_basket();
+         $Shopping_Basket_Chain->add_basket();
          break;
       case 'remove_basket':
          //FIXME
          //trow some error
          if( $P->logged_in && $F->check_get('id_nr_shopping_basket') )
-            $Shopping_Basket_Chain->remove_basket($F->GET['id_nr_shopping_basket']);
+         $Shopping_Basket_Chain->remove_basket($F->GET['id_nr_shopping_basket']);
          else
          ;
          break;
@@ -43,7 +44,7 @@ if( $F->check_get('mode') ) {
          //FIXME
          //trow some error
          if( $F->check_get('id_nr_shopping_basket') )
-            $Shopping_Basket_Chain->clean_basket($F->GET['id_nr_shopping_basket']);
+         $Shopping_Basket_Chain->clean_basket($F->GET['id_nr_shopping_basket']);
          else
          ;
          break;
@@ -51,7 +52,7 @@ if( $F->check_get('mode') ) {
          //FIXME
          //trow some error
          if( $F->check_get('id_nr_shopping_basket') )
-            $Shopping_Basket_Chain->add_to_mainbasket($F->GET['id_nr_shopping_basket']);
+         $Shopping_Basket_Chain->add_to_mainbasket($F->GET['id_nr_shopping_basket']);
          else
          ;
          break;
@@ -59,7 +60,7 @@ if( $F->check_get('mode') ) {
          //FIXME
          //trow some error
          if( $P->logged_in && $F->check_get('id_nr_shopping_basket') )
-            $Shopping_Basket_Chain->set_default_basket($F->GET['id_nr_shopping_basket']);
+         $Shopping_Basket_Chain->set_default_basket($F->GET['id_nr_shopping_basket']);
          else
          ;
          break;
@@ -67,6 +68,16 @@ if( $F->check_get('mode') ) {
          break;
    }
    $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('action,id_nr_shopping_basket', false)) );
+} elseif( $F->check_get('show') ) {
+   //show
+   switch($F->GET['show']) {
+      case 'all':
+         require 'basket' . DS . 'list_all.php';
+         break;
+      default:
+         $F->redirect( $F->make_link(CFG_COM_BASKET));
+         break;
+   }
 } else {
    //display basket
    require 'basket' . DS . 'list.php';
