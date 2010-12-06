@@ -34,12 +34,12 @@ if( $template != '' && is_file($template) ) {
    //throw error
 }
 
-print_debug($Shopping_Basket_Chain);
-print_debug($query_log);
+//print_debug($Shopping_Basket_Chain);
+//print_debug($query_log);
 //print_debug($BackTrail);
 //print_debug($Page);
 //print_debug($F);
 //print_debug($P);
-//print_debug($Info);
-//print_debug(Lang::$STR);
+print_debug($Info);
+print_debug(Lang::$STR);
 ?>

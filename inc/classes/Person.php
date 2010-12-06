@@ -82,6 +82,22 @@ class Person {
       
       return false;
    }
+   
+   public function update_person_password($old_password, $new_password, $type) {
+      if( $this->logged_in ) {
+         $P_data = Data::get_login_data($this->login, $type);
+         $res = gl_check_password($old_password, $P_data['password']);
+         if( $res ) {
+            $data = compact($old_password, $new_password);
+            Data::update_person_password( $this->id, $type, $data);
+            return true;
+         } else {
+            return false;
+         }
+      } else {
+         return false;
+      }
+   }
 
    public function check_person_login($login, $password, $type) {
       $P_data = Data::get_login_data($login, $type);

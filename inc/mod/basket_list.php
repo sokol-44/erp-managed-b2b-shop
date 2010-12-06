@@ -9,17 +9,18 @@ $Price = Price::g_global();
 $total = $Shopping_Basket->calculate_total();
 
 
+$GET_tmp = $F->make_get('mode,action,show');
+
 $all_basket = $F->draw_link( $F->make_link(CFG_COM_BASKET, array('show' => 'all')), 'title="' . Lang::_('show all BASKETS') . '"', Lang::_('show all BASKETS') . ' ' . $F->static_image('icon/folder_16.png', Lang::_('show all BASKETS')));
 ?>
 <div class="basket basket_show_all"><?php echo $all_basket; ?></div>
 <?php
-$GET_tmp = $F->make_get();
 $GET_id = $F->add_local_get('id_nr_shopping_basket', (int)$Shopping_Basket->id_nr_shopping_basket, $GET_tmp);
 $remove_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'remove_basket', $GET_id));
 $remove_basket = $F->draw_link($remove_basket_link, 'title="' . Lang::_('remove BASKET') . '"', $F->static_image('icon/delete_16.png', Lang::_('remove BASKET')));
 $clean_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'clean_basket', $GET_id));
 $clean_basket = $F->draw_link($clean_basket_link, 'title="' . Lang::_('clean BASKET') . '"', $F->static_image('icon/trash_16.png', Lang::_('clean BASKET')));
-$show_basket_link = $F->make_link(CFG_COM_BASKET, $GET_tmp);
+$show_basket_link = $F->make_link(CFG_COM_BASKET, $GET_id);
 $show_basket = $F->draw_link($show_basket_link, 'title="' . Lang::_('show BASKET') . '"', $F->static_image('icon/folder_16.png', Lang::_('show BASKET')));
 ?>
 <div class="basket mainbasket" id="basket_prev_<?php echo $Shopping_Basket->id_nr_shopping_basket ?>">

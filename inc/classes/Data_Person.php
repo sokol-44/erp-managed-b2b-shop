@@ -28,7 +28,7 @@ class Data_Person extends Data_Rights {
    function __construct() {
       parent::__construct();
    }
-    
+
    static function remove_person($table, $id_in) {
 
       $id = (int)$id_in;
@@ -52,7 +52,21 @@ class Data_Person extends Data_Rights {
             break;
       }
    }
-
+    
+   static function update_person_password($id, $table, $data) {
+      $db_new_password =  gl_make_password($data['new_password'], $data['old_password']);
+      
+      if( $table == 'ADMIN' ) {
+         $sql='UPDATE ' . TBL_GLOBAL_ADMIN . ' set password = "' . db_escape($db_new_password) . '"
+         where id_admin = ' . db_int($id);
+         db_query($sql);
+      } else if( $table == 'CLIENT' ) {
+         $sql='UPDATE ' . TBL_GLOBAL_CLIENT_USER . ' set password = "' . db_escape($db_new_password) . '"
+         where id_client_user = ' . db_int($id);
+         db_query($sql);
+      }
+   }
+         	
    static function insert_person_data($table, $data) {
       $F = Framework::g_global();
       $data_main_sql['login'] =  $data['login'];
@@ -106,7 +120,7 @@ class Data_Person extends Data_Rights {
          foreach($data['rights_ids'] as $id_rights) {
             db_query("insert into " . TBL_GLOBAL_RIGHTS2ADMIN . ' (id_admin, id_rights) values (' . (int)$data_org['id_admin'] . ', ' . (int)$id_rights . ')');
          }
-      } else if( $table == 'HOTEL' ) {
+      } else if( $table == 'CLIENT' ) {
          $data_main_sql['name'] =  $data['name'];
          db_perform(TBL_GLOBAL_CLIENT_USER, $data_main_sql, 'UPDATE', "id_client_user=" . (int)$data_org['id_client_user']);
          db_query("delete from " . TBL_GLOBAL_RIGHTS2CLIENT . ' where id_client_user=' . (int)$data_org['id_client_user']);
@@ -186,7 +200,7 @@ class Data_Person extends Data_Rights {
 
       return db_result_array($res);
    }
-    
+
    static function insert_client_data($data) {
       $F = Framework::g_global();
       $data_main_sql['name'] =  $data['name'];
@@ -201,7 +215,7 @@ class Data_Person extends Data_Rights {
       db_transaction_end();
       return $id_client;
    }
-    
+
    static function update_client_data($id, $data, $data_org) {
       $F = Framework::g_global();
       $data_main_sql['name'] =  $data['name'];
@@ -215,7 +229,7 @@ class Data_Person extends Data_Rights {
    }
 
    static function get_client_attribute( $id, $attribute_type) {
-      
+
       $result = db_query('select value
          	from ' . TBL_GLOBAL_CLIENT_ATTRIBUTES . ' ca ,
          	' . TBL_GLOBAL_CLIENT . ' c

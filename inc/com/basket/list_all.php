@@ -8,6 +8,8 @@ $Price = Price::g_global();
 
 $total = $Shopping_Basket->calculate_total();
 
+$Page->head_title = Lang::_('BASKET list');
+
 echo Lang::_('Basket help for icons');
 ?>
 <ul>

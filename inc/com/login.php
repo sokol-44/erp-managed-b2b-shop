@@ -3,6 +3,9 @@
 
 $Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
 
+//FIXME
+//if( $P->logged_in ) $F->redirect(  );
+
 if( $F->check_login('CLIENT') ) {
 //   list($login, $password) = $F->get_login_data(PERSON_TYPE);
    $status = $P->check_person_login($F->POST['lgn_CLIENT'], $F->POST['pswrd_CLIENT'], 'CLIENT');

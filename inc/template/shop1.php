@@ -32,7 +32,7 @@ if( !defined('_I_INIT') ) die();
 	<td width="975" colspan="3"><?php echo $Page->put_masterhead_html(); ?></td>
 </tr>
 <tr>
-	<td width="975" colspan="3"><?php echo $Page->put_second_head_html(); ?></td>
+	<td width="975" colspan="3">a<?php echo $Page->put_second_head_html(); ?></td>
 </tr>
 <tr>
 	<td width="160" valign="top"><?php echo $Page->put_left_column_html(); ?></td>

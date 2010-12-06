@@ -38,7 +38,7 @@ function gl_check_password($password_in, $password_db) {
 }
 
 
-function gl_make_password($password_in, $salt_add = '') {
+function gl_make_password($password_in, $salt_add = '', $pure_salt = false) {
 
    //if avaiable get 32 bytes of randomness
    $filename = '/dev/urandom';
@@ -51,7 +51,9 @@ function gl_make_password($password_in, $salt_add = '') {
    $random = $str_rand . microtime() . getmypid() . serialize($_ENV);
 
    //try to generate random hash
-   $pass_salt = hash_hmac('ripemd160', $salt_add, $random );
+   if( $pure_salt ) $pass_salt = $salt_add;
+   else $pass_salt = hash_hmac('ripemd160', $salt_add, $random );
+   
    $pass_hash = hash_hmac('ripemd320', $password_in . str_rot13($password_in), $pass_salt);
 
    return $pass_hash . ':' . $pass_salt;
