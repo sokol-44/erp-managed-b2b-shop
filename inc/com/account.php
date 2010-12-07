@@ -51,13 +51,13 @@ echo Lang::_('Account list');
 <div id="account_box_list">
 <ul class="account_box_list">
 <li><?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_LIST, array('mode' => 'account_list')),'', Lang::_('all account list') ); ?>
+<!--
 <ul>
-<li><?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_LIST, array('mode' => 'list_all', 'type' => 'administrator' )),'', Lang::_('administrators') ); ?></li>
-<li><?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_LIST, array('mode' => 'list_all', 'type' => 'operator' )),'', Lang::_('operators') ); ?></li>
-<li><?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_LIST, array('mode' => 'list_all', 'type' => 'user' )),'', Lang::_('users') ); ?></li>
+<li><?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_LIST, array('mode' => 'account_list', 'type' => 'administrator' )),'', Lang::_('administrators') ); ?></li>
+<li><?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_LIST, array('mode' => 'account_list', 'type' => 'operator' )),'', Lang::_('operators') ); ?></li>
+<li><?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_LIST, array('mode' => 'account_list', 'type' => 'user' )),'', Lang::_('users') ); ?></li>
 </ul>
 </li>
-<!--
 <li><?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_LIST, array('mode' => 'add_account')),'', Lang::_('add account') ); ?></li>
 <li><?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_LIST, array('mode' => 'disabled_account')),'', Lang::_('disabled account') ); ?></li>
  -->

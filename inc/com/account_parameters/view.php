@@ -31,6 +31,10 @@ if( !$P->logged_in ) $F->redirect(  );
 		<td><?php echo $F->output_string_html($P->data['created']); ?></td>
 	</tr>
 	<tr>
+		<td><?php echo Lang::_('last login') ?></td>
+		<td><?php echo $F->output_string_html($P->data['last_login']); ?></td>
+	</tr>
+	<tr>
 		<td><?php echo Lang::_('state') ?></td>
 		<td><?php echo $F->output_string_html($P->data['state']); ?></td>
 	</tr>

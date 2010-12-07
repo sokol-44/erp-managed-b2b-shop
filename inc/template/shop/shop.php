@@ -65,7 +65,7 @@ if( !defined('_I_INIT') ) die();
         </div>
         <div id="col3">
           <div id="col3_content" class="clearfix">
-            <?php echo $Page->put_component_info(); ?>
+          	<div><?php echo $Page->put_component_info(); ?></div>
             <!-- add your content here -->
             <?php echo $Page->put_component_html(); ?>
           </div>

@@ -37,10 +37,17 @@ class Framework extends Framework_Data {
    }
 
    static function output_string_html($string, $lenght = false) {
-      if( $lenght ) {
+      if( $lenght && strlen($string) > $lenght ) {
          $substring = substr($string,0, $lenght);
-         $substring = substr($substring,0,strrpos($substring,' '));
-         return $substring;
+         $cut_pos = strrpos($substring,' ');
+         if( $cut_pos == 0 ) {
+             $cut_pos = strrpos($substring,"\n");
+             if( $cut_pos == 0 ) {
+                $cut_pos = $lenght;
+             }
+         }
+         $substring = substr($substring,0,$lenght);
+         return htmlspecialchars($substring);
       } else {
          return htmlspecialchars($string);
       }

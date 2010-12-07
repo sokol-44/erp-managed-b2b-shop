@@ -1,5 +1,6 @@
 <?php
 $Info = Info::g_global();
-print_debug($Info);
+
+echo $Info->output();
 $Info->reset();
 ?>

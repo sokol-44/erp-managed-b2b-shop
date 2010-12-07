@@ -200,7 +200,7 @@ class Page {
       if( strstr($name, 'put_') ) {
          $var_name = str_replace('put_', '', $name);
          if( Framework::not_null($this->${var_name}) ) return $this->${var_name};
-         else return 'PLACE ' . $var_name;
+         //else return 'PLACE ' . $var_name;
       } else {
          echo "$name not defined!";
       }

@@ -88,7 +88,8 @@ class Person {
          $P_data = Data::get_login_data($this->login, $type);
          $res = gl_check_password($old_password, $P_data['password']);
          if( $res ) {
-            $data = compact($old_password, $new_password);
+            list($pw,$salt) = explode(':', $P_data['password']);
+            $data = compact('old_password', 'new_password', 'salt');
             Data::update_person_password( $this->id, $type, $data);
             return true;
          } else {
@@ -105,6 +106,7 @@ class Person {
          $res = gl_check_password($password, $P_data['password']);
          if( $res ) {
             $res_rights = Data::get_login_rights($P_data['id_table'], $type);
+            Data::set_person_last_login($P_data['id_table'], $type);
             $this->set_person_data($P_data, $res_rights);
             return true;
          } else {

@@ -157,7 +157,7 @@ class Data extends Data_Person {
     * @return array|name
     */
    function get_login_data($login, $table) {
-
+      
       if( $table == 'CLIENT' && defined('TBL_GLOBAL_CLIENT_USER') ) {
          $tbl_name = TBL_GLOBAL_CLIENT_USER;
          $table_id = 'id_client_user';

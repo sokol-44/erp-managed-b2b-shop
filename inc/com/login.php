@@ -1,10 +1,13 @@
 <?php
 
 
+$Page->head_title = Lang::_('Login');
+
+
 $Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
 
-//FIXME
-//if( $P->logged_in ) $F->redirect(  );
+if( $P->logged_in ) $F->redirect( $F->make_link('account') );
+
 
 if( $F->check_login('CLIENT') ) {
 //   list($login, $password) = $F->get_login_data(PERSON_TYPE);
@@ -14,6 +17,9 @@ if( $F->check_login('CLIENT') ) {
       $Shopping_Basket_Chain->login_user();
       $Page->redirect( $F->make_link('main') );
    } else {
+      $Info = Info::g_global();
+      $Info->add(Lang::_('wrong user or password'));
+      $Page->redirect( $F->make_link('login') );
    }
    die();
 } else {

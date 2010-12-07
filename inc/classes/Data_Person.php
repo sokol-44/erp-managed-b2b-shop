@@ -54,7 +54,7 @@ class Data_Person extends Data_Rights {
    }
     
    static function update_person_password($id, $table, $data) {
-      $db_new_password =  gl_make_password($data['new_password'], $data['old_password']);
+      $db_new_password =  gl_make_password($data['new_password'], $data['salt'], true);
       
       if( $table == 'ADMIN' ) {
          $sql='UPDATE ' . TBL_GLOBAL_ADMIN . ' set password = "' . db_escape($db_new_password) . '"
@@ -62,6 +62,19 @@ class Data_Person extends Data_Rights {
          db_query($sql);
       } else if( $table == 'CLIENT' ) {
          $sql='UPDATE ' . TBL_GLOBAL_CLIENT_USER . ' set password = "' . db_escape($db_new_password) . '"
+         where id_client_user = ' . db_int($id);
+         db_query($sql);
+      }
+   }
+    
+   static function set_person_last_login($id, $table) {
+
+      if( $table == 'ADMIN' ) {
+         $sql='UPDATE ' . TBL_GLOBAL_ADMIN . ' set last_login = now()
+         where id_admin = ' . db_int($id);
+         db_query($sql);
+      } else if( $table == 'CLIENT' ) {
+         $sql='UPDATE ' . TBL_GLOBAL_CLIENT_USER . ' set last_login = now()
          where id_client_user = ' . db_int($id);
          db_query($sql);
       }
@@ -162,9 +175,11 @@ class Data_Person extends Data_Rights {
       );
    }
 
-   static function get_persons_list($table = '', $id = 0) {
+   static function get_persons_list($table = '', $id = 0, $type) {
       $F = Framework::g_global();
       $SP = SplitPage::g_global();
+      //FIXME
+      //include type
 
       if( $table != 'ADMIN' && $table != 'CLIENT' ) die('get_persons_list');
 
@@ -181,7 +196,7 @@ class Data_Person extends Data_Rights {
       else return false;
 
       if( $table == 'ADMIN' ) {
-         $query = 'select distinct p.id_admin, p.login, p.description, p.email, p.state, GROUP_CONCAT(r.name) as rights_list  from ' .
+         $query = 'select distinct p.id_admin, p.login, p.description, p.email, p.state, p.created, p.last_login, GROUP_CONCAT(r.name) as rights_list  from ' .
          $tbl_person . ' p,  ' . $tbl_glue . ' gl,  ' . $tbl_rights . ' r ' .
       		'where p.id_admin = gl.id_admin and gl.id_rights = r.id_rights  group by (p.id_admin)';
          $sp_query = $SP->prepare_sql( $query );
@@ -189,7 +204,7 @@ class Data_Person extends Data_Rights {
       } else if( $table == 'CLIENT' ) {
          $table_id = 'id_client_user';
          if( $id > 0) $client_where = ' and p.id_client = ' . (int)$id;
-         $query = 'select distinct p.id_client_user, p.login, p.description, p.email, p.state, GROUP_CONCAT(r.name) as rights_list  from ' .
+         $query = 'select distinct p.id_client_user, p.login, p.description, p.email, p.state, p.created, p.last_login, GROUP_CONCAT(r.name) as rights_list  from ' .
             '' . $tbl_person . ' p,  ' . $tbl_glue . ' gl,  ' . $tbl_rights . ' r ' .
       		'where p.id_client_user = gl.id_client_user and gl.id_rights = r.id_rights ' . $client_where . ' group by (p.id_client_user)';
          $sp_query = $SP->prepare_sql( $query );

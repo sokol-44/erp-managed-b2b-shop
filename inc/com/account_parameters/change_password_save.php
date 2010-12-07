@@ -27,7 +27,7 @@ if( !$error && !$P->update_person_password($F->POST['old_password'], $F->POST['n
 }
 
 if( !$error ) {
-   $Info->add(Lang::_('old password incorect'), 'success');
+   $Info->add(Lang::_('old password changed'), 'success');
 }
 
 $F->redirect($F->self_link());
