@@ -29,19 +29,34 @@ class Order {
       }
 
    }
-    
-   function check_rights() {
+
+   function check_rights( $id_client = 0 ) {
       if( Framework::not_null($this->data) ) {
          $P = Person::g_global();
-         return ( $this->data['id_client'] == $P->data['id_client'] );
+         if( $id_client == 0 ) $id_client = $P->data['id_client'];
+         return ( $this->data['id_client'] == $id_client );
       } else {
          return false;
       }
    }
+    
+   function calculate_total() {
+      $this->total = array('product_total' => 0, 'product_types' => 0, 'sum_gross' => 0, 'sum_netto' => 0);
+
+      if ( Framework::not_null($this->product_list) && $this->total['product_total'] == 0 ) {
+         foreach($this->product_list as $id_product => $product ) {
+            $this->total['product_total'] += $product['quantity'];
+            $this->total['product_types'] ++;
+            $this->total['sum_gross'] += Price::add_vat($product['price'], $product['vat'], $product['quantity']);
+            $this->total['sum_netto'] += ($product['price'] * $product['quantity']);
+         }
+      }
+      return $this->total;
+   }
 
    function _load_data( $id_order ) {
       $F = Framework::g_global();
-      
+
       $this->id_order = $id_order;
 
       $this->data = Data::get_order_data( $id_order );

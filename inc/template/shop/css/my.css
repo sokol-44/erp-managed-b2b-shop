@@ -94,6 +94,10 @@ Basket list
 
 }
 
+.order_total {
+	background-color: transparent;
+}
+
 /*
 basket_number
 basket_product_total

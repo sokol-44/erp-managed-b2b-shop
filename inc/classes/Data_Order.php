@@ -16,8 +16,8 @@ class Data_Order {
 
       //$Data_Products_params = array('id_client' => 0, 'client_view' => false);
    }
-    
-    
+
+
    /*
     $this->data = Data::get_order_data( $id_order );
     if( $this->data ) {
@@ -25,7 +25,32 @@ class Data_Order {
     $this->status_history = Data::get_order_status_history_list( $id_order );
      
     */
-    
+
+   static function get_order_list( $id_client = 0 ) {
+      $SP = SplitPage::g_global();
+      
+      if( $id_client > 0 ) {
+         $where =  ' where o.id_client = ' . db_int($id_client);
+      }
+
+      $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
+      o.description, o.description_basket, os.name,
+     	UNIX_TIMESTAMP(o.date_create) as ts_create, UNIX_TIMESTAMP(o.date_modified) as ts_modified
+      from ' . TBL_SHOP_ORDER . ' o left join ' . TBL_SHOP_ORDER_STATUS . ' os
+      on (o.id_order_status = os.id_order_status)' . $where;
+      $query_fast = 'select count(o.id_order) as total from ' . TBL_SHOP_ORDER . ' o ' . $where;
+      $sp_query = $SP->prepare_sql( $query, $query_fast);
+      $res = db_query( $sp_query );
+      $ret_tmp = db_result_array( $res );
+      $ret_array = array();
+      foreach($ret_tmp as $order ) {
+         $ret_array[$order['id_order']] = $order;
+      }
+      return $ret_array;
+   }
+
+
+
    static function get_order_data( $id_order ) {
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
       o.description, o.description_basket, os.name,
@@ -35,7 +60,7 @@ class Data_Order {
       where id_order = ' . db_int($id_order);
       return db_fetch_array( db_query( $query ) );
    }
-    
+
    static function get_order_product_list( $id_order ) {
       $query = 'select op.id_product, op.name, op.price, op.vat, op.quantity,
       p.name as p_name, p.description, p.picture_small_url, p.picture_big_url
@@ -49,7 +74,7 @@ class Data_Order {
       }
       return $ret_array;
    }
-    
+
    static function get_order_status_history_list( $id_order ) {
       $query = 'select osh.id_order_status, osh.timestamp, osh.description, os.name
       from ' . TBL_SHOP_ORDER_STATUS_HISTORY . ' osh left join ' . TBL_SHOP_ORDER_STATUS . ' os
@@ -62,8 +87,8 @@ class Data_Order {
       }
       return $ret_array;
    }
-    
-    
+
+
 
    static function put_order_data($id_client, $description_basket, $order_description) {
       $query = 'insert into ' . TBL_SHOP_ORDER . '
@@ -81,7 +106,7 @@ class Data_Order {
       return $id_order;
    }
 
-    
+
    static function put_order_status($id_order, $id_order_status, $description) {
       $query = 'insert into ' . TBL_SHOP_ORDER_STATUS_HISTORY . '
       	set id_order = ' . db_int($id_order) . ',

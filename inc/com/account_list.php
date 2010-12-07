@@ -17,6 +17,10 @@ if( $F->check_get('type') ) {
    }
 }
 
+$BC->add_crumb(Lang::_('Account'), $F->make_link(CFG_COM_ACCOUNT) );
+$BC->add_crumb(Lang::_('Account list'), $F->make_link(CFG_COM_ORDER_LIST) );
+
+
 $account_list = Data::get_persons_list('CLIENT', (int)$P->data['id_client'], $type);
 
 $Page->add_js_file('table.js');
