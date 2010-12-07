@@ -40,8 +40,6 @@ if( $F->check_get('mode') ) {
             if( $Order->check_rights() ) {
                require 'order' . DS . 'show.php';
             } else {
-               print_debug($Order);
-               die();
                $F->redirect( $F->make_link(CFG_COM_BASKET), array());
             }
          } else {

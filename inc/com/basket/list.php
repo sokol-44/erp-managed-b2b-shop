@@ -13,7 +13,7 @@ $GET_tmp = $F->make_get();
 $form_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('mode', 'update_basket', $GET_tmp));
 
 $GET_id  = $F->add_local_get('id_nr_shopping_basket', (int)$Shopping_Basket->id_nr_shopping_basket, $GET_tmp);
-$order_basket_param = array('onClick' => 'go_to_href(\'' . $F->make_link(CFG_COM_ORDER_BASKET, $GET_id) . '\')');
+
 
 echo $F->draw_form('basket_edit', $form_link);
 ?>
@@ -32,7 +32,7 @@ function remove_from_basked() { return true; }
 	</tr>
 	<tr>
 		<td width="100%" colspan="3"></td>
-		<td align="right"><?php echo $F->draw_button(Lang::_('PREPARE ORDER_BASKET'), $order_basket_param); ?></td>
+		<td align="right"><?php echo $F->draw_submit(Lang::_('PREPARE ORDER_BASKET')); ?></td>
 		<td align="right"><?php echo $F->draw_submit(Lang::_('UPDATE_BASKET')); ?></td>
 	</tr>
 </table>
@@ -75,7 +75,7 @@ function remove_from_basked() { return true; }
 <table width="100%" style="border: 0">
 	<tr>
 		<td width="100%" colspan="5"></td>
-		<td align="right"><?php echo $F->draw_button(Lang::_('PREPARE ORDER_BASKET'), $order_basket_param); ?></td>
+		<td align="right"><?php echo $F->draw_submit(Lang::_('PREPARE ORDER_BASKET')); ?></td>
 		<td align="right"><?php echo $F->draw_submit(Lang::_('UPDATE_BASKET')); ?></td>
 	</tr>
 	<tr>

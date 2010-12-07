@@ -13,7 +13,7 @@ $id_nr_shopping_basket = $Shopping_Basket->id_nr_shopping_basket;
 
 $GET_tmp = $F->make_get();
 $get_form_link =$F->add_local_get(array('mode' => 'order_basket', 'id_nr_shopping_basket' => (int)$id_nr_shopping_basket));
-print_debug($get_form_link);
+//print_debug($get_form_link);
 $form_link = $F->make_link(CFG_COM_ORDER_BASKET, $get_form_link, $GET_tmp);
 
 echo $F->draw_form('basket_order', $form_link);

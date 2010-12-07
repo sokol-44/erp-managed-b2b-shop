@@ -20,6 +20,12 @@ if( $F->check_get('mode') ) {
          break;
       case 'update_basket':
          $Shopping_Basket->update_basket_quantity_list($F->POST['product_quantity'], $F->POST['description']);
+         if( $F->check_post('PREPARE ORDER_BASKET', true) ) {
+            $GET_tmp = $F->make_get('mode');
+            $GET_id  = $F->add_local_get('id_nr_shopping_basket', (int)$Shopping_Basket->id_nr_shopping_basket, $GET_id);
+            print_r( $GET_id);
+            $F->redirect( $F->make_link(CFG_COM_ORDER_BASKET, $GET_id) );
+         }
       default:
 
          break;

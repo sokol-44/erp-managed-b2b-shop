@@ -196,7 +196,7 @@ class Framework extends Framework_Data {
    }
 
    function check_post($text, $translate = false) {
-      if($translate) $text = Lang::_($text);
+      if($translate) $text = str_replace(' ', '_', Lang::_($text));
 
       return self::not_null($this->POST[$text]);
    }

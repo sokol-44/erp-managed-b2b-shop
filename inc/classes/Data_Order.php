@@ -96,7 +96,7 @@ class Data_Order {
       	description = "' . db_escape($order_description) . '",
       	description_basket = "' . db_escape($description_basket) . '",
       	date_create = now(), date_modified = NULL,
-      	id_orders_status = 1';
+      	id_order_status = 1';
 
       //      print_debug($query);
        
