@@ -47,19 +47,19 @@ class Data_Basket extends Data_Order {
       db_transaction_end();
 
    }
-    
-    
+
+
    static function remove_basket_product( $id_product, $basket_params) {
       $clear_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
       id_client = ' . db_int($basket_params['id_client']) . ' and
       id_nr_shopping_basket = ' . db_int($basket_params['id_nr_shopping_basket']) . ' and
       id_product = ' . db_int($id_product);
-      
+
       db_transaction_start();
       db_query( $clear_query );
       $res = db_affected_rows();
       db_transaction_end();
-      
+
       return $res;
    }
 
@@ -90,7 +90,8 @@ class Data_Basket extends Data_Order {
       $F = Framework::g_global();
       $P = Person::g_global();
 
-      $query = 'insert into ' . TBL_SHOP_SHOPPING_BASKET . '
+      //MySQL
+	  $query = 'insert into ' . TBL_SHOP_SHOPPING_BASKET . '
       	set id_client = ' . db_int($basket_params['id_client']) . ',
       	id_nr_shopping_basket = ' . db_int($basket_params['id_nr_shopping_basket']) . ',
       	description = "' . db_escape($basket_params['description']) . '",
@@ -104,9 +105,13 @@ class Data_Basket extends Data_Order {
       	using_id_client_user = ' . db_int($P->id) . ',
       	using_session_id = "' . db_escape($P->session_id) . '",
       	using_date = now()';
+      //PostgreSQL
+      //$query  = 'select save_basket_data(' . db_int($basket_params['id_client']) . ',
+      //' . db_int($basket_params['id_nr_shopping_basket']) . ', \'' . db_escape($basket_params['description']) . '\',
+	  //' . db_int($P->id) . ', \'' . db_escape($P->session_id) . '\')';
       //      print_debug($basket_params);
       //      print_debug($P);
-      echo $query;
+      //echo $query;
       $res = db_query( $query );
    }
 

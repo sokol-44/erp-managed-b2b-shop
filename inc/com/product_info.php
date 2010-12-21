@@ -19,6 +19,8 @@ $link_basket = $F->make_link(CFG_COM_BASKET, $F->add_local_get($GET_basket, '', 
 $add_basket_html = $F->draw_link($link_basket,
 	'onclick="add_to_basket()" title="' . Lang::_('add_to_basket') . '"',
    Lang::_('add_to_basket') . $F->static_image('icon/buy_16.png', Lang::_('add_to_basket')));
+   
+$product_quantity = (int)(($product_info['quantity']>0)?$product_info['quantity']:0);
 
 $Page->add_js_file('jquery.colorbox.js');
 $Page->add_jq_init('$(".product_image").colorbox({
@@ -29,6 +31,7 @@ $Page->head_title = $F->output_string_html( $product_info['name'] );
 <div class="product_info">
    <div class="product_name"><?php echo $F->output_string_html( $product_info['name'] ); ?></div>
    <div class="product_image"><?php echo $small_image_html; ?></div>
+   <div class="product_price"><?php echo Lang::_('QUANTITY_IN_WAREHAUSE') . ': ' . $product_quantity; ?></div>
    <div class="product_price"><?php echo Lang::_('PRICE') . ': ' . $price_html; ?></div>
    <div class="product_description"><?php echo $description_html; ?></div>
    <div class="product_add_basket"><?php echo $add_basket_html; ?></div>

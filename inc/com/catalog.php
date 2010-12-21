@@ -25,6 +25,7 @@ $GET_tmp = $F->make_get();
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('PICTURE') ?></th>
 		<th><?php echo Lang::_('NAME') . ', ' . Lang::_('DESCRIPTION')?></th>
+		<th><?php echo Lang::_('QUANTITY') ?></th>
 		<th><?php echo Lang::_('PRICE') ?></th>
 		<th><?php echo Lang::_('ADD TO BASKET') ?></th>
 	</tr>
@@ -38,6 +39,8 @@ $GET_tmp = $F->make_get();
 	   $cell_product_info = $F->draw_link($link_product_info, '',
 	   '<div class="catalog_product_name">' . $F->output_string_html( $product['name'] ) . '</div>
 	   <div class="catalog_product_description">' . nl2br($F->output_string_html( $product['description'], 384 )) . '</div>');
+	   
+	   $product_quantity = (int)(($product['quantity']>0)?$product['quantity']:0);
 
 	   $small_image_path = Data::get_product_image_path( $product['picture_small_url'] );
 	   $si_oc = "$.colorbox({href:'" . Data::get_product_image_path( $product['picture_big_url'] ) . "', photo:true});";
@@ -47,6 +50,7 @@ $GET_tmp = $F->make_get();
 		<td style="cursor: pointer;" width="5%"><?php echo $F->draw_radio_field('list', $product['id_product'], false, 'style="display: none"')
 		. $small_image_html; ?></td>
 		<td valign="top"><?php echo $cell_product_info; ?></td>
+		<td width="5%"><?php echo $product_quantity; ?></td>
 		<td width="10%"><?php echo Price::val( $product['price'] ) . '<br>(' . Price::tax( $product['vat'] ) . ')'; ?></td>
 		<td width="5%"><?php echo $cell_basket; ?></td>
 	</tr>

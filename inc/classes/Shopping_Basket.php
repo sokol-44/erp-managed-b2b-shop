@@ -154,8 +154,9 @@ class Shopping_Basket {
    }
 
    function update_basket_quantity_list($array, $description = false) {
+      
       foreach($array as $id_product => $array_quantity) {
-         $this->update_product_quantity((int)$id_product, (int)$array_quantity['quantity'], false);
+         $this->update_product_quantity((int)$id_product, (int)$array_quantity, false);
       }
       if( $description ) $this->params['description'] = $description;
       //TODO

@@ -86,6 +86,7 @@ class Order {
       $id_order = Data::put_order_data($P->data['id_client'], $Shopping_Basket->params['description'], $order_description);
       if( $id_order > 0 ) {
          $count_product = Data::put_order_product_list($id_order, $product_list);
+         $count_product_2 = Data::change_product_quantity_list($product_list);
          Data::put_order_status($id_order, '1', $order_description);
          return array($id_order, $count_product);
       } else {

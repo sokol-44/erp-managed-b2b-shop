@@ -49,7 +49,28 @@ class Data_Products extends Data_Basket {
 			order by FIND_IN_SET(id_category,"' . implode(',', $list) . '")';
 
       $result = db_query( $query );
+	  
       return db_result_array($result);
+
+      //fix for postgresql
+      //$array_res_tmp = db_result_array($result);
+
+      // $array_res = array();
+      // if( sizeof($array_res) > 1 ) {
+         // foreach($list as $id_category) {
+            // foreach($array_res_tmp as $key => $row) {
+               // if( $row['id_category'] == $id_category ) {
+                  // $array_res[] = $row;
+                  // unset($array_res_tmp[$key]);
+                  // break 1;
+               // }
+            // }
+         // }
+      // } else {
+         // $array_res = $array_res_tmp;
+      // }
+
+      //return $array_res;
    }
 
    static function get_categories_product_list($id_category, array $filters = array(), array $sort = array()) {
@@ -88,6 +109,26 @@ class Data_Products extends Data_Basket {
       $img_arr = explode('/', $raw_img);
       return '/product_image/' . end($img_arr);
    }
+    
+   static function change_product_quantity_list( array $product_list ) {
+      $F = Framework::g_global();
+
+      if( $F->not_null($product_list) ) {
+         db_transaction_start();
+         foreach( $product_list as $id_product => $details ) {
+            $insert_query = 'update ' . TBL_SHOP_PRODUCT . ' set
+            quantity = quantity - ' . db_int($details['quantity']) . '
+            where id_product = ' . db_int($id_product) . '';
+            //         print_debug($insert_query);
+            db_query( $insert_query );
+         }
+         //      print_debug($basket_params);
+         //      print_debug($basket_contents);
+         $res = db_affected_rows();
+         db_transaction_end();
+      }
+
+   }
 
    static function get_product_info_list( array $id_product_array ) {
       $F = Framework::g_global();
@@ -101,6 +142,13 @@ class Data_Products extends Data_Basket {
       }
 
       if( Framework::not_null($id_product_array) ) {
+<<<<<<< HEAD
+=======
+          
+         //MYSQL group_concat( column_name )
+         //POSTGRESQL = array_to_string(array_agg( column_name ),',')
+          
+>>>>>>> 2120a21... dodanie stanow magazynowych + roznego rodzaju popraki
          $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
             p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
             group_concat(p2c.id_category) as id_category_list
@@ -126,6 +174,11 @@ class Data_Products extends Data_Basket {
          $product_from = TBL_SHOP_PRODUCT;
       }
 
+<<<<<<< HEAD
+=======
+      //MYSQL group_concat( column_name )
+      //POSTGRESQL = array_to_string(array_agg( column_name ),',')
+>>>>>>> 2120a21... dodanie stanow magazynowych + roznego rodzaju popraki
       $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
          p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
          group_concat(p2c.id_category) as id_category_list
@@ -147,10 +200,18 @@ class Data_Products extends Data_Basket {
          $product_from = TBL_SHOP_PRODUCT;
       }
       
+<<<<<<< HEAD
       $query = 'SELECT c.id_category, c.name, c.description, c.id_category_parent, COUNT(p2c.id_category) AS products_in_category
+=======
+      //TODO p.quantity options
+      //AND p.quantity > 0
+
+      $query = 'SELECT c.id_category, c.name, c.description, c.id_category_parent,
+      COUNT(p2c.id_category) AS products_in_category, c.sort_order
+>>>>>>> 2120a21... dodanie stanow magazynowych + roznego rodzaju popraki
    	FROM ' . TBL_SHOP_CATEGORY . ' c LEFT OUTER JOIN (
    		SELECT p2c.id_category FROM ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c, ' . $product_from . ' p
-         WHERE p2c.id_product = p.id_product AND p.status = \'ACTIVE\' AND p.quantity > 0 ' . $where . ') p2c
+         WHERE p2c.id_product = p.id_product AND p.status = \'ACTIVE\' ' . $where . ') p2c
          ON (c.id_category = p2c.id_category)
    	GROUP BY c.id_category ORDER  BY c.sort_order, c.name';
        
