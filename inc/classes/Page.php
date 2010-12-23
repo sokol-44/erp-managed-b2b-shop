@@ -71,16 +71,24 @@ class Page {
    public function put_css() {
       echo implode("\r", $this->css_array) . "\n";
    }
-
+   
    public function put_js() {
+      global $config;
+      
       if( $this->js_jq_init ) {
-         echo '<script type="text/javascript"  src="http://www.google.com/jsapi"></script>' . NL .
-		'<script type="text/javascript">google.load("jquery", "1.4");</script>' . NL .
-		'<script type="text/javascript">' . NL .
-		'$(document).ready(function(){' . NL .
-         implode(NL, $this->js_jq_body) . NL .
-		'})' . NL .
-		'</script>' . NL;
+         echo '<script type="text/javascript" src="http://www.google.com/jsapi"></script>' . NL .
+   		'<script type="text/javascript">' . NL .
+         'if ( window[\'google\'] && window[\'google\'][\'loader\']) {' . NL .
+         '  google.load("jquery", "1.4"); ' . NL .
+         '} else {' . NL .
+         '  document.write(\'<script type="text/javascript" src="' . $this->path_js . $config['TEMPLATES']['jquery'] . '"><\/script>\');' . NL .
+         '}' . NL .
+         '</script>' . NL .
+   		'<script type="text/javascript">' . NL .
+   		'$(document).ready(function(){' . NL .
+            implode(NL, $this->js_jq_body) . NL .
+   		'})' . NL .
+   		'</script>' . NL;
       }
       if( $this->jq_files && count($this->jq_files) > 0 ) {
          foreach($this->jq_files as $js_file) {
