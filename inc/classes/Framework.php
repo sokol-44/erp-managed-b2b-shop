@@ -324,7 +324,10 @@ class Framework extends Framework_Data {
             $ret_array[stripslashes($key)] = self::_request_normalize_rec($val, $type);
          } else {
             $val = (string)trim($val);
-            if( strlen($val) > 0 && !( $type == 'POST' && ($key == 'x' || $key == 'y'))) {
+            if( strlen($val) > 0
+               && !( $type == 'POST' && ($key == 'x' || $key == 'y'))
+               && !( $type == 'GET' && ($key == 'virtualdir'))
+               ) {
                $ret_array[stripslashes($key)] = stripslashes($val);
             }
          }

@@ -1,0 +1,5 @@
+RewriteEngine On
+
+RewriteRule ^index.php$ ../index.php?virtualdir=virtualdir [QSA,L] 
+RewriteRule ^$ ../index.php?virtualdir=virtualdir [QSA,L]
+RewriteRule ^(.*)$ ../$1?virtualdir=virtualdir  [QSA,L]
