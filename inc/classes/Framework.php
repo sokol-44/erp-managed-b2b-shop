@@ -24,6 +24,7 @@ class Framework extends Framework_Data {
       $this->REQUEST = array();
       $this->RSA = array();
       $this->form = 0;
+      $this->virtualdir = false;
 
       $this->_request_normalize();
 
@@ -226,6 +227,21 @@ class Framework extends Framework_Data {
    //      return ($this->POST['lgn_' . $type], )
    //
    //   }
+   
+   
+   function check_virtualdir() {
+      if( $this->virtualdir ) return true;
+      else return false;
+   }
+   
+   function return_virtualdir_id() {
+      $template_array = $GLOBALS['config']['TEMPLATES'];
+      //print_debug($template_array);
+      foreach( $template_array as $key => $val ) {
+         if( $this->virtualdir == $key ) return $val;
+      }
+      return false;
+   }
 
    function _request_normalize() {
       //$_GET, $_POST

@@ -10,10 +10,12 @@ if( !defined('_I_INIT') ) die();
 
 class Data_Products extends Data_Basket {
    static $Data_Products_params = array('id_client' => 0, 'client_view' => false);
+   static $root_number = false;
 
    function __construct() {
       parent::__construct();
       self::_load_client_params();
+      self::_load_virtualdir_params();
    }
 
    static function _load_client_params() {
@@ -25,6 +27,15 @@ class Data_Products extends Data_Basket {
             self::$Data_Products_params['client_view'] = $view_name;
          }
       }
+   }
+   
+   static function _load_virtualdir_params() {
+      $F = Framework::g_global();
+  
+      //pasmanteria_i_dodatki_krawieckie = 1
+      //produkty_medyczne = 2
+      $root_number = $F->return_virtualdir_id();
+      if( $root_number ) self::$root_number = $root_number;
    }
 
    static function get_categories_from_list( $list_in = false ) {
@@ -142,13 +153,9 @@ class Data_Products extends Data_Basket {
       }
 
       if( Framework::not_null($id_product_array) ) {
-<<<<<<< HEAD
-=======
-          
+
          //MYSQL group_concat( column_name )
          //POSTGRESQL = array_to_string(array_agg( column_name ),',')
-          
->>>>>>> 2120a21... dodanie stanow magazynowych + roznego rodzaju popraki
          $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
             p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
             group_concat(p2c.id_category) as id_category_list
@@ -178,7 +185,6 @@ class Data_Products extends Data_Basket {
 =======
       //MYSQL group_concat( column_name )
       //POSTGRESQL = array_to_string(array_agg( column_name ),',')
->>>>>>> 2120a21... dodanie stanow magazynowych + roznego rodzaju popraki
       $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
          p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
          group_concat(p2c.id_category) as id_category_list
@@ -189,31 +195,36 @@ class Data_Products extends Data_Basket {
       return db_fetch_array( $result );
    }
 
+   //FIXME - implements proper filters
    static function get_categories_list( array $filters ) {
       $F = Framework::g_global();
       
+
+      $where = array();
+
       if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-         $where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
+         $where_client = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
          $product_from = self::$Data_Products_params['client_view'];
       } else {
-         $where = '';
+         $where_client = '';
          $product_from = TBL_SHOP_PRODUCT;
       }
-      
-<<<<<<< HEAD
-      $query = 'SELECT c.id_category, c.name, c.description, c.id_category_parent, COUNT(p2c.id_category) AS products_in_category
-=======
+
+      $where_root_number = '';
+      if( self::$root_number ) {
+         $where_root_number = ' where c.root_number = ' . db_int(self::$root_number);
+      }
+
       //TODO p.quantity options
       //AND p.quantity > 0
 
       $query = 'SELECT c.id_category, c.name, c.description, c.id_category_parent,
-      COUNT(p2c.id_category) AS products_in_category, c.sort_order
->>>>>>> 2120a21... dodanie stanow magazynowych + roznego rodzaju popraki
-   	FROM ' . TBL_SHOP_CATEGORY . ' c LEFT OUTER JOIN (
-   		SELECT p2c.id_category FROM ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c, ' . $product_from . ' p
-         WHERE p2c.id_product = p.id_product AND p.status = \'ACTIVE\' ' . $where . ') p2c
-         ON (c.id_category = p2c.id_category)
-   	GROUP BY c.id_category ORDER  BY c.sort_order, c.name';
+		COUNT(p2c.id_category) AS products_in_category, c.sort_order
+		FROM ' . TBL_SHOP_CATEGORY . ' c LEFT OUTER JOIN (
+         WHERE p2c.id_product = p.id_product AND p.status = \'ACTIVE\' ' . $where_client . ') p2c
+         ON (c.id_category = p2c.id_category) ' . $where_root_number . '
+		GROUP BY c.id_category, c.name, c.description, c.id_category_parent, c.sort_order
+		ORDER BY c.sort_order, c.name'
        
       $res = db_query( $query );
       return db_result_array($res);

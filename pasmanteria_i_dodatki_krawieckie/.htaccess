@@ -1,0 +1,5 @@
+RewriteEngine On
+
+RewriteRule ^index.php$ ../index.php?virtualdir=pasmanteria_i_dodatki_krawieckie [QSA,L] 
+RewriteRule ^$ ../index.php?virtualdir=pasmanteria_i_dodatki_krawieckie [QSA,L]
+RewriteRule ^(.*)$ ../$1?virtualdir=pasmanteria_i_dodatki_krawieckie  [QSA,L]
