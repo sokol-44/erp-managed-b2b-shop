@@ -27,6 +27,10 @@ $Page->add_jq_init('$(".product_image").colorbox({
 	href:"' . $F->js_escape($big_image_path) . '",
 	photo:true});');
 $Page->head_title = $F->output_string_html( $product_info['name'] );
+
+
+
+if( $P->logged_in ) {
 ?>
 <div class="product_info">
    <div class="product_name"><?php echo $F->output_string_html( $product_info['name'] ); ?></div>
@@ -36,3 +40,10 @@ $Page->head_title = $F->output_string_html( $product_info['name'] );
    <div class="product_description"><?php echo $description_html; ?></div>
    <div class="product_add_basket"><?php echo $add_basket_html; ?></div>
 </div>
+<?php } else { ?>
+<div class="product_info">
+   <div class="product_name"><?php echo $F->output_string_html( $product_info['name'] ); ?></div>
+   <div class="product_image"><?php echo $small_image_html; ?></div>
+   <div class="product_description"><?php echo $description_html; ?></div>
+</div>
+<?php } ?>

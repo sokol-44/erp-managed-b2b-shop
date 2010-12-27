@@ -139,6 +139,11 @@ class Page {
          'bottom_html' => array('script' => 'empty', 'type' => 'MOD'),
          'footer_html' => array('script' => 'empty', 'type' => 'MOD'),
       );
+      
+      //TODO - chose script to login
+      if( !$P->logged_in ) {
+         $list_places['right_column_html']['script'] = 'empty';
+      }
 
       $list_places['component_html']['script'] = $this->com;
 

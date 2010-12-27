@@ -12,6 +12,7 @@ class Framework extends Framework_Data {
    static $class = false;
    static $POST = array(), $GET = array(), $REQUEST = array();
    static $com = '';
+   static $virtualdir = '';
    static $going_back = false;
    static $GET_array = array();
 
@@ -241,6 +242,11 @@ class Framework extends Framework_Data {
          //unset($this->GET['com']);
       }
 
+      if( self::not_null($this->GET['virtualdir']) ) {
+         $this->virtualdir = $this->GET['virtualdir'];
+         unset($this->GET['virtualdir']);
+      }
+
       if( self::not_null($this->GET['going_back']) ) {
          $this->going_back = (($this->GET['going_back']==1)?true:false);
          unset($this->GET['going_back']);
@@ -326,7 +332,7 @@ class Framework extends Framework_Data {
             $val = (string)trim($val);
             if( strlen($val) > 0
                && !( $type == 'POST' && ($key == 'x' || $key == 'y'))
-               && !( $type == 'GET' && ($key == 'virtualdir'))
+               //&& !( $type == 'GET' && ($key == 'virtualdir'))
                ) {
                $ret_array[stripslashes($key)] = stripslashes($val);
             }
