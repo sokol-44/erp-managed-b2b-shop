@@ -91,7 +91,7 @@ class Data_Basket extends Data_Order {
       $P = Person::g_global();
 
       //MySQL
-	  $query = 'insert into ' . TBL_SHOP_SHOPPING_BASKET . '
+      $query = 'insert into ' . TBL_SHOP_SHOPPING_BASKET . '
       	set id_client = ' . db_int($basket_params['id_client']) . ',
       	id_nr_shopping_basket = ' . db_int($basket_params['id_nr_shopping_basket']) . ',
       	description = "' . db_escape($basket_params['description']) . '",
@@ -108,7 +108,7 @@ class Data_Basket extends Data_Order {
       //PostgreSQL
       //$query  = 'select save_basket_data(' . db_int($basket_params['id_client']) . ',
       //' . db_int($basket_params['id_nr_shopping_basket']) . ', \'' . db_escape($basket_params['description']) . '\',
-	  //' . db_int($P->id) . ', \'' . db_escape($P->session_id) . '\')';
+      //' . db_int($P->id) . ', \'' . db_escape($P->session_id) . '\')';
       //      print_debug($basket_params);
       //      print_debug($P);
       //echo $query;

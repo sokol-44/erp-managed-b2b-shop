@@ -28,10 +28,10 @@ class Data_Products extends Data_Basket {
          }
       }
    }
-   
+    
    static function _load_virtualdir_params() {
       $F = Framework::g_global();
-  
+
       //pasmanteria_i_dodatki_krawieckie = 1
       //produkty_medyczne = 2
       $root_number = $F->return_virtualdir_id();
@@ -60,7 +60,7 @@ class Data_Products extends Data_Basket {
 			order by FIND_IN_SET(id_category,"' . implode(',', $list) . '")';
 
       $result = db_query( $query );
-	  
+       
       return db_result_array($result);
 
       //fix for postgresql
@@ -68,17 +68,17 @@ class Data_Products extends Data_Basket {
 
       // $array_res = array();
       // if( sizeof($array_res) > 1 ) {
-         // foreach($list as $id_category) {
-            // foreach($array_res_tmp as $key => $row) {
-               // if( $row['id_category'] == $id_category ) {
-                  // $array_res[] = $row;
-                  // unset($array_res_tmp[$key]);
-                  // break 1;
-               // }
-            // }
-         // }
+      // foreach($list as $id_category) {
+      // foreach($array_res_tmp as $key => $row) {
+      // if( $row['id_category'] == $id_category ) {
+      // $array_res[] = $row;
+      // unset($array_res_tmp[$key]);
+      // break 1;
+      // }
+      // }
+      // }
       // } else {
-         // $array_res = $array_res_tmp;
+      // $array_res = $array_res_tmp;
       // }
 
       //return $array_res;
@@ -120,7 +120,7 @@ class Data_Products extends Data_Basket {
       $img_arr = explode('/', $raw_img);
       return '/product_image/' . end($img_arr);
    }
-    
+
    static function change_product_quantity_list( array $product_list ) {
       $F = Framework::g_global();
 
@@ -181,8 +181,6 @@ class Data_Products extends Data_Basket {
          $product_from = TBL_SHOP_PRODUCT;
       }
 
-<<<<<<< HEAD
-=======
       //MYSQL group_concat( column_name )
       //POSTGRESQL = array_to_string(array_agg( column_name ),',')
       $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
@@ -198,7 +196,7 @@ class Data_Products extends Data_Basket {
    //FIXME - implements proper filters
    static function get_categories_list( array $filters ) {
       $F = Framework::g_global();
-      
+
 
       $where = array();
 
@@ -219,12 +217,13 @@ class Data_Products extends Data_Basket {
       //AND p.quantity > 0
 
       $query = 'SELECT c.id_category, c.name, c.description, c.id_category_parent,
-		COUNT(p2c.id_category) AS products_in_category, c.sort_order
-		FROM ' . TBL_SHOP_CATEGORY . ' c LEFT OUTER JOIN (
+      COUNT(p2c.id_category) AS products_in_category, c.sort_order
+   	  FROM ' . TBL_SHOP_CATEGORY . ' c LEFT OUTER JOIN (
+   		SELECT p2c.id_category FROM ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c, ' . $product_from . ' p
          WHERE p2c.id_product = p.id_product AND p.status = \'ACTIVE\' ' . $where_client . ') p2c
          ON (c.id_category = p2c.id_category) ' . $where_root_number . '
-		GROUP BY c.id_category, c.name, c.description, c.id_category_parent, c.sort_order
-		ORDER BY c.sort_order, c.name'
+   	   GROUP BY c.id_category, c.name, c.description, c.id_category_parent, c.sort_order
+     	ORDER BY c.sort_order, c.name';
        
       $res = db_query( $query );
       return db_result_array($res);
