@@ -3,7 +3,7 @@
 # Server version:               5.1.40-community-log
 # Server OS:                    Win32
 # HeidiSQL version:             6.0.0.3603
-# Date/time:                    2010-12-03 15:45:00
+# Date/time:                    2011-01-07 15:16:49
 # --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS `shop_product_to_category` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 # Dumping data for table b2b_sklep.shop_product_to_category: ~258 rows (approximately)
-DELETE FROM `shop_product_to_category`;
 /*!40000 ALTER TABLE `shop_product_to_category` DISABLE KEYS */;
 INSERT INTO `shop_product_to_category` (`id_product`, `id_category`) VALUES
 	(3190, 25),

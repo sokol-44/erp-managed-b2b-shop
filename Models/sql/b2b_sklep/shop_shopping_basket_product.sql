@@ -3,7 +3,7 @@
 # Server version:               5.1.40-community-log
 # Server OS:                    Win32
 # HeidiSQL version:             6.0.0.3603
-# Date/time:                    2010-12-03 15:45:01
+# Date/time:                    2011-01-07 15:16:49
 # --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -28,11 +28,8 @@ CREATE TABLE IF NOT EXISTS `shop_shopping_basket_product` (
   CONSTRAINT `fk.shopping_cart_product.id_product` FOREIGN KEY (`id_product`) REFERENCES `shop_product` (`id_product`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-# Dumping data for table b2b_sklep.shop_shopping_basket_product: ~1 rows (approximately)
-DELETE FROM `shop_shopping_basket_product`;
+# Dumping data for table b2b_sklep.shop_shopping_basket_product: ~0 rows (approximately)
 /*!40000 ALTER TABLE `shop_shopping_basket_product` DISABLE KEYS */;
-INSERT INTO `shop_shopping_basket_product` (`id_client`, `id_nr_shopping_basket`, `id_product`, `quantity`, `date_added`) VALUES
-	(1, 5, 10757, 1, '2010-12-03 14:27:53');
 /*!40000 ALTER TABLE `shop_shopping_basket_product` ENABLE KEYS */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

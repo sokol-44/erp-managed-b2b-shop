@@ -3,7 +3,7 @@
 # Server version:               5.1.40-community-log
 # Server OS:                    Win32
 # HeidiSQL version:             6.0.0.3603
-# Date/time:                    2010-12-03 15:44:59
+# Date/time:                    2011-01-07 15:16:48
 # --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS `global_rights2client` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 # Dumping data for table b2b_sklep.global_rights2client: ~4 rows (approximately)
-DELETE FROM `global_rights2client`;
 /*!40000 ALTER TABLE `global_rights2client` DISABLE KEYS */;
 INSERT INTO `global_rights2client` (`id_client_user`, `id_rights`) VALUES
 	(2, 4),

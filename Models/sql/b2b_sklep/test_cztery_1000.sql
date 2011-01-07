@@ -11,25 +11,26 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-# Dumping structure for table b2b_sklep.shop_order_status
-DROP TABLE IF EXISTS `shop_order_status`;
-CREATE TABLE IF NOT EXISTS `shop_order_status` (
-  `id_order_status` int(11) NOT NULL,
-  `name` tinytext,
-  PRIMARY KEY (`id_order_status`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+# Dumping structure for procedure b2b_sklep.test_cztery_1000
+DROP PROCEDURE IF EXISTS `test_cztery_1000`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `test_cztery_1000`()
+BEGIN
+DECLARE idx INT DEFAULT 0;
+DECLARE stime INT DEFAULT 0;
+DECLARE etime INT DEFAULT 0;
+DECLARE res BLOB DEFAULT '';
 
-# Dumping data for table b2b_sklep.shop_order_status: ~7 rows (approximately)
-/*!40000 ALTER TABLE `shop_order_status` DISABLE KEYS */;
-INSERT INTO `shop_order_status` (`id_order_status`, `name`) VALUES
-	(1, 'START'),
-	(2, 'WAITING_FOR_ACCEPTANCE'),
-	(3, 'WAITING_FOR_PAIMENT'),
-	(4, 'WAITING_FOR_DELIVER'),
-	(5, 'IN_DELIVERY'),
-	(6, 'DELIVERED'),
-	(7, 'END');
-/*!40000 ALTER TABLE `shop_order_status` ENABLE KEYS */;
+	SET stime =  UNIX_TIMESTAMP();
+	REPEAT
+		SELECT hash_arc4_password( CONCAT('Wiki', CHAR( MOD(idx,255) ) ), 'pediapediapediapediapediapediapediapediapediapedia') INTO res;
+		SET idx = idx + 1;
+	UNTIL idx > 1000 END REPEAT;
+	
+	SET etime = UNIX_TIMESTAMP() - stime;
+	select etime;
+END//
+DELIMITER ;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
