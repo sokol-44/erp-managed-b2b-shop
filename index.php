@@ -31,6 +31,7 @@ if( $template != '' && is_file($template) ) {
    include_once($template);
 } else {
    //FIXME
+   die('Wrong template!');
    //throw error
 }
 

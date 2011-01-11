@@ -11,11 +11,11 @@ if( !defined('_I_INIT') ) die();
 define('NONE', false);
 
 //loading config file into array
-$config = @parse_ini_file('config.ini', true);
+$config = parse_ini_file('config.ini', true);
 
 if( $config === FALSE ) {
 	mail('msokolowski@example.com', 'Fatal Error: config_init', "\n\n" . addslashes( serialize($_SERVER) ));
-	die('Fatal Error!');
+	die('Fatal Config Error!');
 }
 
 //DB table names
