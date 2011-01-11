@@ -39,6 +39,10 @@ class Price {
       return number_format((float)$number, 2, $currency_decimal, ' ') . self::$currency_str;
    }
    
+   static function rount_tax( $number ) {
+      return round( $number, 2);
+   }
+   
    static function tax ($number) {
      return number_format((float)$number, 0, $currency_decimal, ' ') . '%';
    }

@@ -32,6 +32,7 @@ class Shopping_Basket {
             $this->db_save_contents();
          } else {
             $this->db_restore_contents();
+            $this->calculate_total();
          }
       }
       $this->id_nr_shopping_basket = $this->params['id_nr_shopping_basket'];
@@ -255,15 +256,20 @@ class Shopping_Basket {
    }
 
    function calculate_total() {
-      $this->total = array('product_total' => 0, 'product_types' => 0, 'sum_gross' => 0, 'sum_netto' => 0);
+      $this->total = array('product_total' => 0, 'product_types' => 0,
+      'sum_gross' => 0, 'sum_gross_split' => array(), 'sum_netto' => 0);
 
       if ( Framework::not_null($this->contents) && $this->total['product_total'] == 0 ) {
          $this->get_all_product();
          foreach($this->product_array as $id_product => $product ) {
             $this->total['product_total'] += $product['quantity'];
             $this->total['product_types'] ++;
-            $this->total['sum_gross'] += Price::add_vat($product['price'], $product['vat'], $product['quantity']);
+            $this->total['sum_gross_split'][$product['vat']] += Price::add_vat($product['price'], $product['vat'], $product['quantity']);
             $this->total['sum_netto'] += ($product['price'] * $product['quantity']);
+         }
+         foreach( $this->total['sum_gross_split'] as $vat => $vat_value ) {
+            $this->total['sum_gross_split'][$vat] = Price::rount_tax($vat_value);
+            $this->total['sum_gross'] += Price::rount_tax($vat_value);
          }
       }
       return $this->total;
