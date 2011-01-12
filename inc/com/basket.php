@@ -5,6 +5,7 @@ $Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
 $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
 //STR: end
 
+
 $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_COM_BASKET) ) );
 
 if( $F->check_get('mode') ) {
