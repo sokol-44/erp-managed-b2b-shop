@@ -30,10 +30,15 @@ class Lang {
       define('TEXT_SPLITPAGE_BUTTON_NEXT', '>>');
       $F = Framework::g_global();
 
-      $arr_translation = Data::get_translation($F->com);
+      $arr_translation = Data::get_translation_all($F->com);
       foreach($arr_translation as $translation) {
          define($translation['definition'], $translation['translation']);
       }
+   }
+   
+   function get_translation_load( $name ) {
+      $data = Data::get_translation('load', $name);
+      return $data['translation'];
    }
 
    function _($string_in, $js = false) {

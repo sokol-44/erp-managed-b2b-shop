@@ -72,17 +72,17 @@ class Person {
          if( !is_array($roles) ) {
             $roles = explode(',', $roles);
          }
-          
+
          foreach($roles as $role) {
             if( array_search($role, $this->roles) ) {
                return true;
             }
          }
       }
-      
+
       return false;
    }
-   
+
    public function update_person_password($old_password, $new_password, $type) {
       if( $this->logged_in ) {
          $P_data = Data::get_login_data($this->login, $type);
@@ -127,6 +127,31 @@ class Person {
       } else {
          return false;
       }
+   }
+    
+   public function get_account_manager_address() {
+
+      //TODO add field and data to client: account_manager
+      //Data::get_account_manager_address( (int)$this->data['id_client'] )
+      $cfg_mail = $GLOBALS['config']['MAIL'];
+
+      if( Framework::not_null($cfg_mail['default_to_address']) ) {
+         return array('email' => $cfg_mail['default_to_address'], 'name' => $cfg_mail['default_to_name']);
+      } elseif( Framework::not_null($cfg_mail['main_from_address']) ) {
+         return array('email' => $cfg_mail['main_from_address'], 'name' => $cfg_mail['main_from_name']);
+      } else {
+         return array('email' => '','name' =>  '');
+      }
+   }
+
+   public function get_client_email_address() {
+      $client_data = Data::get_client_data( (int)$this->data['id_client'] );
+      return $client_data['email'];
+   }
+
+   public function get_client_data() {
+      $client_data = Data::get_client_data( (int)$this->data['id_client'] );
+      return $client_data;
    }
 
    public function check_pass() {

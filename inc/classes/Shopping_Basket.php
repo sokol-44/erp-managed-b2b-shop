@@ -183,6 +183,10 @@ class Shopping_Basket {
          return 0;
       }
    }
+   
+   function get_id_client() {
+      return $this->params['id_client'];
+   }
 
    function check_product_in($id_product) {
       if (isset($this->contents[(int)$id_product])) {

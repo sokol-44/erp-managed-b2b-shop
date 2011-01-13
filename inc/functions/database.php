@@ -210,7 +210,8 @@ function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link 
    die('DB fatal error (SUCCESS)');
 }
 
-function db_result_array($result, $link = 'db_link') {
+
+function db_result_array_full($result, $link = 'db_link') {
    global $$link;
 
    $result_data = array();
@@ -219,6 +220,12 @@ function db_result_array($result, $link = 'db_link') {
    }
 
    return $result_data;
+}
+
+function db_result_array($result, $link = 'db_link') {
+   global $$link;
+
+   return db_result_array_full($result, $link);
 }
 
 function db_fetch_array($result, $idx = '', $link = 'db_link') {

@@ -234,6 +234,17 @@ class Framework extends Framework_Data {
       else return false;
    }
    
+   static function get_current_date( $timestamp = false ) {
+      if (!$timestamp) $timestamp = time();
+      return date($GLOBALS['config']['DATE']['date'], $timestamp);
+   }
+   
+   static function get_current_datetime( $timestamp = false ) {
+      if (!$timestamp) $timestamp = time();
+      return date($GLOBALS['config']['DATE']['datetime'], $timestamp);
+   }
+   
+   
    function return_virtualdir_id() {
       $template_array = $GLOBALS['config']['TEMPLATES'];
       //print_debug($template_array);

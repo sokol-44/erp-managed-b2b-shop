@@ -65,7 +65,8 @@ include(DIR_INC_CLASSES . DS . 'Price.php');
 include(DIR_INC_CLASSES . DS . 'Breadcrumbs.php');
 include(DIR_INC_CLASSES . DS . 'BackTrail.php');
 include(DIR_INC_CLASSES . DS . 'Order.php');
-//include(DIR_INC_CLASSES . DS . 'Mail.php');
+include(DIR_INC_CLASSES . DS . 'Mail.php');
+include(DIR_INC_CLASSES . DS . 'Mail2Send.php');
 
 /**
  * initialize engine

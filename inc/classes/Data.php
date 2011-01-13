@@ -29,10 +29,16 @@ class Data extends Data_Person {
       parent::__construct();
    }
 
-   function get_translation($com_str) {
+   function get_translation_all($com_str) {
       $query = 'select definition, translation from ' . TBL_CORE_TRANSLATION . '
       	where com is NULL or com = "' . db_escape($com_str) . '"';
       return db_result_array( db_query($query) );
+   }
+
+   function get_translation($com_str, $name) {
+      $query = 'select definition, translation from ' . TBL_CORE_TRANSLATION . '
+      	where com = "' . db_escape($com_str) . '" and definition = "' . db_escape($name) . '"';
+      return db_fetch_array( db_query($query) );
    }
 
 

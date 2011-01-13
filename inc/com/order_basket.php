@@ -28,8 +28,10 @@ if( $F->check_get('mode') ) {
    switch($F->GET['mode']) {
       case 'order_basket':
          list($id_order, $count_product) = Order::make_new_order($Shopping_Basket, $F->POST['order_description']);
-         $Shopping_Basket_Chain->remove_basket( $Shopping_Basket->id_nr_shopping_basket );
-         $Shopping_Basket_Chain->set_default_basket();
+         //FIXME - mail
+         Mail2Send::order( (int)$Shopping_Basket->get_id_client(), (int)$id_order);
+         ///$Shopping_Basket_Chain->remove_basket( $Shopping_Basket->id_nr_shopping_basket );
+         //$Shopping_Basket_Chain->set_default_basket();
          $get = $F->add_local_get( array('mode' => 'show_order', 'id_order' => (int)$id_order ));
          $F->redirect( $F->make_link(CFG_COM_ORDER_BASKET, $get) );
          break;
