@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://127.0.0.1/MS_test/soap/server2.php" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="scramble2-2" targetNamespace="http://127.0.0.1/MS_test/soap/server2.php">
+  <wsdl:message name="getRot13Request">
+    <wsdl:part name="getRot13Request" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:message name="getRot13Response">
+    <wsdl:part name="getRot13Response" type="xsd:string"/>
+  </wsdl:message>
+  <wsdl:portType name="scramble2-2">
+    <wsdl:operation name="getRot13">
+      <wsdl:input message="tns:getRot13Request"/>
+      <wsdl:output message="tns:getRot13Response"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="scramble2-2SOAP" type="tns:scramble2-2">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getRot13">
+      <soap:operation soapAction="http://127.0.0.1/MS_test/soap/server2.php/NewOperation"/>
+      <wsdl:input>
+        <soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://127.0.0.1/MS_test/soap/server2.php" use="encoded"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body encodingStyle="http://schemas.xmlsoap.org/soap/encoding/" namespace="http://127.0.0.1/MS_test/soap/server2.php" use="encoded"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="scramble2-2">
+    <wsdl:port binding="tns:scramble2-2SOAP" name="scramble2-2SOAP">
+      <soap:address location="http://127.0.0.1/MS_test/soap/server2.php"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
