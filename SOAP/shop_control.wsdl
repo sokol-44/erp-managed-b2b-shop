@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://b2b_sklep.localhost/SOAP/server.php" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="scramble2-1" targetNamespace="http://b2b_sklep.localhost/SOAP/server.php">
+    <wsdl:types><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="http://b2b_sklep.localhost/SOAP/server.php">
+	<xsd:complexType name="arraytmp">
+		<xsd:sequence>
+			<xsd:element name="a" type="xsd:string"></xsd:element>
+			<xsd:element name="b" type="xsd:string"></xsd:element>
+		</xsd:sequence>
+	</xsd:complexType>
+	<xsd:complexType name="KeyValueData">
+      <xsd:sequence>
+        <xsd:element minOccurs="1" maxOccurs="1" name="id" type="xsd:string"/>
+        <xsd:element minOccurs="1" maxOccurs="1" name="name" type="xsd:string"/>
+        <xsd:element minOccurs="1" maxOccurs="1" name="data" type="xsd:string"/>
+      </xsd:sequence>
+    </xsd:complexType>
+    <xsd:complexType name="ArrayOfKeyValueData">
+      <xsd:sequence>
+        <xsd:element minOccurs="0" maxOccurs="unbounded"
+                 name="keyval" type="tns:KeyValueData"/>
+      </xsd:sequence>
+    </xsd:complexType>
+	
+    <xsd:complexType name="OrderValueData">
+    	<xsd:sequence>
+    		<xsd:element name="id_order" type="xsd:int"></xsd:element>
+    		<xsd:element name="id_client" type="xsd:int"></xsd:element>
+    		<xsd:element name="date_create" type="xsd:dateTime"></xsd:element>
+    		<xsd:element name="date_modified" type="xsd:dateTime"></xsd:element>
+    		<xsd:element name="id_order_status" type="xsd:int"></xsd:element>
+    		<xsd:element name="hidden_status" type="xsd:string"></xsd:element>
+    		<xsd:element name="description" type="xsd:string"></xsd:element>
+    		<xsd:element name="description_basket" type="xsd:string"></xsd:element>
+    	</xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="OrderValueDataArray">
+
+    	<xsd:sequence>
+    		<xsd:element name="keyval" type="tns:OrderValueData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+    	</xsd:sequence>
+    </xsd:complexType>
+
+        
+    <xsd:group name="NewGroupDefinition">
+    	<xsd:sequence></xsd:sequence>
+    </xsd:group>
+
+    <xsd:complexType name="ProductValueDataArray">
+    	<xsd:sequence>
+    		<xsd:sequence maxOccurs="unbounded" minOccurs="0">
+    			<xsd:element name="id_product" type="xsd:int"></xsd:element>
+    			<xsd:element name="name" type="xsd:string"></xsd:element>
+    			<xsd:element name="description" type="xsd:string"></xsd:element>
+    			<xsd:element name="picture_small_url" type="xsd:string"></xsd:element>
+    			<xsd:element name="picture_big_url" type="xsd:string"></xsd:element>
+    			<xsd:element name="picture_id" type="xsd:string"></xsd:element>
+    			<xsd:element name="price" type="xsd:double"></xsd:element>
+    			<xsd:element name="vat" type="xsd:double"></xsd:element>
+    			<xsd:element name="quantity" type="xsd:int"></xsd:element>
+    			<xsd:element name="status" type="xsd:string"></xsd:element>
+    		</xsd:sequence>
+    	</xsd:sequence>
+    </xsd:complexType>
+</xsd:schema></wsdl:types>
+  <wsdl:message name="getArrayRequest">
+  	<wsdl:part name="getArrayRequest" type="xsd:string"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getArrayResponse">
+  	<wsdl:part name="getArrayResponse" type="tns:arraytmp"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getArray2Request">
+  	<wsdl:part name="getArray2Request" type="xsd:string"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getArray2Response">
+  	<wsdl:part name="getArray2Response" type="tns:ArrayOfKeyValueData"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="StatisticsListOutput">
+      <wsdl:part name="data" type="tns:ArrayOfKeyValueData"/>
+    </wsdl:message>
+  <wsdl:message name="getProductListRequest">
+  	<wsdl:part name="getProductListRequest" type="xsd:int"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="getProductListResponse">
+  	<wsdl:part name="getProductListResponse" type="tns:ProductValueDataArray"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="scramble2-1">        <wsdl:operation name="getArray">
+    	<wsdl:input message="tns:getArrayRequest"></wsdl:input>
+    	<wsdl:output message="tns:getArrayResponse"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getArray2">
+    	<wsdl:input message="tns:getArray2Request"></wsdl:input>
+    	<wsdl:output message="tns:getArray2Response"></wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductList">
+    	<wsdl:input message="tns:getProductListRequest"></wsdl:input>
+    	<wsdl:output message="tns:getProductListResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+
+  <wsdl:binding name="scramble2-1SOAP" type="tns:scramble2-1">
+    <soap:binding style="rpc" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="getArray">
+      <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/server.php"/>
+      <wsdl:input>
+        <soap:body namespace="http://b2b_sklep.localhost/SOAP/server.php" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="http://b2b_sklep.localhost/SOAP/server.php" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getArray2">
+      <soap:operation soapAction="http://127.0.0.1/MS_test/soap/server2.php"/>
+      <wsdl:input>
+        <soap:body namespace="http://b2b_sklep.localhost/SOAP/server.php" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="http://b2b_sklep.localhost/SOAP/server.php" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getProductList">
+      <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/server.php"/>
+      <wsdl:input>
+        <soap:body namespace="http://b2b_sklep.localhost/SOAP/server.php" use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body namespace="http://b2b_sklep.localhost/SOAP/server.php" use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+
+  <wsdl:service name="scramble2-1">
+    <wsdl:port binding="tns:scramble2-1SOAP" name="scramble2-1SOAP">
+      <soap:address location="http://b2b_sklep.localhost/SOAP/server.php"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
