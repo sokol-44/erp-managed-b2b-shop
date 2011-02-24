@@ -8,7 +8,7 @@
 			targetNamespace="http://b2b_sklep.localhost/SOAP/scs.php">
 			<xsd:complexType name="OrderValueDataArray">
 				<xsd:sequence>
-					<xsd:element name="keyval" type="tns:OrderValueData"
+					<xsd:element name="values" type="tns:OrderValueData"
 						maxOccurs="unbounded" minOccurs="0"></xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
@@ -27,7 +27,7 @@
 
 			<xsd:complexType name="ProductValueDataArray">
 				<xsd:sequence>
-					<xsd:element minOccurs="0" maxOccurs="unbounded" name="array"
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="values"
 						type="tns:ProductValueData" />
 				</xsd:sequence>
 			</xsd:complexType>
@@ -48,24 +48,46 @@
 		
 			<xsd:complexType name="ClientData">
 				<xsd:sequence>
-					<xsd:element name="id_client_in" type="xsd:int"></xsd:element>
-					<xsd:element name="name_in" type="xsd:string"></xsd:element>
-					<xsd:element name="description_in" type="xsd:string"></xsd:element>
-					<xsd:element name="email_in" type="xsd:string"></xsd:element>
-					<xsd:element name="phone_in" type="xsd:string"></xsd:element>
-					<xsd:element name="state_in" type="xsd:string"></xsd:element>
+					<xsd:element name="id_client" type="xsd:int"></xsd:element>
+					<xsd:element name="name" type="xsd:string"></xsd:element>
+					<xsd:element name="description" type="xsd:string"></xsd:element>
+					<xsd:element name="email" type="xsd:string"></xsd:element>
+					<xsd:element name="phone" type="xsd:string"></xsd:element>
+					<xsd:element name="state" type="xsd:string"></xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
 		
 			<xsd:complexType name="ClientDataArray">
 				<xsd:sequence>
-					<xsd:element name="array" type="tns:ClientData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+					<xsd:element name="values" type="tns:ClientData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="ParamStartLength">
+				<xsd:sequence>
+					<xsd:element name="start" type="xsd:int"></xsd:element>
+					<xsd:element name="length" type="xsd:int"></xsd:element>
+					<xsd:element name="options" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="StatusData">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:string"></xsd:element>
+					<xsd:element name="additional_data" type="xsd:string"></xsd:element>
+					<xsd:element name="status" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="StatusDataArray">
+				<xsd:sequence>
+					<xsd:element name="values" type="tns:StatusData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
 		</xsd:schema>
 	</wsdl:types>
 	<wsdl:message name="getProductListRequest">
-		<wsdl:part name="getProductListRequest" type="xsd:int"></wsdl:part>
+		<wsdl:part name="getProductListRequest" type="tns:ParamStartLength"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getProductListResponse">
 		<wsdl:part name="getProductListResponse" type="tns:ProductValueDataArray"></wsdl:part>
@@ -74,7 +96,19 @@
 		<wsdl:part name="doClientAddRequest" type="tns:ClientDataArray"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doClientAddResponse">
-		<wsdl:part name="doClientAddResponse" type="xsd:string"></wsdl:part>
+		<wsdl:part name="doClientAddResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientListRequest">
+		<wsdl:part name="getClientListRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientListResponse">
+		<wsdl:part name="getClientListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getParamStartLengthRequest">
+		<wsdl:part name="getParamStartLengthRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getParamStartLengthResponse">
+		<wsdl:part name="getParamStartLengthResponse" type="tns:ParamStartLength"></wsdl:part>
 	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
@@ -88,10 +122,37 @@
 								message="tns:doClientAddResponse">
 							</wsdl:output>
 						</wsdl:operation>
+						<wsdl:operation name="getClientList">
+							<wsdl:input
+								message="tns:getClientListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getClientListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getParamStartLength">
+							<wsdl:input
+								message="tns:getParamStartLengthRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getParamStartLengthResponse">
+							</wsdl:output>
+						</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="shop_control-SOAP" type="tns:shop_control">
 		<soap:binding style="rpc"
 			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="getClientList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
 		<wsdl:operation name="doClientAdd">
 			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
 			<wsdl:input>
@@ -104,6 +165,17 @@
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getProductList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getParamStartLength">
 			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
 			<wsdl:input>
 				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
