@@ -37,7 +37,10 @@ $server = new SoapServer('shop_control.wsdl', $param_array);
 $server->setClass('Soap_Server');
 $server->setPersistence(SOAP_PERSISTENCE_SESSION);
 
+fwrite($fp, "server\n" . print_r($server , true) . "\n\n");
 $server->handle();
+
+fwrite($fp, "server\n" . print_r($server , true) . "\n\n");
 
 fclose($fp);
 ?>

@@ -1,6 +1,9 @@
 <html>
+<head>
+<title>Test - B2B Sklep</title>
+</head>
 <body>
-T
+Tests <?php  echo date('r'); ?><br>
 <pre>
 <?
 include "scs_t_function.php";
@@ -11,23 +14,20 @@ $client = new SoapClient($soap_address, $soap_param_array);
 //$client->__setSoapHeaders( $soapHeaders );
 
 
-
+// Test Client/User
 // test_doClientAdd( $client );
+// test_doClientChange( $client );
+// test_doClientUserAdd( $client );
+// test_doClientUserChange( $client );
+// test_doClientUserSetPassword( $client );
+// test_doClientUserDelete( $client );
+ test_getClientList( $client );
+// test_getClientUserList( $client );
+
+
 // test_getProductList( $client );
-$in_oo = new ParamStartLength('dupa');
-//$in_oo->start = 1;
-//$in_oo->length = 2;
-//$in_oo->options = 'sasa';
-
-print_r($in_oo);
-
-$resC = $client->getProductList( $in_oo );
-//print_lr( $client );
-print_r($resC);
 
 
-//$resC = $client->getParamStartLength( 'aa' );
-//print_r($resC);
 
 ?>
 </pre>
