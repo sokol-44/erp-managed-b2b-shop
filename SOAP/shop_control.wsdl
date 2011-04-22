@@ -6,13 +6,13 @@
 	<wsdl:types>
 		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://b2b_sklep.localhost/SOAP/scs.php">
-			<xsd:complexType name="OrderValueDataArray">
+			<xsd:complexType name="OrderDataArray">
 				<xsd:sequence>
-					<xsd:element name="values" type="tns:OrderValueData"
+					<xsd:element name="values" type="tns:OrderData"
 						maxOccurs="unbounded" minOccurs="0"></xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
-			<xsd:complexType name="OrderValueData">
+			<xsd:complexType name="OrderData">
 				<xsd:sequence>
 					<xsd:element name="id_order" type="xsd:int"></xsd:element>
 					<xsd:element name="id_client" type="xsd:int"></xsd:element>
@@ -25,13 +25,13 @@
 				</xsd:sequence>
 			</xsd:complexType>
 
-			<xsd:complexType name="ProductValueDataArray">
+			<xsd:complexType name="ProductDataArray">
 				<xsd:sequence>
 					<xsd:element minOccurs="0" maxOccurs="unbounded" name="values"
-						type="tns:ProductValueData" />
+						type="tns:ProductData" />
 				</xsd:sequence>
 			</xsd:complexType>
-			<xsd:complexType name="ProductValueData">
+			<xsd:complexType name="ProductData">
 				<xsd:sequence>
 					<xsd:element name="id_product" type="xsd:int"></xsd:element>
 					<xsd:element name="name" type="xsd:string"></xsd:element>
@@ -153,13 +153,28 @@
 					<xsd:element name="options" type="xsd:string"></xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
+		
+			<xsd:complexType name="ProductClientPriceData">
+				<xsd:sequence>
+					<xsd:element name="id_product" type="xsd:int"></xsd:element>
+					<xsd:element name="id_client" type="xsd:int"></xsd:element>
+					<xsd:element name="price" type="xsd:float"></xsd:element>
+					<xsd:element name="vat" type="xsd:float"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="ProductClientPriceDataArray">
+				<xsd:sequence>
+					<xsd:element name="values" type="tns:ProductClientPriceData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
 		</xsd:schema>
 	</wsdl:types>
 	<wsdl:message name="getProductListRequest">
 		<wsdl:part name="getProductListRequest" type="tns:ParamStartLength"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getProductListResponse">
-		<wsdl:part name="getProductListResponse" type="tns:ProductValueDataArray"></wsdl:part>
+		<wsdl:part name="getProductListResponse" type="tns:ProductDataArray"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doClientAddRequest">
 		<wsdl:part name="doClientAddRequest" type="tns:ClientDataArray"></wsdl:part>
@@ -210,10 +225,28 @@
 		<wsdl:part name="getClientListResponse" type="tns:ClientDataArray"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getClientUserListRequest">
-		<wsdl:part name="getClientUserListRequest" type="xsd:string"></wsdl:part>
+		<wsdl:part name="getClientUserListRequest" type="tns:ParamDoubleStartLength"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getClientUserListResponse">
-		<wsdl:part name="getClientUserListResponse" type="xsd:string"></wsdl:part>
+		<wsdl:part name="getClientUserListResponse" type="tns:ClientUserDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doProductAddRequest">
+		<wsdl:part name="doProductAddRequest" type="tns:ProductDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doProductAddResponse">
+		<wsdl:part name="doProductAddResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doProductChangeRequest">
+		<wsdl:part name="doProductChangeRequest" type="tns:ProductDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doProductChangeResponse">
+		<wsdl:part name="doProductChangeResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setProductClientPriceRequest">
+		<wsdl:part name="setProductClientPriceRequest" type="tns:ProductClientPriceDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setProductClientPriceResponse">
+		<wsdl:part name="setProductClientPriceResponse" type="tns:StatusDoubleDataArray"></wsdl:part>
 	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
@@ -291,21 +324,34 @@
 								message="tns:getClientUserListResponse">
 							</wsdl:output>
 						</wsdl:operation>
+						<wsdl:operation name="doProductAdd">
+							<wsdl:input
+								message="tns:doProductAddRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doProductAddResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doProductChange">
+							<wsdl:input
+								message="tns:doProductChangeRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doProductChangeResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="setProductClientPrice">
+							<wsdl:input
+								message="tns:setProductClientPriceRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:setProductClientPriceResponse">
+							</wsdl:output>
+						</wsdl:operation>
 	</wsdl:portType>
 	<wsdl:binding name="shop_control-SOAP" type="tns:shop_control">
 		<soap:binding style="rpc"
 			transport="http://schemas.xmlsoap.org/soap/http" />
-		<wsdl:operation name="getClientList">
-			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
-			<wsdl:input>
-				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
-					use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
-					use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
 		<wsdl:operation name="doClientChange">
 			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
 			<wsdl:input>
@@ -384,6 +430,39 @@
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getClientUserList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="doProductAdd">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="doProductChange">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setProductClientPrice">
 			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
 			<wsdl:input>
 				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"

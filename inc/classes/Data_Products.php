@@ -28,7 +28,7 @@ class Data_Products extends Data_Basket {
          }
       }
    }
-    
+
    static function _load_virtualdir_params() {
       $F = Framework::g_global();
 
@@ -98,7 +98,12 @@ class Data_Products extends Data_Basket {
          if( $id_category != 0 ) $where['p2c.id_category'] = (int)$id_category;
 
          if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-            $where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
+            if( defined('DEFAULT_CLIENT_PRICE_MODE') &&
+            constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+               $where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
+            } else {
+               $where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
+            }
             $product_from = self::$Data_Products_params['client_view'];
          } else {
             $product_from = TBL_SHOP_PRODUCT;
@@ -145,7 +150,12 @@ class Data_Products extends Data_Basket {
       $F = Framework::g_global();
 
       if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-         $where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
+         if( defined('DEFAULT_CLIENT_PRICE_MODE') &&
+         constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+            $where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
+         } else {
+            $where = ' and (p.id_client = ' . (int)self::$Data_Products_params['id_client'] . ' or p.id_client IS NULL)';
+         }
          $product_from = self::$Data_Products_params['client_view'];
       } else {
          $where = '';
@@ -174,7 +184,12 @@ class Data_Products extends Data_Basket {
       $F = Framework::g_global();
        
       if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-         $where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
+         if( defined('DEFAULT_CLIENT_PRICE_MODE') &&
+         constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+            $where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
+         } else {
+            $where = ' and (p.id_client = ' . (int)self::$Data_Products_params['id_client'] . ' or p.id_client IS NULL)';
+         }
          $product_from = self::$Data_Products_params['client_view'];
       } else {
          $where = '';
@@ -201,7 +216,12 @@ class Data_Products extends Data_Basket {
       $where = array();
 
       if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-         $where_client = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
+         if( defined('DEFAULT_CLIENT_PRICE_MODE') &&
+         constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+            $where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
+         } else {
+            $where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
+         }
          $product_from = self::$Data_Products_params['client_view'];
       } else {
          $where_client = '';

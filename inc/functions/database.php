@@ -65,8 +65,8 @@ function db_perform($table, $data_array, $action = 'insert', $where = '', $link 
 
    if ($action == 'INSERT') {
       if( is_array($where) && Framework::not_null($where) ) {
-          //INSERT on duplikate key - update
-          //FIXME
+         //INSERT on duplikate key - update
+         //FIXME
       } else {
          $query = 'insert into ' . $table . ' set ' . implode(', ',  $query_array);
          $res = db_query($query, $link);
@@ -97,12 +97,21 @@ function db_transaction_end($link = 'db_link') {
    $transaction_count--;
 }
 
-function db_unroll_conditions($conditions_array, $type = 'and') {
+function db_unroll_conditions($conditions_array, $type = 'and', $field_name = false) {
 
    $return_str = '';
    if( is_array($conditions_array) ) {
       foreach( $conditions_array as $attr => $val ) {
-         $return_array[] = $attr . '=\'' . $val . '\'';
+         if( is_array($val) ) {
+            $return_array[] = ' (' . db_unroll_conditions($val, 'or', $attr) . ')';
+         } else {
+            if( Framework::not_null($field_name) ) $attr = $field_name;
+            if( strtoupper(trim($val)) == 'NULL' || strtoupper(trim($val)) == 'NOT NULL') {
+               $return_array[] = $attr . ' IS ' . trim($val);
+            } else {
+               $return_array[] = $attr . '=\'' . $val . '\'';
+            }
+         }
       }
       $return_str = implode(' ' . $type . ' ', $return_array);
    } else {

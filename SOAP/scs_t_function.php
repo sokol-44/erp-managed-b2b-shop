@@ -16,7 +16,7 @@ function add_to_fp($str) {
    global $fp;
    if( isset($fp) && is_resource($fp) ) {
       //fwrite($fp, print_r(debug_backtrace(), true));
-      fwrite($fp, ' ------------- add_to_fd');
+      fwrite($fp, ' ------------- add_to_fd: ');
       fwrite($fp, $str);
    } else {
       

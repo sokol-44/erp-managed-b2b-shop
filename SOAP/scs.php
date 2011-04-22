@@ -4,11 +4,11 @@ include "init.php";
 include "scs_t_function.php";
 include "scs_t_class.php";
 
-$fp = fopen('C:\wamp\www\MS_test\soap\log\server2-'.time().'.log', 'a+');
+$fp = fopen('log\server2-'.time().'.log', 'a+');
 
 $hdr = file_get_contents("php://input");
 
-//fwrite($fp, "input \n" . $hdr . "\n\n");
+add_to_fp("input \n" . $hdr . "\n\n");
 //fwrite($fp, "GLOBALS\n" . print_r($GLOBALS  , true));
 //fwrite($fp, "_SERVER\n" . print_r($_SERVER, true));
 
@@ -31,16 +31,15 @@ $param_array = array(
 	'password' => 'ola'
 );
 
-
 $server = new SoapServer('shop_control.wsdl', $param_array);
 
 $server->setClass('Soap_Server');
 $server->setPersistence(SOAP_PERSISTENCE_SESSION);
 
-fwrite($fp, "server\n" . print_r($server , true) . "\n\n");
+add_to_fp("server\n" . print_r($server , true) . "\n\n");
 $server->handle();
 
-fwrite($fp, "server\n" . print_r($server , true) . "\n\n");
+add_to_fp("server\n" . print_r($server , true) . "\n\n");
 
 fclose($fp);
 ?>

@@ -250,6 +250,7 @@ class Data_Person extends Data_Rights {
          	' . TBL_GLOBAL_CLIENT . ' c
          	where ca.id_client = c.id_client and ca.id_client = "' . db_escape($attribute_type) . '"');
       if( db_rows($result) ) return db_fetch_result('val');
+	  elseif ( defined('DEFAULT_CLIENT_PRODUCT_PRICE_VIEW') ) return constant('DEFAULT_CLIENT_PRODUCT_PRICE_VIEW');
       else return false;
    }
 

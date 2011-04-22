@@ -10,6 +10,9 @@ include "scs_t_function.php";
 include "scs_t_class.php";
 include "scs_t_test.php";
 
+// turn off the wsdl cache
+ini_set('soap.wsdl_cache_enabled', '0');
+
 $client = new SoapClient($soap_address, $soap_param_array);
 //$client->__setSoapHeaders( $soapHeaders );
 
@@ -21,8 +24,11 @@ $client = new SoapClient($soap_address, $soap_param_array);
 // test_doClientUserChange( $client );
 // test_doClientUserSetPassword( $client );
 // test_doClientUserDelete( $client );
- test_getClientList( $client );
+// test_getClientList( $client );
 // test_getClientUserList( $client );
+// test_doProductAdd( $client );
+// test_doProductChange( $client );
+ test_setProductClientPrice( $client );
 
 
 // test_getProductList( $client );

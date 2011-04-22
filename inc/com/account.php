@@ -5,7 +5,7 @@ $GET_tmp = $F->make_get();
 
 //FIXME
 //remember backtrack
-if( !$P->logged_in ) $F->redirect(  );
+//if( !$P->logged_in ) $F->redirect(  );
 
 $BC->add_crumb(Lang::_('Account'), $F->make_link(CFG_COM_ACCOUNT) );
 

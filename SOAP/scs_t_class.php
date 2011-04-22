@@ -16,7 +16,7 @@ class ClientData {
    public $phone = '';
    public $state = '';
 
-   function __construct($add = 'null') {
+   function __construct($add = 'null', $string_add = '') {
       if( !is_object($add) ) {
          $this->id_client = strlen($add) + 10000;
          $this->name = $add . '$name';
@@ -51,26 +51,26 @@ class ClientData {
 class ClientUserData {
    public $id_client_user = '';
    public $id_client = '';
-   public $name = '';
-   public $description = '';
    public $login = '';
    public $password = '';
    public $password_salt = '';
+   public $description = '';
+   public $name = '';
    public $email = '';
    public $created = '';
    public $last_login = '';
    public $state = '';
 
 
-   function __construct($add = 'null') {
+   function __construct($add = 'null', $string_add = '') {
       if( !is_object($add) ) {
          $this->id_client_user = strlen($add) + 10000;
          $this->id_client = strlen($add) + 20000;
-         $this->name = $add . '$name';
-         $this->description = $add . '$description';
          $this->login = $add . '$login';
          $this->password = $add . '$password';
          $this->password_salt = $add . '$password_salt';
+         $this->description = $add . '$description';
+         $this->name = $add . '$name';
          $this->email = $add . '$email';
          $this->created = data_data();
          $this->last_login = data_data();
@@ -83,11 +83,11 @@ class ClientUserData {
    function _fill_response( $obj ) {
       $this->id_client_user = 0;
       $this->id_client = 0;
-      $this->name = '';
-      $this->description = '';
       $this->login = '';
       $this->password = '';
       $this->password_salt = '';
+      $this->description = '';
+      $this->name = '';
       $this->email = '';
       $this->created = '';
       $this->last_login = '';
@@ -116,7 +116,7 @@ class ClientUserPassword {
    public $password_salt = '';
 
 
-   function __construct($add = 'null') {
+   function __construct($add = 'null', $string_add = '') {
       $this->id_client_user = strlen($add) + 10000;
       $this->id_client = strlen($add) + 20000;
       $this->password = $add . '$password';
@@ -136,7 +136,7 @@ class CategoryData {
    public $date_modified = '';
 
 
-   function __construct($add = 'null') {
+   function __construct($add = 'null', $string_add = '') {
       $this->id_category = strlen($add) + 10000;
       $this->id_category_parent = strlen($add) + 20000;
       $this->sort_order = strlen($add) + 30000;
@@ -179,7 +179,7 @@ class OrderData {
    public $description_basket = '';
 
 
-   function __construct($add = 'null') {
+   function __construct($add = 'null', $string_add = '') {
       $this->id_order = strlen($add) + 10000;
       $this->id_client = strlen($add) + 20000;
       $this->date_create = data_data();
@@ -198,7 +198,7 @@ class OrderStatus {
    public $description = '';
 
 
-   function __construct($add = 'null') {
+   function __construct($add = 'null', $string_add = '') {
       $this->id_order_status = strlen($add) + 10000;
       $this->id_order = strlen($add) + 20000;
       $this->timestamp = data_data();
@@ -211,7 +211,7 @@ class Product2Category {
    public $id_product = '';
    public $id_category = '';
 
-   function __construct($add = 'null') {
+   function __construct($add = 'null', $string_add = '') {
       $this->id_product = strlen($add) + 10000;
       $this->id_category = strlen($add) + 20000;
    }
@@ -230,7 +230,7 @@ class ProductData {
    public $quantity = '';
    public $status= '';
 
-   function __construct($add = 'null') {
+   function __construct($add = 'null', $string_add = '') {
       $this->id_product = strlen($add) + 10000;
       $this->name = $add . '$name';
       $this->description = $add . '$description';
@@ -251,7 +251,7 @@ class ProductClientPriceData {
    public $price = '';
    public $vat = '';
 
-   function __construct($add = 'null') {
+   function __construct($add = 'null', $string_add = '') {
       $this->id_product = strlen($add) + 10000;
       $this->id_client = strlen($add) + 20000;
       $this->price = strlen($add) + 10000;
@@ -264,7 +264,7 @@ class ParamStartLength  {
    public $length = '';
    public $options = '';
 
-   function __construct($add = 'null') {
+   function __construct($add = 'null', $string_add = '') {
       $this->id_start = 10;
       $this->length = 2;
       $this->options = 'dupa';
@@ -278,7 +278,7 @@ class ParamStartWhereLength {
    public $where = '';
    public $options = '';
 
-   function __construct($add = 'null') {
+   function __construct($add = 'null', $string_add = '') {
       $this->id_start = strlen($add) + 10;
       $this->length = strlen($add) + 20;
       $this->where = $add . '$where';
@@ -292,7 +292,7 @@ class ParamDoubleStartLength {
    public $length = '';
    public $options = '';
 
-   function __construct($add = 'null') {
+   function __construct($add = 'null', $string_add = '') {
       $this->id_start_one = strlen($add) + 10;
       $this->id_start_two = strlen($add) + 10;
       $this->length = strlen($add) + 20;
@@ -306,21 +306,21 @@ class StatusData {
    public $additional_data = '';
    public $status = '';
 
-   function __construct($add = 'null') {
+   function __construct($add = 'null', $string_add = '') {
       if( !is_object($add) ) {
          $this->id = strlen($add) + 10;
          $this->additional_data = $add . '$additional_data';
          $this->status = $add . '$status';
       } else {
-         add_to_fp( print_r($add, true) );
-         $this->_fill_response($add);
-         add_to_fp( print_r($this, true) );
+         //add_to_fp( print_r($add, true) );
+         $this->_fill_response($add, $string_add);
+         //add_to_fp( print_r($this, true) );
       }
    }
 
-   function _fill_response( $obj ) {
+   function _fill_response( $obj, $string_add = '') {
       $this->id = false;
-      $this->status = 'TIMEOUT';
+      $this->status = 'TIMEOUT' . $string_add;
       foreach( $obj as $key => $variable ) {
          if( substr($key, 0, 2) == 'id' ) {
             $this->id = $variable;
@@ -338,21 +338,21 @@ class StatusDoubleData {
    public $additional_data = '';
    public $status = '';
 
-   function __construct($add = 'null') {
+   function __construct($add = 'null', $string_add = '') {
       if( !is_object($add) ) {
          $this->id_one = strlen($add) + 10;
          $this->id_two = strlen($add) + 20;
          $this->additional_data = $add . '$additional_data';
          $this->status = $add . '$status';
       } else {
-         $this->_fill_response($add);
+         $this->_fill_response($add, $string_add);
       }
    }
 
-   function _fill_response( $obj ) {
+   function _fill_response( $obj, $string_add = '' ) {
       $this->id_one = false;
       $this->id_two = false;
-      $this->status = 'TIMEOUT';
+      $this->status = 'TIMEOUT' . $string_add;
       $first_id_name = false;
       foreach( $obj as $key => $variable ) {
          if( substr($key, 0, 2) == 'id' ) {

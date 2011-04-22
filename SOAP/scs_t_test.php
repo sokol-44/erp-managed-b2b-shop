@@ -7,8 +7,9 @@ function test_doClientAdd( $client ) {
    $in_o->values = array( 0 => new ClientData('dupa'), new ClientData('dupaq'));
    print_r($in_o);
    $resC = $client->doClientAdd($in_o);
-   //print_lr( $client );
+   // print_lr( $client );
    //print("" . print_r( unserialize($resC), true). '<br>');
+   //echo 'res:';
    print("" . print_r( $resC, true). '<br>');
 }
 
@@ -68,13 +69,12 @@ function test_getClientList( $client ) {
 function test_getClientUserList( $client ) {
    echo "test_getClientUserList\n";
    $in_o = new stdClass();
-   $in_o->values = array( 0 => new ClientUserData('dupa'), new ClientUserData('dupaq'));
+   $in_o = new ParamDoubleStartLength();
    print_r($in_o);
    $resC = $client->getClientUserList($in_o);
    //print_lr( $client );
    print("" . print_r( $resC, true). '<br>');
 }
-
 
 function test_doClientUserSetPassword( $client ) {
    echo "test_doClientUserSetPassword\n";
@@ -85,6 +85,45 @@ function test_doClientUserSetPassword( $client ) {
    //print_lr( $client );
    print("" . print_r( $resC, true). '<br>');
 }
+
+
+
+//Produkty / Kategorie
+
+
+function test_doProductAdd( $client ) {
+   echo "test_doProductAdd\n";
+   $in_o = new stdClass();
+   $in_o->values = array( 0 => new ProductData('dupa'), new ProductData('dupaq'));
+   print_r($in_o);
+   $resC = $client->doProductAdd($in_o, 'test_doProductChange');
+   //print_lr( $client );
+   print("" . print_r( $resC, true). '<br>');
+}
+
+function test_doProductChange( $client ) {
+   echo "test_doProductChange\n";
+   $in_o = new stdClass();
+   $in_o->values = array( 0 => new ProductData('dupa'), new ProductData('dupaq'));
+   print_r($in_o);
+   $resC = $client->doProductChange($in_o);
+   //print_lr( $client );
+   print("" . print_r( $resC, true). '<br>');
+}
+
+
+function test_setProductClientPrice( $client ) {
+   echo "test_setProductClientPrice\n";
+   $in_o = new stdClass();
+   $in_o->values = array( 0 => new ProductClientPriceData('dupa'), new ProductClientPriceData('dupaq'));
+   //$in_o = 'test';
+   print_r($in_o);
+   $resC = $client->setProductClientPrice($in_o);
+   //print_lr( $client );
+   print("" . print_r( $resC, true). '<br>');
+}
+
+
 
 
 function test_getProductList( $client ) {

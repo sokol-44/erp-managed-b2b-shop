@@ -9,6 +9,8 @@
 if( !defined('_I_INIT') ) die();
 
 class Soap_Server {
+   public $auth = false;
+   public $nr_req = 0;
 
    function Authenticate($login) {
 
@@ -20,6 +22,12 @@ class Soap_Server {
       // }
    }
     
+   function __construct() {
+      $this->nr_req++;
+      add_to_fp("Soap_Server.php\n");
+      add_to_fp(print_r($this, true));
+   }
+
    function getProductList( $input ) {
 
       $start = $input->start;
@@ -30,7 +38,7 @@ class Soap_Server {
          'name' => '0 name'.$idx,
          'description' => '0 description'.$idx,
          'picture_small_url' => '0 picture_small_url.$idx',
-        'picture_big_url' => ' 0 picture_big_url'.$idx,
+         'picture_big_url' => ' 0 picture_big_url'.$idx,
          'picture_id' => 7+$idx,
          'price' => 8+$idx,
          'vat' => 9+$idx,
@@ -42,25 +50,15 @@ class Soap_Server {
 
       return($res_obj);
    }
-    
-   function getClientList ( $in ) {
-      $start = 1;
-      $length = 1;
-      if( $in && is_object($in) ) {
-         if( $in->start > 0 ) $start = $in->start;
-         if( $in->length > 0 ) $length = $in->length;
-      }
-      return serialize($in);
-   }
-    
-   function doClientAdd ( $input ) {
+
+   function doClientChange ( $input ) {
       // return serialize($input);
       add_to_fp(print_r($input, true));
-      
+
       $response = $this->_fill_response( $input, 'StatusData');
-      
+
       add_to_fp(print_r($response, true));
-      
+
       return $response;
       //		`id_client_in` INT,
       //		`name_in` TINYTEXT,
@@ -69,45 +67,109 @@ class Soap_Server {
       //		`phone_in` TINYTEXT,
       //		`state_in` TINYTEXT
    }
-    
-   function doClientUserAdd () {
 
-      //      `id_client_user_in` INT,
-      //      `id_client_in` INT,
-      //      `login_in` TINYTEXT,
-      //      `password_in` TINYTEXT,
-      //      `password_salt_in` BLOB,
-      //      `name_in` TINYTEXT,
-      //      `description_in` TEXT,
-      //      `email_in` TINYTEXT,
-      //      `state_in` TINYTEXT
+   function doClientAdd ( $input ) {
+      // return serialize($input);
+
+      $response = $this->_fill_response( $input, 'StatusData');
+
+      return $response;
+      //		`id_client_in` INT,
+      //		`name_in` TINYTEXT,
+      //		`description_in` TEXT,
+      //		`email_in` TINYTEXT,
+      //		`phone_in` TINYTEXT,
+      //		`state_in` TINYTEXT
+   }
+
+   function doClientUserAdd ( $input ) {
+      $response = $this->_fill_response( $input, 'StatusDoubleData');
+
+      return $response;
+   }
+
+   function doClientUserChange ( $input ) {
+      $response = $this->_fill_response( $input, 'StatusDoubleData');
+
+      return $response;
+   }
+
+   function doClientUserDelete ( $input ) {
+      $response = $this->_fill_response( $input, 'StatusDoubleData');
+
+      return $response;
+   }
+
+   function doClientUserSetPassword( $input ) {
+      $response = $this->_fill_response( $input, 'StatusDoubleData');
+
+      return $response;
+   }
+       
+   function getClientList( $input ) {
+      //$response = $this->_fill_response( $input, 'ClientData');
+
+      $response = array( new ClientData('xyz') );
+
+      return $response;
+   }
+    
+   function getClientUserList( $input ) {
+      //$response = $this->_fill_response( $input, 'ClientUserData');
+      $response = array( new ClientUserData('xyz') );
+      //$response = array();
+      return $response;
    }
    
+   function doProductAdd( $input ) {
+      $response = $this->_fill_response( $input, 'StatusData', 'doProductAdd');
+      //$response = array( new StatusData('xyz') );
+      //$response = array();
+      return $response;
+   }
+    
+   function doProductChange( $input ) {
+      $response = $this->_fill_response( $input, 'StatusData', 'doProductChange');
+      //$response = array( new StatusData('xyz') );
+      //$response = array();
+      return $response;
+   }
+    
+    
+   function setProductClientPrice( $input ) {
+      //$response = 'setProductClientPrice';
+      $response = $this->_fill_response( $input, 'StatusDoubleData', 'setProductClientPrice');
+      // $response = array( new StatusDoubleData('xyz') );
+      //$response = array();
+      
+      return $response;
+   }
+
    
    function getParamStartLength( $input ) {
       $in_o = array(
          'start' => 1,
          'length' => 2,
          'options' => 'asasa'
-      );
-      return $in_o;
+         );
+         return $in_o;
    }
-   
-   function _fill_response( $input, $classname ) {
-//      $count = sizeof($input);
+    
+   function _fill_response( $input, $classname, $string_add = '') {
+      //      $count = sizeof($input);
       //add_to_fp(print_r($input, true));
       $response = array();
       foreach($input->values as $key => $val) {
          //eval('$response["' . $key . '"] = ' . $classname . '::_fill_response();');
-         add_to_fp(print_r($val, true));
-         $response[$key] = new $classname($val);
+         //add_to_fp(print_r($val, true));
+         $response[$key] = new $classname($val, $string_add);
       }
       return $response;
-      
-      
+
+
    }
-    
-    
+
+
    //Client_Add, client_change, client_user_add, client_user_change, client_user_delete, client_user_set_password
 }
 
