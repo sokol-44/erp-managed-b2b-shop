@@ -145,6 +145,33 @@ class Soap_Server {
       return $response;
    }
 
+    
+   function doCategoryAdd( $input ) {
+      //$response = 'setProductClientPrice';
+      $response = $this->_fill_response( $input, 'StatusData', 'doCategoryAdd');
+      // $response = array( new StatusDoubleData('xyz') );
+      //$response = array();
+      
+      return $response;
+   }
+    
+   function doCategoryEdit( $input ) {
+      $response = $this->_fill_response( $input, 'StatusData', 'doCategoryEdit');
+      // $response = array( new StatusDoubleData('xyz') );
+      //$response = array();
+      
+      return $response;
+   }
+
+    
+   function doCategoryDelete( $input ) {
+      $response = $this->_fill_response( $input, 'StatusData', 'doCategoryDelete');
+      // $response = array( new StatusDoubleData('xyz') );
+      //$response = array();
+      
+      return $response;
+   }
+
    
    function getParamStartLength( $input ) {
       $in_o = array(

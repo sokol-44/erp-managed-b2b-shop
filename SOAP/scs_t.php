@@ -28,7 +28,10 @@ $client = new SoapClient($soap_address, $soap_param_array);
 // test_getClientUserList( $client );
 // test_doProductAdd( $client );
 // test_doProductChange( $client );
- test_setProductClientPrice( $client );
+// test_setProductClientPrice( $client );
+// test_doCategoryAdd( $client );
+// test_doCategoryEdit( $client );
+ test_doCategoryDelete( $client );
 
 
 // test_getProductList( $client );

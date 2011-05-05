@@ -124,6 +124,40 @@ function test_setProductClientPrice( $client ) {
 }
 
 
+function test_doCategoryAdd( $client ) {
+   echo "test_doCategoryAdd\n";
+   $in_o = new stdClass();
+   $in_o->values = array( 0 => new CategoryData('dupa'), new CategoryData('dupaq'));
+   //$in_o = 'test';
+   print_r($in_o);
+   $resC = $client->doCategoryAdd($in_o);
+   //print_lr( $client );
+   print("" . print_r( $resC, true). '<br>');
+}
+
+function test_doCategoryEdit( $client ) {
+   echo "test_doCategoryEdit\n";
+   $in_o = new stdClass();
+   $in_o->values = array( 0 => new CategoryData('dupa'), new CategoryData('dupaq'));
+   //$in_o = 'test';
+   print_r($in_o);
+   $resC = $client->doCategoryEdit($in_o);
+   //print_lr( $client );
+   print("" . print_r( $resC, true). '<br>');
+}
+
+function test_doCategoryDelete( $client ) {
+   echo "test_doCategoryDelete\n";
+   $in_o = new stdClass();
+   $in_o->values = array( 0 => new CategoryData('dupa'), new CategoryData('dupaq'));
+   //$in_o = 'test';
+   print_r($in_o);
+   $resC = $client->doCategoryDelete($in_o);
+   //print_lr( $client );
+   print("" . print_r( $resC, true). '<br>');
+}
+
+
 
 
 function test_getProductList( $client ) {
