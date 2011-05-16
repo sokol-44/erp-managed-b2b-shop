@@ -189,6 +189,36 @@
 					<xsd:element name="values" type="tns:CategoryData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
 				</xsd:sequence>
 			</xsd:complexType>
+		
+			<xsd:complexType name="Product2Category">
+				<xsd:sequence>
+					<xsd:element name="id_product" type="xsd:string"></xsd:element>
+					<xsd:element name="id_category" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="Product2CategoryArray">
+				<xsd:sequence>
+					<xsd:element name="values" type="tns:Product2Category" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="OrderStatusData">
+				<xsd:sequence>
+					<xsd:element name="id_order_status"
+						type="xsd:string">
+					</xsd:element>
+					<xsd:element name="id_order" type="xsd:string"></xsd:element>
+					<xsd:element name="timestamp" type="xsd:string"></xsd:element>
+					<xsd:element name="description" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="OrderStatusDataArray">
+				<xsd:sequence>
+					<xsd:element name="values" type="tns:OrderStatusData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
 		</xsd:schema>
 	</wsdl:types>
 	<wsdl:message name="getProductListRequest">
@@ -286,6 +316,54 @@
 	</wsdl:message>
 	<wsdl:message name="doCategoryDeleteResponse">
 		<wsdl:part name="doCategoryDeleteResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setProduct2CategoryRequest">
+		<wsdl:part name="setProduct2CategoryRequest" type="tns:Product2CategoryArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setProduct2CategoryResponse">
+		<wsdl:part name="setProduct2CategoryResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProductListFromCategoryRequest">
+		<wsdl:part name="getProductListFromCategoryRequest" type="tns:ParamDoubleStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProductListFromCategoryResponse">
+		<wsdl:part name="getProductListFromCategoryResponse" type="tns:ProductDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getCategoryListRequest">
+		<wsdl:part name="getCategoryListRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getCategoryListResponse">
+		<wsdl:part name="getCategoryListResponse" type="tns:CategoryDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProductClientPriceListRequest">
+		<wsdl:part name="getProductClientPriceListRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProductClientPriceListResponse">
+		<wsdl:part name="getProductClientPriceListResponse" type="tns:ProductClientPriceDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderListNewRequest">
+		<wsdl:part name="getOrderListNewRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderListNewResponse">
+		<wsdl:part name="getOrderListNewResponse" type="tns:OrderDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderListRequest">
+		<wsdl:part name="getOrderListRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderListResponse">
+		<wsdl:part name="getOrderListResponse" type="tns:OrderDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setOrderStatusRequest">
+		<wsdl:part name="setOrderStatusRequest" type="tns:OrderStatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setOrderStatusResponse">
+		<wsdl:part name="setOrderStatusResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setOrderHiddenStatusRequest">
+		<wsdl:part name="setOrderHiddenStatusRequest" type="tns:OrderDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setOrderHiddenStatusResponse">
+		<wsdl:part name="setOrderHiddenStatusResponse" type="tns:StatusDataArray"></wsdl:part>
 	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
@@ -409,6 +487,67 @@
 							</wsdl:input>
 							<wsdl:output
 								message="tns:doCategoryDeleteResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="setProduct2Category">
+							<wsdl:input
+								message="tns:setProduct2CategoryRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:setProduct2CategoryResponse">
+							</wsdl:output>
+						</wsdl:operation>						<wsdl:operation name="getProductListFromCategory">							<wsdl:input
+								message="tns:getProductListFromCategoryRequest">
+							</wsdl:input>							<wsdl:output
+								message="tns:getProductListFromCategoryResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getCategoryList">
+							<wsdl:input
+								message="tns:getCategoryListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getCategoryListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getProductClientPriceList">
+							<wsdl:input
+								message="tns:getProductClientPriceListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getProductClientPriceListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getOrderListNew">
+							<wsdl:input
+								message="tns:getOrderListNewRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getOrderListNewResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getOrderList">
+							<wsdl:input
+								message="tns:getOrderListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getOrderListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="setOrderStatus">
+							<wsdl:input
+								message="tns:setOrderStatusRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:setOrderStatusResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="setOrderHiddenStatus">
+							<wsdl:input
+								message="tns:setOrderHiddenStatusRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:setOrderHiddenStatusResponse">
 							</wsdl:output>
 						</wsdl:operation>
 	</wsdl:portType>
@@ -569,7 +708,95 @@
 					use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
+		<wsdl:operation name="setProduct2Category">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
 		<wsdl:operation name="getProductList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getProductListFromCategory">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getCategoryList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getProductClientPriceList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getOrderListNew">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getOrderList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setOrderStatus">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setOrderHiddenStatus">
 			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
 			<wsdl:input>
 				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"

@@ -31,10 +31,17 @@ $client = new SoapClient($soap_address, $soap_param_array);
 // test_setProductClientPrice( $client );
 // test_doCategoryAdd( $client );
 // test_doCategoryEdit( $client );
- test_doCategoryDelete( $client );
-
-
+// test_doCategoryDelete( $client );
+// test_setProduct2Category( $client );
 // test_getProductList( $client );
+// test_getProductListFromCategory( $client );
+// test_getCategoryList( $client );
+// test_getClientPriceList( $client );
+// test_getClientPriceProductList( $client );
+// test_getOrderListNew( $client );
+// test_getOrderList( $client );
+// test_setOrderStatus( $client );
+ test_setOrderHiddenStatus( $client );
 
 
 

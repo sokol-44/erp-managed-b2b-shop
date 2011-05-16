@@ -142,7 +142,7 @@ class CategoryData {
       $this->sort_order = strlen($add) + 30000;
       $this->root_number = strlen($add)%2;
       $this->name = $add . '$name';
-      $this->description = $add . '$description';
+      $this->description = $add . '$description' . $string_add;
       $this->date_added = data_data();
       $this->date_modified = data_data();
    }
@@ -186,7 +186,7 @@ class OrderData {
       $this->date_modified = data_data();
       $this->id_order_status = strlen($add) + 30000;
       $this->hidden_status = strlen($add)%2;
-      $this->description = $add . '$description';
+      $this->description = $add . '$description' . $string_add;
       $this->description_basket = $add . '$description_basket';
    }
 }
@@ -202,7 +202,7 @@ class OrderStatus {
       $this->id_order_status = strlen($add) + 10000;
       $this->id_order = strlen($add) + 20000;
       $this->timestamp = data_data();
-      $this->description = data_data();
+      $this->description = data_data() . $string_add;
    }
 }
 
@@ -240,7 +240,7 @@ class ProductData {
       $this->price = strlen($add) + 10000;
       $this->vat = strlen($add)%23;
       $this->quantity = strlen($add)%3;
-      $this->status = $add . '$picture_big_url';
+      $this->status = $add . '$picture_big_url' . $string_add;
    }
 }
 
@@ -254,7 +254,7 @@ class ProductClientPriceData {
    function __construct($add = 'null', $string_add = '') {
       $this->id_product = strlen($add) + 10000;
       $this->id_client = strlen($add) + 20000;
-      $this->price = strlen($add) + 10000;
+      $this->price = strlen($add) + 10000 + strlen($string_add);
       $this->vat = strlen($add)%23;
    }
 }

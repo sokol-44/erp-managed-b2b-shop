@@ -157,7 +157,16 @@ function test_doCategoryDelete( $client ) {
    print("" . print_r( $resC, true). '<br>');
 }
 
-
+function test_setProduct2Category( $client ) {
+   echo "test_setProduct2Category\n";
+   $in_o = new stdClass();
+   $in_o->values = array( 0 => new Product2Category('dupa'), new Product2Category('dupaq'));
+   //$in_o = 'test';
+   print_r($in_o);
+   $resC = $client->setProduct2Category($in_o);
+   //print_lr( $client );
+   print("" . print_r( $resC, true). '<br>');
+}
 
 
 function test_getProductList( $client ) {
@@ -165,6 +174,80 @@ function test_getProductList( $client ) {
    $in_oo = new ParamStartLength('dupa');
    //print_r($in_oo);
    $resC = $client->getProductList( $in_oo );
+   //print_lr( $client );
+   print_r($resC);
+}
+
+function test_getProductListFromCategory( $client ) {
+   echo "test_getProductListFromCategory\n";
+   $in_oo = new ParamDoubleStartLength('dupa');
+   print_r($in_oo);
+   $resC = $client->getProductListFromCategory( $in_oo );
+   //print_lr( $client );
+   print_r($resC);
+}
+
+function test_getCategoryList( $client ) {
+   echo "test_getCategoryList\n";
+   $in_oo = new ParamStartLength('dupa');
+   print_r($in_oo);
+   $resC = $client->getCategoryList( $in_oo );
+   //print_lr( $client );
+   print_r($resC);
+}
+
+function test_getProductClientPriceList( $client ) {
+   echo "test_getProductClientPriceList\n";
+   $in_oo = new ParamStartLength('dupa');
+   print_r($in_oo);
+   $resC = $client->getProductClientPriceList( $in_oo );
+   //print_lr( $client );
+   print_r($resC);
+}
+
+function test_getClientPriceProductList( $client ) {
+   echo "test_getClientPriceProductList\n";
+   $in_oo = new ParamStartLength('dupa');
+   print_r($in_oo);
+   $resC = $client->getClientPriceProductList( $in_oo );
+   //print_lr( $client );
+   print_r($resC);
+}
+
+function test_getOrderListNew( $client ) {
+   echo "test_getOrderListNew\n";
+   $in_oo = new ParamStartLength('dupa');
+   print_r($in_oo);
+   $resC = $client->getOrderListNew( $in_oo );
+   //print_lr( $client );
+   print_r($resC);
+}
+
+function test_getOrderList( $client ) {
+   echo "test_getOrderList\n";
+   $in_oo = new ParamStartLength('dupa');
+   print_r($in_oo);
+   $resC = $client->getOrderList( $in_oo );
+   //print_lr( $client );
+   print_r($resC);
+}
+
+function test_setOrderStatus( $client ) {
+   echo "test_setOrderStatus\n";
+   $in_o = new stdClass();
+   $in_o->values = array( 0 => new OrderStatus('dupa'), new OrderStatus('dupaq'));
+   print_r($in_o);
+   $resC = $client->setOrderStatus( $in_o );
+   //print_lr( $client );
+   print_r($resC);
+}
+
+function test_setOrderHiddenStatus( $client ) {
+   echo "test_setOrderHiddenStatus\n";
+   $in_o = new stdClass();
+   $in_o->values = array( 0 => new OrderData('dupa'), new OrderData('dupaq'));
+   print_r($in_o);
+   $resC = $client->setOrderHiddenStatus( $in_o );
    //print_lr( $client );
    print_r($resC);
 }
