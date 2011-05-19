@@ -203,6 +203,17 @@ function test_getProductClientPriceList( $client ) {
    $resC = $client->getProductClientPriceList( $in_oo );
    //print_lr( $client );
    print_r($resC);
+   
+   
+}
+
+function test_getClientPriceList( $client ) {
+   echo "test_getClientPriceList\n";
+   $in_oo = new ParamStartLength('dupa');
+   print_r($in_oo);
+   $resC = $client->getClientPriceList( $in_oo );
+   //print_lr( $client );
+   print_r($resC);
 }
 
 function test_getClientPriceProductList( $client ) {

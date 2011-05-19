@@ -365,6 +365,18 @@
 	<wsdl:message name="setOrderHiddenStatusResponse">
 		<wsdl:part name="setOrderHiddenStatusResponse" type="tns:StatusDataArray"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="getClientPriceListRequest">
+		<wsdl:part name="getClientPriceListRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientPriceListResponse">
+		<wsdl:part name="getClientPriceListResponse" type="tns:ProductClientPriceDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientPriceProductListRequest">
+		<wsdl:part name="getClientPriceProductListRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientPriceProductListResponse">
+		<wsdl:part name="getClientPriceProductListResponse" type="tns:ProductClientPriceDataArray"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
 			<wsdl:output message="tns:getProductListResponse"></wsdl:output>
@@ -548,6 +560,22 @@
 							</wsdl:input>
 							<wsdl:output
 								message="tns:setOrderHiddenStatusResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getClientPriceList">
+							<wsdl:input
+								message="tns:getClientPriceListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getClientPriceListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getClientPriceProductList">
+							<wsdl:input
+								message="tns:getClientPriceProductListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getClientPriceProductListResponse">
 							</wsdl:output>
 						</wsdl:operation>
 	</wsdl:portType>
@@ -808,6 +836,28 @@
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getParamStartLength">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getClientPriceList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getClientPriceProductList">
 			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
 			<wsdl:input>
 				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
