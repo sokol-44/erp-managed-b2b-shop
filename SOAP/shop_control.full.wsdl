@@ -1,0 +1,878 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:tns="http://b2b_sklep.localhost/SOAP/scs.php" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="shop_control"
+	targetNamespace="http://b2b_sklep.localhost/SOAP/scs.php">
+	<wsdl:types>
+		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+			targetNamespace="http://b2b_sklep.localhost/SOAP/scs.php">
+			<xsd:complexType name="OrderDataArray">
+				<xsd:sequence>
+					<xsd:element name="values" type="tns:OrderData"
+						maxOccurs="unbounded" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="OrderData">
+				<xsd:sequence>
+					<xsd:element name="id_order" type="xsd:int"></xsd:element>
+					<xsd:element name="id_client" type="xsd:int"></xsd:element>
+					<xsd:element name="date_create" type="xsd:dateTime"></xsd:element>
+					<xsd:element name="date_modified" type="xsd:dateTime"></xsd:element>
+					<xsd:element name="id_order_status" type="xsd:int"></xsd:element>
+					<xsd:element name="hidden_status" type="xsd:string"></xsd:element>
+					<xsd:element name="description" type="xsd:string"></xsd:element>
+					<xsd:element name="description_basket" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+
+			<xsd:complexType name="ProductDataArray">
+				<xsd:sequence>
+					<xsd:element minOccurs="0" maxOccurs="unbounded" name="values"
+						type="tns:ProductData" />
+				</xsd:sequence>
+			</xsd:complexType>
+			<xsd:complexType name="ProductData">
+				<xsd:sequence>
+					<xsd:element name="id_product" type="xsd:int"></xsd:element>
+					<xsd:element name="name" type="xsd:string"></xsd:element>
+					<xsd:element name="description" type="xsd:string"></xsd:element>
+					<xsd:element name="picture_small_url" type="xsd:string"></xsd:element>
+					<xsd:element name="picture_big_url" type="xsd:string"></xsd:element>
+					<xsd:element name="picture_id" type="xsd:string"></xsd:element>
+					<xsd:element name="price" type="xsd:double"></xsd:element>
+					<xsd:element name="vat" type="xsd:double"></xsd:element>
+					<xsd:element name="quantity" type="xsd:int"></xsd:element>
+					<xsd:element name="status" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="ClientData">
+				<xsd:sequence>
+					<xsd:element name="id_client" type="xsd:int"></xsd:element>
+					<xsd:element name="name" type="xsd:string"></xsd:element>
+					<xsd:element name="description" type="xsd:string"></xsd:element>
+					<xsd:element name="email" type="xsd:string"></xsd:element>
+					<xsd:element name="phone" type="xsd:string"></xsd:element>
+					<xsd:element name="state" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="ClientDataArray">
+				<xsd:sequence>
+					<xsd:element name="values" type="tns:ClientData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="ParamStartLength">
+				<xsd:sequence>
+					<xsd:element name="id_start" type="xsd:int"></xsd:element>
+					<xsd:element name="length" type="xsd:int"></xsd:element>
+					<xsd:element name="options" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="StatusData">
+				<xsd:sequence>
+					<xsd:element name="id" type="xsd:string"></xsd:element>
+					<xsd:element name="additional_data" type="xsd:string"></xsd:element>
+					<xsd:element name="status" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="StatusDataArray">
+				<xsd:sequence>
+					<xsd:element name="values" type="tns:StatusData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="ClientUserData">
+				<xsd:sequence>
+					<xsd:element name="id_client_user"
+						type="xsd:string">
+					</xsd:element>
+					<xsd:element name="id_client" type="xsd:string"></xsd:element>
+
+					<xsd:element name="login" type="xsd:string"></xsd:element>
+					<xsd:element name="password" type="xsd:string"></xsd:element>
+					<xsd:element name="password_salt"
+						type="xsd:string">
+					</xsd:element>
+					<xsd:element name="description" type="xsd:string"></xsd:element>
+					<xsd:element name="name" type="xsd:string"></xsd:element>
+
+
+					<xsd:element name="email" type="xsd:string"></xsd:element>
+					<xsd:element name="created" type="xsd:string"></xsd:element>
+					<xsd:element name="last_login" type="xsd:string"></xsd:element>
+					<xsd:element name="state" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="ClientUserDataArray">
+				<xsd:sequence>
+					<xsd:element name="values" type="tns:ClientUserData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="ClientUserPassword">
+				<xsd:sequence>
+					<xsd:element name="id_client_user" type="xsd:string"></xsd:element>
+					<xsd:element name="id_client" type="xsd:string"></xsd:element>
+					<xsd:element name="password" type="xsd:string"></xsd:element>
+					<xsd:element name="password_salt" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="ClientUserPasswordArray">
+				<xsd:sequence>
+					<xsd:element name="values" type="tns:ClientUserPassword" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="StatusDoubleData">
+				<xsd:sequence>
+					<xsd:element name="id_one" type="xsd:string"></xsd:element>
+					<xsd:element name="id_two" type="xsd:string"></xsd:element>
+					<xsd:element name="additional_data" type="xsd:string"></xsd:element>
+					<xsd:element name="status" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="StatusDoubleDataArray">
+				<xsd:sequence>
+					<xsd:element name="values" type="tns:StatusDoubleData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+        
+			<xsd:complexType name="ParamDoubleStartLength">
+				<xsd:sequence>
+					<xsd:element name="id_start_one" type="xsd:string"></xsd:element>
+					<xsd:element name="id_start_two" type="xsd:string"></xsd:element>
+					<xsd:element name="length" type="xsd:string"></xsd:element>
+					<xsd:element name="options" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="ProductClientPriceData">
+				<xsd:sequence>
+					<xsd:element name="id_product" type="xsd:int"></xsd:element>
+					<xsd:element name="id_client" type="xsd:int"></xsd:element>
+					<xsd:element name="price" type="xsd:float"></xsd:element>
+					<xsd:element name="vat" type="xsd:float"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="ProductClientPriceDataArray">
+				<xsd:sequence>
+					<xsd:element name="values" type="tns:ProductClientPriceData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="CategoryData">
+				<xsd:sequence>
+					<xsd:element name="id_category" type="xsd:string"></xsd:element>
+					<xsd:element name="id_category_parent"
+						type="xsd:string">
+					</xsd:element>
+					<xsd:element name="sort_order" type="xsd:string"></xsd:element>
+					<xsd:element name="root_number" type="xsd:string"></xsd:element>
+					<xsd:element name="name" type="xsd:string"></xsd:element>
+					<xsd:element name="description" type="xsd:string"></xsd:element>
+					<xsd:element name="date_added" type="xsd:string"></xsd:element>
+					<xsd:element name="date_modified" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="CategoryDataArray">
+				<xsd:sequence>
+					<xsd:element name="values" type="tns:CategoryData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="Product2Category">
+				<xsd:sequence>
+					<xsd:element name="id_product" type="xsd:string"></xsd:element>
+					<xsd:element name="id_category" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="Product2CategoryArray">
+				<xsd:sequence>
+					<xsd:element name="values" type="tns:Product2Category" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="OrderStatusData">
+				<xsd:sequence>
+					<xsd:element name="id_order_status"
+						type="xsd:string">
+					</xsd:element>
+					<xsd:element name="id_order" type="xsd:string"></xsd:element>
+					<xsd:element name="timestamp" type="xsd:string"></xsd:element>
+					<xsd:element name="description" type="xsd:string"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		
+			<xsd:complexType name="OrderStatusDataArray">
+				<xsd:sequence>
+					<xsd:element name="values" type="tns:OrderStatusData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
+				</xsd:sequence>
+			</xsd:complexType>
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="getProductListRequest">
+		<wsdl:part name="getProductListRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProductListResponse">
+		<wsdl:part name="getProductListResponse" type="tns:ProductDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientAddRequest">
+		<wsdl:part name="doClientAddRequest" type="tns:ClientDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientAddResponse">
+		<wsdl:part name="doClientAddResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getParamStartLengthRequest">
+		<wsdl:part name="getParamStartLengthRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getParamStartLengthResponse">
+		<wsdl:part name="getParamStartLengthResponse" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientChangeRequest">
+		<wsdl:part name="doClientChangeRequest" type="tns:ClientDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientChangeResponse">
+		<wsdl:part name="doClientChangeResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserAddRequest">
+		<wsdl:part name="doClientUserAddRequest" type="tns:ClientUserDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserAddResponse">
+		<wsdl:part name="doClientUserAddResponse" type="tns:StatusDoubleDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserChangeRequest">
+		<wsdl:part name="doClientUserChangeRequest" type="tns:ClientUserDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserChangeResponse">
+		<wsdl:part name="doClientUserChangeResponse" type="tns:StatusDoubleDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserSetPasswordRequest">
+		<wsdl:part name="doClientUserSetPasswordRequest" type="tns:ClientUserPasswordArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserSetPasswordResponse">
+		<wsdl:part name="doClientUserSetPasswordResponse" type="tns:StatusDoubleDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserDeleteRequest">
+		<wsdl:part name="doClientUserDeleteRequest" type="tns:ClientUserDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserDeleteResponse">
+		<wsdl:part name="doClientUserDeleteResponse" type="tns:StatusDoubleDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientListRequest">
+		<wsdl:part name="getClientListRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientListResponse">
+		<wsdl:part name="getClientListResponse" type="tns:ClientDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientUserListRequest">
+		<wsdl:part name="getClientUserListRequest" type="tns:ParamDoubleStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientUserListResponse">
+		<wsdl:part name="getClientUserListResponse" type="tns:ClientUserDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doProductAddRequest">
+		<wsdl:part name="doProductAddRequest" type="tns:ProductDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doProductAddResponse">
+		<wsdl:part name="doProductAddResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doProductChangeRequest">
+		<wsdl:part name="doProductChangeRequest" type="tns:ProductDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doProductChangeResponse">
+		<wsdl:part name="doProductChangeResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setProductClientPriceRequest">
+		<wsdl:part name="setProductClientPriceRequest" type="tns:ProductClientPriceDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setProductClientPriceResponse">
+		<wsdl:part name="setProductClientPriceResponse" type="tns:StatusDoubleDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doCategoryAddRequest">
+		<wsdl:part name="doCategoryAddRequest" type="tns:CategoryDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doCategoryAddResponse">
+		<wsdl:part name="doCategoryAddResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doCategoryEditRequest">
+		<wsdl:part name="doCategoryEditRequest" type="tns:CategoryDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doCategoryEditResponse">
+		<wsdl:part name="doCategoryEditResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doCategoryDeleteRequest">
+		<wsdl:part name="doCategoryDeleteRequest" type="tns:CategoryDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doCategoryDeleteResponse">
+		<wsdl:part name="doCategoryDeleteResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setProduct2CategoryRequest">
+		<wsdl:part name="setProduct2CategoryRequest" type="tns:Product2CategoryArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setProduct2CategoryResponse">
+		<wsdl:part name="setProduct2CategoryResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProductListFromCategoryRequest">
+		<wsdl:part name="getProductListFromCategoryRequest" type="tns:ParamDoubleStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProductListFromCategoryResponse">
+		<wsdl:part name="getProductListFromCategoryResponse" type="tns:ProductDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getCategoryListRequest">
+		<wsdl:part name="getCategoryListRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getCategoryListResponse">
+		<wsdl:part name="getCategoryListResponse" type="tns:CategoryDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProductClientPriceListRequest">
+		<wsdl:part name="getProductClientPriceListRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProductClientPriceListResponse">
+		<wsdl:part name="getProductClientPriceListResponse" type="tns:ProductClientPriceDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderListNewRequest">
+		<wsdl:part name="getOrderListNewRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderListNewResponse">
+		<wsdl:part name="getOrderListNewResponse" type="tns:OrderDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderListRequest">
+		<wsdl:part name="getOrderListRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderListResponse">
+		<wsdl:part name="getOrderListResponse" type="tns:OrderDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setOrderStatusRequest">
+		<wsdl:part name="setOrderStatusRequest" type="tns:OrderStatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setOrderStatusResponse">
+		<wsdl:part name="setOrderStatusResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setOrderHiddenStatusRequest">
+		<wsdl:part name="setOrderHiddenStatusRequest" type="tns:OrderDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setOrderHiddenStatusResponse">
+		<wsdl:part name="setOrderHiddenStatusResponse" type="tns:StatusDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientPriceListRequest">
+		<wsdl:part name="getClientPriceListRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientPriceListResponse">
+		<wsdl:part name="getClientPriceListResponse" type="tns:ProductClientPriceDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientPriceProductListRequest">
+		<wsdl:part name="getClientPriceProductListRequest" type="tns:ParamStartLength"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientPriceProductListResponse">
+		<wsdl:part name="getClientPriceProductListResponse" type="tns:ProductClientPriceDataArray"></wsdl:part>
+	</wsdl:message>
+	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
+			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
+			<wsdl:output message="tns:getProductListResponse"></wsdl:output>
+		</wsdl:operation>
+						<wsdl:operation name="doClientAdd">
+							<wsdl:input
+								message="tns:doClientAddRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientAddResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getParamStartLength">
+							<wsdl:input
+								message="tns:getParamStartLengthRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getParamStartLengthResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doClientChange">
+							<wsdl:input
+								message="tns:doClientChangeRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientChangeResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doClientUserAdd">
+							<wsdl:input
+								message="tns:doClientUserAddRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientUserAddResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doClientUserChange">
+							<wsdl:input
+								message="tns:doClientUserChangeRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientUserChangeResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doClientUserSetPassword">
+							<wsdl:input
+								message="tns:doClientUserSetPasswordRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientUserSetPasswordResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doClientUserDelete">
+							<wsdl:input
+								message="tns:doClientUserDeleteRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientUserDeleteResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getClientList">
+							<wsdl:input
+								message="tns:getClientListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getClientListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getClientUserList">
+							<wsdl:input
+								message="tns:getClientUserListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getClientUserListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doProductAdd">
+							<wsdl:input
+								message="tns:doProductAddRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doProductAddResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doProductChange">
+							<wsdl:input
+								message="tns:doProductChangeRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doProductChangeResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="setProductClientPrice">
+							<wsdl:input
+								message="tns:setProductClientPriceRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:setProductClientPriceResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doCategoryAdd">
+							<wsdl:input
+								message="tns:doCategoryAddRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doCategoryAddResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doCategoryEdit">
+							<wsdl:input
+								message="tns:doCategoryEditRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doCategoryEditResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doCategoryDelete">
+							<wsdl:input
+								message="tns:doCategoryDeleteRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doCategoryDeleteResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="setProduct2Category">
+							<wsdl:input
+								message="tns:setProduct2CategoryRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:setProduct2CategoryResponse">
+							</wsdl:output>
+						</wsdl:operation>						<wsdl:operation name="getProductListFromCategory">							<wsdl:input
+								message="tns:getProductListFromCategoryRequest">
+							</wsdl:input>							<wsdl:output
+								message="tns:getProductListFromCategoryResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getCategoryList">
+							<wsdl:input
+								message="tns:getCategoryListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getCategoryListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getProductClientPriceList">
+							<wsdl:input
+								message="tns:getProductClientPriceListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getProductClientPriceListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getOrderListNew">
+							<wsdl:input
+								message="tns:getOrderListNewRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getOrderListNewResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getOrderList">
+							<wsdl:input
+								message="tns:getOrderListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getOrderListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="setOrderStatus">
+							<wsdl:input
+								message="tns:setOrderStatusRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:setOrderStatusResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="setOrderHiddenStatus">
+							<wsdl:input
+								message="tns:setOrderHiddenStatusRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:setOrderHiddenStatusResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getClientPriceList">
+							<wsdl:input
+								message="tns:getClientPriceListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getClientPriceListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getClientPriceProductList">
+							<wsdl:input
+								message="tns:getClientPriceProductListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getClientPriceProductListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="shop_control-SOAP" type="tns:shop_control">
+		<soap:binding style="rpc"
+			transport="http://schemas.xmlsoap.org/soap/http" />
+		<wsdl:operation name="doClientChange">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="doClientAdd">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="doClientUserAdd">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="doClientUserChange">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="doClientUserDelete">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="doClientUserSetPassword">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getClientList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getClientUserList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="doProductAdd">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="doProductChange">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setProductClientPrice">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="doCategoryAdd">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="doCategoryEdit">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="doCategoryDelete">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setProduct2Category">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getProductList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getProductListFromCategory">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getCategoryList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getProductClientPriceList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getOrderListNew">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getOrderList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setOrderStatus">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setOrderHiddenStatus">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getParamStartLength">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getClientPriceList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getClientPriceProductList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+	</wsdl:binding>
+
+	<wsdl:service name="shop_control">
+		<wsdl:port binding="tns:shop_control-SOAP" name="shop_control-SOAP">
+			<soap:address location="http://b2b_sklep.localhost/SOAP/scs.php" />
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
