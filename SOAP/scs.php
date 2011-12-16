@@ -4,11 +4,23 @@ include "init.php";
 include "scs_t_function.php";
 include "scs_t_class.php";
 
-$fp = fopen('log\server2-'.time().'.log', 'a+');
+$utime_array = explode(' ', microtime());
+
+$fp = fopen('log/server2-'.date('Ymd_Hi_s_').$utime_array[0].'.log', 'a+');
 
 $hdr = file_get_contents("php://input");
 
 add_to_fp("input \n" . $hdr . "\n\n");
+
+if( $hdr=='' ) {
+	add_to_fp("EMPTY input:\n" . print_r($_SERVER, true));
+	//if( isset($_GET['wsdl']) ) { 
+	readfile('shop_control.wsdl');
+	//} else {
+	//}
+	die();
+}
+
 //fwrite($fp, "GLOBALS\n" . print_r($GLOBALS  , true));
 //fwrite($fp, "_SERVER\n" . print_r($_SERVER, true));
 

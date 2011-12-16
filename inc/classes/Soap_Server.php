@@ -276,7 +276,12 @@ class Soap_Server {
          );
          return $in_o;
    }
-    
+   
+   function _response( $input, $methodname) {
+      
+      
+   }
+   
    function _fill_response( $input, $classname, $string_add = '') {
       //      $count = sizeof($input);
       add_to_fp('START _fill_response');

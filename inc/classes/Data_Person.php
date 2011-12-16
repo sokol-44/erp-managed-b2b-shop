@@ -216,18 +216,33 @@ class Data_Person extends Data_Rights {
       return db_result_array($res);
    }
 
+   static function insert_client_data_id($data) {
+      
+      $data_sql['id_client'] =  $data['id_client'];
+      $data_sql['name'] =  $data['name'];
+      $data_sql['description'] =  $data['description'];
+      $data_sql['email'] =  $data['email'];
+      $data_sql['phone'] =  $data['phone'];
+      $data_sql['state'] =  $data['state'];
+      
+      
+      $return = db_call_proc('b_func_client_add', $data_sql);
+      
+   }
+   
    static function insert_client_data($data) {
-      $F = Framework::g_global();
+
       $data_main_sql['name'] =  $data['name'];
       $data_main_sql['description'] =  $data['description'];
       $data_main_sql['email'] =  $data['email'];
       $data_main_sql['phone'] =  $data['phone'];
       $data_main_sql['state'] =  $data['state'];
-
+      
       db_transaction_start();
       db_perform(TBL_GLOBAL_CLIENT, $data_main_sql, 'INSERT');
       $id_client = db_insert_id();
       db_transaction_end();
+
       return $id_client;
    }
 

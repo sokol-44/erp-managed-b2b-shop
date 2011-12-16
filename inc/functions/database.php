@@ -132,6 +132,25 @@ function db_int($value){
 
 }
 
+
+function db_escape_array($array_in, $link = 'db_link') {
+   global $$link;
+   
+   $ret = array();
+   if( is_array($array_in) ) {
+      foreach($array_in as $key_in => $val_in) {
+         if( is_array($val_in) ) {
+            $ret[$key_in] = db_escape_array($array_in, $link);
+         } else {
+            $ret[$key_in] = db_escape($array_in, $link);
+         }
+      }
+      return $ret;
+   } else {
+      return db_escape($array_in, $link);
+   }
+}
+
 function db_escape($string, $link = 'db_link') {
    global $$link;
 
@@ -147,6 +166,19 @@ function db_escape($string, $link = 'db_link') {
 
    return $ret;
 }
+
+function db_call_proc($name, $data, $link = 'db_link') {
+   global $$link;
+   
+   $data = db_escape_array($data);
+   
+   // TODO kolejność, moze parametr to regulujący
+   
+   $data_str = '"' . implode('", "', $data) . '"';
+   $sql = $name . '(' . $data_str . ');';
+   db_query($sql);
+}
+
 
 function db_query($query, $link = 'db_link') {
    global $$link;
