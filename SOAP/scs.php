@@ -7,6 +7,7 @@ include "scs_t_class.php";
 $utime_array = explode(' ', microtime());
 
 $fp = fopen('log/server2-'.date('Ymd_Hi_s_').$utime_array[0].'.log', 'a+');
+$fp_xml = fopen('log/server2-'.date('Ymd_Hi_s_').$utime_array[0].'.xml', 'a+');
 
 $hdr = file_get_contents("php://input");
 
@@ -14,7 +15,7 @@ add_to_fp("input \n" . $hdr . "\n\n");
 
 if( $hdr=='' ) {
 	add_to_fp("EMPTY input:\n" . print_r($_SERVER, true));
-	//if( isset($_GET['wsdl']) ) { 
+	//if( isset($_GET['wsdl']) ) {
 	readfile('shop_control.wsdl');
 	//} else {
 	//}
@@ -54,4 +55,5 @@ $server->handle();
 add_to_fp("server\n" . print_r($server , true) . "\n\n");
 
 fclose($fp);
+fclose($fp_xml);
 ?>

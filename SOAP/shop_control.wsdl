@@ -6,376 +6,163 @@
 	<wsdl:types>
 		<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 			targetNamespace="http://b2b_sklep.localhost/SOAP/scs.php">
-			<xsd:complexType name="OrderDataArray">
-				<xsd:sequence>
-					<xsd:element name="values" type="tns:OrderData"
-						maxOccurs="unbounded" minOccurs="0"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-			<xsd:complexType name="OrderData">
-				<xsd:sequence>
-					<xsd:element name="id_order" type="xsd:int"></xsd:element>
-					<xsd:element name="id_client" type="xsd:int"></xsd:element>
-					<xsd:element name="date_create" type="xsd:dateTime"></xsd:element>
-					<xsd:element name="date_modified" type="xsd:dateTime"></xsd:element>
-					<xsd:element name="id_order_status" type="xsd:int"></xsd:element>
-					<xsd:element name="hidden_status" type="xsd:string"></xsd:element>
-					<xsd:element name="description" type="xsd:string"></xsd:element>
-					<xsd:element name="description_basket" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-
-			<xsd:complexType name="ProductDataArray">
-				<xsd:sequence>
-					<xsd:element minOccurs="0" maxOccurs="unbounded" name="values"
-						type="tns:ProductData" />
-				</xsd:sequence>
-			</xsd:complexType>
-			<xsd:complexType name="ProductData">
-				<xsd:sequence>
-					<xsd:element name="id_product" type="xsd:int"></xsd:element>
-					<xsd:element name="name" type="xsd:string"></xsd:element>
-					<xsd:element name="description" type="xsd:string"></xsd:element>
-					<xsd:element name="picture_small_url" type="xsd:string"></xsd:element>
-					<xsd:element name="picture_big_url" type="xsd:string"></xsd:element>
-					<xsd:element name="picture_id" type="xsd:string"></xsd:element>
-					<xsd:element name="price" type="xsd:double"></xsd:element>
-					<xsd:element name="vat" type="xsd:double"></xsd:element>
-					<xsd:element name="quantity" type="xsd:int"></xsd:element>
-					<xsd:element name="status" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="ClientData">
-				<xsd:sequence>
-					<xsd:element name="id_client" type="xsd:int"></xsd:element>
-					<xsd:element name="name" type="xsd:string"></xsd:element>
-					<xsd:element name="description" type="xsd:string"></xsd:element>
-					<xsd:element name="email" type="xsd:string"></xsd:element>
-					<xsd:element name="phone" type="xsd:string"></xsd:element>
-					<xsd:element name="state" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="ClientDataArray">
-				<xsd:sequence>
-					<xsd:element name="values" type="tns:ClientData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="ParamStartLength">
-				<xsd:sequence>
-					<xsd:element name="id_start" type="xsd:int"></xsd:element>
-					<xsd:element name="length" type="xsd:int"></xsd:element>
-					<xsd:element name="options" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="StatusData">
-				<xsd:sequence>
-					<xsd:element name="id" type="xsd:string"></xsd:element>
-					<xsd:element name="additional_data" type="xsd:string"></xsd:element>
-					<xsd:element name="status" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="StatusDataArray">
-				<xsd:sequence>
-					<xsd:element name="values" type="tns:StatusData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="ClientUserData">
-				<xsd:sequence>
-					<xsd:element name="id_client_user"
-						type="xsd:string">
-					</xsd:element>
-					<xsd:element name="id_client" type="xsd:string"></xsd:element>
-
-					<xsd:element name="login" type="xsd:string"></xsd:element>
-					<xsd:element name="password" type="xsd:string"></xsd:element>
-					<xsd:element name="password_salt"
-						type="xsd:string">
-					</xsd:element>
-					<xsd:element name="description" type="xsd:string"></xsd:element>
-					<xsd:element name="name" type="xsd:string"></xsd:element>
-
-
-					<xsd:element name="email" type="xsd:string"></xsd:element>
-					<xsd:element name="created" type="xsd:string"></xsd:element>
-					<xsd:element name="last_login" type="xsd:string"></xsd:element>
-					<xsd:element name="state" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="ClientUserDataArray">
-				<xsd:sequence>
-					<xsd:element name="values" type="tns:ClientUserData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="ClientUserPassword">
-				<xsd:sequence>
-					<xsd:element name="id_client_user" type="xsd:string"></xsd:element>
-					<xsd:element name="id_client" type="xsd:string"></xsd:element>
-					<xsd:element name="password" type="xsd:string"></xsd:element>
-					<xsd:element name="password_salt" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="ClientUserPasswordArray">
-				<xsd:sequence>
-					<xsd:element name="values" type="tns:ClientUserPassword" maxOccurs="unbounded" minOccurs="0"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="StatusDoubleData">
-				<xsd:sequence>
-					<xsd:element name="id_one" type="xsd:string"></xsd:element>
-					<xsd:element name="id_two" type="xsd:string"></xsd:element>
-					<xsd:element name="additional_data" type="xsd:string"></xsd:element>
-					<xsd:element name="status" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="StatusDoubleDataArray">
-				<xsd:sequence>
-					<xsd:element name="values" type="tns:StatusDoubleData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-        
-			<xsd:complexType name="ParamDoubleStartLength">
-				<xsd:sequence>
-					<xsd:element name="id_start_one" type="xsd:string"></xsd:element>
-					<xsd:element name="id_start_two" type="xsd:string"></xsd:element>
-					<xsd:element name="length" type="xsd:string"></xsd:element>
-					<xsd:element name="options" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="ProductClientPriceData">
-				<xsd:sequence>
-					<xsd:element name="id_product" type="xsd:int"></xsd:element>
-					<xsd:element name="id_client" type="xsd:int"></xsd:element>
-					<xsd:element name="price" type="xsd:float"></xsd:element>
-					<xsd:element name="vat" type="xsd:float"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="ProductClientPriceDataArray">
-				<xsd:sequence>
-					<xsd:element name="values" type="tns:ProductClientPriceData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="CategoryData">
-				<xsd:sequence>
-					<xsd:element name="id_category" type="xsd:string"></xsd:element>
-					<xsd:element name="id_category_parent"
-						type="xsd:string">
-					</xsd:element>
-					<xsd:element name="sort_order" type="xsd:string"></xsd:element>
-					<xsd:element name="root_number" type="xsd:string"></xsd:element>
-					<xsd:element name="name" type="xsd:string"></xsd:element>
-					<xsd:element name="description" type="xsd:string"></xsd:element>
-					<xsd:element name="date_added" type="xsd:string"></xsd:element>
-					<xsd:element name="date_modified" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="CategoryDataArray">
-				<xsd:sequence>
-					<xsd:element name="values" type="tns:CategoryData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="Product2Category">
-				<xsd:sequence>
-					<xsd:element name="id_product" type="xsd:string"></xsd:element>
-					<xsd:element name="id_category" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="Product2CategoryArray">
-				<xsd:sequence>
-					<xsd:element name="values" type="tns:Product2Category" maxOccurs="unbounded" minOccurs="0"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="OrderStatusData">
-				<xsd:sequence>
-					<xsd:element name="id_order_status"
-						type="xsd:string">
-					</xsd:element>
-					<xsd:element name="id_order" type="xsd:string"></xsd:element>
-					<xsd:element name="timestamp" type="xsd:string"></xsd:element>
-					<xsd:element name="description" type="xsd:string"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
-		
-			<xsd:complexType name="OrderStatusDataArray">
-				<xsd:sequence>
-					<xsd:element name="values" type="tns:OrderStatusData" maxOccurs="unbounded" minOccurs="0"></xsd:element>
-				</xsd:sequence>
-			</xsd:complexType>
 		</xsd:schema>
 	</wsdl:types>
 	<wsdl:message name="getProductListRequest">
-		<wsdl:part name="getProductListRequest" type="tns:ParamStartLength"></wsdl:part>
+		<wsdl:part name="getProductListRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getProductListResponse">
-		<wsdl:part name="getProductListResponse" type="tns:ProductDataArray"></wsdl:part>
+		<wsdl:part name="getProductListResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doClientAddRequest">
-		<wsdl:part name="doClientAddRequest" type="tns:ClientDataArray"></wsdl:part>
+		<wsdl:part name="doClientAddRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doClientAddResponse">
-		<wsdl:part name="doClientAddResponse" type="tns:StatusDataArray"></wsdl:part>
+		<wsdl:part name="doClientAddResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getParamStartLengthRequest">
 		<wsdl:part name="getParamStartLengthRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getParamStartLengthResponse">
-		<wsdl:part name="getParamStartLengthResponse" type="tns:ParamStartLength"></wsdl:part>
+		<wsdl:part name="getParamStartLengthResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doClientChangeRequest">
-		<wsdl:part name="doClientChangeRequest" type="tns:ClientDataArray"></wsdl:part>
+		<wsdl:part name="doClientChangeRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doClientChangeResponse">
-		<wsdl:part name="doClientChangeResponse" type="tns:StatusDataArray"></wsdl:part>
+		<wsdl:part name="doClientChangeResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doClientUserAddRequest">
-		<wsdl:part name="doClientUserAddRequest" type="tns:ClientUserDataArray"></wsdl:part>
+		<wsdl:part name="doClientUserAddRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doClientUserAddResponse">
-		<wsdl:part name="doClientUserAddResponse" type="tns:StatusDoubleDataArray"></wsdl:part>
+		<wsdl:part name="doClientUserAddResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doClientUserChangeRequest">
-		<wsdl:part name="doClientUserChangeRequest" type="tns:ClientUserDataArray"></wsdl:part>
+		<wsdl:part name="doClientUserChangeRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doClientUserChangeResponse">
-		<wsdl:part name="doClientUserChangeResponse" type="tns:StatusDoubleDataArray"></wsdl:part>
+		<wsdl:part name="doClientUserChangeResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doClientUserSetPasswordRequest">
-		<wsdl:part name="doClientUserSetPasswordRequest" type="tns:ClientUserPasswordArray"></wsdl:part>
+		<wsdl:part name="doClientUserSetPasswordRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doClientUserSetPasswordResponse">
-		<wsdl:part name="doClientUserSetPasswordResponse" type="tns:StatusDoubleDataArray"></wsdl:part>
+		<wsdl:part name="doClientUserSetPasswordResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doClientUserDeleteRequest">
-		<wsdl:part name="doClientUserDeleteRequest" type="tns:ClientUserDataArray"></wsdl:part>
+		<wsdl:part name="doClientUserDeleteRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doClientUserDeleteResponse">
-		<wsdl:part name="doClientUserDeleteResponse" type="tns:StatusDoubleDataArray"></wsdl:part>
+		<wsdl:part name="doClientUserDeleteResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getClientListRequest">
-		<wsdl:part name="getClientListRequest" type="tns:ParamStartLength"></wsdl:part>
+		<wsdl:part name="getClientListRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getClientListResponse">
-		<wsdl:part name="getClientListResponse" type="tns:ClientDataArray"></wsdl:part>
+		<wsdl:part name="getClientListResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getClientUserListRequest">
-		<wsdl:part name="getClientUserListRequest" type="tns:ParamDoubleStartLength"></wsdl:part>
+		<wsdl:part name="getClientUserListRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getClientUserListResponse">
-		<wsdl:part name="getClientUserListResponse" type="tns:ClientUserDataArray"></wsdl:part>
+		<wsdl:part name="getClientUserListResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doProductAddRequest">
-		<wsdl:part name="doProductAddRequest" type="tns:ProductDataArray"></wsdl:part>
+		<wsdl:part name="doProductAddRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doProductAddResponse">
-		<wsdl:part name="doProductAddResponse" type="tns:StatusDataArray"></wsdl:part>
+		<wsdl:part name="doProductAddResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doProductChangeRequest">
-		<wsdl:part name="doProductChangeRequest" type="tns:ProductDataArray"></wsdl:part>
+		<wsdl:part name="doProductChangeRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doProductChangeResponse">
-		<wsdl:part name="doProductChangeResponse" type="tns:StatusDataArray"></wsdl:part>
+		<wsdl:part name="doProductChangeResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="setProductClientPriceRequest">
-		<wsdl:part name="setProductClientPriceRequest" type="tns:ProductClientPriceDataArray"></wsdl:part>
+		<wsdl:part name="setProductClientPriceRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="setProductClientPriceResponse">
-		<wsdl:part name="setProductClientPriceResponse" type="tns:StatusDoubleDataArray"></wsdl:part>
+		<wsdl:part name="setProductClientPriceResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doCategoryAddRequest">
-		<wsdl:part name="doCategoryAddRequest" type="tns:CategoryDataArray"></wsdl:part>
+		<wsdl:part name="doCategoryAddRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doCategoryAddResponse">
-		<wsdl:part name="doCategoryAddResponse" type="tns:StatusDataArray"></wsdl:part>
+		<wsdl:part name="doCategoryAddResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doCategoryEditRequest">
-		<wsdl:part name="doCategoryEditRequest" type="tns:CategoryDataArray"></wsdl:part>
+		<wsdl:part name="doCategoryEditRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doCategoryEditResponse">
-		<wsdl:part name="doCategoryEditResponse" type="tns:StatusDataArray"></wsdl:part>
+		<wsdl:part name="doCategoryEditResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doCategoryDeleteRequest">
-		<wsdl:part name="doCategoryDeleteRequest" type="tns:CategoryDataArray"></wsdl:part>
+		<wsdl:part name="doCategoryDeleteRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="doCategoryDeleteResponse">
-		<wsdl:part name="doCategoryDeleteResponse" type="tns:StatusDataArray"></wsdl:part>
+		<wsdl:part name="doCategoryDeleteResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="setProduct2CategoryRequest">
-		<wsdl:part name="setProduct2CategoryRequest" type="tns:Product2CategoryArray"></wsdl:part>
+		<wsdl:part name="setProduct2CategoryRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="setProduct2CategoryResponse">
-		<wsdl:part name="setProduct2CategoryResponse" type="tns:StatusDataArray"></wsdl:part>
+		<wsdl:part name="setProduct2CategoryResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getProductListFromCategoryRequest">
-		<wsdl:part name="getProductListFromCategoryRequest" type="tns:ParamDoubleStartLength"></wsdl:part>
+		<wsdl:part name="getProductListFromCategoryRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getProductListFromCategoryResponse">
-		<wsdl:part name="getProductListFromCategoryResponse" type="tns:ProductDataArray"></wsdl:part>
+		<wsdl:part name="getProductListFromCategoryResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getCategoryListRequest">
-		<wsdl:part name="getCategoryListRequest" type="tns:ParamStartLength"></wsdl:part>
+		<wsdl:part name="getCategoryListRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getCategoryListResponse">
-		<wsdl:part name="getCategoryListResponse" type="tns:CategoryDataArray"></wsdl:part>
+		<wsdl:part name="getCategoryListResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getProductClientPriceListRequest">
-		<wsdl:part name="getProductClientPriceListRequest" type="tns:ParamStartLength"></wsdl:part>
+		<wsdl:part name="getProductClientPriceListRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getProductClientPriceListResponse">
-		<wsdl:part name="getProductClientPriceListResponse" type="tns:ProductClientPriceDataArray"></wsdl:part>
+		<wsdl:part name="getProductClientPriceListResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getOrderListNewRequest">
-		<wsdl:part name="getOrderListNewRequest" type="tns:ParamStartLength"></wsdl:part>
+		<wsdl:part name="getOrderListNewRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getOrderListNewResponse">
-		<wsdl:part name="getOrderListNewResponse" type="tns:OrderDataArray"></wsdl:part>
+		<wsdl:part name="getOrderListNewResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getOrderListRequest">
-		<wsdl:part name="getOrderListRequest" type="tns:ParamStartLength"></wsdl:part>
+		<wsdl:part name="getOrderListRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getOrderListResponse">
-		<wsdl:part name="getOrderListResponse" type="tns:OrderDataArray"></wsdl:part>
+		<wsdl:part name="getOrderListResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="setOrderStatusRequest">
-		<wsdl:part name="setOrderStatusRequest" type="tns:OrderStatusDataArray"></wsdl:part>
+		<wsdl:part name="setOrderStatusRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="setOrderStatusResponse">
-		<wsdl:part name="setOrderStatusResponse" type="tns:StatusDataArray"></wsdl:part>
+		<wsdl:part name="setOrderStatusResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="setOrderHiddenStatusRequest">
-		<wsdl:part name="setOrderHiddenStatusRequest" type="tns:OrderDataArray"></wsdl:part>
+		<wsdl:part name="setOrderHiddenStatusRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="setOrderHiddenStatusResponse">
-		<wsdl:part name="setOrderHiddenStatusResponse" type="tns:StatusDataArray"></wsdl:part>
+		<wsdl:part name="setOrderHiddenStatusResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getClientPriceListRequest">
-		<wsdl:part name="getClientPriceListRequest" type="tns:ParamStartLength"></wsdl:part>
+		<wsdl:part name="getClientPriceListRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getClientPriceListResponse">
-		<wsdl:part name="getClientPriceListResponse" type="tns:ProductClientPriceDataArray"></wsdl:part>
+		<wsdl:part name="getClientPriceListResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getClientPriceProductListRequest">
-		<wsdl:part name="getClientPriceProductListRequest" type="tns:ParamStartLength"></wsdl:part>
+		<wsdl:part name="getClientPriceProductListRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="getClientPriceProductListResponse">
-		<wsdl:part name="getClientPriceProductListResponse" type="tns:ProductClientPriceDataArray"></wsdl:part>
+		<wsdl:part name="getClientPriceProductListResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>

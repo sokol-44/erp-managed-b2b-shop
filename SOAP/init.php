@@ -68,6 +68,7 @@ include(DIR_INC_CLASSES . DS . 'Order.php');
 include(DIR_INC_CLASSES . DS . 'Mail.php');
 include(DIR_INC_CLASSES . DS . 'Mail2Send.php');
 include(DIR_INC_CLASSES . DS . 'Soap_Server.php');
+include(DIR_INC_CLASSES . DS . 'ArrayToXML.php');
 
 /**
  * initialize engine

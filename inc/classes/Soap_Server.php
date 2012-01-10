@@ -21,7 +21,7 @@ class Soap_Server {
       return array('Authenticated'=>false);
       // }
    }
-    
+
    function __construct() {
       $this->nr_req++;
       add_to_fp("Soap_Server.php\n");
@@ -30,25 +30,9 @@ class Soap_Server {
 
    function getProductList( $input ) {
 
-      $start = $input->start;
-      $end = $input->start+$input->length;
-      for($idx = $start; $idx<$end ; $idx++) {
-         $res_obj[] = array (
-            'id_product' => $idx,
-         'name' => '0 name'.$idx,
-         'description' => '0 description'.$idx,
-         'picture_small_url' => '0 picture_small_url.$idx',
-         'picture_big_url' => ' 0 picture_big_url'.$idx,
-         'picture_id' => 7+$idx,
-         'price' => 8+$idx,
-         'vat' => 9+$idx,
-         'quantity' => 10+$idx,
-         'status' => '0 status' . serialize($input)
-         );
-      }
+      $response = $this->_fill_response( $input, 'ProductData');
 
-
-      return($res_obj);
+      return(ProductData);
    }
 
    function doClientChange ( $input ) {
@@ -56,8 +40,6 @@ class Soap_Server {
       add_to_fp(print_r($input, true));
 
       $response = $this->_fill_response( $input, 'StatusData');
-
-      add_to_fp(print_r($response, true));
 
       return $response;
       //		`id_client_in` INT,
@@ -105,7 +87,7 @@ class Soap_Server {
 
       return $response;
    }
-       
+
    function getClientList( $input ) {
       //$response = $this->_fill_response( $input, 'ClientData');
 
@@ -113,161 +95,161 @@ class Soap_Server {
 
       return $response;
    }
-    
+
    function getClientUserList( $input ) {
-      //$response = $this->_fill_response( $input, 'ClientUserData');
-      $response = array( new ClientUserData('xyz') );
+      $response = $this->_fill_response( $input, 'ClientUserData');
+      //$response = array( new ClientUserData('xyz') );
       //$response = array();
       return $response;
    }
-   
+
    function doProductAdd( $input ) {
       $response = $this->_fill_response( $input, 'StatusData', 'doProductAdd');
       //$response = array( new StatusData('xyz') );
       //$response = array();
       return $response;
    }
-    
+
    function doProductChange( $input ) {
       $response = $this->_fill_response( $input, 'StatusData', 'doProductChange');
       //$response = array( new StatusData('xyz') );
       //$response = array();
       return $response;
    }
-    
-    
+
+
    function setProductClientPrice( $input ) {
       //$response = 'setProductClientPrice';
       $response = $this->_fill_response( $input, 'StatusDoubleData', 'setProductClientPrice');
       // $response = array( new StatusDoubleData('xyz') );
       //$response = array();
-      
+
       return $response;
    }
 
-    
+
    function doCategoryAdd( $input ) {
       //$response = 'setProductClientPrice';
       $response = $this->_fill_response( $input, 'StatusData', 'doCategoryAdd');
       // $response = array( new StatusDoubleData('xyz') );
       //$response = array();
-      
+
       return $response;
    }
-    
+
    function doCategoryEdit( $input ) {
       $response = $this->_fill_response( $input, 'StatusData', 'doCategoryEdit');
       // $response = array( new StatusDoubleData('xyz') );
       //$response = array();
-      
+
       return $response;
    }
 
-    
+
    function doCategoryDelete( $input ) {
       $response = $this->_fill_response( $input, 'StatusData', 'doCategoryDelete');
       // $response = array( new StatusDoubleData('xyz') );
       //$response = array();
-      
+
       return $response;
    }
 
-    
+
    function setProduct2Category( $input ) {
       $response = $this->_fill_response( $input, 'StatusData', 'setProduct2Category');
       // $response = array( new StatusDoubleData('xyz') );
       //$response = array();
-      
+
       return $response;
    }
-  
-    
+
+
    function getProductListFromCategory( $input ) {
-      //$response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      $response = array( new ProductData('xyz', 'getProductListFromCategory') );
+      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
+      //$response = array( new ProductData('xyz', 'getProductListFromCategory') );
       //$response = array();
-      
+
       return $response;
    }
-    
+
    function getCategoryList( $input ) {
-      //$response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      $response = array( new CategoryData('xyz', 'getCategoryList') );
+      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
+      //$response = array( new CategoryData('xyz', 'getCategoryList') );
       //$response = array();
-      
+
       return $response;
    }
-   
+
    function getClientPriceList( $input ) {
-      //$response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      $response = array( new ProductClientPriceData('xyz', 'getProductClientPriceList') );
+      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
+      // $response = array( new ProductClientPriceData('xyz', 'getProductClientPriceList') );
       //$response = array();
-      
+
       return $response;
    }
-   
+
    function getProductClientPriceList( $input ) {
-      //$response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      $response = array( new ProductClientPriceData('xyz', 'getProductClientPriceList') );
+      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
+      //$response = array( new ProductClientPriceData('xyz', 'getProductClientPriceList') );
       //$response = array();
-      
+
       return $response;
    }
-   
+
    function getClientPriceProductList( $input ) {
-      //$response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      $response = array( new ProductClientPriceData('xyz', 'getClientPriceProductList') );
+      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
+      //$response = array( new ProductClientPriceData('xyz', 'getClientPriceProductList') );
       //$response = array();
-      
+
       return $response;
    }
-   
+
    function getOrderListNew( $input ) {
-      //$response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      $response = array( new OrderData('xyz', 'getOrderListNew') );
+      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
+      //$response = array( new OrderData('xyz', 'getOrderListNew') );
       //$response = array();
-      
+
       return $response;
    }
-   
+
    function getOrderList( $input ) {
-      //$response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      $response = array( new OrderData('xyz', 'getOrderList') );
+      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
+      //$response = array( new OrderData('xyz', 'getOrderList') );
       //$response = array();
-      
+
       return $response;
    }
-   
+
    function setOrderStatus( $input ) {
       $response = $this->_fill_response( $input, 'StatusData', 'setOrderStatus');
       //$response = array();
-      
+
       return $response;
    }
-   
+
    function setOrderHiddenStatus( $input ) {
       $response = $this->_fill_response( $input, 'StatusData', 'setOrderHiddenStatus');
       //$response = array();
-      
+
       return $response;
    }
-    
-//   function _fill_response_param( $input, $classname, $string_add = '') {
-//      //      $count = sizeof($input);
-//      add_to_fp('START _fill_response_param');
-//      add_to_fp(print_r($input, true));
-//      add_to_fp($classname);
-//      $response = array();
-//      for($input->values as $key => $val) {
-//         //eval('$response["' . $key . '"] = ' . $classname . '::_fill_response();');
-//         add_to_fp(print_r($val, true));
-//         $response[$key] = new $classname($val, $string_add);
-//      }
-//      add_to_fp(print_r($response, true));
-//      add_to_fp('END _fill_response');
-//      return $response;
-//   }
-   
+
+   //   function _fill_response_param( $input, $classname, $string_add = '') {
+   //      //      $count = sizeof($input);
+   //      add_to_fp('START _fill_response_param');
+   //      add_to_fp(print_r($input, true));
+   //      add_to_fp($classname);
+   //      $response = array();
+   //      for($input->values as $key => $val) {
+   //         //eval('$response["' . $key . '"] = ' . $classname . '::_fill_response();');
+   //         add_to_fp(print_r($val, true));
+   //         $response[$key] = new $classname($val, $string_add);
+   //      }
+   //      add_to_fp(print_r($response, true));
+   //      add_to_fp('END _fill_response');
+   //      return $response;
+   //   }
+
    function getParamStartLength( $input ) {
       $in_o = array(
          'start' => 1,
@@ -276,26 +258,53 @@ class Soap_Server {
          );
          return $in_o;
    }
-   
+
    function _response( $input, $methodname) {
-      
-      
+
+
    }
-   
+
    function _fill_response( $input, $classname, $string_add = '') {
       //      $count = sizeof($input);
-      add_to_fp('START _fill_response');
-      add_to_fp(print_r($input, true));
-      add_to_fp($classname);
+      global $fp_xml;
+      
+      add_to_fp("START _fill_response\n" .
+      print_r($input, true) . "\n" .
+               "CLASSNAME: $classname");
       $response = array();
-      foreach($input->values as $key => $val) {
-         //eval('$response["' . $key . '"] = ' . $classname . '::_fill_response();');
-         add_to_fp(print_r($val, true));
-         $response[$key] = new $classname($val, $string_add);
+
+      // foreach($input->values as $key => $val) {
+      //eval('$response["' . $key . '"] = ' . $classname . '::_fill_response();');
+      //   add_to_fp(print_r($val, true));
+      //   $response[$key] = new $classname($val, $string_add);
+      //}
+
+      if( !isset($input->values) && is_string($input) ) {
+
+         if( isset($fp_xml) && is_resource($fp_xml) ) {
+            fwrite($fp_xml, $input);
+         }
+
+         add_to_fp('INPUT_fill: $' . $input . '$');
+         $input_xml = simplexml_load_string ( $input);
+         add_to_fp("input_xml:\n#" . print_r($input_xml, true) . "#\n");
+         if( isset($input_xml->values) && is_object($input_xml->values) ) {
+            add_to_fp('ITERATE');
+            foreach( $input_xml->values as $key => $val ) {
+               $response[$key] = new $classname($val, $string_add);
+            }
+         } else {
+            $response['foo'] = new $classname($input, $string_add);
+            $response['bar'] = new $classname($input, $string_add);
+         }
       }
-      add_to_fp(print_r($response, true));
-      add_to_fp('END _fill_response');
-      return $response;
+
+      add_to_fp("RES:\n" . print_r($response, true) . "\nEND _fill_response");
+
+      $res_xml = ArrayToXML::toXml($response);
+      add_to_fp("RES XML:\n" . print_r($res_xml, true));
+
+      return $res_xml;
    }
 
    //Client_Add, client_change, client_user_add, client_user_change, client_user_delete, client_user_set_password

@@ -4,13 +4,16 @@ function test_doClientAdd( $client ) {
    echo "test_doClientAdd\n";
    //$in_o = array( 0 => new ClientData('dupa'), new ClientData('dupaq'));
    $in_o = new stdClass();
-   $in_o->values = array( 0 => new ClientData('dupa'), new ClientData('dupaq'));
+   $in_o->values = array( 'ala' => new ClientData('dupa'), 'ola' => new ClientData('dupaq'));
    print_r($in_o);
-   $resC = $client->doClientAdd($in_o);
+   $in_o_x = ArrayToXML::toXml($in_o);
+   print("" . xml_b( $in_o_x ). '<br>');
+   $resC = $client->doClientAdd($in_o_x);
+   //$resC = $client->doClientAdd('dupa');
    // print_lr( $client );
    //print("" . print_r( unserialize($resC), true). '<br>');
    //echo 'res:';
-   print("" . print_r( $resC, true). '<br>');
+   print("" . xml_b( $resC ). '<br>');
 }
 
 

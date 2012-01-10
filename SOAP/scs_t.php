@@ -9,6 +9,7 @@ Tests <?php  echo date('r'); ?><br>
 include "scs_t_function.php";
 include "scs_t_class.php";
 include "scs_t_test.php";
+include "../inc/classes/ArrayToXML.php";
 
 // turn off the wsdl cache
 ini_set('soap.wsdl_cache_enabled', '0');
@@ -18,7 +19,7 @@ $client = new SoapClient($soap_address, $soap_param_array);
 
 
 // Test Client/User
-// test_doClientAdd( $client );
+test_doClientAdd( $client );
 // test_doClientChange( $client );
 // test_doClientUserAdd( $client );
 // test_doClientUserChange( $client );
@@ -41,7 +42,7 @@ $client = new SoapClient($soap_address, $soap_param_array);
 // test_getOrderListNew( $client );
 // test_getOrderList( $client );
 // test_setOrderStatus( $client );
- test_setOrderHiddenStatus( $client );
+// test_setOrderHiddenStatus( $client );
 
 
 
