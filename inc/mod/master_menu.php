@@ -12,7 +12,7 @@ $array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_CATALOG),'', Lang::_('
 $array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_BASKET),'', Lang::_('Basket') );
 
 //FIXME - ugly hack
-$array_mastermenu[] = '<a href="/kontakt.html">' . Kontakt . '</a>';
+$array_mastermenu[] = '<a href="http://zebra.waw.pl/other.php">' . Kontakt . '</a>';
 
 echo implode(' | ', $array_mastermenu);
 ?>

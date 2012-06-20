@@ -3,7 +3,7 @@
  * init.php Global initialization file
  * Copyright Michał Sokołowski 2010
  *
- * @author Micha� Soko�owski <msokolowski@example.com>
+ * @author Michał Sokołowski <msokolowski@example.com>
  */
 
 if( !defined('_I_INIT') ) die();
@@ -47,6 +47,12 @@ if( defined('_I_ADM_ROOT_DIR') ) {
 //image structure
 foreach( $config['IMAGE'] as $cnf => $value) {
 	define('IMAGE_' . $cnf, $value);
+}
+
+
+//image structure
+foreach( $config['DEFAULT'] as $cnf => $value) {
+	define('DEFAULT_' . $cnf, $value);
 }
 
 $dir_www_inc = $dir_www['HTTP_SERVER'] . $dir_www['HTTP_ROOT_CATALOG'] . $dir_www['HTTP_INC_CATALOG'];

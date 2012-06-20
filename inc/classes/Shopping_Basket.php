@@ -8,34 +8,35 @@
 
 if( !defined('_I_INIT') ) die();
 
-/**
- * @author ms
- *
- */
 class Shopping_Basket {
    static $class = false;
    public $contents = array();
-   public $id_nr_shopping_basket = 0;
+   public $version = array();
+   public $history = array();
+   public $id_shopping_basket = 0;
+   public $id_shopping_basket_version = 0;
    public $params = array(
-      	'id_client' => 0, 'id_nr_shopping_basket' => 0, 'description' => 0,
+      	'id_client' => 0, 'id_shopping_basket' => 0, 'id_shopping_basket_version' => 0,
+         'id_nr_shopping_basket' => 0, 'description' => 0,
          'date_create' => null, 'date_modified' => null, 'ts_create' => 0, 'ts_modified' => 0,
       	'using_id_client_user' => 0, 'using_session_id' => 0, 'using_date' => 0,  'ts_using' => 0);
-   //   static $GET_raw = '', $GET_array = array();
 
    function __construct($params = false, $create = false) {
       $this->reset();
       self::$class = $this;
-      //      echo '$params'.(($params)?'_t_':'_f_') . ' $create'.(($create)?'_t_':'_f_')."<br>";
-      if( $params ) {
+       if( $params ) {
          $this->params = $params;
          if( $create ) {
+            $new_params = $this->db_create_basket();
+            $this->params['id_shopping_basket'] = $new_params['id_shopping_basket'];
+            $this->params['id_shopping_basket_version'] = $new_params['id_shopping_basket_version'];
             $this->db_save_contents();
          } else {
             $this->db_restore_contents();
             $this->calculate_total();
          }
       }
-      $this->id_nr_shopping_basket = $this->params['id_nr_shopping_basket'];
+      $this->id_shopping_basket = $this->params['id_shopping_basket'];
    }
 
    static function g_global() {
@@ -86,7 +87,6 @@ class Shopping_Basket {
 
       //FIXME
       //check in db
-      //echo $this->params['using_id_client_user']." != ".$P->id.' && '.$this->params['ts_using'].'  < '.$time_diff_ok . "<br>\n";
       if( $this->params['using_id_client_user'] != $P->id && $this->params['ts_using'] < $time_diff_ok ) {
          return true;
       }
@@ -96,27 +96,50 @@ class Shopping_Basket {
 
    function db_restore_contents() {
       //FIXME
-      //DB stuff
-      // and merge with DB
+      //DB stuff and merge with DB
       $F = Framework::g_global();
       $P = Person::g_global();
 
       if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
-         $this->params = Data::get_basket_data($this->params);
-         $this->contents = Data::get_basket_product_list($this->params);
+         //$this->params = Data::get_basket_data($this->params);
+         
+         //VERSIONS
+         $version_list = Data::get_basket_version_list($this->params);
+         
+         $last = 0;
+         foreach( $version_list as $key => $basket_version ) {
+            if( $basket_version['ts_create'] > $last ) {
+                 $last = $basket_version['ts_create'];
+                 $this->id_shopping_basket_version = $basket_version['id_shopping_basket_version'];
+                 $this->params['id_shopping_basket_version'] = $this->id_shopping_basket_version;
+            }
+            $this->version[$basket_version['id_shopping_basket_version']] = $basket_version;
+         }
+         //CONTENST OF "NEWEST" VER.
+         if( Framework::not_null($this->version) )
+            $this->contents = Data::get_basket_version_product_list( $this->version[$this->id_shopping_basket_version] );
       }
+   }
+
+   function db_create_basket() {
+      //DB CREATE
+      $F = Framework::g_global();
+      $P = Person::g_global();
+      
+      $res = array('id_shopping_basket' => 0, 'id_shopping_basket_version' => 0);
+      if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
+         $res = Data::create_new_basket($this->params);
+      }
+      return $res;
    }
 
    function db_save_contents() {
       //DB SAVE
       $F = Framework::g_global();
       $P = Person::g_global();
-      
-//     print_debug($this); die();
 
       if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
-         Data::put_basket_data($this->params);
-         Data::put_basket_product_list($this->contents, $this->params);
+         Data::put_basket_version_product_list($this->contents, $this->params);
       }
    }
     
@@ -259,6 +282,12 @@ class Shopping_Basket {
       return $this->product_array;
    }
 
+   function remove_basket() {
+      // Data::remove_basket( $this->id_client, $id_nr_shopping_basket );
+      Data::remove_basket( $this->id_client, $this->id_nr_shopping_basket );
+   }
+   
+   
    function calculate_total() {
       $this->total = array('product_total' => 0, 'product_types' => 0,
       'sum_gross' => 0, 'sum_gross_split' => array(), 'sum_netto' => 0);

@@ -8,35 +8,29 @@
 
 if( !defined('_I_INIT') ) die();
 
-/**
- * @author ms
- *
- */
 class Shopping_Basket_Chain {
    static $class = false;
    static $id_client = 0, $id_client_user = 0;
    static $id_basket_current = 0;
    static $id_basket_set = false;
    static $Basket_List = array();
-   private static $max_basket = 8;
+   private static $max_basket = 24;
 
-   function __construct() {
+   public function __construct() {
       self::$class = $this;
 
       $this->_reload_data();
 
    }
 
-   function _reload_data() {
+   private function _reload_data() {
       $F = Framework::g_global();
       $P = Person::g_global();
-
 
       $this->id_client = (int)$P->data['id_client'];
       $this->id_client_user = (int)$P->id;
       $this->Basket_List = array();
 
-       
       //FIXME
       //for not logged users
       if( $P->logged_in ) {
@@ -52,12 +46,13 @@ class Shopping_Basket_Chain {
       }
    }
 
-   function add_to_mainbasket( $id_nr_shopping_basket = 0 ) {
+   public function add_to_mainbasket( $id_nr_shopping_basket = 0 ) {
       if( $this->_check_valid_basket($id_nr_shopping_basket) ) {
          $status = $this->Basket_List[$this->id_basket_current]->add_from_basket($this->Basket_List[$id_nr_shopping_basket]);
          if( $status ) {
+            // Data::remove_basket( $this->id_client, $id_nr_shopping_basket );
+            $this->Basket_List[$this->id_basket_current]->remove_basket();
             unset( $this->Basket_List[$id_nr_shopping_basket] );
-            Data::remove_basket( $this->id_client, $id_nr_shopping_basket );
          } else {
             return false;
          }
@@ -66,7 +61,7 @@ class Shopping_Basket_Chain {
       }
    }
 
-   function add_basket( ) {
+   public function add_basket( ) {
       if( sizeof($this->Basket_List) <= self::$max_basket ) {
          for( $id_sb = 1; $id_sb <= self::$max_basket ; $id_sb++ ){
             if( !$this->_check_valid_basket($id_sb) ) {
@@ -80,7 +75,7 @@ class Shopping_Basket_Chain {
       }
    }
 
-   function remove_basket( $id_nr_shopping_basket = 0 ) {
+   public function remove_basket( $id_nr_shopping_basket = 0 ) {
       if( $this->_check_valid_basket($id_nr_shopping_basket) ) {
          Data::remove_basket( $this->id_client, $id_nr_shopping_basket );
          unset($this->Basket_List[$id_nr_shopping_basket]);
@@ -90,7 +85,7 @@ class Shopping_Basket_Chain {
       }
    }
 
-   function _check_valid_basket( $id_nr_shopping_basket ) {
+   public function _check_valid_basket( $id_nr_shopping_basket ) {
       if ($id_nr_shopping_basket > 0 &&
       isset($this->Basket_List[$id_nr_shopping_basket]) &&
       is_object($this->Basket_List[$id_nr_shopping_basket]) ) {
@@ -100,18 +95,18 @@ class Shopping_Basket_Chain {
       }
    }
 
-   function get_can_add_basket() {
+   public function get_can_add_basket() {
       if( $this->get_basket_list_count() < self::$max_basket ) { return true; }
       else { return false; }
    }
 
-   function get_basket_list_count() {
+   public function get_basket_list_count() {
       //FIXME
       //params to get list of baskets belonging to specific ID
       return count($this->Basket_List);
    }
 
-   function init_basket( $number = 1, $create = true ) {
+   public function init_basket( $number = 1, $create = true ) {
       $P = Person::g_global();
       $params = array(
       	'id_client' => $this->id_client, 'id_nr_shopping_basket' => $number, 'description' => '',
@@ -124,7 +119,7 @@ class Shopping_Basket_Chain {
       }
    }
 
-   function clean_basket( $id_nr_shopping_basket = 0 ) {
+   public function clean_basket( $id_nr_shopping_basket = 0 ) {
       if( $this->_check_valid_basket($id_nr_shopping_basket) ) {
          $this->Basket_List[$id_nr_shopping_basket]->remove_all_product();
          return true;
@@ -133,18 +128,19 @@ class Shopping_Basket_Chain {
       }
    }
 
-   function set_basket_list( $Basket_List ) {
+  public  function set_basket_list( $Basket_List ) {
       $ts_modified = 0;
       foreach( $Basket_List as $id => $param) {
          if( !$this->id_basket_set && ($ts_modified == 0 || $param['ts_modified'] > $ts_modified) ) {
             $this->id_basket_current = $param['id_nr_shopping_basket'];
             $ts_modified = $param['ts_modified'];
          }
+         //LOAD Basket
          $this->Basket_List[$param['id_nr_shopping_basket']] = new Shopping_Basket( $param );
       }
    }
 
-   function set_default_basket( $id_nr_shopping_basket = 0 ) {
+   public function set_default_basket( $id_nr_shopping_basket = 0 ) {
       if( $this->_check_valid_basket($id_nr_shopping_basket) ) {
          $this->id_basket_set = true;
          $this->id_basket_current = (int)$id_nr_shopping_basket;
@@ -156,7 +152,7 @@ class Shopping_Basket_Chain {
       }
    }
 
-   function set_default_basket_by_date() {
+   public function set_default_basket_by_date() {
       $ts_modified = 0;
       foreach( $this->Basket_List as $id => $Basket) {
          if( !$this->id_basket_set && ($Basket->param['ts_modified'] > $ts_modified) ) {
@@ -166,11 +162,11 @@ class Shopping_Basket_Chain {
       }
    }
 
-   function return_default_basket() {
+   public function return_default_basket() {
       return $this->Basket_List[ $this->id_basket_current ];
    }
 
-   function return_basket( $id_nr_shopping_basket = 0 ) {
+   public function return_basket( $id_nr_shopping_basket = 0 ) {
       if( $this->_check_valid_basket($id_nr_shopping_basket) ) {
          return $this->Basket_List[ $id_nr_shopping_basket ];
       } else {
@@ -178,11 +174,11 @@ class Shopping_Basket_Chain {
       }
    }
     
-   function reset_basket_list() {
+   public function reset_basket_list() {
       reset($this->Basket_List);
    }
 
-   function return_basket_next( $skip_current = false ) {
+   public function return_basket_next( $skip_current = false ) {
       $Shopping_Basket = current($this->Basket_List);
       if( $this->id_basket_current == $Shopping_Basket->id_nr_shopping_basket ) {
          next($this->Basket_List);
@@ -194,7 +190,7 @@ class Shopping_Basket_Chain {
    }
 
 
-   function login_user() {
+   public function login_user() {
       $Shopping_Basket_tmp = reset($this->Basket_List);
       $Shopping_Basket = clone $Shopping_Basket_tmp;
 
@@ -211,7 +207,6 @@ class Shopping_Basket_Chain {
             }
          }
       }
-
    }
 
    static function g_global() {

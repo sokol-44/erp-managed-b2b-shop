@@ -1,0 +1,347 @@
+
+/*
+Global
+*/
+
+input { padding: 3px; }
+
+/*
+Product Info
+*/
+.product_info {}
+.product_image { 
+	float: right;
+	border: 1px solid grey;
+	cursor: pointer;
+	padding: 1px;
+	background-color: black;
+	margin: 10px;
+	vertical-align: top;
+	clear: none;
+}
+.product_add_basket {
+	float: right;
+	margin: 10px;
+	border: 1px dotted green;
+	text-align: justify;
+	padding: 2px;
+}
+.product_add_basket img {
+	margin-left: 5px;
+}
+.product_name {
+	text-transform: uppercase;
+	font-weight: bolder;
+	font-size: large;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.product_description {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+/*
+Catalog
+*/
+.catalog_box {
+	margin: 2px;
+	padding: 0px;
+	border: 1px solid blue;
+	border-radius: 4px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+    box-shadow: 1px 1px 0px 1px lightblue;
+	-moz-box-shadow: 1px 1px 0px 1px lightblue;
+	-webkit-box-shadow: 1px 1px 0px 1px lightblue;
+	background-color: #eeeeff;
+}
+
+.catalog_header {
+	margin: 0;
+	padding: 4px;
+	font-weight: bold;
+	background-color: blue;
+	color: #ffffee;
+	font-size: larger;
+}
+
+.catalog_product_name {
+	font-size: small;
+	font-weight: bolder;
+	padding-bottom: 10px;
+	padding-left: 7px;
+}
+.catalog_product_description {
+	padding-top: 10px;
+}
+/*
+product_info
+product_name
+product_image
+product_price
+product_description
+product_add_basket
+*/
+/*
+Basket list
+*/
+.basket {
+	background-color: lightgrey;
+	padding: 5px;
+	margin-bottom: 5px;
+}
+.mainbasket {
+	background-color: lightblue;
+}
+.usedbasket {
+	background-color: moccasin;
+}
+
+.basket_number {
+	padding: 0px 0 5px 0;
+	border-bottom: 1px dotted brown;
+	margin:  0px 0 5px 0;
+}
+.basket #nr {
+	text-decoration: underline;
+	padding: 2px;
+	margin-left: 3px;
+}
+
+.basket_menu {
+	float: right;
+}
+.basket_menu img{
+	margin-left: 5px;
+}
+
+.basket_show_all {
+
+}
+
+.order_total {
+	background-color: transparent;
+}
+
+/*
+basket_number
+basket_product_total
+basket_product_types
+basket_sum_gross
+basket_sum_netto
+*/
+
+/*
+usedbasket
+basket_add_icon
+*/
+
+.basket_add {
+	background-color: lightgreen;
+	padding: 5px;
+}
+
+
+/*
+Menu
+*/
+
+.cat_href {
+	border-color: #7b9ebd;
+	border-style: solid;
+	border-width: 1px 0px 0px 0px;
+	/*background-color: #eeeeff;*/
+	margin: 2px;
+	padding: 3px 0px 3px 3px;
+}
+
+.cat_href#category_selected { font-weight: bolder; }
+
+.cat_href a:link {text-decoration: none; color: #111111;}
+.cat_href a:visited {text-decoration: none; color: #111111;}
+.cat_href a:active {text-decoration: none; color: #111111;}
+.cat_href a:hover {text-decoration: none; color: #881111;}
+
+#tooltip {
+	position: absolute;
+	z-index: 3000;
+	border: 1px solid #111;
+	background-color: #9a9a9a;
+	padding: 5px;
+	opacity: 0.95;
+	color: red;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 14px;
+}
+
+#tooltip h3,#tooltip div {
+	margin: 0;
+}
+
+/*
+Table things
+*/
+TR.header {
+	background: #ffffff;
+}
+
+TD.headerNavigation {
+	font-size: 12px;
+	background: #6a7000;
+	color: #ffffff;
+	padding-bottom: 2px;
+	font-weight: bold;
+}
+
+.tableBox {
+	background: #f6f7f6;
+	width: 99%;
+}
+
+.tableBorder {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+.tableBorder td {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+.tableBorder th {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+.tableBox td {
+	padding: 5px;
+	border: 1px solid white;
+	border-collapse: collapse;
+	color: #111111;
+}
+
+.tableBox td a{
+	color: #212121;
+}
+
+.tableBox th {
+	padding: 5px;
+	border: 1px solid white;
+	border-collapse: collapse;
+}
+
+.tableBoxContents {
+	background: blue;
+	font-size: 10px;
+}
+
+.tableBoxHeading {
+	font-size: 12px;
+	font-weight: bold;
+	background: blue;
+	color: #ffffff;
+}
+
+.tableBoxHeading th {
+	font-size: 13px;
+	font-weight: bold;
+	background: blue;
+	color: #ffffff;
+}
+
+.tableBox TR.tableRow-odd {
+	background: #f8f8f9;
+}
+
+.tableBox TR.tableRow-even {
+	background: #d8d8d9;
+}
+
+tbody tr:hover td { background:transparent; }
+/*
+"InfoBox"
+*/
+div.InfoBox {
+	float: left;
+	display: block;
+	background-color: pink;
+	font-size: 20;
+}
+
+/*
+Toolbox
+*/
+div.ToolBox {
+	float: right;
+	clear: right;
+	display: block;
+	background-color: pink;
+	padding: 4px;
+}
+
+.ToolBox img {
+	margin: 2px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.ToolBox img:hover {
+	cursor: pointer;
+	margin: 2px;
+}
+
+/*
+Pagination
+*/
+div.SplitPageContainer {
+	float: left;
+	display: block;
+	width: 700px;
+	height: 50px;
+	overflow: hidden;
+}
+
+.SplitPageContainer div {
+	float: left;
+	display: block;
+	height: 50px;
+	overflow: hidden;
+	padding: 0 7px 0 7px;
+}
+
+.SplitPageContainer a:link {text-decoration: none; color: grey;}
+.SplitPageContainer a:visited {text-decoration: none; color: grey;}
+.SplitPageContainer a:active {text-decoration: none; color: grey;}
+.SplitPageContainer a:hover {text-decoration: none; color: darkred;}
+
+/*
+SplitPageContainer
+SplitPagePrev
+SplitPageGroup
+SplitPageThis
+SplitPagePage
+SplitPageNext
+*/
+/*
+Info
+*/
+.messageInfo {
+	margin-bottom: 1px;
+	padding: 3px;
+}
+
+.messageInfoError {
+	background: Crimson;
+}
+
+.messageInfoWarning {
+	background: Orange;
+}
+
+.messageInfoSuccess {
+	background: DarkSeaGreen;
+}
+
+.messageInfoOther {
+	background: Azure;
+}

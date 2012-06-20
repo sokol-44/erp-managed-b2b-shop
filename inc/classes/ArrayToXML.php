@@ -26,16 +26,6 @@ class ArrayToXML
 		// loop through the data passed in.
 		foreach($data as $key => $value)
 		{
-			// no numeric keys in our xml please!
-			//if (is_numeric($key))
-			//{
-				// make string key...
-				//$key = "unknownNode_". (string) $key;
-			//}
-			
-			// replace anything not alpha numeric
-			//$key = preg_replace('/[^a-z]/i', '', $key);
-			
 			// if there is another array found recrusively call this function
 			if (is_array($value))
 			{

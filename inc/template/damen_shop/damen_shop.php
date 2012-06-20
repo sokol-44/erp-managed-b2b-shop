@@ -26,7 +26,7 @@ if( !defined('_I_INIT') ) die();
 <?php $Page->put_js(); ?>
 <?php $Page->put_head_js(); ?>
 </head>
-<body>
+<body style="background: #ededee none; padding: 10px 0;">
   <div class="page_margins">
     <div id="border-top">
       <div id="edge-tl"></div>

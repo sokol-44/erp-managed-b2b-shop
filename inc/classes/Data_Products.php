@@ -43,21 +43,27 @@ class Data_Products extends Data_Basket {
 
       if( $list_in ) {
          if( is_array($list_in) ) {
-            foreach($list_in as $val) { $list[] = (int)$val; }
+            foreach($list_in as $val) {
+               $list[] = (int)$val;
+            }
          } else {
             $list_tmp = explode(',', $list_in);
-            foreach($list_tmp as $val) { $list[] = (int)$val; }
+            foreach($list_tmp as $val) {
+               $list[] = (int)$val;
+            }
          }
       } elseif( isset($F->GET['catpath']) ) {
          $list_tmp = $F->request_split_array('catpath', '_', 'GET');
-         foreach($list_tmp as $val) { $list[] = (int)$val; }
+         foreach($list_tmp as $val) {
+            $list[] = (int)$val;
+         }
       } else {
          $list = array(0);
       }
 
       $query =  'select * from ' . TBL_SHOP_CATEGORY . '
-      	where id_category IN (' . implode(',', $list) . ')
-			order by FIND_IN_SET(id_category,"' . implode(',', $list) . '")';
+      where id_category IN (' . implode(',', $list) . ')
+      order by FIND_IN_SET(id_category,"' . implode(',', $list) . '")';
 
       $result = db_query( $query );
        
@@ -99,7 +105,7 @@ class Data_Products extends Data_Basket {
 
          if( $F->not_null(self::$Data_Products_params['client_view']) ) {
             if( defined('DEFAULT_CLIENT_PRICE_MODE') &&
-            constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+                  constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
                $where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
             } else {
                $where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
@@ -123,7 +129,9 @@ class Data_Products extends Data_Basket {
 
    static function get_product_image_path( $raw_img ) {
       $img_arr = explode('/', $raw_img);
-      return '/product_image/' . end($img_arr);
+      //FIXME - hack
+      //return '/product_image/' . end($img_arr);
+      return $raw_img;
    }
 
    static function change_product_quantity_list( array $product_list ) {
@@ -151,7 +159,7 @@ class Data_Products extends Data_Basket {
 
       if( $F->not_null(self::$Data_Products_params['client_view']) ) {
          if( defined('DEFAULT_CLIENT_PRICE_MODE') &&
-         constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+               constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
             $where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
          } else {
             $where = ' and (p.id_client = ' . (int)self::$Data_Products_params['id_client'] . ' or p.id_client IS NULL)';
@@ -167,14 +175,35 @@ class Data_Products extends Data_Basket {
          //MYSQL group_concat( column_name )
          //POSTGRESQL = array_to_string(array_agg( column_name ),',')
          $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
-            p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
-            group_concat(p2c.id_category) as id_category_list
-            from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
-            ( p.id_product = p2c.id_product )
-            where p.id_product IN (' . implode(',', $id_product_array) . ')' . $where . '
-            group by p.id_product';
+         p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
+         group_concat(p2c.id_category) as id_category_list
+         from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+         ( p.id_product = p2c.id_product )
+         where p.status = "ACTIVE" and and
+         p.id_product IN (' . implode(',', $id_product_array) . ')' . $where . '
+         group by p.id_product';
          $result = db_query( $query );
-         return db_result_array( $result );
+         $product_list_raw = db_result_array( $result );
+         if( defined('TBL_SHOP_PRODUCT_SUBTYPE') && TBL_SHOP_PRODUCT_SUBTYPE=='') {
+            $query_subtype = 'select pst.id_product_subtype, pst.id_product, pst.description,
+            pst.picture_small_url, st.picture_big_url, pst.picture_id, pst.price_diff, pst.status
+            from ' . TBL_SHOP_PRODUCT_SUBTYPE . ' pst
+            where pst.status = "ACTIVE" and
+            pst.id_product IN (' . implode(',', $id_product_array) . ')' .
+            ' order by pst.description';
+            $result_subtype = db_query( $query_subtype );
+            $product_subtype = db_result_array_full( $result_subtype );
+         }
+         $product_list = array();
+         foreach( $product_list_raw as $id => $product_info) {
+            $product_list[$id] = $product_info;
+            $product_list[$id]['subtype'] = array();
+            foreach( $product_subtypes as $subtype) {
+               if( (int)$subtype['id_product'] == (int)$product_info['id_product'] ) {
+                  $product_list[$id]['subtype'][] = $subtype;
+               }
+            }
+         }
       } else {
          return array();
       }
@@ -185,7 +214,7 @@ class Data_Products extends Data_Basket {
        
       if( $F->not_null(self::$Data_Products_params['client_view']) ) {
          if( defined('DEFAULT_CLIENT_PRICE_MODE') &&
-         constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+               constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
             $where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
          } else {
             $where = ' and (p.id_client = ' . (int)self::$Data_Products_params['id_client'] . ' or p.id_client IS NULL)';
@@ -199,13 +228,22 @@ class Data_Products extends Data_Basket {
       //MYSQL group_concat( column_name )
       //POSTGRESQL = array_to_string(array_agg( column_name ),',')
       $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
-         p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
-         group_concat(p2c.id_category) as id_category_list
-         from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
-         ( p.id_product = p2c.id_product )
-         where p.id_product = ' . (int)$id_product . $where . ' group by p.id_product';
+      p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
+      group_concat(p2c.id_category) as id_category_list
+      from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+      ( p.id_product = p2c.id_product )
+      where p.id_product = ' . (int)$id_product . $where . ' group by p.id_product';
       $result = db_query( $query );
-      return db_fetch_array( $result );
+      $product_info = db_fetch_array( $result );
+      if( defined('TBL_SHOP_PRODUCT_SUBTYPE') && TBL_SHOP_PRODUCT_SUBTYPE=='') {
+         $query_subtype = 'select pst.id_product_subtype, pst.id_product, pst.description,
+         pst.picture_small_url, st.picture_big_url, pst.picture_id, pst.price_diff, p.status
+         from ' . TBL_SHOP_PRODUCT_SUBTYPE . ' pst where pst.status = "ACTIVE" and
+         pst.id_product = ' . (int)$id_product . ' order by pst.description';
+         $result_subtyp = db_query( $query_subtype );
+         $product_info['subtype'] = db_result_array_full( $result_subtype );
+      }
+      return $product_info;
    }
 
    //FIXME - implements proper filters
@@ -217,7 +255,7 @@ class Data_Products extends Data_Basket {
 
       if( $F->not_null(self::$Data_Products_params['client_view']) ) {
          if( defined('DEFAULT_CLIENT_PRICE_MODE') &&
-         constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+               constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
             $where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
          } else {
             $where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
@@ -239,10 +277,10 @@ class Data_Products extends Data_Basket {
       $query = 'SELECT c.id_category, c.name, c.description, c.id_category_parent,
       COUNT(p2c.id_category) AS products_in_category, c.sort_order
    	  FROM ' . TBL_SHOP_CATEGORY . ' c LEFT OUTER JOIN (
-   		SELECT p2c.id_category FROM ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c, ' . $product_from . ' p
-         WHERE p2c.id_product = p.id_product AND p.status = \'ACTIVE\' ' . $where_client . ') p2c
-         ON (c.id_category = p2c.id_category) ' . $where_root_number . '
-   	   GROUP BY c.id_category, c.name, c.description, c.id_category_parent, c.sort_order
+   	  SELECT p2c.id_category FROM ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c, ' . $product_from . ' p
+   	  WHERE p2c.id_product = p.id_product AND p.status = \'ACTIVE\' ' . $where_client . ') p2c
+   	  ON (c.id_category = p2c.id_category) ' . $where_root_number . '
+   	  GROUP BY c.id_category, c.name, c.description, c.id_category_parent, c.sort_order
      	ORDER BY c.sort_order, c.name';
        
       $res = db_query( $query );
@@ -263,10 +301,10 @@ class Data_Products extends Data_Basket {
       foreach($local_tree as $key => $categories) {
          if( $id_category_parent == $categories['id_category_parent'] ) {
             if($categories['products_in_category'] > 0 ||
-            (is_array($categories['children']) && sizeof($categories['children'])>0) ) {
+                  (is_array($categories['children']) && sizeof($categories['children'])>0) ) {
                $tree[$key] = $categories;
                if( is_array($categories['children']) )
-               $tree[$key]['children'] =  __categories_purge_empty($id_category_parent, $categories['children']);
+                  $tree[$key]['children'] =  __categories_purge_empty($id_category_parent, $categories['children']);
             } else {
                $category_purged = true;
             }
@@ -295,14 +333,14 @@ class Data_Products extends Data_Basket {
             }
              
             $tree[$category['id_category']] = array('name' => $category['name'],
-                                                'name_long' => $category['description'],
-                                                'parent' => $category['id_category_parent'],
-                                                'level' => $level,
-                                                'all_children' => $all_children,
-																'products_in_subcategories' => $products_in_subcategories,
-                                                'products_in_category' => $category['products_in_category'],
-                                                'children' => $children,
-                                                'path' => $path . $category['id_category']);
+                  'name_long' => $category['description'],
+                  'parent' => $category['id_category_parent'],
+                  'level' => $level,
+                  'all_children' => $all_children,
+                  'products_in_subcategories' => $products_in_subcategories,
+                  'products_in_category' => $category['products_in_category'],
+                  'children' => $children,
+                  'path' => $path . $category['id_category']);
          }
       }
       return $tree;

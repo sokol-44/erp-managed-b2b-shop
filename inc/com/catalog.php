@@ -49,7 +49,8 @@ $GET_tmp = $F->make_get();
 
 
 	   $small_image_path = Data::get_product_image_path( $product['picture_small_url'] );
-	   $si_oc = "$.colorbox({href:'" . Data::get_product_image_path( $product['picture_big_url'] ) . "', photo:true});";
+       //FIXME
+	   $si_oc = "$.colorbox({href:'/zebra/" . Data::get_product_image_path( $product['picture_big_url'] ) . "', photo:true});";
 	   $small_image_html = $F->static_image($small_image_path, Lang::_('show_big_image'), " onclick=\"$si_oc\"");
 
 	   if( $P->logged_in ) {
