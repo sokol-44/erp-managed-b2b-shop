@@ -11,6 +11,7 @@ if( !defined('_I_INIT') ) die();
 class Shopping_Basket {
    static $class = false;
    public $contents = array();
+   public $product_info_array = array();
    public $version = array();
    public $history = array();
    public $id_shopping_basket = 0;
@@ -58,7 +59,7 @@ class Shopping_Basket {
       if( $this->_check_valid_basket($Shopping_Basket) ) {
          $in_contents = $Shopping_Basket->contents;
          foreach( $in_contents as $id_product => $product_array ) {
-            $this->add_to_basket($id_product, $product_array['quantity'], false);
+            $this->add_to_basket($product_array, false);
          }
          $in_description = $Shopping_Basket->params['description'];
          if( Framework::not_null($in_description) ) {
@@ -105,7 +106,7 @@ class Shopping_Basket {
          
          //VERSIONS
          $version_list = Data::get_basket_version_list($this->params);
-         
+//          var_dump($version_list);
          $last = 0;
          foreach( $version_list as $key => $basket_version ) {
             if( $basket_version['ts_create'] > $last ) {
@@ -115,7 +116,7 @@ class Shopping_Basket {
             }
             $this->version[$basket_version['id_shopping_basket_version']] = $basket_version;
          }
-         //CONTENST OF "NEWEST" VER.
+         //CONTENTS OF "NEWEST" VER.
          if( Framework::not_null($this->version) )
             $this->contents = Data::get_basket_version_product_list( $this->version[$this->id_shopping_basket_version] );
       }
@@ -143,11 +144,11 @@ class Shopping_Basket {
       }
    }
     
-   function db_remove_product( $id_product = 0 ) {
+   function db_remove_product( $product_params ) {
       $P = Person::g_global();
 
-      if( $P->logged_in && $P->data['id_client'] == $this->params['id_client'] && $id_product > 0 ) {
-         Data::remove_basket_product( (int)$id_product, $this->params);
+      if( $P->logged_in && $P->data['id_client'] == $this->params['id_client'] && $product_params['id_product'] > 0 ) {
+         Data::remove_basket_product( $product_params, $this->params);
       }
    }
 
@@ -166,21 +167,28 @@ class Shopping_Basket {
       }
    }
 
-   function add_to_basket($id_product, $quantity = 1, $save = true) {
-      $id_product = (int)$id_product;
-      if( isset($this->contents[$id_product]) ) {
-         $this->contents[$id_product]['quantity'] = $this->contents[$id_product]['quantity'] + (int)$quantity;
+   function add_to_basket($product_params, $quantity = 1, $save = true) {
+      $id_product = (int)$product_params['id_product'];
+      $id_product_subtype = (int)$product_params['id_product_subtype'];
+      $key_product = Data::get_key_from_product_params($product_params);
+      if( isset($this->contents[$key_product]) ) {
+         $this->contents[$key_product]['quantity'] = $this->contents[$key_product]['quantity'] + (int)$quantity;
       } else {
-         $this->contents[$id_product]['quantity'] = (int)$quantity;
+         $this->contents[$key_product] = array(
+               'quantity' => (int)$quantity,
+               'id_product' => $id_product,
+               'id_product_subtype' => $id_product_subtype,
+               'id_shopping_basket_version' => (int)$this->id_shopping_basket_version
+               );
       }
       if( $save ) self::db_save_contents();
-      return $this->contents[$id_product]['quantity'];
+      return $this->contents[$key_product]['quantity'];
    }
 
-   function update_basket_quantity_list($array, $description = false) {
+   function update_basket_quantity_list($product_array, $description = false) {
       
-      foreach($array as $id_product => $array_quantity) {
-         $this->update_product_quantity((int)$id_product, (int)$array_quantity, false);
+      foreach($product_array as $key_product => $product_params) {
+         $this->update_product_quantity($product_params, (int)$product_params['quantity'], false);
       }
       if( $description ) $this->params['description'] = $description;
       //TODO
@@ -188,20 +196,22 @@ class Shopping_Basket {
       self::db_save_contents();
    }
 
-   function update_product_quantity($id_product, $quantity = 0, $save = true) {
+   function update_product_quantity($product_params, $quantity = 0, $save = true) {
       $id_product = (int)$id_product;
-      if( isset($this->contents[$id_product]) ) {
-         $this->contents[$id_product]['quantity'] = (int)$quantity;
+      $key_product = Data::get_key_from_product_params($product_params);
+      if( isset($this->contents[$key_product]) ) {
+         $this->contents[$key_product]['quantity'] = (int)$quantity;
          if( $save ) self::db_save_contents();
-         return $this->contents[$id_product]['quantity'];
+         return $this->contents[$key_product]['quantity'];
       } else {
          return 0;
       }
    }
 
-   function get_product_quantity($id_product) {
-      if (isset($this->contents[$id_product])) {
-         return $this->contents[$id_product]['quantity'];
+   function get_product_quantity($product_params) {
+      $key_product = Data::get_key_from_product_params($product_params);
+      if( isset($this->contents[$key_product]) ) {
+         return $this->contents[$key_product]['quantity'];
       } else {
          return 0;
       }
@@ -211,21 +221,21 @@ class Shopping_Basket {
       return $this->params['id_client'];
    }
 
-   function check_product_in($id_product) {
-      if (isset($this->contents[(int)$id_product])) {
+   function check_product_in($key_product) {
+      if (isset($this->contents[$key_product])) {
          return true;
       } else {
          return false;
       }
    }
 
-   function remove_from_basket($id_product) {
-      if (isset($this->contents[$id_product])) {
-         unset( $this->contents[$id_product] );
+   function remove_from_basket( $product_params ) {
+      $key = Data::get_key_from_product_params($product_params);
+      if( isset($this->contents[$key]) ) {
+         unset( $this->contents[$key] );
       }
-      //TODO
-      //only delete 1 row
-      self::db_remove_product( $id_product );
+      
+      self::db_remove_product( $product_params );
    }
 
    function remove_all_product() {
@@ -234,22 +244,30 @@ class Shopping_Basket {
       //only delete
       self::db_save_contents();
    }
+   
+   function get_version_list() {
+      return array_keys($this->version);
+   }
 
    function get_product_id_list() {
       return array_keys($this->contents);
    }
 
-   function get_quantity($id_product) {
-      if (isset($this->contents[$id_product])) {
-         return $this->contents[$id_product]['quantity'];
+   function get_quantity( $product_params ) {
+      $key = Data::get_key_from_product_params($product_params);
+       if( isset($this->contents[$key]) ) {
+         return $this->contents[$key]['quantity'];
+      } else {
+         return 0;
       }
    }
 
    function get_all_product() {
-
+      $F = Framework::g_global();
+      
       if (!is_array($this->contents)) return false;
 
-      if( !Framework::not_null($this->product_array) ) {
+      if( !$F::not_null($this->product_array) ) {
 
          $product_id_array = $this->get_product_id_list();
 
@@ -257,9 +275,10 @@ class Shopping_Basket {
 
          $product_array = array();
          foreach($product_info_array as $product_info ) {
-            $id_product = (int)$product_info['id_product'];
-            if ( Framework::not_null($this->contents[$id_product]) ) {
-               $product_array[$id_product] = array('id_product' => $id_product,
+            $key = Data::get_key_from_product_params($product_info);
+            if ( Framework::not_null($this->contents[$key]) ) {
+               $product_array[$key] = array('id_product' => (int)$this->contents[$key]['id_product'],
+                                    'id_product_subtype' => (int)$this->contents[$key]['id_product_subtype'],
                                     'name' => $product_info['name'],
                                     'description' => $product_info['description'],
                                     'picture_small_url' => $product_info['picture_small_url'],
@@ -267,8 +286,28 @@ class Shopping_Basket {
                                     'picture_id' => $product_info['picture_id'],
                                     'price' => $product_info['price'],
             								'vat' => $product_info['vat'],
-                                    'quantity' => $this->contents[$id_product]['quantity']
+                                    'quantity' => $this->contents[$key]['quantity']
                );
+               $id_product_subtype = (int)$this->contents[$key]['id_product_subtype'];
+               if( $id_product_subtype > 0 && isset($product_info['subtype'][$id_product_subtype])) {
+                  $product_subtype = $product_info['subtype'][$id_product_subtype];
+                  
+                     if( !$F::not_null($product_subtype['description']) )
+                        $product_array[$key]['description'] .= $product_subtype['description'];
+                     
+                     if( !$F::not_null($product_subtype['picture_small_url']) )
+                        $product_array[$key]['picture_small_url'] = $product_subtype['picture_small_url'];
+                     
+                     if( !$F::not_null($product_subtype['picture_big_url']) )
+                        $product_array[$key]['picture_big_url'] = $product_subtype['picture_big_url'];
+                     
+                     if( !$F::not_null($product_subtype['picture_id']) )
+                        $product_array[$key]['picture_id'] = $product_subtype['picture_id'];
+                     
+                     if( !$F::not_null($product_subtype['price_diff']) )
+                        $product_array[$key]['price'] += $product_subtype['price_diff'];
+                  
+               }
             }
          }
          //      foreach ($product_array as $key => $row) {
@@ -276,15 +315,16 @@ class Shopping_Basket {
          //         $products_name[$key] = strtolower($row['name']);
          //      }
          //      @array_multisort($customers_username, SORT_ASC, $products_name, SORT_ASC, $product_array);
-         $this->product_array = $product_array;
+         $this->product_info_array = $product_array;
       }
 
-      return $this->product_array;
+      return $this->product_info_array;
    }
 
    function remove_basket() {
       // Data::remove_basket( $this->id_client, $id_nr_shopping_basket );
-      Data::remove_basket( $this->id_client, $this->id_nr_shopping_basket );
+      $version_list = $this->get_version_list();
+      Data::remove_basket( $this->params, $version_list );
    }
    
    
@@ -294,7 +334,7 @@ class Shopping_Basket {
 
       if ( Framework::not_null($this->contents) && $this->total['product_total'] == 0 ) {
          $this->get_all_product();
-         foreach($this->product_array as $id_product => $product ) {
+         foreach($this->product_array as $key_product => $product ) {
             $this->total['product_total'] += $product['quantity'];
             $this->total['product_types'] ++;
             $this->total['sum_gross_split'][$product['vat']] += Price::add_vat($product['price'], $product['vat'], $product['quantity']);

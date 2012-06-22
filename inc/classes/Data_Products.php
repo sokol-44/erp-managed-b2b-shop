@@ -139,10 +139,10 @@ class Data_Products extends Data_Basket {
 
       if( $F->not_null($product_list) ) {
          db_transaction_start();
-         foreach( $product_list as $id_product => $details ) {
+         foreach( $product_list as $key => $product_params ) {
             $insert_query = 'update ' . TBL_SHOP_PRODUCT . ' set
             quantity = quantity - ' . db_int($details['quantity']) . '
-            where id_product = ' . db_int($id_product) . '';
+            where id_product = ' . db_int($product_params['id_product']) . '';
             //         print_debug($insert_query);
             db_query( $insert_query );
          }
@@ -184,6 +184,8 @@ class Data_Products extends Data_Basket {
          group by p.id_product';
          $result = db_query( $query );
          $product_list_raw = db_result_array( $result );
+         
+         $product_subtypes = array();
          if( defined('TBL_SHOP_PRODUCT_SUBTYPE') && TBL_SHOP_PRODUCT_SUBTYPE=='') {
             $query_subtype = 'select pst.id_product_subtype, pst.id_product, pst.description,
             pst.picture_small_url, st.picture_big_url, pst.picture_id, pst.price_diff, pst.status
@@ -194,13 +196,14 @@ class Data_Products extends Data_Basket {
             $result_subtype = db_query( $query_subtype );
             $product_subtype = db_result_array_full( $result_subtype );
          }
+         
          $product_list = array();
          foreach( $product_list_raw as $id => $product_info) {
             $product_list[$id] = $product_info;
             $product_list[$id]['subtype'] = array();
             foreach( $product_subtypes as $subtype) {
                if( (int)$subtype['id_product'] == (int)$product_info['id_product'] ) {
-                  $product_list[$id]['subtype'][] = $subtype;
+                  $product_list[$id]['subtype'][$subtype['id_product_subtype']] = $subtype;
                }
             }
          }
@@ -235,13 +238,18 @@ class Data_Products extends Data_Basket {
       where p.id_product = ' . (int)$id_product . $where . ' group by p.id_product';
       $result = db_query( $query );
       $product_info = db_fetch_array( $result );
+      $product_info['subtype'] = array();
+      
       if( defined('TBL_SHOP_PRODUCT_SUBTYPE') && TBL_SHOP_PRODUCT_SUBTYPE=='') {
-         $query_subtype = 'select pst.id_product_subtype, pst.id_product, pst.description,
+         $query_subtypes = 'select pst.id_product_subtype, pst.id_product, pst.description,
          pst.picture_small_url, st.picture_big_url, pst.picture_id, pst.price_diff, p.status
          from ' . TBL_SHOP_PRODUCT_SUBTYPE . ' pst where pst.status = "ACTIVE" and
          pst.id_product = ' . (int)$id_product . ' order by pst.description';
-         $result_subtyp = db_query( $query_subtype );
-         $product_info['subtype'] = db_result_array_full( $result_subtype );
+         $result_subtypes = db_query( $query_subtypes );
+         $product_subtypes = db_result_array_full( $result_subtype );
+         foreach( $product_subtypes as $subtype ) {
+            $product_info['subtype'][$subtype['id_product_subtype']] = $subtype;
+         }
       }
       return $product_info;
    }
@@ -294,7 +302,21 @@ class Data_Products extends Data_Basket {
       return $category_tree;
 
    }
-
+   
+   static function get_key_from_product_params( $product_params ) {
+      $key = $product_params['id_product'] .
+      (((int)$product_params['id_product_subtype']>0)?'_' . (int)$product_params['id_product_subtype']:'');
+      return $key;
+   }
+    
+   static function get_product_params_from_key( $key ) {
+      $product_params = array('id_product' => 0, 'id_product_subtype' => 0);
+      $res = explode('_', $key);
+      $product_params['id_product'] = (int)$res['0'];
+      if( isset($key['1']) )$product_params['id_product_subtype'] = (int)$key['i'];
+      return $product_params;
+   }
+   
    private static function __categories_purge_empty ($id_category_parent, $local_tree) {
       $tree = array();
 

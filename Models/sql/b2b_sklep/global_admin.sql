@@ -3,7 +3,7 @@
 # Server version:               5.1.40-community-log
 # Server OS:                    Win32
 # HeidiSQL version:             6.0.0.3603
-# Date/time:                    2011-01-07 15:16:48
+# Date/time:                    2010-12-03 15:44:58
 # --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -11,21 +11,8 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-# Dumping structure for table b2b_sklep.global_admin
-DROP TABLE IF EXISTS `global_admin`;
-CREATE TABLE IF NOT EXISTS `global_admin` (
-  `id_admin` int(11) NOT NULL AUTO_INCREMENT,
-  `login` tinytext,
-  `password` tinytext,
-  `description` tinytext,
-  `email` tinytext,
-  `created` datetime DEFAULT NULL,
-  `last_login` datetime DEFAULT NULL,
-  `state` enum('ACTIVE','BLOCKED','SUSPENDED','ERASED') DEFAULT NULL,
-  PRIMARY KEY (`id_admin`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
-
 # Dumping data for table b2b_sklep.global_admin: ~9 rows (approximately)
+DELETE FROM `global_admin`;
 /*!40000 ALTER TABLE `global_admin` DISABLE KEYS */;
 INSERT INTO `global_admin` (`id_admin`, `login`, `password`, `description`, `email`, `created`, `last_login`, `state`) VALUES
 	(1, 'admin', 'd416b11c07591e8110c8e235ace521ce5da74be29229af683b5b059b927402be3c54f9468f75f165:1b9c0e339fd5827ba532f432f74fbe2133bb1efd', 'main admin', 'aaaa@wp.pl', '0000-00-00 00:00:00', NULL, 'ACTIVE'),

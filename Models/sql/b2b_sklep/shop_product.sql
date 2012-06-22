@@ -3,7 +3,7 @@
 # Server version:               5.1.40-community-log
 # Server OS:                    Win32
 # HeidiSQL version:             6.0.0.3603
-# Date/time:                    2011-01-07 15:16:49
+# Date/time:                    2010-12-03 15:45:00
 # --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -11,23 +11,8 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-# Dumping structure for table b2b_sklep.shop_product
-DROP TABLE IF EXISTS `shop_product`;
-CREATE TABLE IF NOT EXISTS `shop_product` (
-  `id_product` int(11) NOT NULL AUTO_INCREMENT,
-  `name` text NOT NULL,
-  `description` text NOT NULL,
-  `picture_small_url` tinytext NOT NULL,
-  `picture_big_url` tinytext,
-  `picture_id` int(10) unsigned DEFAULT NULL,
-  `price` decimal(20,4) unsigned DEFAULT NULL,
-  `vat` tinyint(3) unsigned DEFAULT NULL,
-  `quantity` int(10) unsigned NOT NULL,
-  `status` enum('ACTIVE','NA') NOT NULL DEFAULT 'ACTIVE',
-  PRIMARY KEY (`id_product`)
-) ENGINE=InnoDB AUTO_INCREMENT=10851 DEFAULT CHARSET=utf8;
-
-# Dumping data for table b2b_sklep.shop_product: ~205 rows (approximately)
+# Dumping data for table b2b_sklep.shop_product: ~169 rows (approximately)
+DELETE FROM `shop_product`;
 /*!40000 ALTER TABLE `shop_product` DISABLE KEYS */;
 INSERT INTO `shop_product` (`id_product`, `name`, `description`, `picture_small_url`, `picture_big_url`, `picture_id`, `price`, `vat`, `quantity`, `status`) VALUES
 	(3190, 'MIMIO', ' \r\nSpełnia oczekiwania najbardziej wymagających wykładowców!\r\n\r\n- do zastosowania na dowolnej suchościeralnej białej tablicy (lub innej podobnej powierzchni projekcyjnej)\r\n- ogromna interaktywna powierzchnia prezentacyjna - aż do ponad 3 m\r\n- lekka, przenośna i prosta w montażu\r\n- potężna baza interaktywnych materiałów do wykorzystania na prowadzonych przez Ciebie zajęciach i prezentacjach\r\n- wiele dostępnych formatów zapisu pliku ( .html, .pdf, .gif, .jpg, .tif, .bmp, .png, .wmf, .emf )\r\n\r\nUmów się na PREZENTACJĘ! \r\ntel. kom.: 0693 469 114', 'product_image/MIMIO_interactive_main_s.jpg', 'product_image/MIMIO_interactive_main.jpg', NULL, 2250.0000, 5, 1, 'ACTIVE'),

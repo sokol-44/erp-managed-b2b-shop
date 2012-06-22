@@ -3,7 +3,7 @@
 # Server version:               5.1.40-community-log
 # Server OS:                    Win32
 # HeidiSQL version:             6.0.0.3603
-# Date/time:                    2011-01-07 15:16:49
+# Date/time:                    2010-12-03 15:45:00
 # --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -11,19 +11,8 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-# Dumping structure for table b2b_sklep.shop_product_to_category
-DROP TABLE IF EXISTS `shop_product_to_category`;
-CREATE TABLE IF NOT EXISTS `shop_product_to_category` (
-  `id_product` int(11) NOT NULL,
-  `id_category` int(11) NOT NULL,
-  PRIMARY KEY (`id_category`,`id_product`),
-  KEY `fk.product_to_category.id_product` (`id_product`),
-  KEY `fk.product_to_category.id_category` (`id_category`),
-  CONSTRAINT `fk.product_to_category.id_category` FOREIGN KEY (`id_category`) REFERENCES `shop_category` (`id_category`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk.product_to_category.id_product` FOREIGN KEY (`id_product`) REFERENCES `shop_product` (`id_product`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 # Dumping data for table b2b_sklep.shop_product_to_category: ~258 rows (approximately)
+DELETE FROM `shop_product_to_category`;
 /*!40000 ALTER TABLE `shop_product_to_category` DISABLE KEYS */;
 INSERT INTO `shop_product_to_category` (`id_product`, `id_category`) VALUES
 	(3190, 25),

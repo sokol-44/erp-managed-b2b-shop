@@ -9,15 +9,19 @@ $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
 $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_COM_BASKET) ) );
 
 if( $F->check_get('mode') ) {
+   $product_params = array(
+         'id_product' => (int)$F->GET['id_product'],
+         'id_product_subtype' => (int)$F->GET['id_product_subtype']
+   );
    //single basket mode
    switch($F->GET['mode']) {
       //   case 'add_basket':
       //   case 'remove_basket':
       case 'add_to_basket':
-         $Shopping_Basket->add_to_basket($F->GET['id_product']);
+         $Shopping_Basket->add_to_basket( $product_params );
          break;
       case 'remove_from_basket':
-         $Shopping_Basket->remove_from_basket($F->GET['id_product']);
+         $Shopping_Basket->remove_from_basket( $product_params );
          break;
       case 'update_basket':
          $Shopping_Basket->update_basket_quantity_list($F->POST['product_quantity'], $F->POST['description']);

@@ -11,17 +11,6 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-# Dumping structure for table b2b_sklep.global_client_attributes
-DROP TABLE IF EXISTS `global_client_attributes`;
-CREATE TABLE IF NOT EXISTS `global_client_attributes` (
-  `id_client` int(11) NOT NULL,
-  `type` enum('PRODUCT_VIEW_NAME') NOT NULL,
-  `value` tinytext,
-  PRIMARY KEY (`id_client`,`type`),
-  KEY `fk.global_client_attributes.id_client` (`id_client`),
-  CONSTRAINT `fk.global_client_attributes.id_client` FOREIGN KEY (`id_client`) REFERENCES `global_client` (`id_client`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
 # Dumping data for table b2b_sklep.global_client_attributes: ~0 rows (approximately)
 DELETE FROM `global_client_attributes`;
 /*!40000 ALTER TABLE `global_client_attributes` DISABLE KEYS */;
