@@ -154,7 +154,7 @@ class Data_Products extends Data_Basket {
 
    }
 
-   static function get_product_info_list( array $id_product_array ) {
+   static function get_product_info_list( array $product_key_array ) {
       $F = Framework::g_global();
 
       if( $F->not_null(self::$Data_Products_params['client_view']) ) {
@@ -169,7 +169,18 @@ class Data_Products extends Data_Basket {
          $where = '';
          $product_from = TBL_SHOP_PRODUCT;
       }
-
+      
+//       $product_and_subproducts_array = array(
+//             'id_product' => array(),
+//             'id_product_subtype' => array(),
+//             'subtype2product' => array(),
+//       );
+      
+      
+      $product_and_subproducts_array = self::get_product_and_subproducts_from_key_list( $product_key_array );
+      //$id_product_array = $product_and_subproducts_array['id_product'];
+      $id_product_subtype_array = $product_and_subproducts_array['id_product_subtype'];
+      
       if( Framework::not_null($id_product_array) ) {
 
          //MYSQL group_concat( column_name )
@@ -179,12 +190,12 @@ class Data_Products extends Data_Basket {
          group_concat(p2c.id_category) as id_category_list
          from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
          ( p.id_product = p2c.id_product )
-         where p.status = "ACTIVE" and and
-         p.id_product IN (' . implode(',', $id_product_array) . ')' . $where . '
+         where p.status = "ACTIVE" and
+         p.id_product IN (' . implode(',', $id_product_array) . ') ' . $where . '
          group by p.id_product';
          $result = db_query( $query );
          $product_list_raw = db_result_array( $result );
-         
+
          $product_subtypes = array();
          if( defined('TBL_SHOP_PRODUCT_SUBTYPE') && TBL_SHOP_PRODUCT_SUBTYPE=='') {
             $query_subtype = 'select pst.id_product_subtype, pst.id_product, pst.description,
@@ -198,15 +209,54 @@ class Data_Products extends Data_Basket {
          }
          
          $product_list = array();
-         foreach( $product_list_raw as $id => $product_info) {
-            $product_list[$id] = $product_info;
-            $product_list[$id]['subtype'] = array();
-            foreach( $product_subtypes as $subtype) {
-               if( (int)$subtype['id_product'] == (int)$product_info['id_product'] ) {
-                  $product_list[$id]['subtype'][$subtype['id_product_subtype']] = $subtype;
-               }
+         foreach( $product_key_array as $key) {
+            $product_param = self::get_product_params_from_key($key);
+            $id_product_subtype = isset($product_param['id_product_subtype'])?(int)$product_param['id_product_subtype']:0;
+            $product_array[$key] = array('id_product' => (int)$product_param['id_product'],
+                                 'id_product_subtype' => (int)$id_product_subtype,
+                                 'name' => $product_info['name'],
+                                 'description' => $product_info['description'],
+                                 'picture_small_url' => $product_info['picture_small_url'],
+                                 'picture_big_url' => $product_info['picture_big_url'],
+                                 'picture_id' => $product_info['picture_id'],
+                                 'price' => $product_info['price'],
+         								'vat' => $product_info['vat'],
+                                 'quantity' => $this->contents[$key]['quantity']
+            );
+            $id_product_subtype = (int)$this->contents[$key]['id_product_subtype'];
+            if( $id_product_subtype > 0 && isset($product_info['subtype'][$id_product_subtype])) {
+               $product_subtype = $product_info['subtype'][$id_product_subtype];
+               
+                  if( !$F->not_null($product_subtype['description']) )
+                     $product_array[$key]['description'] .= $product_subtype['description'];
+                  
+                  if( !$F->not_null($product_subtype['picture_small_url']) )
+                     $product_array[$key]['picture_small_url'] = $product_subtype['picture_small_url'];
+                  
+                  if( !$F->not_null($product_subtype['picture_big_url']) )
+                     $product_array[$key]['picture_big_url'] = $product_subtype['picture_big_url'];
+                  
+                  if( !$F->not_null($product_subtype['picture_id']) )
+                     $product_array[$key]['picture_id'] = $product_subtype['picture_id'];
+                  
+                  if( !$F->not_null($product_subtype['price_diff']) )
+                     $product_array[$key]['price'] += $product_subtype['price_diff'];
+               
             }
+//             $product_list[$product_key] = $product_info;
+//             $product_list[$product_key]['subtype'] = array();
+//             $product_param = self::get_product_params_from_key($product_key);
+//             if( isset($product_param['id_product_subtype']) ) {
+//                foreach( $product_subtypes as $subtype) {
+//                   if( (int)$subtype['id_product'] == (int)$product_info['id_product'] &&
+//                         (int)$product_param['id_product'] == (int)$product_info['id_product'] ) {
+//                      $product_list[$product_key]['subtype'] = $subtype;
+//                   }
+//                }
+//             }
          }
+
+         return $product_list;
       } else {
          return array();
       }
@@ -303,6 +353,29 @@ class Data_Products extends Data_Basket {
 
    }
    
+   static function get_product_and_subproducts_from_key_list( $product_key_array ) {
+      $product_and_subproducts_array = array(
+            'id_product' => array(),
+            'id_product_subtype' => array(),
+            'subtype2product' => array(),
+             );
+      foreach( $product_key_array  as $product_key ) {
+         $product_params = self::get_product_params_from_key( $product_key );
+
+         if( !array_search($product_params['id_product'], $product_and_subproducts_array['id_product']) ) {
+            $product_and_subproducts_array['id_product'][] = $product_params['id_product'];
+         }
+         if( isset($product_params['id_product_subtype'])  ) {
+            $product_and_subproducts_array['subtype2product'][$product_params['id_product_subtype']] = $product_params['id_product'];
+            if( !array_search($product_params['id_product_subtype'], $product_and_subproducts_array['id_product_subtype']) ) {
+               $product_and_subproducts_array['id_product_subtype'][] = $product_params['id_product_subtype'];
+            }
+         }
+      }
+
+      return $product_and_subproducts_array;
+   }
+    
    static function get_key_from_product_params( $product_params ) {
       $key = $product_params['id_product'] .
       (((int)$product_params['id_product_subtype']>0)?'_' . (int)$product_params['id_product_subtype']:'');

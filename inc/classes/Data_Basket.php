@@ -61,7 +61,7 @@ class Data_Basket extends Data_Order {
       $product_array = db_result_array( db_query( $query ) );
       $contents = array();
       foreach( $product_array as $product ) {
-         $key = self::get_key_from_product_params( $product );
+         $key = Data_Products::get_key_from_product_params( $product );
          $contents[$key] = array(
                'quantity' => (int)$product['quantity'],
                'id_product' => (int)$product['id_product'],

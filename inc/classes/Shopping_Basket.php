@@ -249,6 +249,10 @@ class Shopping_Basket {
       return array_keys($this->version);
    }
 
+   function get_product_key_list() {
+      return array_keys($this->contents);
+   }
+
    function get_product_id_list() {
       return array_keys($this->contents);
    }
@@ -267,15 +271,16 @@ class Shopping_Basket {
       
       if (!is_array($this->contents)) return false;
 
-      if( !$F::not_null($this->product_array) ) {
+      if( !$F->not_null($this->product_array) ) {
 
-         $product_id_array = $this->get_product_id_list();
-
+         $product_id_array = $this->get_product_key_list();
+         
          $product_info_array = Data::get_product_info_list( $product_id_array );
-
+         
          $product_array = array();
          foreach($product_info_array as $product_info ) {
             $key = Data::get_key_from_product_params($product_info);
+            
             if ( Framework::not_null($this->contents[$key]) ) {
                $product_array[$key] = array('id_product' => (int)$this->contents[$key]['id_product'],
                                     'id_product_subtype' => (int)$this->contents[$key]['id_product_subtype'],
@@ -292,19 +297,19 @@ class Shopping_Basket {
                if( $id_product_subtype > 0 && isset($product_info['subtype'][$id_product_subtype])) {
                   $product_subtype = $product_info['subtype'][$id_product_subtype];
                   
-                     if( !$F::not_null($product_subtype['description']) )
+                     if( !$F->not_null($product_subtype['description']) )
                         $product_array[$key]['description'] .= $product_subtype['description'];
                      
-                     if( !$F::not_null($product_subtype['picture_small_url']) )
+                     if( !$F->not_null($product_subtype['picture_small_url']) )
                         $product_array[$key]['picture_small_url'] = $product_subtype['picture_small_url'];
                      
-                     if( !$F::not_null($product_subtype['picture_big_url']) )
+                     if( !$F->not_null($product_subtype['picture_big_url']) )
                         $product_array[$key]['picture_big_url'] = $product_subtype['picture_big_url'];
                      
-                     if( !$F::not_null($product_subtype['picture_id']) )
+                     if( !$F->not_null($product_subtype['picture_id']) )
                         $product_array[$key]['picture_id'] = $product_subtype['picture_id'];
                      
-                     if( !$F::not_null($product_subtype['price_diff']) )
+                     if( !$F->not_null($product_subtype['price_diff']) )
                         $product_array[$key]['price'] += $product_subtype['price_diff'];
                   
                }
