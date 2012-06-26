@@ -18,7 +18,7 @@ class Shopping_Basket {
    public $id_shopping_basket_version = 0;
    public $params = array(
       	'id_client' => 0, 'id_shopping_basket' => 0, 'id_shopping_basket_version' => 0,
-         'id_nr_shopping_basket' => 0, 'description' => 0,
+         'id_nr_shopping_basket' => 0, 'description' => '',
          'date_create' => null, 'date_modified' => null, 'ts_create' => 0, 'ts_modified' => 0,
       	'using_id_client_user' => 0, 'using_session_id' => 0, 'using_date' => 0,  'ts_using' => 0);
 
@@ -102,15 +102,15 @@ class Shopping_Basket {
       $P = Person::g_global();
 
       if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
-         //$this->params = Data::get_basket_data($this->params);
+         $this->params = Data::get_basket_data($this->params);
          
          //VERSIONS
          $version_list = Data::get_basket_version_list($this->params);
 //          var_dump($version_list);
          $last = 0;
          foreach( $version_list as $key => $basket_version ) {
-            if( $basket_version['ts_create'] > $last ) {
-                 $last = $basket_version['ts_create'];
+            if( $basket_version['ts_created'] > $last ) {
+                 $last = $basket_version['ts_created'];
                  $this->id_shopping_basket_version = $basket_version['id_shopping_basket_version'];
                  $this->params['id_shopping_basket_version'] = $this->id_shopping_basket_version;
             }
@@ -144,11 +144,11 @@ class Shopping_Basket {
       }
    }
     
-   function db_remove_product( $product_params ) {
+   function db_remove_product( $product_key ) {
       $P = Person::g_global();
 
-      if( $P->logged_in && $P->data['id_client'] == $this->params['id_client'] && $product_params['id_product'] > 0 ) {
-         Data::remove_basket_product( $product_params, $this->params);
+      if( $P->logged_in && $P->data['id_client'] == $this->params['id_client'] && Framework::not_null($product_key) ) {
+         Data::remove_basket_product( $product_key, $this->params);
       }
    }
 
@@ -185,10 +185,10 @@ class Shopping_Basket {
       return $this->contents[$key_product]['quantity'];
    }
 
-   function update_basket_quantity_list($product_array, $description = false) {
+   function update_basket_quantity_list($product_quantity_array, $description = false) {
       
-      foreach($product_array as $key_product => $product_params) {
-         $this->update_product_quantity($product_params, (int)$product_params['quantity'], false);
+      foreach($product_quantity_array as $key_product => $quantity) {
+         $this->update_product_quantity($key_product, (int)$quantity, false);
       }
       if( $description ) $this->params['description'] = $description;
       //TODO
@@ -196,9 +196,7 @@ class Shopping_Basket {
       self::db_save_contents();
    }
 
-   function update_product_quantity($product_params, $quantity = 0, $save = true) {
-      $id_product = (int)$id_product;
-      $key_product = Data::get_key_from_product_params($product_params);
+   function update_product_quantity($key_product, $quantity = 0, $save = true) {
       if( isset($this->contents[$key_product]) ) {
          $this->contents[$key_product]['quantity'] = (int)$quantity;
          if( $save ) self::db_save_contents();
@@ -229,13 +227,12 @@ class Shopping_Basket {
       }
    }
 
-   function remove_from_basket( $product_params ) {
-      $key = Data::get_key_from_product_params($product_params);
+   function remove_from_basket( $product_key ) {
       if( isset($this->contents[$key]) ) {
          unset( $this->contents[$key] );
       }
       
-      self::db_remove_product( $product_params );
+      self::db_remove_product( $product_key );
    }
 
    function remove_all_product() {
@@ -269,58 +266,17 @@ class Shopping_Basket {
    function get_all_product() {
       $F = Framework::g_global();
       
-      if (!is_array($this->contents)) return false;
-
-      if( !$F->not_null($this->product_array) ) {
-
+      $this->product_info_array = array();
+      
+      if ( is_array($this->contents) && $F->not_null($this->contents) ) {
          $product_id_array = $this->get_product_key_list();
-         
          $product_info_array = Data::get_product_info_list( $product_id_array );
          
-         $product_array = array();
-         foreach($product_info_array as $product_info ) {
-            $key = Data::get_key_from_product_params($product_info);
-            
-            if ( Framework::not_null($this->contents[$key]) ) {
-               $product_array[$key] = array('id_product' => (int)$this->contents[$key]['id_product'],
-                                    'id_product_subtype' => (int)$this->contents[$key]['id_product_subtype'],
-                                    'name' => $product_info['name'],
-                                    'description' => $product_info['description'],
-                                    'picture_small_url' => $product_info['picture_small_url'],
-                                    'picture_big_url' => $product_info['picture_big_url'],
-                                    'picture_id' => $product_info['picture_id'],
-                                    'price' => $product_info['price'],
-            								'vat' => $product_info['vat'],
-                                    'quantity' => $this->contents[$key]['quantity']
-               );
-               $id_product_subtype = (int)$this->contents[$key]['id_product_subtype'];
-               if( $id_product_subtype > 0 && isset($product_info['subtype'][$id_product_subtype])) {
-                  $product_subtype = $product_info['subtype'][$id_product_subtype];
-                  
-                     if( !$F->not_null($product_subtype['description']) )
-                        $product_array[$key]['description'] .= $product_subtype['description'];
-                     
-                     if( !$F->not_null($product_subtype['picture_small_url']) )
-                        $product_array[$key]['picture_small_url'] = $product_subtype['picture_small_url'];
-                     
-                     if( !$F->not_null($product_subtype['picture_big_url']) )
-                        $product_array[$key]['picture_big_url'] = $product_subtype['picture_big_url'];
-                     
-                     if( !$F->not_null($product_subtype['picture_id']) )
-                        $product_array[$key]['picture_id'] = $product_subtype['picture_id'];
-                     
-                     if( !$F->not_null($product_subtype['price_diff']) )
-                        $product_array[$key]['price'] += $product_subtype['price_diff'];
-                  
-               }
-            }
+         foreach ($product_info_array  as $key => $product_info) {
+            $product_info_array[$key]['quantity'] = $this->contents[$key]['quantity'];
          }
-         //      foreach ($product_array as $key => $row) {
-         //         $customers_username[$key] = strtolower($row['customers_username']);
-         //         $products_name[$key] = strtolower($row['name']);
-         //      }
-         //      @array_multisort($customers_username, SORT_ASC, $products_name, SORT_ASC, $product_array);
-         $this->product_info_array = $product_array;
+         
+         $this->product_info_array = $product_info_array;
       }
 
       return $this->product_info_array;
@@ -339,7 +295,8 @@ class Shopping_Basket {
 
       if ( Framework::not_null($this->contents) && $this->total['product_total'] == 0 ) {
          $this->get_all_product();
-         foreach($this->product_array as $key_product => $product ) {
+         
+         foreach($this->product_info_array as $key_product => $product ) {
             $this->total['product_total'] += $product['quantity'];
             $this->total['product_types'] ++;
             $this->total['sum_gross_split'][$product['vat']] += Price::add_vat($product['price'], $product['vat'], $product['quantity']);

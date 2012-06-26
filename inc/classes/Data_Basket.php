@@ -28,7 +28,12 @@ class Data_Basket extends Data_Order {
       using_id_client_user, using_session_id, using_date, UNIX_TIMESTAMP(using_date) as ts_using
       from ' . TBL_SHOP_SHOPPING_BASKET . '
       where id_client = ' . db_int($id_client) . '';
-      return db_result_array( db_query( $query ) );
+      $basket_list_raw = db_result_array( db_query( $query ) );
+      $basket_list = array();
+      foreach( $basket_list_raw as $basket ) {
+         $basket_list[$basket['id_shopping_basket']] = $basket;
+      }
+      return $basket_list;
    }
     
    //BASKET
@@ -57,7 +62,7 @@ class Data_Basket extends Data_Order {
       $query = ' select id_shopping_basket_version, id_product, id_product_subtype,
       quantity, date_added
       from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
-      id_shopping_basket_version = ' . db_int($basket_params['params']['id_shopping_basket_version']);
+      id_shopping_basket_version = ' . db_int($basket_params['id_shopping_basket_version']);
       $product_array = db_result_array( db_query( $query ) );
       $contents = array();
       foreach( $product_array as $product ) {
@@ -72,12 +77,13 @@ class Data_Basket extends Data_Order {
       return $contents;
    }
     
-   static function remove_basket_product( $product_params, $basket_params) {
+   static function remove_basket_product( $product_key, $basket_params) {
+      $product_params = Data_Products::get_product_params_from_key($product_key);
       $clear_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
-      id_shopping_basket_version = ' . db_int($basket_params['params']['id_shopping_basket_version']) . ' and
+      id_shopping_basket_version = ' . db_int($basket_params['id_shopping_basket_version']) . ' and
       id_product_subtype = ' . db_int($product_params['id_product_subtype']) . ' and
       id_product = ' . db_int($product_params['id_product']);
-   
+
       db_transaction_start();
       db_query( $clear_query );
       $res = db_affected_rows();

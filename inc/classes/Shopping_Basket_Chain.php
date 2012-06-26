@@ -13,7 +13,10 @@ class Shopping_Basket_Chain {
    static $id_client = 0, $id_client_user = 0;
    static $id_basket_current = 0;
    static $id_basket_set = false;
+   static $id_nr_shopping_basket = 0;
+   static $nr2id = array();
    static $Basket_List = array();
+   static $nr_basket = 0;
    private static $max_basket = 24;
 
    public function __construct() {
@@ -46,12 +49,16 @@ class Shopping_Basket_Chain {
       }
    }
 
-   public function add_to_mainbasket( $id_nr_shopping_basket = 0 ) {
-      if( $this->_check_valid_basket($id_nr_shopping_basket) ) {
-         $status = $this->Basket_List[$this->id_basket_current]->add_from_basket($this->Basket_List[$id_nr_shopping_basket]);
+   public function add_to_mainbasket( $id_shopping_basket = 0, $true_id = false) {
+      
+      if( $true_id ) $id_shopping_basket = $id_nr_shopping_basket;
+      else $id_shopping_basket = $this->nr2id[$id_nr_shopping_basket];
+      
+      if( $this->_check_valid_basket($id_shopping_basket) ) {
+         $status = $this->Basket_List[$this->id_basket_current]->add_from_basket($this->Basket_List[$id_shopping_basket]);
          if( $status ) {
             $this->Basket_List[$this->id_basket_current]->remove_basket();
-            unset( $this->Basket_List[$id_nr_shopping_basket] );
+            unset( $this->Basket_List[$id_shopping_basket] );
          } else {
             return false;
          }
@@ -74,7 +81,11 @@ class Shopping_Basket_Chain {
       }
    }
 
-   public function remove_basket( $id_nr_shopping_basket = 0 ) {
+   public function remove_basket( $id_nr_shopping_basket = 0, $true_id = false) {
+      
+      if( $true_id ) $id_shopping_basket = $id_nr_shopping_basket;
+      else $id_shopping_basket = $this->nr2id[$id_nr_shopping_basket];
+
       if( $this->_check_valid_basket($id_nr_shopping_basket) ) {
          $this->Basket_List[$id_nr_shopping_basket]->remove_basket();
          unset($this->Basket_List[$id_nr_shopping_basket]);
@@ -84,7 +95,11 @@ class Shopping_Basket_Chain {
       }
    }
 
-   public function _check_valid_basket( $id_nr_shopping_basket ) {
+   public function _check_valid_basket( $id_nr_shopping_basket, $true_id = false) {
+      
+      if( $true_id ) $id_shopping_basket = $id_nr_shopping_basket;
+      else $id_shopping_basket = $this->nr2id[$id_nr_shopping_basket];
+
       if ($id_nr_shopping_basket > 0 &&
       isset($this->Basket_List[$id_nr_shopping_basket]) &&
       is_object($this->Basket_List[$id_nr_shopping_basket]) ) {
@@ -112,14 +127,20 @@ class Shopping_Basket_Chain {
          'id_nr_shopping_basket' => $number, 'description' => 0,
          'date_create' => date('Y-m-d H:i:s'), 'date_modified' => '', 'ts_create' => time(), 'ts_modified' => '',
       	'using_id_client_user' => $this->id_client, 'using_session_id' => 0, 'using_date' => 0);
-      $this->Basket_List[$number] = new Shopping_Basket( $params, $create );
+      $new_basket = new Shopping_Basket( $params, $create );
+      $this->Basket_List[$new_basket->id_shopping_basket] = $new_basket;
+
       if( $number == 1 && $create ) {
          $this->id_basket_set = false;
          $this->id_basket_current = $number;
       }
    }
 
-   public function clean_basket( $id_nr_shopping_basket = 0 ) {
+   public function clean_basket( $id_nr_shopping_basket = 0, $true_id = false) {
+      
+      if( $true_id ) $id_shopping_basket = $id_nr_shopping_basket;
+      else $id_shopping_basket = $this->nr2id[$id_nr_shopping_basket];
+         
       if( $this->_check_valid_basket($id_nr_shopping_basket) ) {
          $this->Basket_List[$id_nr_shopping_basket]->remove_all_product();
          return true;
@@ -131,23 +152,29 @@ class Shopping_Basket_Chain {
   public  function set_basket_list( $Basket_List ) {
       $ts_modified = 0;
       $id_nr_shopping_basket = 1;
-      foreach( $Basket_List as $id => $param) {
+
+      foreach( $Basket_List as $id_shopping_basket => $param) {
          if( !$this->id_basket_set && ($ts_modified == 0 || $param['ts_modified'] > $ts_modified) ) {
             $ts_modified = $param['ts_modified'];
-            $this->id_basket_current = $id_nr_shopping_basket;
+            $this->id_basket_current = $id_shopping_basket;
             $param['id_nr_shopping_basket'] = $id_nr_shopping_basket;
          }
+         $this->Basket_List[$id_shopping_basket] = new Shopping_Basket( $param );
+         $this->nr2id[$id_nr_shopping_basket] = $id_shopping_basket;
          $id_nr_shopping_basket++;
          //LOAD Basket
          // var_dump($param);
-         $this->Basket_List[$param['id_nr_shopping_basket']] = new Shopping_Basket( $param );
       }
    }
 
-   public function set_default_basket( $id_nr_shopping_basket = 0 ) {
-      if( $this->_check_valid_basket($id_nr_shopping_basket) ) {
+   public function set_default_basket( $id_nr_shopping_basket = 0, $true_id = false) {
+      
+      if( $true_id ) $id_shopping_basket = $id_nr_shopping_basket;
+      else $id_shopping_basket = $this->nr2id[$id_nr_shopping_basket];
+         
+      if( $this->_check_valid_basket($id_shopping_basket) ) {
          $this->id_basket_set = true;
-         $this->id_basket_current = (int)$id_nr_shopping_basket;
+         $this->id_basket_current = (int)$id_shopping_basket;
          return true;
       } else {
          $this->id_basket_set = false;
@@ -158,15 +185,16 @@ class Shopping_Basket_Chain {
 
    public function set_default_basket_by_date() {
       $ts_modified = 0;
-      foreach( $this->Basket_List as $id => $Basket) {
+      foreach( $this->Basket_List as $id_shopping_basket => $Basket) {
          if( !$this->id_basket_set && ($Basket->param['ts_modified'] > $ts_modified) ) {
-            $this->id_basket_current = $Basket->param['id_nr_shopping_basket'];
+            $this->id_basket_current = $id_shopping_basket;
             $ts_modified = $Basket->param['ts_modified'];
          }
       }
    }
 
    public function return_default_basket() {
+      
       if( $this->_check_valid_basket($this->id_basket_current) ) {
          return $this->Basket_List[ $this->id_basket_current ];
       } else {
@@ -175,9 +203,13 @@ class Shopping_Basket_Chain {
       }
    }
 
-   public function return_basket( $id_nr_shopping_basket = 0 ) {
-      if( $this->_check_valid_basket($id_nr_shopping_basket) ) {
-         return $this->Basket_List[ $id_nr_shopping_basket ];
+   public function return_basket( $id_nr_shopping_basket = 0, $true_id = false ) {
+      
+      if( $true_id ) $id_shopping_basket = $id_nr_shopping_basket;
+      else $id_shopping_basket = $this->nr2id[$id_nr_shopping_basket];
+            
+      if( $this->_check_valid_basket($id_shopping_basket) ) {
+         return $this->Basket_List[ $id_shopping_basket ];
       } else {
          return false;
       }
@@ -189,7 +221,7 @@ class Shopping_Basket_Chain {
 
    public function return_basket_next( $skip_current = false ) {
       $Shopping_Basket = current($this->Basket_List);
-      if( $this->id_basket_current == $Shopping_Basket->id_nr_shopping_basket ) {
+      if( $this->id_basket_current == $Shopping_Basket->id_shopping_basket ) {
          next($this->Basket_List);
          $Shopping_Basket = current($this->Basket_List);
       }
@@ -208,10 +240,13 @@ class Shopping_Basket_Chain {
       //adding nonlogin basket - upt to 2 times baskets
       if( Shopping_Basket::_check_valid_basket($Shopping_Basket) &&
       sizeof($Shopping_Basket->contents) > 0 ) {
+         //FIXME - new ID for basket!
          for( $id_sb = 1; $id_sb <= (self::$max_basket*2-1) ; $id_sb++ ){
             if( !$this->_check_valid_basket($id_sb) ) {
-               $Shopping_Basket->update_person( $id_sb );
-               $this->Basket_List[$id_sb] = $Shopping_Basket;
+               $Shopping_Basket->add_person_save( $id_sb );
+               die('FIXME');
+               
+               $this->Basket_List[$id_shopping_basket] = $Shopping_Basket;
                return true;
             }
          }

@@ -45,8 +45,8 @@ function remove_from_basked() { return true; }
 		<th><?php echo Lang::_('remove from BASKET') ?></th>
 	</tr>
 	<?php
-	foreach( $product_list as $product ) {
-	   $GET_tmp = $F->add_local_get('id_product', $product['id_product'], $GET_tmp);
+	foreach( $product_list as $product_key => $product ) {
+	   $GET_tmp = $F->add_local_get('product_key', $product_key, $GET_tmp);
 	   $link_remove_from_basket = $F->make_link(CFG_COM_BASKET, $F->add_local_get('mode', 'remove_from_basket', $GET_tmp));
 	   $cell_remove_from_basket = $F->draw_link($link_remove_from_basket, 'onclick="remove_from_basked()" title="' . Lang::_('remove from BASKET') . '"', $F->static_image('icon/delete_16.png', Lang::_('remove from BASKET')));
 	   
@@ -61,11 +61,11 @@ function remove_from_basked() { return true; }
 	   
 	   ?>
 	<tr>
-		<td style="cursor: pointer;" width="5%"><?php echo $F->draw_radio_field('list', $product['id_product'], false, 'style="display: none"')
+		<td style="cursor: pointer;" width="5%"><?php echo $F->draw_radio_field('list', $product_key, false, 'style="display: none"')
 		. $small_image_html; ?></td>
 		<td valign="top"><?php echo $cell_product_info; ?></td>
 		<td width="10%"><?php echo Price::val( $product['price'] ) . '<br>(' . Price::tax( $product['vat'] ) . ')'; ?></td>
-		<td width="10%"><?php echo $F->draw_input_field('product_quantity[' . $product['id_product'] . ']', $product['quantity'], array('size' => '5')); ?></td>
+		<td width="10%"><?php echo $F->draw_input_field('product_quantity[' . $product_key . ']', $product['quantity'], array('size' => '5')); ?></td>
 		<td><?php echo $cell_remove_from_basket; ?></td>
 	</tr>
 	<?php

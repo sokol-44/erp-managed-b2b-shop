@@ -5,7 +5,8 @@ $Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
 $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
 //STR: end
 
-
+// print_debug($Shopping_Basket_Chain);
+// print_debug($Shopping_Basket);
 $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_COM_BASKET) ) );
 
 if( $F->check_get('mode') ) {
@@ -21,7 +22,7 @@ if( $F->check_get('mode') ) {
          $Shopping_Basket->add_to_basket( $product_params );
          break;
       case 'remove_from_basket':
-         $Shopping_Basket->remove_from_basket( $product_params );
+         $Shopping_Basket->remove_from_basket( $F->GET['product_key'] );
          break;
       case 'update_basket':
          $Shopping_Basket->update_basket_quantity_list($F->POST['product_quantity'], $F->POST['description']);
