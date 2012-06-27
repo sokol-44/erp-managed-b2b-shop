@@ -58,8 +58,8 @@ class Shopping_Basket {
    function add_from_basket( $Shopping_Basket ) {
       if( $this->_check_valid_basket($Shopping_Basket) ) {
          $in_contents = $Shopping_Basket->contents;
-         foreach( $in_contents as $id_product => $product_array ) {
-            $this->add_to_basket($product_array, false);
+         foreach( $in_contents as $key_product => $product_array ) {
+            $this->add_to_basket($product_array, $product_array['quantity']);
          }
          $in_description = $Shopping_Basket->params['description'];
          if( Framework::not_null($in_description) ) {
@@ -217,6 +217,10 @@ class Shopping_Basket {
    
    function get_id_client() {
       return $this->params['id_client'];
+   }
+   
+   function get_id_nr_shopping_basket() {
+      return $this->params['id_nr_shopping_basket'];
    }
 
    function check_product_in($key_product) {

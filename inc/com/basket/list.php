@@ -12,7 +12,7 @@ $Page->head_title = Lang::_('BASKET');
 $GET_tmp = $F->make_get();
 $form_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('mode', 'update_basket', $GET_tmp));
 
-$GET_id  = $F->add_local_get('id_nr_shopping_basket', (int)$Shopping_Basket->id_nr_shopping_basket, $GET_tmp);
+$GET_id  = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_tmp);
 
 
 echo $F->draw_form('basket_edit', $form_link);

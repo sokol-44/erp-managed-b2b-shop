@@ -130,14 +130,16 @@ class Data_Basket extends Data_Order {
       //      self::remove_basket_pdata($id_nr_shopping_basket);
       db_transaction_start();
       
+      if( count($basket_version_list) == 0 ) return false;
+      
       foreach( $basket_version_list as $version ) {
          $basket_version_list_escape[] = db_int($version);
       }
-      $sql_basket_version_list = imlode(',', $basket_version_list_escape);
+      $sql_basket_version_list = implode(',', $basket_version_list_escape);
       
       $verified_basket_version = 'select GROUP_CONCAT(id_shopping_basket_version) as list
          from ' . TBL_SHOP_SHOPPING_BASKET_VERSION . ' where
-         id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']) . ',
+         id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']) . ' and
          id_client = ' . db_int($basket_params['id_client']) . ' and
          id_shopping_basket_version IN (' . $sql_basket_version_list . ')';
       $verified_basket_version_list = db_fetch_result('list', db_query( $verified_basket_version ) );
@@ -153,14 +155,15 @@ class Data_Basket extends Data_Order {
       
       $clear_basket_history_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_HISTORY . ' where
          id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']);
-      db_query( $delete_basket_history_query );
+      db_query( $clear_basket_history_query );
       
       $clear_basket_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET. ' where
          id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']);
       db_query( $clear_basket_query );
       
       db_transaction_end();
-
+      
+      return true;
    }
    
    static function put_basket_version_product_list($basket_contents, $basket_params) {

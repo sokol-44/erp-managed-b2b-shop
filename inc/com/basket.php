@@ -5,8 +5,8 @@ $Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
 $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
 //STR: end
 
-// print_debug($Shopping_Basket_Chain);
-// print_debug($Shopping_Basket);
+// print_debug($Shopping_Basket_Chain, true);
+// print_debug($Shopping_Basket, true);
 $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_COM_BASKET) ) );
 
 if( $F->check_get('mode') ) {
@@ -28,7 +28,7 @@ if( $F->check_get('mode') ) {
          $Shopping_Basket->update_basket_quantity_list($F->POST['product_quantity'], $F->POST['description']);
          if( $F->check_post('PREPARE ORDER_BASKET', true) ) {
             $GET_tmp = $F->make_get('mode');
-            $GET_id  = $F->add_local_get('id_nr_shopping_basket', (int)$Shopping_Basket->id_nr_shopping_basket, $GET_id);
+            $GET_id  = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_id);
             print_r( $GET_id);
             $F->redirect( $F->make_link(CFG_COM_ORDER_BASKET, $GET_id) );
          }
@@ -47,39 +47,39 @@ if( $F->check_get('mode') ) {
       case 'remove_basket':
          //FIXME
          //trow some error
-         if( $P->logged_in && $F->check_get('id_nr_shopping_basket') )
-         $Shopping_Basket_Chain->remove_basket($F->GET['id_nr_shopping_basket']);
+         if( $P->logged_in && $F->check_get('id_shopping_basket') )
+         $Shopping_Basket_Chain->remove_basket( (int)$F->GET['id_shopping_basket'] );
          else
          ;
          break;
       case 'clean_basket':
          //FIXME
          //trow some error
-         if( $F->check_get('id_nr_shopping_basket') )
-         $Shopping_Basket_Chain->clean_basket($F->GET['id_nr_shopping_basket']);
+         if( $F->check_get('id_shopping_basket') )
+         $Shopping_Basket_Chain->clean_basket( (int)$F->GET['id_shopping_basket'] );
          else
          ;
          break;
       case 'add_to_mainbasket':
          //FIXME
          //trow some error
-         if( $F->check_get('id_nr_shopping_basket') )
-         $Shopping_Basket_Chain->add_to_mainbasket($F->GET['id_nr_shopping_basket']);
+         if( $F->check_get('id_shopping_basket') )
+         $Shopping_Basket_Chain->add_to_mainbasket( (int)$F->GET['id_shopping_basket'] );
          else
          ;
          break;
       case 'switch_basket':
          //FIXME
          //trow some error
-         if( $P->logged_in && $F->check_get('id_nr_shopping_basket') )
-         $Shopping_Basket_Chain->set_default_basket($F->GET['id_nr_shopping_basket']);
+         if( $P->logged_in && $F->check_get('id_shopping_basket') )
+         $Shopping_Basket_Chain->set_default_basket( (int)$F->GET['id_shopping_basket'] );
          else
          ;
          break;
       default:
          break;
    }
-   $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('action,id_nr_shopping_basket', false)) );
+   $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('action,id_shopping_basket', false)) );
 } elseif( $F->check_get('show') ) {
    //show
    switch($F->GET['show']) {

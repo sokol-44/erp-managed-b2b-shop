@@ -49,15 +49,12 @@ class Shopping_Basket_Chain {
       }
    }
 
-   public function add_to_mainbasket( $id_shopping_basket = 0, $true_id = false) {
-      
-      if( $true_id ) $id_shopping_basket = $id_nr_shopping_basket;
-      else $id_shopping_basket = $this->nr2id[$id_nr_shopping_basket];
-      
+   public function add_to_mainbasket( $id_shopping_basket = 0) {
+
       if( $this->_check_valid_basket($id_shopping_basket) ) {
          $status = $this->Basket_List[$this->id_basket_current]->add_from_basket($this->Basket_List[$id_shopping_basket]);
          if( $status ) {
-            $this->Basket_List[$this->id_basket_current]->remove_basket();
+            $this->remove_basket($id_shopping_basket);
             unset( $this->Basket_List[$id_shopping_basket] );
          } else {
             return false;
@@ -81,28 +78,23 @@ class Shopping_Basket_Chain {
       }
    }
 
-   public function remove_basket( $id_nr_shopping_basket = 0, $true_id = false) {
-      
-      if( $true_id ) $id_shopping_basket = $id_nr_shopping_basket;
-      else $id_shopping_basket = $this->nr2id[$id_nr_shopping_basket];
-
-      if( $this->_check_valid_basket($id_nr_shopping_basket) ) {
-         $this->Basket_List[$id_nr_shopping_basket]->remove_basket();
-         unset($this->Basket_List[$id_nr_shopping_basket]);
+   public function remove_basket( $id_shopping_basket = 0) {
+      if( $this->_check_valid_basket($id_shopping_basket) ) {
+         $this->Basket_List[$id_shopping_basket]->remove_basket();
+         unset($this->Basket_List[$id_shopping_basket]);
+         if( (int)$id_shopping_basket == (int)$id_basket_current ) {
+            $this->set_default_basket_by_date();
+         }
          return true;
       } else {
          return false;
       }
    }
 
-   public function _check_valid_basket( $id_nr_shopping_basket, $true_id = false) {
-      
-      if( $true_id ) $id_shopping_basket = $id_nr_shopping_basket;
-      else $id_shopping_basket = $this->nr2id[$id_nr_shopping_basket];
-
-      if ($id_nr_shopping_basket > 0 &&
-      isset($this->Basket_List[$id_nr_shopping_basket]) &&
-      is_object($this->Basket_List[$id_nr_shopping_basket]) ) {
+   public function _check_valid_basket( $id_shopping_basket ) {
+      if ($id_shopping_basket > 0 &&
+      isset($this->Basket_List[$id_shopping_basket]) &&
+      is_object($this->Basket_List[$id_shopping_basket]) ) {
          return true;
       } else {
          return false;
@@ -136,13 +128,10 @@ class Shopping_Basket_Chain {
       }
    }
 
-   public function clean_basket( $id_nr_shopping_basket = 0, $true_id = false) {
-      
-      if( $true_id ) $id_shopping_basket = $id_nr_shopping_basket;
-      else $id_shopping_basket = $this->nr2id[$id_nr_shopping_basket];
-         
-      if( $this->_check_valid_basket($id_nr_shopping_basket) ) {
-         $this->Basket_List[$id_nr_shopping_basket]->remove_all_product();
+   public function clean_basket( $id_shopping_basket = 0 ) {
+
+      if( $this->_check_valid_basket($id_shopping_basket) ) {
+         $this->Basket_List[$id_shopping_basket]->remove_all_product();
          return true;
       } else {
          return false;
@@ -167,10 +156,7 @@ class Shopping_Basket_Chain {
       }
    }
 
-   public function set_default_basket( $id_nr_shopping_basket = 0, $true_id = false) {
-      
-      if( $true_id ) $id_shopping_basket = $id_nr_shopping_basket;
-      else $id_shopping_basket = $this->nr2id[$id_nr_shopping_basket];
+   public function set_default_basket( $id_shopping_basket = 0 ) {
          
       if( $this->_check_valid_basket($id_shopping_basket) ) {
          $this->id_basket_set = true;
@@ -199,14 +185,13 @@ class Shopping_Basket_Chain {
          return $this->Basket_List[ $this->id_basket_current ];
       } else {
          // var_dump($this);
-         return false;
+         $this->id_basket_set = false;
+         $this->set_default_basket_by_date();
+         return $this->Basket_List[ $this->id_basket_current ];
       }
    }
 
-   public function return_basket( $id_nr_shopping_basket = 0, $true_id = false ) {
-      
-      if( $true_id ) $id_shopping_basket = $id_nr_shopping_basket;
-      else $id_shopping_basket = $this->nr2id[$id_nr_shopping_basket];
+   public function return_basket( $id_shopping_basket = 0 ) {
             
       if( $this->_check_valid_basket($id_shopping_basket) ) {
          return $this->Basket_List[ $id_shopping_basket ];
