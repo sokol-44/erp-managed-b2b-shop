@@ -30,6 +30,71 @@ function print_debug($var, $vd = false ) {
    '</p>';
 }
 
+
+
+class File_Debug {
+   private $save_debug_fd = false;
+   static $class = false;
+   
+   function __construct($tag = '') {
+      self::$class = $this;
+      if( is_dir('debug') ) {
+         $name = 'debug/' . $tag . '_' . getmypid() . '_' . microtime(true) . '.log.html';
+         //$name = 'debug/log.html';
+         $this->save_debug_fd = fopen($name, 'a');
+         if( $this->save_debug_fd ) {
+            fwrite($this->save_debug_fd, '<html><body><pre>');
+         }
+      }
+   }
+   static function g_global($tag = '') {
+      if(self::$class == false) {
+         self::$class = new File_Debug($tag);
+      }
+      return self::$class;
+   }
+   
+   function s($var) {
+      if( $this->save_debug_fd ) {
+         $res = stripslashes( var_export($var, true) );
+         fwrite($this->save_debug_fd, htmlspecialchars($res) . "\n\n");
+      };
+   }
+   
+   function __destruct() {
+      $this->c();
+   }
+   
+   function c() {
+      if( $this->save_debug_fd ) {
+         fwrite($this->save_debug_fd, '</pre></body></html>');
+         fclose($this->save_debug_fd);
+      }
+   }
+}
+
+register_shutdown_function('shutdown');
+
+function shutdown() {
+   global $query_log;
+   
+   $FD = File_Debug::g_global();
+   $FD->s($_GET);
+   $FD->s($_POST);
+   $FD->s($query_log);
+   $FD->c();
+   
+   //print_debug($BackTrail);
+   //print_debug($Page);
+   //print_debug($F);
+   //print_debug($P);
+   //print_debug($Info);
+   //print_debug(Lang::$STR);
+   //print_debug($_GET);
+}
+
+
+
 function gl_check_password($password_in, $password_db) {
 
    $pass_array = explode(':', $password_db);

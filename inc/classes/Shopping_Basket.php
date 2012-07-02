@@ -166,11 +166,46 @@ class Shopping_Basket {
          //remove from DB
       }
    }
+   
+   function add_check_version() {
+      $P = Person::g_global();
+      
+      if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
+         $current_client_user_id = (int)$this->version[(int)$this->id_shopping_basket_version]['id_client_user'];
+         if( (int)$P->data['id_client_user'] != (int)$current_client_user_id &&
+              Framework::not_null($this->contents) ) {
+
+            $basket_new_version = Data::add_basket_new_version($this->params, (int)$current_client_user_id);
+            
+            $this->id_shopping_basket_version = (int)$basket_new_version['id_shopping_basket_version'];
+            $this->version[$this->id_shopping_basket_version] = $basket_new_version;
+            $this->params['id_shopping_basket_version'] = $this->id_shopping_basket_version;
+            
+            foreach( $this->contents as $key_product => $product_params ) {
+               $this->contents[$key_product]['id_shopping_basket_version'] = $this->id_shopping_basket_version;
+            }
+            $FD = File_Debug::g_global();
+            $FD->s('ADD');
+            $FD->s(array('$this->version' => $this->version, '$this->id_shopping_basket_version' => $this->id_shopping_basket_version));
+            
+            return true;
+         }
+      }
+      $FD = File_Debug::g_global();
+      $FD->s('NOT');
+      $FD->s(array('$this->version' => $this->version, '$this->id_shopping_basket_version' => $this->id_shopping_basket_version));
+      
+      return false;
+   }
 
    function add_to_basket($product_params, $quantity = 1, $save = true) {
+      
+      $this->add_check_version();
+      
       $id_product = (int)$product_params['id_product'];
       $id_product_subtype = (int)$product_params['id_product_subtype'];
       $key_product = Data::get_key_from_product_params($product_params);
+      
       if( isset($this->contents[$key_product]) ) {
          $this->contents[$key_product]['quantity'] = $this->contents[$key_product]['quantity'] + (int)$quantity;
       } else {
@@ -179,8 +214,9 @@ class Shopping_Basket {
                'id_product' => $id_product,
                'id_product_subtype' => $id_product_subtype,
                'id_shopping_basket_version' => (int)$this->id_shopping_basket_version
-               );
+         );
       }
+
       if( $save ) self::db_save_contents();
       return $this->contents[$key_product]['quantity'];
    }
@@ -232,18 +268,23 @@ class Shopping_Basket {
    }
 
    function remove_from_basket( $product_key ) {
+      
       if( isset($this->contents[$key]) ) {
          unset( $this->contents[$key] );
       }
       
-      self::db_remove_product( $product_key );
+      if( $this->add_check_version() ) {
+         $this->db_save_contents();
+      }
+       
+      $this->db_remove_product( $product_key );
    }
 
    function remove_all_product() {
       $this->reset();
       //TODO
       //only delete
-      self::db_save_contents();
+      $this->db_save_contents();
    }
    
    function get_version_list() {

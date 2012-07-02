@@ -187,6 +187,30 @@ class Data_Basket extends Data_Order {
       // db_transaction_end();
    }
    
+   static function add_basket_new_version($basket_params, $id_client_user ) {
+     
+      $add_basket_new_version_query = 'insert into ' . TBL_SHOP_SHOPPING_BASKET_VERSION . ' set
+      id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']) . ',
+      id_client = ' . db_int($basket_params['id_client']) . ',
+      id_client_user = ' . db_int($id_client_user) . ',
+      date_created = now()';
+      db_query( $add_basket_new_version_query );
+      $id_shopping_basket_version = db_insert_id();
+      
+      $basket_new_version = 'select id_shopping_basket_version, id_shopping_basket,
+      id_client, id_client_user, date_created, date_modified,
+      UNIX_TIMESTAMP(date_created) as ts_created, UNIX_TIMESTAMP(date_modified) as ts_modified
+      from ' . TBL_SHOP_SHOPPING_BASKET_VERSION . '
+      where id_shopping_basket_version = ' . (int)$id_shopping_basket_version;
+      $basket_new_version_res = db_query( $basket_new_version );
+      $basket_new_version = db_fetch_array($basket_new_version_res, 0);
+      
+      $FD = File_Debug::g_global();
+      $FD->s(array('id_shopping_basket_version' => $id_shopping_basket_version, '$basket_new_version' => $basket_new_version));
+      
+      return $basket_new_version;
+   }
+   
    //OLD
    /*
    static function put_basket_data($basket_params) {

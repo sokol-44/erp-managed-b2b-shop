@@ -8,7 +8,7 @@ $Page->add_jq_init('colorize_table(".tableBox");');
 $Page->add_jq_init('set_toolbox_table(".tableBox");');
 
 $Page->head_title = Lang::_('BASKET');
-
+// print_debug($Shopping_Basket);
 $GET_tmp = $F->make_get();
 $form_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('mode', 'update_basket', $GET_tmp));
 
