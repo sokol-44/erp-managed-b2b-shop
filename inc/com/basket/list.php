@@ -1,5 +1,13 @@
 <?php
-$product_list = $Shopping_Basket->get_all_product();
+if( $F->check_get('id_shopping_basket_version') ) {
+   $id_shopping_basket_version = (int)$F->GET['id_shopping_basket_version'];
+   $product_list = $Shopping_Basket->get_all_product_version( $id_shopping_basket_version );
+} else {
+   $product_list = $Shopping_Basket->get_all_product();
+   $id_shopping_basket_version = (int)$Shopping_Basket->id_shopping_basket_version;
+}
+
+$version_list = $Shopping_Basket->get_all_version();
 
 $Page->add_js_file('table.js');
 $Page->add_js_file('toolbox.js');
@@ -20,7 +28,7 @@ echo $F->draw_form('basket_edit', $form_link);
 <script>
 function remove_from_basked() { return true; }
 </script>
-<table width="100%" style="border: 0">
+<table style="border: 0; width: 100%;">
 	<tr>
 		<td colspan="5"><?php //print_debug($product_list); ?></td>
 	</tr>
@@ -46,11 +54,11 @@ function remove_from_basked() { return true; }
 	</tr>
 	<?php
 	foreach( $product_list as $product_key => $product ) {
-	   $GET_tmp = $F->add_local_get('product_key', $product_key, $GET_tmp);
-	   $link_remove_from_basket = $F->make_link(CFG_COM_BASKET, $F->add_local_get('mode', 'remove_from_basket', $GET_tmp));
+	   $GET_product = $F->add_local_get('product_key', $product_key, $GET_tmp);
+	   $link_remove_from_basket = $F->make_link(CFG_COM_BASKET, $F->add_local_get('mode', 'remove_from_basket', $GET_product));
 	   $cell_remove_from_basket = $F->draw_link($link_remove_from_basket, 'onclick="remove_from_basked()" title="' . Lang::_('remove from BASKET') . '"', $F->static_image('icon/delete_16.png', Lang::_('remove from BASKET')));
 	   
-	   $link_product_info = $F->make_link(CFG_COM_PRODUCT_INFO, $GET_tmp);
+	   $link_product_info = $F->make_link(CFG_COM_PRODUCT_INFO, $GET_product);
 	   $cell_product_info = $F->draw_link($link_product_info, '',
 	   '<div class="catalog_product_name">' . $F->output_string_html( $product['name'] ) . '</div>
 	   <div class="catalog_product_description">' . nl2br($F->output_string_html( $product['description'], 384 )) . '</div>');
@@ -72,7 +80,7 @@ function remove_from_basked() { return true; }
 	}
 	?>
 </table>
-<table width="100%" style="border: 0">
+<table  style="border: 0; width: 100%;">
 	<tr>
 		<td width="100%" colspan="5"></td>
 		<td align="right"><?php echo $F->draw_submit(Lang::_('PREPARE ORDER_BASKET')); ?></td>
@@ -81,6 +89,36 @@ function remove_from_basked() { return true; }
 	<tr>
 		<td colspan="5"><?php //echo $SP->display_links(); ?></td>
 	</tr>
+</table>
+<table class="tableBox" style="border: 0">
+	<tr class="tableBoxHeading">
+		<th><?php echo Lang::_('ID') ?></th>
+		<th><?php echo Lang::_('id_client_user') ?></th>
+		<th><?php echo Lang::_('date_created') ?></th>
+		<th><?php echo Lang::_('date_modified') ?></th>
+	</tr>
+	<?php
+	foreach( $version_list as $version_key => $version ) {
+	   $GET_version = $F->add_local_get('id_shopping_basket', $version['id_shopping_basket'], $GET_tmp);
+	   $GET_version = $F->add_local_get('id_shopping_basket_version', $version_key, $GET_version);
+
+	   $link_version_info = $F->make_link(CFG_COM_BASKET, $F->add_local_get('show', 'version_details', $GET_version));
+	   $cell_version_info = $F->draw_link($link_version_info, '', $version['id_shopping_basket_version']);
+	   if ( $id_shopping_basket_version == $version_key ) {
+	      $row_class = 'class="tableBoxActiveRow"';
+	   } else {
+	      $row_class = '';
+	   }
+	   ?>
+	<tr <?php echo $row_class; ?>>
+		<td style="cursor: pointer;" width="5%"><?php echo $cell_version_info ; ?></td>
+		<td valign="top"><?php echo $version['id_client_user']; ?></td>
+		<td width="10%"><?php echo $version['date_created']; ?></td>
+		<td width="10%"><?php echo $version['date_created']; ?></td>
+	</tr>
+	<?php
+	}
+	?>
 </table>
 <?php
 echo $F->draw_form_close();

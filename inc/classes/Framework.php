@@ -61,7 +61,7 @@ class Framework extends Framework_Data {
 
    static function redirect($page) {
       header('Location: ' . $page, true);
-      $this->put_js_redirect($page);
+      self::put_js_redirect($page);
       exit();
    }
 
@@ -350,18 +350,19 @@ class Framework extends Framework_Data {
       //$_GET, $_POST
 
       $ret_array = array();
-
       foreach( $array as $key => $val ) {
-         $key = (string)$key;
+         if( get_magic_quotes_gpc() === TRUE ) $key = stripslashes($key);
+         if( get_magic_quotes_gpc() === TRUE ) $val = stripslashes($val);
+         
          if( is_array($val) ) {
-            $ret_array[stripslashes($key)] = self::_request_normalize_rec($val, $type);
+            $ret_array[$key] = self::_request_normalize_rec($val, $type);
          } else {
             $val = (string)trim($val);
             if( strlen($val) > 0
                && !( $type == 'POST' && ($key == 'x' || $key == 'y'))
                //&& !( $type == 'GET' && ($key == 'virtualdir'))
                ) {
-               $ret_array[stripslashes($key)] = stripslashes($val);
+               $ret_array[$key] = $val;
             }
          }
       }

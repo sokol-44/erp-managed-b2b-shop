@@ -233,6 +233,10 @@ TD.headerNavigation {
 	border-collapse: collapse;
 }
 
+.tableBoxActiveRow {
+	background: #f8a0b0;
+}
+
 .tableBoxContents {
 	background: #f8f8f9;
 	font-size: 10px;

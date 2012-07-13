@@ -291,8 +291,9 @@ class Shopping_Basket {
       return array_keys($this->version);
    }
 
-   function get_product_key_list() {
-      return array_keys($this->contents);
+   function get_product_key_list( $contents = false ) {
+      if( $contents === FALSE ) return array_keys($this->contents);
+      else array_keys($contents);
    }
 
    function get_product_id_list() {
@@ -307,7 +308,11 @@ class Shopping_Basket {
          return 0;
       }
    }
-
+   
+   function get_all_version() {
+      return $this->version;
+   }
+   
    function get_all_product() {
       $F = Framework::g_global();
       
@@ -325,6 +330,25 @@ class Shopping_Basket {
       }
 
       return $this->product_info_array;
+   }
+   
+   function get_all_product_version( $id_shopping_basket_version = 0 ) {
+      $F = Framework::g_global();
+      
+      $product_info_array = array();
+      
+      $contents = Data::get_basket_version_product_list( (int)$id_shopping_basket_version );
+      
+      if ( is_array($$contents) && $F->not_null($$contents) ) {
+         $product_id_array = $this->get_product_key_list( $$contents );
+         $product_info_array = Data::get_product_info_list( $product_id_array );
+         
+         foreach ($product_info_array  as $key => $product_info) {
+            $product_info_array[$key]['quantity'] = $this->contents[$key]['quantity'];
+         }
+      }
+
+      return $product_info_array;
    }
 
    function remove_basket() {

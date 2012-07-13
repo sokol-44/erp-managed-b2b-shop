@@ -3,6 +3,7 @@
 //FIXME
 $Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
 $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
+
 $Price = Price::g_global();
 //STR: end
 

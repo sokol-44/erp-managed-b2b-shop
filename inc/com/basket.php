@@ -1,8 +1,15 @@
 <?php
 //STR: tmp
-//FIXME
 $Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
-$Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
+//FIXME
+
+if( $F->check_get('id_shopping_basket') ) {
+   $id_shopping_basket = (int)$F->GET['id_shopping_basket'];
+   $Shopping_Basket = $Shopping_Basket_Chain->return_basket($id_shopping_basket);
+   if( $Shopping_Basket === FALSE ) $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
+} else {
+   $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
+}
 //STR: end
 
 // print_debug($Shopping_Basket_Chain, true);
@@ -29,7 +36,6 @@ if( $F->check_get('mode') ) {
          if( $F->check_post('PREPARE ORDER_BASKET', true) ) {
             $GET_tmp = $F->make_get('mode');
             $GET_id  = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_id);
-            print_r( $GET_id);
             $F->redirect( $F->make_link(CFG_COM_ORDER_BASKET, $GET_id) );
          }
       default:
@@ -85,6 +91,9 @@ if( $F->check_get('mode') ) {
    switch($F->GET['show']) {
       case 'all':
          require 'basket' . DS . 'list_all.php';
+         break;
+      case 'version_details':
+         require 'basket' . DS . 'list.php';
          break;
       default:
          $F->redirect( $F->make_link(CFG_COM_BASKET));
