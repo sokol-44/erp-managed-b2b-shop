@@ -49,12 +49,17 @@ class Data_Basket extends Data_Order {
    }
    
    static function get_basket_version_list($basket_params) {
-      $query = 'select id_shopping_basket_version, id_shopping_basket, id_client, id_client_user,
-      date_created, date_modified,
-      UNIX_TIMESTAMP(date_created) as ts_created, UNIX_TIMESTAMP(date_modified) as ts_modified
-      from ' . TBL_SHOP_SHOPPING_BASKET_VERSION . ' where
-      id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']) . '
-      order by date_created asc, date_modified asc';
+      $query = 'select bv.id_shopping_basket_version, bv.id_shopping_basket, bv.id_client, bv.id_client_user,
+      bv.date_created, bv.date_modified,
+      UNIX_TIMESTAMP(bv.date_created) as ts_created, UNIX_TIMESTAMP(bv.date_modified) as ts_modified,
+      count(bp.id_shopping_basket_version) as count_product_types, sum(bp.quantity) as product_count
+      from ' . TBL_SHOP_SHOPPING_BASKET_VERSION . ' bv
+      left join ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' bp on
+      (bv.id_shopping_basket_version = bp.id_shopping_basket_version)
+      where
+      bv.id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']) . '
+      group by bp.id_shopping_basket_version
+      order by bv.date_created asc, bv.date_modified asc ';
       return db_result_array_full( db_query( $query ) );
    }
    

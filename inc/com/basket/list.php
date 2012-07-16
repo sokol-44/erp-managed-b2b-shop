@@ -94,6 +94,8 @@ function remove_from_basked() { return true; }
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('ID') ?></th>
 		<th><?php echo Lang::_('id_client_user') ?></th>
+		<th><?php echo Lang::_('product_types') ?></th>
+		<th><?php echo Lang::_('product_count') ?></th>
 		<th><?php echo Lang::_('date_created') ?></th>
 		<th><?php echo Lang::_('date_modified') ?></th>
 	</tr>
@@ -105,7 +107,7 @@ function remove_from_basked() { return true; }
 	   $link_version_info = $F->make_link(CFG_COM_BASKET, $F->add_local_get('show', 'version_details', $GET_version));
 	   $cell_version_info = $F->draw_link($link_version_info, '', $version['id_shopping_basket_version']);
 	   if ( $id_shopping_basket_version == $version_key ) {
-	      $row_class = 'class="tableBoxActiveRow"';
+	      $row_class = 'class="tableRow-active"';
 	   } else {
 	      $row_class = '';
 	   }
@@ -113,6 +115,8 @@ function remove_from_basked() { return true; }
 	<tr <?php echo $row_class; ?>>
 		<td style="cursor: pointer;" width="5%"><?php echo $cell_version_info ; ?></td>
 		<td valign="top"><?php echo $version['id_client_user']; ?></td>
+		<td width="10%"><?php echo $version['count_product_types']; ?></td>
+		<td width="10%"><?php echo $version['product_count']; ?></td>
 		<td width="10%"><?php echo $version['date_created']; ?></td>
 		<td width="10%"><?php echo $version['date_created']; ?></td>
 	</tr>

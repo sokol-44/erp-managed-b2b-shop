@@ -233,9 +233,7 @@ TD.headerNavigation {
 	border-collapse: collapse;
 }
 
-.tableBoxActiveRow {
-	background: #f8a0b0;
-}
+
 
 .tableBoxContents {
 	background: #f8f8f9;
@@ -249,12 +247,16 @@ TD.headerNavigation {
 	color: #ffffff;
 }
 
-TR.tableRow-odd {
-	background: #f8f8f9;
+.tableRow-odd {
+	background: #e8e8e9;
 }
 
-TR.tableRow-even {
+.tableRow-even {
 	background: #d8d8d9;
+}
+
+.tableRow-active {
+	background: #f8a0b0;
 }
 
 /*
