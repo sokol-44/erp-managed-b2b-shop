@@ -144,14 +144,23 @@ class Person {
       }
    }
 
-   public function get_client_email_address() {
-      $client_data = Data::get_client_data( (int)$this->data['id_client'] );
+   public function get_client_email_address( $id_client = false ) {
+      if( $id_client === false ) $id_client = (int)$this->data['id_client'];
+      $client_data = Data::get_client_data( (int)$id_client );
       return $client_data['email'];
    }
 
-   public function get_client_data() {
-      $client_data = Data::get_client_data( (int)$this->data['id_client'] );
+   public function get_client_data( $id_client = false ) {
+      if( $id_client === false ) $id_client = (int)$this->data['id_client'];
+      $client_data = Data::get_client_data( (int)$id_client );
       return $client_data;
+   }
+
+   static public function get_client_user_data( $id, $table = 'CLIENT') {
+      //'CLIENT', 'ADMIN'
+      $client_client_data = Data::get_person_data( $table, $id );
+
+      return $client_client_data;
    }
 
    public function check_pass() {

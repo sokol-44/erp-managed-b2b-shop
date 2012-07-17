@@ -114,6 +114,12 @@ class Shopping_Basket {
                  $this->id_shopping_basket_version = $basket_version['id_shopping_basket_version'];
                  $this->params['id_shopping_basket_version'] = $this->id_shopping_basket_version;
             }
+            if( $basket_version['id_client_user'] == $P->id ) {
+               $basket_version['client_user_name'] = $P->data['name'];
+            } else {
+               $client_user_data = Person::get_client_user_data( (int)$basket_version['id_client_user'], 'CLIENT');
+               $basket_version['client_user_name'] = $client_user_data['name'];
+            }
             $this->version[$basket_version['id_shopping_basket_version']] = $basket_version;
          }
          //CONTENTS OF "NEWEST" VER.

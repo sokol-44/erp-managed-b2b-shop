@@ -93,7 +93,7 @@ function remove_from_basked() { return true; }
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('ID') ?></th>
-		<th><?php echo Lang::_('id_client_user') ?></th>
+		<th><?php echo Lang::_('client_user') ?></th>
 		<th><?php echo Lang::_('product_types') ?></th>
 		<th><?php echo Lang::_('product_count') ?></th>
 		<th><?php echo Lang::_('date_created') ?></th>
@@ -111,10 +111,11 @@ function remove_from_basked() { return true; }
 	   } else {
 	      $row_class = '';
 	   }
+	   $client_user_cell = $version['client_user_name'] . ' (' . $version['id_client_user'] . ')';
 	   ?>
 	<tr <?php echo $row_class; ?>>
 		<td style="cursor: pointer;" width="5%"><?php echo $cell_version_info ; ?></td>
-		<td valign="top"><?php echo $version['id_client_user']; ?></td>
+		<td valign="top"><?php echo $client_user_cell; ?></td>
 		<td width="10%"><?php echo $version['count_product_types']; ?></td>
 		<td width="10%"><?php echo $version['product_count']; ?></td>
 		<td width="10%"><?php echo $version['date_created']; ?></td>

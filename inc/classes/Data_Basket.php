@@ -108,7 +108,8 @@ class Data_Basket extends Data_Order {
       	date_create = now(), date_modified = NULL,
       	using_id_client_user = ' . db_int($P->id) . ',
       	using_session_id = "' . db_escape($P->session_id) . '",
-      	using_date = now()';
+      	using_date = now(),
+      	mode = "START"';
       db_query( $create_basket_query );
       $id_shopping_basket = db_insert_id();
 

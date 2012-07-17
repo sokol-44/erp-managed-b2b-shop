@@ -160,6 +160,8 @@ class Data_Person extends Data_Rights {
       		'where p.id_client_user = gl.id_client_user and gl.id_rights = r.id_rights and p.id_client_user = ' . (int)$id );
          return db_fetch_array($res);
       }
+      
+      return array();
    }
 
    static function get_person_account_state($type) {
