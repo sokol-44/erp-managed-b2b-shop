@@ -62,6 +62,7 @@ while( $Shopping_Basket = $Shopping_Basket_Chain->return_basket_next( true ) ) {
    $total = $Shopping_Basket->calculate_total();
    
    $currently_other_using = $Shopping_Basket->currently_other_using();
+   $basket_params = $Shopping_Basket->params;
    
    if( $currently_other_using ) $class_add = ' class="usedbasket"';
    else $class_add = '';

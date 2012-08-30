@@ -18,7 +18,7 @@ class Shopping_Basket {
    public $id_shopping_basket_version = 0;
    public $params = array(
       	'id_client' => 0, 'id_shopping_basket' => 0, 'id_shopping_basket_version' => 0,
-         'id_nr_shopping_basket' => 0, 'description' => '',
+         'id_nr_shopping_basket' => 0, 'description' => '', 'state' => '',
          'date_create' => null, 'date_modified' => null, 'ts_create' => 0, 'ts_modified' => 0,
       	'using_id_client_user' => 0, 'using_session_id' => 0, 'using_date' => 0,  'ts_using' => 0);
 
@@ -40,6 +40,7 @@ class Shopping_Basket {
       $this->id_shopping_basket = $this->params['id_shopping_basket'];
    }
 
+  
    static function g_global() {
       if(self::$class == false) {
          self::$class = new Shopping_Basket();
@@ -56,6 +57,15 @@ class Shopping_Basket {
    }
 
    function add_from_basket( $Shopping_Basket ) {
+      $Rights = Rights::g_global();
+      
+      $res = $Rights->basket_rights($this->params, 'MODIFY_CONTENTS');
+      
+      if( !$res ) {
+         Info::g('add', Lang::_('You don\'t have rights for ADD FROM BASKET to basket: ' . $this->id_shopping_basket));
+         return false;
+      }
+      
       if( $this->_check_valid_basket($Shopping_Basket) ) {
          $in_contents = $Shopping_Basket->contents;
          foreach( $in_contents as $key_product => $product_array ) {
@@ -94,6 +104,18 @@ class Shopping_Basket {
 
       return false;
    }
+   
+   
+   function check_rights( $action ) {
+      $P = Person::g_global();
+      $Rights = Rights::g_global();
+ 
+      $res = $Rights->basket_rights($this->params, $action);
+      
+      if( !$res ) Info::run_global('add', Lang::_('You dont have rights for (' . $action . ') basket: ' . $this->$id_shopping_basket));
+      
+      return $res;
+   }
 
    function db_restore_contents() {
       //FIXME
@@ -125,6 +147,10 @@ class Shopping_Basket {
          //CONTENTS OF "NEWEST" VER.
          if( Framework::not_null($this->version) )
             $this->contents = Data::get_basket_version_product_list( $this->version[$this->id_shopping_basket_version] );
+         
+         //HISTORY
+         $history_list = Data::get_basket_history_list($this->params);
+         $this->history = $history_list;
       }
    }
 
@@ -135,6 +161,8 @@ class Shopping_Basket {
       
       $res = array('id_shopping_basket' => 0, 'id_shopping_basket_version' => 0);
       if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
+         $this->params['using_id_client_user'] = (int)$P->id;
+         $this->params['using_session_id'] = (int)$P->session_id;
          $res = Data::create_new_basket($this->params);
       }
       return $res;
@@ -146,6 +174,8 @@ class Shopping_Basket {
       $P = Person::g_global();
 
       if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
+         $this->params['using_id_client_user'] = (int)$P->id;
+         $this->params['using_session_id'] = (int)$P->session_id;
          Data::put_basket_version_product_list($this->contents, $this->params);
       }
    }
@@ -205,6 +235,14 @@ class Shopping_Basket {
    }
 
    function add_to_basket($product_params, $quantity = 1, $save = true) {
+      $Rights = Rights::g_global();
+      
+      $res = $Rights->basket_rights($this->params, 'MODIFY_CONTENTS');
+      
+      if( !$res ) {
+         Info::g('add', Lang::_('You don\'t have rights for ADD to basket: ' . $this->id_shopping_basket));
+         return false;
+      }
       
       $this->add_check_version();
       
@@ -274,7 +312,15 @@ class Shopping_Basket {
    }
 
    function remove_from_basket( $product_key ) {
+      $Rights = Rights::g_global();
       
+      $res = $Rights->basket_rights($this->params, 'MODIFY_CONTENTS');
+      
+      if( !$res ) {
+         Info::g('add', Lang::_('You don\'t have rights for REMOVE to basket: ' . $this->id_shopping_basket));
+         return false;
+      }
+            
       if( isset($this->contents[$key]) ) {
          unset( $this->contents[$key] );
       }
@@ -283,10 +329,19 @@ class Shopping_Basket {
          $this->db_save_contents();
       }
        
-      $this->db_remove_product( $product_key );
+      return $this->db_remove_product( $product_key );
    }
 
    function remove_all_product() {
+      $Rights = Rights::g_global();
+      
+      $res = $Rights->basket_rights($this->params, 'MODIFY_CONTENTS');
+      
+      if( !$res ) {
+         Info::g('add', Lang::_('You don\'t have rights for REMOVE ALL to basket: ' . $this->id_shopping_basket));
+         return false;
+      }
+      
       $this->reset();
       //TODO
       //only delete
@@ -317,6 +372,10 @@ class Shopping_Basket {
    
    function get_all_version() {
       return $this->version;
+   }
+   
+   function get_all_history() {
+      return $this->history;
    }
    
    function get_all_product() {

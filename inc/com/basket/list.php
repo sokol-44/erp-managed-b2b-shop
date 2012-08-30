@@ -8,6 +8,7 @@ if( $F->check_get('id_shopping_basket_version') ) {
 }
 
 $version_list = $Shopping_Basket->get_all_version();
+$history_list = $Shopping_Basket->get_all_history();
 
 $Page->add_js_file('table.js');
 $Page->add_js_file('toolbox.js');
@@ -88,6 +89,45 @@ function remove_from_basked() { return true; }
 	</tr>
 	<tr>
 		<td colspan="5"><?php //echo $SP->display_links(); ?></td>
+	</tr>
+</table>
+<table style="border: 0; width: 100%;">
+	<tr>
+		<td colspan="5">
+      <?php echo Lang::_('basket history'); ?>
+      <br>
+      </td>
+	</tr>
+</table>
+<table class="tableBox" style="border: 0">
+	<tr class="tableBoxHeading">
+		<th><?php echo Lang::_('ID') ?></th>
+		<th><?php echo Lang::_('user_client') ?></th>
+		<th><?php echo Lang::_('date') ?></th>
+		<th><?php echo Lang::_('mode') ?></th>
+		<th><?php echo Lang::_('description') ?></th>
+	</tr>
+	<?php
+	foreach( $history_list as $history_key => $history ) {
+	      
+	?>
+	<tr>
+		<td style="cursor: pointer;" width="5%"><?php echo $history['id_shopping_basket_history'] ; ?></td>
+		<td width="10%"><?php echo $history['login'] . ' (' . $history['id_client_user'] . ')'; ?></td>
+		<td width="10%"><?php echo $history['date']; ?></td>
+		<td width="10%"><?php echo $history['mode']; ?></td>
+		<td width="10%"><?php echo $history['description']; ?></td>
+	</tr>
+	<?php
+	}
+	?>
+</table>
+<table style="border: 0; width: 100%;">
+	<tr>
+		<td colspan="5">
+      <?php echo Lang::_('basket versions'); ?>
+      <br>
+      </td>
 	</tr>
 </table>
 <table class="tableBox" style="border: 0">

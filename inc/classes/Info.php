@@ -24,6 +24,19 @@ class Info {
       }
       return self::$class;
    }
+   
+   static function g( $method, $args = array()) {
+      if( !is_object(self::$class) ) {
+         self::$class = new Info;
+      }
+      if(method_exists(self::$class, $method)) {
+         return call_user_func_array(array(self::$class, $method), $args);
+      } else {
+         return false;
+         //throw new Exception(sprintf('The required method "%s" does not exist for %s', $method, get_class($this)));
+      }
+   }
+
 
    function __wakeup() {
       self::$class = $this;

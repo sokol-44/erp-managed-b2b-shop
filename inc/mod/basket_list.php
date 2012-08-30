@@ -64,7 +64,7 @@ while( $Shopping_Basket = $Shopping_Basket_Chain->return_basket_next( true ) ) {
 }
 
 if( $P->logged_in && $Shopping_Basket_Chain->get_can_add_basket() ) {
-   $add_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'add_basket', $GET_tmp));
+   $add_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('add_basket', 'add_basket', $GET_tmp));
    $add_basket = $F->draw_link($add_basket_link, 'title="' . Lang::_('add BASKET') . '"', Lang::_('add BASKET') . ' ' . $F->static_image('icon/plus_16.png', Lang::_('add BASKET')));
 ?>
 <div class="basket_add">

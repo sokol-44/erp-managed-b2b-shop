@@ -192,8 +192,22 @@ class Shopping_Basket_Chain {
       }
    }
 
+   public function return_basket_modify( $id_shopping_basket = 0 ) {
+      
+      if( $this->_check_valid_basket($id_shopping_basket) ) {
+         if( $this->Basket_List[ $id_shopping_basket ]->check_rights('MODIFY_CONTENTS') ) {
+            return $this->Basket_List[ $id_shopping_basket ];
+         } else {
+            Info::g('add', Lang::_('SBC err'));
+            return false;
+         }
+      } else {
+         return false;
+      }
+   }
+    
+
    public function return_basket( $id_shopping_basket = 0 ) {
-            
       if( $this->_check_valid_basket($id_shopping_basket) ) {
          return $this->Basket_List[ $id_shopping_basket ];
       } else {
