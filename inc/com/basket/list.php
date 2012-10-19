@@ -35,6 +35,11 @@ function remove_from_basked() { return true; }
 	</tr>
 	<tr>
 		<td colspan="5">
+      <h3><?php echo Lang::_('basket nr:') . ' ' . $Shopping_Basket->id_shopping_basket; ?></h3>
+      </td>
+	</tr>
+	<tr>
+		<td colspan="5">
       <?php echo Lang::_('basket description'); ?><br>
       <?php echo $F->draw_textarea_field('description', 'auto', '95%', 6, $Shopping_Basket->params['description']); ?>
       </td>

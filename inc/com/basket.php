@@ -7,21 +7,22 @@ $Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
 // print_debug($Shopping_Basket, true);
 $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_COM_BASKET) ) );
 
-
-if( $F->check_get('mode') || $F->check_get('action') ) {
-   
-   
    //edit rights
-   if( $F->check_get('id_shopping_basket') ) {
-      $id_shopping_basket = (int)$F->GET['id_shopping_basket'];
-      $Shopping_Basket = $Shopping_Basket_Chain->return_basket_modify($id_shopping_basket);
-      if( $Shopping_Basket === FALSE ) $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
-   } else {
+   $Shopping_Basket = FALSE;
+      
+   if ( $Shopping_Basket_Chain->id_basket_set ) {
+      $Shopping_Basket = $Shopping_Basket_Chain->return_basket_modify($Shopping_Basket_Chain->id_basket_current);
+   }
+   
+   if( $Shopping_Basket === FALSE ) {
+      $Shopping_Basket_Chain->set_default_basket_by_date();
       $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
    }
    
    if( $Shopping_Basket === FALSE ) {
-      $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode')));
+      print_debug($Shopping_Basket, true);
+      die();
+      //$F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode')));
    }
    
    //single basket mode
@@ -82,8 +83,13 @@ if( $F->check_get('mode') || $F->check_get('action') ) {
          case 'switch_basket':
             //FIXME
             //trow some error
-            if( $P->logged_in && $F->check_get('id_shopping_basket') )
+            if( $P->logged_in && $F->check_get('id_shopping_basket') ) {
                $Shopping_Basket_Chain->set_default_basket( (int)$F->GET['id_shopping_basket'] );
+            }
+            if( $Shopping_Basket === FALSE ) {
+               $Shopping_Basket_Chain->set_default_basket_by_date();
+               $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
+            }
             else
                ;
             break;
@@ -91,7 +97,6 @@ if( $F->check_get('mode') || $F->check_get('action') ) {
             break;
       }
       $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('action,id_shopping_basket', false)) );
-   }
 } elseif( $F->check_get('show') ) {
    //show
    switch($F->GET['show']) {
