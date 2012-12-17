@@ -13,7 +13,8 @@ include "../inc/classes/ArrayToXML.php";
 
 // turn off the wsdl cache
 ini_set('soap.wsdl_cache_enabled', '0');
-
+// var_dump($soap_param_array);
+// var_dump($soap_address);
 $client = new SoapClient($soap_address, $soap_param_array);
 //$client->__setSoapHeaders( $soapHeaders );
 

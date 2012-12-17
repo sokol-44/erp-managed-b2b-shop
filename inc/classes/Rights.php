@@ -8,6 +8,7 @@
 
 if( !defined('_I_INIT') ) die();
 
+define('RIGHTS_LEVEL_NAME', 'LEVEL_');
 
 class Rights {
    static $class;
@@ -43,25 +44,72 @@ class Rights {
    private function info($method, $str) {
       if( $this->show_info ) Info::g($method, $str);
    }
+   
+   static function split_state( $state ) {
+      list($state_type, $state_lvl) = explode('_', $state);
+      return array('state_type' => $state_type, 'state_lvl' => $state_lvl,
+               'level_role' => RIGHTS_LEVEL_NAME . (int)$state_lvl,
+               'level_role_plus' => RIGHTS_LEVEL_NAME . (int)($state_lvl+1)
+            );
+   }
     
+   
+   static function get_lowest_level( ) {
+      $P = Person::g_global();
+      for($nr_level=0; $nr_level<100; $nr_level++) {
+         $level_role = RIGHTS_LEVEL_NAME . (int)$nr_level;
+         if( $P->check_roles( $level_role ) ) {
+            return $nr_level;
+         }
+      }
+      return false;
+   }
     
-   function basket_rights( $basket_params, $action, $show_info = true ) {
+   public function basket_level_rights( $basket_params) {
+      $P = Person::g_global();
+      $res_debug = '';
+
+      $state = $basket_params['state'];
+      $st = self::split_state($state);
+      
+      if( $P->check_roles($st['level_role']) ) {
+         return array(0, '#DF:0<br>');
+      } else {
+         for( $dif_lvl=1; $dif_lvl<100; $dif_lvl++ ) {
+            if( $P->check_roles(RIGHTS_LEVEL_NAME . (int)($st['state_lvl']+$dif_lvl)) ) {
+               return array('-'.$dif_lvl, '#DF:-'.$dif_lvl.'<br>');
+               break;
+            } elseif ( $P->check_roles(RIGHTS_LEVEL_NAME . (int)($st['state_lvl']-$dif_lvl)) ) {
+               return array('+'.$dif_lvl, '#DF:+'.$dif_lvl.'<br>');
+               break;
+            }
+         }
+      }
+      
+   }
+   
+   public function basket_rights( $basket_params, $action, $show_info = true ) {
       $P = Person::g_global();
       $this->show_info = $show_info;
 
       $state = $basket_params['state'];
-      list($state_type, $state_lvl) = explode('_', $state);
-
+      $st = self::split_state($state);
+      extract($st);
+      
+      //       return array('state_type' => $state_type, 'state_lvl' => $state_lvl,
+      //             'level_role' => 'LEVEL_' . (int)$state_lvl,
+      //             'level_role_plus' => 'LEVEL_' . (int)($state_lvl+1)
+      //       );
+      
+      
       //       'id_client' => 0, 'id_shopping_basket' => 0, 'id_shopping_basket_version' => 0,
       //       'id_nr_shopping_basket' => 0, 'description' => '', 'state' => '',
       //       'date_create' => null, 'date_modified' => null, 'ts_create' => 0, 'ts_modified' => 0,
       //       'using_id_client_user' => 0, 'using_session_id' => 0, 'using_date' => 0,  'ts_using' => 0);
 
-      $level_role = 'LEVEL_' . (int)$state_lvl;
-      $level_role_plus = 'LEVEL_' . (int)($state_lvl+1);
-
-      $res_debug = 'RCR:<i>' . $action . '</i>:S:' . $state . '=' . $state_type . '_' . $state_lvl . '";';
-      $res_debug .= 'u:<b>' . $basket_params['using_id_client_user'] .'</b>: '.$basket_params['using_session_id'];
+      //$res_debug = 'RCR:<i>' . $action . '</i>:S:' . $state . '=' . state_type . '_' . $state_lvl . '";';
+      $res_debug = 'RCR:<i>' . $action . '</i>:';
+      $res_debug .= 'u:<b>' . $basket_params['using_id_client_user'] .'</b>: '.$basket_params['using_session_id'] . '<br>';
 
       switch( $action ) {
 // ---------------------------------------------------------------------------------------------------- //

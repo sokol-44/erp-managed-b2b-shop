@@ -90,6 +90,18 @@ Basket list
 	background-color: moccasin;
 }
 
+.lockedbasket_user {
+	background-color: yellow;
+}
+
+.lockedbasket_other {
+	background-color: blue;
+}
+
+.na_basket {
+	background-color: lightgrey;
+}
+
 .basket_number {
 	padding: 0px 0 5px 0;
 	border-bottom: 1px dotted brown;

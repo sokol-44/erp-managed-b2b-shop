@@ -4,15 +4,23 @@ function test_doClientAdd( $client ) {
    echo "test_doClientAdd\n";
    //$in_o = array( 0 => new ClientData('dupa'), new ClientData('dupaq'));
    $in_o = new stdClass();
-   $in_o->values = array( 'ala' => new ClientData('dupa'), 'ola' => new ClientData('dupaq'));
-   print_r($in_o);
-   $in_o_x = ArrayToXML::toXml($in_o);
-   print("" . xml_b( $in_o_x ). '<br>');
-   $resC = $client->doClientAdd($in_o_x);
+   $in_o = array( 'value_1' => new ClientData('dupa') ,  'value_2' => new ClientData('foobar_dupa'));
+   //$in_o->value = new ClientData('dupa');
+   //print_r($in_o);
+   $in_o_x = ArrayToXML::toXml($in_o, 'DocumentElement');
+   //echo $in_o_x;
+   //print("" . xml_b( $in_o_x ). '<br>');
+   try {
+	$resC = $client->doClientAdd($in_o_x);
+	} catch (Exception $e) {
+    var_dump($e);
+    var_dump($client->__last_response);
+}
    //$resC = $client->doClientAdd('dupa');
    // print_lr( $client );
    //print("" . print_r( unserialize($resC), true). '<br>');
    //echo 'res:';
+   //var_dump($client->__last_response);
    print("" . xml_b( $resC ). '<br>');
 }
 
@@ -30,10 +38,13 @@ function test_doClientChange( $client ) {
 function test_doClientUserAdd( $client ) {
    echo "test_doClientUserAdd\n";
    $in_o = new stdClass();
-   $in_o->values = array( 0 => new ClientUserData('dupa'), new ClientUserData('dupaq'));
-   print_r($in_o);
-   $resC = $client->doClientUserAdd($in_o);
+   $in_o->DocumentElement = array( 'value' => new ClientUserData('dupa'), 'element_2' => new ClientUserData('dupaq'));
+   //print_r($in_o);
+   $in_o_x = ArrayToXML::toXml($in_o);
+   print("" . xml_b( $in_o_x ). '<br>');
+   $resC = $client->doClientUserAdd($in_o_x);
    //print_lr( $client );
+   //print("" . print_r( $resC, true). '<br>');
    print("" . print_r( $resC, true). '<br>');
 }
 
@@ -97,11 +108,14 @@ function test_doClientUserSetPassword( $client ) {
 function test_doProductAdd( $client ) {
    echo "test_doProductAdd\n";
    $in_o = new stdClass();
-   $in_o->values = array( 0 => new ProductData('dupa'), new ProductData('dupaq'));
-   print_r($in_o);
-   $resC = $client->doProductAdd($in_o, 'test_doProductChange');
+   $in_o->values = array( 'element_1' => new ProductData('dupa'), 'element_2' => new ProductData('dupaq'));
+   //print_r($in_o);
+   $in_o_x = ArrayToXML::toXml($in_o);
+   print("" . xml_b( $in_o_x ). '<br>');
+   $resC = $client->doProductAdd($in_o_x, 'test_doProductAdd');
    //print_lr( $client );
-   print("" . print_r( $resC, true). '<br>');
+   //print("" . print_r( $resC, true). '<br>');
+   print("" . xml_b( $resC ). '<br>');
 }
 
 function test_doProductChange( $client ) {
@@ -130,12 +144,15 @@ function test_setProductClientPrice( $client ) {
 function test_doCategoryAdd( $client ) {
    echo "test_doCategoryAdd\n";
    $in_o = new stdClass();
-   $in_o->values = array( 0 => new CategoryData('dupa'), new CategoryData('dupaq'));
+   $in_o->values = array('element_1' => new CategoryData('dupa'), 'element_2' => new CategoryData('dupaq'));
    //$in_o = 'test';
-   print_r($in_o);
-   $resC = $client->doCategoryAdd($in_o);
+   //print_r($in_o);
+   $in_o_x = ArrayToXML::toXml($in_o);
+   print("" . xml_b( $in_o_x ). '<br>');
+   $resC = $client->doCategoryAdd($in_o_x);
    //print_lr( $client );
-   print("" . print_r( $resC, true). '<br>');
+   //print("" . print_r( $resC, true). '<br>');
+   print("" . xml_b( $resC ). '<br>');
 }
 
 function test_doCategoryEdit( $client ) {
@@ -165,10 +182,13 @@ function test_setProduct2Category( $client ) {
    $in_o = new stdClass();
    $in_o->values = array( 0 => new Product2Category('dupa'), new Product2Category('dupaq'));
    //$in_o = 'test';
-   print_r($in_o);
-   $resC = $client->setProduct2Category($in_o);
+   //print_r($in_o);
+   $in_o_x = ArrayToXML::toXml($in_o);
+   print("" . xml_b( $in_o_x ). '<br>');
+   $resC = $client->setProduct2Category($in_o_x);
    //print_lr( $client );
-   print("" . print_r( $resC, true). '<br>');
+   //print("" . print_r( $resC, true). '<br>');
+   print("" . xml_b( $resC ). '<br>');
 }
 
 

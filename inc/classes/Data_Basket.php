@@ -186,11 +186,24 @@ class Data_Basket extends Data_Order {
       return true;
    }
    
+   static function put_basket_update_lock_data($basket_params) {
+       self::put_basket_update_use_data( $basket_params );
+   }
+   
    static function put_basket_update_use_data($basket_params) {
+
+      if( (int)$basket_params['using_id_client_user']>0 ) {
+         $sql_set_m = ', date_modified = now() ';
+      } else {
+         $sql_set_m = '';
+      }
+      
+      
       $update_query = 'update ' . TBL_SHOP_SHOPPING_BASKET . ' set
          using_id_client_user = ' . db_int($basket_params['using_id_client_user']) . ',
-         using_session_id = "' . db_escape($basket_params['using_session_id']) . '"
-         where id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']);
+         using_session_id = "' . db_escape($basket_params['using_session_id']) . '",
+         state = "' . db_escape($basket_params['state']) . '"
+         ' . $sql_set_m . ' where id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']);
       db_query( $update_query );
       
       return true;
@@ -212,8 +225,8 @@ class Data_Basket extends Data_Order {
          quantity = ' . db_int($details['quantity']) . ', date_added = now()';
          db_query( $insert_query );
       }
-      //      print_debug($basket_params);
-      //      print_debug($basket_contents);
+      // print_debug($basket_params);
+      // print_debug($basket_contents);
       // db_transaction_end();
    }
    
@@ -231,12 +244,12 @@ class Data_Basket extends Data_Order {
       id_client, id_client_user, date_created, date_modified,
       UNIX_TIMESTAMP(date_created) as ts_created, UNIX_TIMESTAMP(date_modified) as ts_modified
       from ' . TBL_SHOP_SHOPPING_BASKET_VERSION . '
-      where id_shopping_basket_version = ' . (int)$id_shopping_basket_version;
+      where id_shopping_basket_version = ' . db_int($id_shopping_basket_version);
       $basket_new_version_res = db_query( $basket_new_version );
       $basket_new_version = db_fetch_array($basket_new_version_res, 0);
       
       $FD = File_Debug::g_global();
-      $FD->s(array('id_shopping_basket_version' => $id_shopping_basket_version, '$basket_new_version' => $basket_new_version));
+      $FD->s(array('id_shopping_basket_version' => (int)$id_shopping_basket_version, '$basket_new_version' => $basket_new_version));
       
       return $basket_new_version;
    }

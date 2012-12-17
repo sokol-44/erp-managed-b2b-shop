@@ -11,6 +11,7 @@ $soap_param_array = array(
 );
 
 $soap_address = 'http://b2b_sklep.localhost/SOAP/shop_control.wsdl';
+//$soap_address = 'http://sklep-b2b.pl/SOAP/shop_control.wsdl';
 
 function add_to_fp($str) {
    global $fp;

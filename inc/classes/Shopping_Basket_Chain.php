@@ -76,7 +76,7 @@ class Shopping_Basket_Chain {
    }
 
    public function add_basket( $force = false ) {
-      echo 'x' . sizeof($this->Basket_List) . ',' . self::$max_basket . 'x';
+      echo 'xbc:<b>' . sizeof($this->Basket_List) . '</b>,mb<b>' . self::$max_basket . '</b>,' . ($force?'t':'f') . 'x<br>';
       if( sizeof($this->Basket_List) < self::$max_basket ) {
          for( $id_sb = 1; $id_sb <= self::$max_basket ; $id_sb++ ){
             if( !$this->_check_valid_basket($id_sb) ) {
@@ -177,6 +177,32 @@ class Shopping_Basket_Chain {
       }
    }
 
+   public function set_lock_basket( $id_shopping_basket = 0 ) {
+       
+      if( $this->_check_valid_basket($id_shopping_basket) &&
+            $this->Basket_List[ $id_shopping_basket ]->check_rights('MODIFY_CONTENTS') &&
+            $this->Basket_List[ $id_shopping_basket ]->check_rights('LOCK') ) {
+         //$this->id_basket_set = true;
+         $this->Basket_List[ $id_shopping_basket ]->state_lock_set();
+         return true;
+      } else {
+         return false;
+      }
+   }
+
+   public function set_unlock_basket( $id_shopping_basket = 0 ) {
+       
+      if( $this->_check_valid_basket($id_shopping_basket) &&
+            $this->Basket_List[ $id_shopping_basket ]->check_rights('MODIFY_CONTENTS') &&
+            $this->Basket_List[ $id_shopping_basket ]->check_rights('UNLOCK') ) {
+         //$this->id_basket_set = true;
+         $this->Basket_List[ $id_shopping_basket ]->state_lock_unset( $this->id_basket_current );
+         return true;
+      } else {
+         return false;
+      }
+   }
+
    public function set_default_basket( $id_shopping_basket = 0 ) {
        
       if( $this->_check_valid_basket($id_shopping_basket) &&
@@ -193,10 +219,10 @@ class Shopping_Basket_Chain {
    
    private function _switch_default_basket( $id_shopping_basket ) {
       if( $this->_check_valid_basket($this->id_basket_current) ) {
-         $this->Basket_List[ $this->id_basket_current ]->using_clear();
+         $this->Basket_List[ $this->id_basket_current ]->state_using_clear();
       }
       $this->id_basket_current = $id_shopping_basket;
-      $this->Basket_List[ $this->id_basket_current ]->using_get();
+      $this->Basket_List[ $this->id_basket_current ]->state_using_get();
    }
    
 

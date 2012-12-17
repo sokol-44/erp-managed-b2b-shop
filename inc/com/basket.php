@@ -80,6 +80,23 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
             else
                ;
             break;
+         case 'lock_basket':
+            //FIXME
+            //trow some error
+            if( $F->check_get('id_shopping_basket') )
+               $Shopping_Basket_Chain->set_lock_basket( (int)$F->GET['id_shopping_basket'] );
+            else
+               ;
+            break;
+         case 'unlock_basket':
+            //FIXME
+            //trow some error
+            if( $F->check_get('id_shopping_basket') ) {
+               var_dump( $Shopping_Basket_Chain->set_unlock_basket( (int)$F->GET['id_shopping_basket'] ) ) ;
+               die();
+            } else
+               ;
+            break;
          case 'switch_basket':
             //FIXME
             //trow some error

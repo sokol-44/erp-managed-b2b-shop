@@ -307,14 +307,14 @@ class StatusData {
    public $status = '';
 
    function __construct($add = 'null', $string_add = '') {
-      if( !is_object($add) ) {
+      if( is_object($add) || is_array($add) ) {
+      add_to_fp( 'StatusData _in ' . var_export($add, true) );
+         $this->_fill_response($add, $string_add);
+         //add_to_fp( print_r($this, true) );
+      } else {
          $this->id = strlen($add) + 10;
          $this->additional_data = $add . '$additional_data';
          $this->status = $add . '$status';
-      } else {
-         //add_to_fp( print_r($add, true) );
-         $this->_fill_response($add, $string_add);
-         //add_to_fp( print_r($this, true) );
       }
    }
 
@@ -339,13 +339,13 @@ class StatusDoubleData {
    public $status = '';
 
    function __construct($add = 'null', $string_add = '') {
-      if( !is_object($add) ) {
+      if( is_object($add) || is_array($add) ) {
+         $this->_fill_response($add, $string_add);
+      } else {
          $this->id_one = strlen($add) + 10;
          $this->id_two = strlen($add) + 20;
          $this->additional_data = $add . '$additional_data';
          $this->status = $add . '$status';
-      } else {
-         $this->_fill_response($add, $string_add);
       }
    }
 

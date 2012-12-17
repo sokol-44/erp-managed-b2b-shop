@@ -30,6 +30,7 @@ if( $hdr=='' ) {
 // fwrite($fp, "_POST\n" . print_r($_POST, true));
 // fwrite($fp, "HTTP_RAW_POST_DATA\n" . print_r($HTTP_RAW_POST_DATA, true));
 //fwrite($fp, "_SERVER[HTTP_SOAPACTION]\n" . $_SERVER['HTTP_SOAPACTION'] . "\n\n");
+// add_to_fp("_SERVER[HTTP_SOAPACTION]\n" . $_SERVER['HTTP_SOAPACTION'] . "\n\n");
 
 // turn off the wsdl cache
 ini_set('soap.wsdl_cache_enabled', '0');

@@ -67,6 +67,7 @@ include(DIR_INC_CLASSES . DS . 'BackTrail.php');
 include(DIR_INC_CLASSES . DS . 'Order.php');
 include(DIR_INC_CLASSES . DS . 'Mail.php');
 include(DIR_INC_CLASSES . DS . 'Mail2Send.php');
+include(DIR_INC_CLASSES . DS . 'Rights.php');
 
 /**
  * initialize engine
@@ -85,6 +86,7 @@ if ( function_exists('ini_get') && (ini_get('register_globals') == false) ) {
 $F = new Framework();
 $Page = new Page();
 $Lang = new Lang();
+$Rights = new Rights();
 
 /**
  * session objects
