@@ -28,7 +28,7 @@ class ArrayToXML
       foreach($data as $key => $value)
       {
          $key_a = explode('_', $key);
-         if( is_array($key_a) && sizeof($key_a)==2 ) {
+         if( is_array($key_a) && sizeof($key_a)==2 && $key_a[0] != 'id') {
             $xml_key = $key_a[0];
          } else {
             $xml_key = $key;

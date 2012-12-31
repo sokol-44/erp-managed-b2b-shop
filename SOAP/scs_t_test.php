@@ -3,10 +3,13 @@
 function test_doClientAdd( $client ) {
    echo "test_doClientAdd\n";
    //$in_o = array( 0 => new ClientData('dupa'), new ClientData('dupaq'));
-   $in_o = new stdClass();
-   $in_o = array( 'value_1' => new ClientData('dupa') ,  'value_2' => new ClientData('foobar_dupa'));
+   //$in_o = new stdClass();
+   //$in_o = array( 'value_1' => new ClientData('dupa') ,  'value_2' => new ClientData('foobar_dupa'));
+   $c1 = new ClientData('dupa');
+   $c2 = new ClientData('foobar_dupa');
+   $in_o = array( 'value_1' => $c1->return_array(),  'value_2' => $c2->return_array());
    //$in_o->value = new ClientData('dupa');
-   //print_r($in_o);
+   print_r($in_o);
    $in_o_x = ArrayToXML::toXml($in_o, 'DocumentElement');
    //echo $in_o_x;
    //print("" . xml_b( $in_o_x ). '<br>');
@@ -38,7 +41,11 @@ function test_doClientChange( $client ) {
 function test_doClientUserAdd( $client ) {
    echo "test_doClientUserAdd\n";
    $in_o = new stdClass();
-   $in_o->DocumentElement = array( 'value' => new ClientUserData('dupa'), 'element_2' => new ClientUserData('dupaq'));
+   //$in_o->DocumentElement = array( 'value' => new ClientUserData('dupa'), 'element_2' => new ClientUserData('dupaq'));
+   $c1 = new ClientUserData('dupa');
+   $c2 = new ClientUserData('foobar_dupa');
+   //var_dump($c1);
+   $in_o = array( 'value_1' => $c1->return_array(),  'value_2' => $c2->return_array());
    //print_r($in_o);
    $in_o_x = ArrayToXML::toXml($in_o);
    print("" . xml_b( $in_o_x ). '<br>');

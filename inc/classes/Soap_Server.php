@@ -32,15 +32,12 @@ class Soap_Server {
    function __construct() {
       $this->nr_req++;
       add_to_fp("Soap_Server.php\n");
-      add_to_fp(print_r($this, true));
       $this->__init_worker();
    }
   
    
    function call_worker($name, array $arguments) {
-      //$arguments = array( $input ) ; $input->values = array();
       $xml_data = $this->translate_xml($arguments);
-      //add_to_fp(print_r($xml_data, true));
       $response = call_user_func_array( array($this->worker, $name), array($xml_data));
       add_to_fp(print_r($response, true));
       return $response;
@@ -56,12 +53,12 @@ class Soap_Server {
    }
    
    function __call($name, array $arguments) {
-      if(method_exists($this->worker,$name)) {
+      if(strstr($name, '_') === FALSE && method_exists($this->worker,$name)) {
          return $this->call_worker($name, $arguments);//Request
          ///call_user_func_array( array($this->worker, $name), $arguments);
          //$this->worker->${var_name}();
       } else {
-         
+         return false;
       }
    }
 

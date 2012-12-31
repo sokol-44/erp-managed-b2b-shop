@@ -2,7 +2,6 @@
 include "init.php";
 
 include "scs_t_function.php";
-include "scs_t_class.php";
 
 $utime_array = explode(' ', microtime());
 

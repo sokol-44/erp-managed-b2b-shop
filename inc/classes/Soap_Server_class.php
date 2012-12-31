@@ -8,163 +8,187 @@
 //
 //}
 
-class ClientData {
-   public $id_client = '';
-   public $name = '';
-   public $description = '';
-   public $email = '';
-   public $phone = '';
-   public $state = '';
-
-   function __construct($add = 'null', $string_add = '') {
-      if( !is_object($add) ) {
-         $this->id_client = strlen($add) + 10000;
-         $this->name = $add . '$name';
-         $this->description = $add . '$description';
-         $this->email = $add . '$email';
-         $this->phone = $add . '$phone';
-         $this->state = $add . '$state';
+class BasicSOAPDataMethods { /* implements ArrayAccess */
+   private $values = array();
+   private $new = false;
+   private $status = array('NR' => -1, 'TXT' => '');
+   private $error = array();
+   private $warning = array();
+   // placeholder for upper class
+   public $list = array();
+   public $list_new = array();
+   public $list_update = array();
+   /*
+    * klasy:
+    * - sprawdzajaca instnienie, wraz z tym czy musi istniec
+    *    list, list_new, list_update
+    * - sprawdzajaca predefiniowane typy (int, email, ito)
+    * - zwracająca atrybuty jako tablica (do XML)
+    * - wczytująca atrybuty z tablicy
+    * - zwracajaca atrybury do sql (z escape) oraz uwzglednieniem intert(new)/update
+    * - ogolna obsługa błedów (nieprawidłowych elementów
+    */
+   public function __construct( $input = false, $new = true ) {
+      $this->new = (bool)$new;
+      if( $input ) {
+         if( is_string($input) ) {
+            $input = $this->fill_object( $input );
+         } else {
+            $input = array();
+         }
       } else {
-         $this->_fill_response($add);
+         $input = array();
       }
+      
+      $this->load_array( $input );
+      //var_dump($this);
    }
-
-
-   function _fill_response( $obj ) {
-      $this->id_client = 0;
-      $this->name = '';
-      $this->description = '';
-      $this->email = '';
-      $this->phone = '';
-      $this->state = '';
-      foreach( $obj as $key => $variable ) {
-         if( substr($key, 0, 2) == 'id' ) {
-            $this->id_client = $variable;
-            break;
-         }
+   
+   public function init( $new = false ) {
+      $this->new = (bool)$new;
+   }
+   
+   public function load_array( array $input ) {
+      $this->check_list($input);
+      $this->check_list_need();
+      
+      //TODO somethinig with error
+      if( $this->is_error() ) {
+         return false;
       }
-      return $this;
+      return true;
    }
-}
-
-
-class ClientUserData {
-   public $id_client_user = '';
-   public $id_client = '';
-   public $login = '';
-   public $password = '';
-   public $password_salt = '';
-   public $description = '';
-   public $name = '';
-   public $email = '';
-   public $created = '';
-   public $last_login = '';
-   public $state = '';
-
-
-   function __construct($add = 'null', $string_add = '') {
-      if( !is_object($add) ) {
-         $this->id_client_user = strlen($add) + 10000;
-         $this->id_client = strlen($add) + 20000;
-         $this->login = $add . '$login';
-         $this->password = $add . '$password';
-         $this->password_salt = $add . '$password_salt';
-         $this->description = $add . '$description';
-         $this->name = $add . '$name';
-         $this->email = $add . '$email';
-         $this->created = data_data();
-         $this->last_login = data_data();
-         $this->state = $add . '$state';
+   
+   public function return_array() {
+      if( $this->is_error() ) {
+         return array();
       } else {
-         $this->_fill_response($add);
+         return $this->values;
       }
    }
+   
+   
+   private function is_error() {
+      if( sizeof( $this->error ) > 0 ) {
+         return true;
+      }
+      return false;
+   }
 
-   function _fill_response( $obj ) {
-      $this->id_client_user = 0;
-      $this->id_client = 0;
-      $this->login = '';
-      $this->password = '';
-      $this->password_salt = '';
-      $this->description = '';
-      $this->name = '';
-      $this->email = '';
-      $this->created = '';
-      $this->last_login = '';
-      $this->state = '';
-      foreach( $obj as $key => $variable ) {
-         if( substr($key, 0, 2) == 'id' ) {
-            if( !$first_id_name && $key != $first_id_name) {
-               $first_id_name = $key;
-               $this->id_client_user = $variable;
-            } else {
-               $this->id_client = $variable;
-               break;
-            }
+   private function get_local_list() {
+      if( $this->new ) {
+         return $this->list_new;
+      } else {
+         return $this->list_update;
+      }
+      
+   }
+   
+   private function check_list_need(  ) {
+      
+      $local_list = $this->get_local_list();
+      
+      foreach( $local_list as $new_key ) {
+         if( isset($this->values[$new_key]) && !empty($this->values[$new_key]) ) {
+            //
+         } else {
+            $this->error[] = array('check_list_'.(($this->new)?'new':'update'), $new_key);
          }
       }
-      return $this;
+   }
+   
+   private function check_list( $input ) {
+      foreach ($input as $key => $val ) {
+       if( !empty($val) && in_array($key, $this->list) ) {
+            $this->values[$key] = $val;
+         } else {
+            $this->warning[] = array('check_list', $key.'=>'.$val);
+         }
+      }
+   }
+   
+   public function fill_object($add = 'null') {
+      if( !is_object($add) || !method_exists($add,'return_array') ) {
+          $local_list = $this->get_local_list();
+          $first_id_name = false;
+          
+          foreach( $local_list as $new_key ) {
+             if( substr($new_key, 0, 2) == 'id' ) {
+                if( !$first_id_name && $new_key != $first_id_name) {
+                   $first_id_name = $new_key;
+
+                   echo "#$new_key#1!";
+                   $values[$new_key] = strlen($add) + rand(10,100);
+                } else {
+                   echo "#$new_key#2!";
+                   $values[$new_key] = strlen($add) + rand(1010,1100);
+                }
+                continue;
+             }
+             $values[$new_key] = $add . ' ' . time() . ' ' . $new_key;
+          }
+      } else {
+         $values = $add->return_array();
+      }
+      return $values;
    }
 
+   /*
+   public function offsetSet($offset, $value) {
+      if (is_null($offset)) {
+         $this->values[] = $value;
+      } else {
+         $this->values[$offset] = $value;
+      }
+   }
+   
+   public function offsetExists($offset) {
+      return isset($this->container[$offset]);
+   }
+   
+   public function offsetUnset($offset) {
+      unset($this->values[$offset]);
+   }
+   
+   public function offsetGet($offset) {
+      return isset($this->values[$offset]) ? $this->values[$offset] : null;
+   }
+   */
+}
+/*
+ * atrybuty w tablicach:
+ * - lista elementów
+ * - wymagane elementy dla nowy/update
+ */
+
+class ClientData extends BasicSOAPDataMethods {
+   public $list = array('id_client', 'name', 'description', 'email', 'phone', 'state');
+   public $list_new = array('id_client', 'name');
+   public $list_update = array('id_client');
 
 }
 
-class ClientUserPassword {
-   public $id_client_user = '';
-   public $id_client = '';
-   public $password = '';
-   public $password_salt = '';
 
+class ClientUserData extends BasicSOAPDataMethods {
+   public $list = array('id_client_user', 'id_client', 'login', 'password', 'password_salt',
+         'description', 'name', 'email', 'created', 'last_login', 'state');
+   public $list_new = array('id_client_user', 'id_client', 'login', 'password', 'name', 'email');
+   public $list_update = array('id_client_user', 'id_client');
 
-   function __construct($add = 'null', $string_add = '') {
-      $this->id_client_user = strlen($add) + 10000;
-      $this->id_client = strlen($add) + 20000;
-      $this->password = $add . '$password';
-      $this->password_salt = $add . '$password_salt';
-   }
+}
+
+class ClientUserPassword extends BasicSOAPDataMethods {
+   public $list = array('id_client_user', 'id_client', 'password', 'password_salt');
+   public $list_new = array('id_client_user', 'id_client', 'password');
+   public $list_update = array('id_client_user', 'id_client', 'password');
 }
 
 
-class CategoryData {
-   public $id_category = '';
-   public $id_category_parent = '';
-   public $sort_order = '';
-   public $root_number = '';
-   public $name = '';
-   public $description = '';
-   public $date_added = '';
-   public $date_modified = '';
-
-
-   function __construct($add = 'null', $string_add = '') {
-      $this->id_category = strlen($add) + 10000;
-      $this->id_category_parent = strlen($add) + 20000;
-      $this->sort_order = strlen($add) + 30000;
-      $this->root_number = strlen($add)%2;
-      $this->name = $add . '$name';
-      $this->description = $add . '$description' . $string_add;
-      $this->date_added = data_data();
-      $this->date_modified = data_data();
-   }
-
-   function _fill_response( $obj ) {
-      $this->id_category = 0;
-      $this->id_category_parent = 0;
-      $this->sort_order = 0;
-      $this->root_number = 0;
-      $this->name = '';
-      $this->description = '';
-      $this->date_added = '';
-      $this->date_modified = '';
-      foreach( $obj as $key => $variable ) {
-         if( substr($key, 0, 2) == 'id' ) {
-            $this->id_category = $variable;
-            break;
-         }
-      }
-      return $this;
-   }
-
+class CategoryData extends BasicSOAPDataMethods {
+   public $list = array('id_category', 'id_category_parent', 'sort_order', 'root_number', 'name', 'description',
+         'date_added', 'date_modified');
+   public $list_new = array('id_category', 'id_category_parent', 'name');
+   public $list_update = array('id_category', 'id_category_parent');
 }
 
 
