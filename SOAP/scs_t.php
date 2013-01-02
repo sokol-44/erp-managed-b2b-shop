@@ -11,6 +11,9 @@ include "scs_t_test.php";
 include "../inc/classes/ArrayToXML.php";
 include "../inc/classes/Soap_Server_class.php";
 
+$fp = false;
+$fp_xml = false;
+
 // turn off the wsdl cache
 ini_set('soap.wsdl_cache_enabled', '0');
 // var_dump($soap_param_array);
@@ -22,7 +25,7 @@ $client = new SoapClient($soap_address, $soap_param_array);
 // Test Client/User
 // test_doClientAdd( $client );
 // test_doClientChange( $client );
-test_doClientUserAdd( $client );
+// test_doClientUserAdd( $client );
 // test_doClientUserChange( $client );
 // test_doClientUserSetPassword( $client );
 // test_doClientUserDelete( $client );
@@ -35,7 +38,7 @@ test_doClientUserAdd( $client );
 // test_doCategoryEdit( $client );
 // test_doCategoryDelete( $client );
 // test_setProduct2Category( $client );
-// test_getProductList( $client );
+test_getProductList( $client );
 // test_getProductListFromCategory( $client );
 // test_getCategoryList( $client );
 // test_getClientPriceList( $client );

@@ -201,11 +201,26 @@ function test_setProduct2Category( $client ) {
 
 function test_getProductList( $client ) {
    echo "test_getProductList\n";
-   $in_oo = new ParamStartLength('dupa');
+   //$in_oo = new ParamStartLength('dupa');
+   $in_oo = new ParamStartLength(array('id_start' => '1', 'length' => '5'));
+   //var_dump($in_oo);
+   if( $in_oo->is_error() ) print_r(array('error' => $in_oo->return_error(), 'warning' => $in_oo->return_warning()) );
+   //$resC = $client->getOrderList( $in_oo);
+   //print_r("IN:".$in_oo->return_array());
+   $in_o = array( 'value_1' => $in_oo->return_array() );
+   $in_o_x = ArrayToXML::toXml($in_o, 'DocumentElement');
+   //echo $in_o_x;
+   print("IN:" . xml_b( $in_o_x ). '<br>');
+   try {
+      $resC = $client->getProductList($in_o_x);
+   } catch (Exception $e) {
+      var_dump($e);
+      var_dump($client->__last_response);
+   }
    //print_r($in_oo);
-   $resC = $client->getProductList( $in_oo );
+   ///$resC = $client->getProductList( $in_oo );
    //print_lr( $client );
-   print_r($resC);
+   print("RES:" . xml_b( $resC ). '<br>');
 }
 
 function test_getProductListFromCategory( $client ) {
@@ -267,10 +282,22 @@ function test_getOrderListNew( $client ) {
 function test_getOrderList( $client ) {
    echo "test_getOrderList\n";
    $in_oo = new ParamStartLength('dupa');
-   print_r($in_oo);
-   $resC = $client->getOrderList( $in_oo );
+  //print_r($in_oo);
+   //$resC = $client->getOrderList( $in_oo);
+   print_r($in_oo->return_array());
+   $in_o = array( 'value_1' => $in_oo->return_array() );
+   $in_o_x = ArrayToXML::toXml($in_o, 'DocumentElement');
+   //echo $in_o_x;
+   print("" . xml_b( $in_o_x ). '<br>');
+   try {
+	$resC = $client->getOrderList($in_o_x);
+	} catch (Exception $e) {
+    var_dump($e);
+    var_dump($client->__last_response);
+}
+   print("" . xml_b( $resC ). '<br>');
    //print_lr( $client );
-   print_r($resC);
+   //print_r($resC);
 }
 
 function test_setOrderStatus( $client ) {

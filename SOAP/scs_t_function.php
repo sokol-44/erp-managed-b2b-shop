@@ -15,14 +15,14 @@ $soap_address = 'http://b2b_sklep.localhost/SOAP/shop_control.wsdl';
 
 function add_to_fp($str) {
    global $fp;
+
    if( isset($fp) && is_resource($fp) ) {
       //fwrite($fp, print_r(debug_backtrace(), true));
       fwrite($fp, "\n--> " . microtime(true) . "\n");
       fwrite($fp, $str);
       fwrite($fp, "\n<--\n");
    } else {
-      
-      die();
+
    }
    
 }

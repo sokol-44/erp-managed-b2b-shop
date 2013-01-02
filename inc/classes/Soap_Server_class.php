@@ -11,6 +11,7 @@
 class BasicSOAPDataMethods { /* implements ArrayAccess */
    private $values = array();
    private $new = false;
+   private $full = false;
    private $status = array('NR' => -1, 'TXT' => '');
    private $error = array();
    private $warning = array();
@@ -28,11 +29,15 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
     * - zwracajaca atrybury do sql (z escape) oraz uwzglednieniem intert(new)/update
     * - ogolna obsługa błedów (nieprawidłowych elementów
     */
-   public function __construct( $input = false, $new = true ) {
-      $this->new = (bool)$new;
+   public function __construct( $input = false, $type = true ) {
+      $this->init($type);
+      
       if( $input ) {
          if( is_string($input) ) {
             $input = $this->fill_object( $input );
+         } elseif (is_array($input) ) {
+            //ok -> $input = $input;
+            add_to_fp("input_array\n");
          } else {
             $input = array();
          }
@@ -41,11 +46,22 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
       }
       
       $this->load_array( $input );
+//       add_to_fp(print_r($this, true)."\n");
       //var_dump($this);
+      
    }
    
-   public function init( $new = false ) {
-      $this->new = (bool)$new;
+   public function init( $type ) {
+      if( !$type || empty($type) || $type == 'NEW') {
+         $this->new = true;
+         $this->full = false;
+      } elseif ($type == 'FULL') {
+         $this->new = false;
+         $this->full = true;
+      } else {
+         $this->new = false;
+         $this->full = false;
+      }
    }
    
    public function load_array( array $input ) {
@@ -67,8 +83,18 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
       }
    }
    
-   
-   private function is_error() {
+   public function return_list() {
+      return compact( $this->list );
+   }
+
+   public function return_error() {
+      return $this->error;
+   }
+   public function return_warning() {
+      return $this->warning;
+   }
+       
+   public function is_error() {
       if( sizeof( $this->error ) > 0 ) {
          return true;
       }
@@ -76,7 +102,9 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
    }
 
    private function get_local_list() {
-      if( $this->new ) {
+      if( $this->full ) {
+         return $this->list;
+      } elseif( $this->new ) {
          return $this->list_new;
       } else {
          return $this->list_update;
@@ -92,12 +120,13 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
          if( isset($this->values[$new_key]) && !empty($this->values[$new_key]) ) {
             //
          } else {
-            $this->error[] = array('check_list_'.(($this->new)?'new':'update'), $new_key);
+            $this->error[] = array('check_list_'.(($this->new)?'new':'update'), $new_key, $this->values[$new_key]);
          }
       }
    }
    
    private function check_list( $input ) {
+      var_dump($input);
       foreach ($input as $key => $val ) {
        if( !empty($val) && in_array($key, $this->list) ) {
             $this->values[$key] = $val;
@@ -117,10 +146,8 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
                 if( !$first_id_name && $new_key != $first_id_name) {
                    $first_id_name = $new_key;
 
-                   echo "#$new_key#1!";
                    $values[$new_key] = strlen($add) + rand(10,100);
                 } else {
-                   echo "#$new_key#2!";
                    $values[$new_key] = strlen($add) + rand(1010,1100);
                 }
                 continue;
@@ -192,156 +219,66 @@ class CategoryData extends BasicSOAPDataMethods {
 }
 
 
-class OrderData {
-   public $id_order = '';
-   public $id_client = '';
-   public $date_create = '';
-   public $date_modified = '';
-   public $id_order_status = '';
-   public $hidden_status = '';
-   public $description = '';
-   public $description_basket = '';
-
-
-   function __construct($add = 'null', $string_add = '') {
-      $this->id_order = strlen($add) + 10000;
-      $this->id_client = strlen($add) + 20000;
-      $this->date_create = data_data();
-      $this->date_modified = data_data();
-      $this->id_order_status = strlen($add) + 30000;
-      $this->hidden_status = strlen($add)%2;
-      $this->description = $add . '$description' . $string_add;
-      $this->description_basket = $add . '$description_basket';
-   }
+class OrderData extends BasicSOAPDataMethods {
+   public $list = array('id_order', 'id_client', 'date_create', 'date_modified', 'id_order_status',
+          'hidden_status', 'description', 'description_basket');
+   public $list_new = array('id_order', 'id_client');
+   public $list_update = array('id_order', 'id_client');
 }
 
-class OrderStatus {
-   public $id_order_status = '';
-   public $id_order = '';
-   public $timestamp = '';
-   public $description = '';
-
-
-   function __construct($add = 'null', $string_add = '') {
-      $this->id_order_status = strlen($add) + 10000;
-      $this->id_order = strlen($add) + 20000;
-      $this->timestamp = data_data();
-      $this->description = data_data() . $string_add;
-   }
+class OrderStatus extends BasicSOAPDataMethods {
+   public $list = array('id_order_status', 'id_order', 'timestamp', 'description');
+   public $list_new = array('id_order_status', 'id_order');
+   public $list_update = array('id_order_status', 'id_order');
 }
 
 
-class Product2Category {
-   public $id_product = '';
-   public $id_category = '';
-
-   function __construct($add = 'null', $string_add = '') {
-      $this->id_product = strlen($add) + 10000;
-      $this->id_category = strlen($add) + 20000;
-   }
+class Product2Category extends BasicSOAPDataMethods {
+   public $list = array('id_product', 'id_category');
+   public $list_new = array('id_product', 'id_category');
+   public $list_update = array('id_product', 'id_category');
 }
 
 
-class ProductData {
-   public $id_product = '';
-   public $name = '';
-   public $description = '';
-   public $picture_small_url = '';
-   public $picture_big_url = '';
-   public $picture_id = '';
-   public $price = '';
-   public $vat = '';
-   public $quantity = '';
-   public $status= '';
-
-   function __construct($add = 'null', $string_add = '') {
-      $this->id_product = strlen($add) + 10000;
-      $this->name = $add . '$name';
-      $this->description = $add . '$description';
-      $this->picture_small_url = $add . '$picture_small_url';
-      $this->picture_big_url = $add . '$picture_big_url';
-      $this->picture_id = 0;
-      $this->price = strlen($add) + 10000;
-      $this->vat = strlen($add)%23;
-      $this->quantity = strlen($add)%3;
-      $this->status = $add . '$picture_big_url' . $string_add;
-   }
+class ProductData extends BasicSOAPDataMethods {
+   public $list = array('id_product', 'name', 'description', 'picture_small_url', 'picture_big_url',
+          'picture_id', 'price', 'vat', 'quantity', 'status');
+   public $list_new = array('id_product', 'price', 'vat', 'quantity');
+   public $list_update = array('id_product');
 }
 
 
-class ProductClientPriceData {
-   public $id_product = '';
-   public $id_client = '';
-   public $price = '';
-   public $vat = '';
-
-   function __construct($add = 'null', $string_add = '') {
-      $this->id_product = strlen($add) + 10000;
-      $this->id_client = strlen($add) + 20000;
-      $this->price = strlen($add) + 10000 + strlen($string_add);
-      $this->vat = strlen($add)%23;
-   }
+class ProductClientPriceData extends BasicSOAPDataMethods {
+   public $list = array('id_product', 'id_client', 'price', 'vat');
+   public $list_new = array('id_product', 'id_client', 'price', 'vat');
+   public $list_update = array('id_product', 'id_client', 'price', 'vat');
 }
 
-class ParamStartLength  {
-   public $id_start = '';
-   public $length = '';
-   public $options = '';
-
-   function __construct($add = 'null', $string_add = '') {
-      $this->id_start = 10;
-      $this->length = 2;
-      $this->options = 'dupa';
-   }
+class ParamStartLength extends BasicSOAPDataMethods {
+   public $list = array('id_start', 'length', 'options');
+   public $list_new = array('id_start', 'length');
+   public $list_update = array('id_start', 'length');
 }
 
 
-class ParamStartWhereLength {
-   public $id_start = '';
-   public $length = '';
-   public $where = '';
-   public $options = '';
-
-   function __construct($add = 'null', $string_add = '') {
-      $this->id_start = strlen($add) + 10;
-      $this->length = strlen($add) + 20;
-      $this->where = $add . '$where';
-      $this->options = $add . '$options';
-   }
+class ParamStartWhereLength extends BasicSOAPDataMethods {
+   public $list = array('id_start', 'length', 'where', 'options');
+   public $list_new = array('id_start', 'length', 'where');
+   public $list_update = array('id_start', 'length', 'where');
 }
 
-class ParamDoubleStartLength {
-   public $id_start_one = '';
-   public $id_start_two = '';
-   public $length = '';
-   public $options = '';
-
-   function __construct($add = 'null', $string_add = '') {
-      $this->id_start_one = strlen($add) + 10;
-      $this->id_start_two = strlen($add) + 10;
-      $this->length = strlen($add) + 20;
-      $this->options = $add . '$options';
-   }
+class ParamDoubleStartLength extends BasicSOAPDataMethods {
+   public $list = array('id_start_one', 'id_start_two', 'length', 'options');
+   public $list_new = array('id_start_one', 'id_start_two', 'length');
+   public $list_update = array('id_start_one', 'id_start_two', 'length');
+   
 }
 
-
-class StatusData {
-   public $id = '';
-   public $additional_data = '';
-   public $status = '';
-
-   function __construct($add = 'null', $string_add = '') {
-      if( is_object($add) || is_array($add) ) {
-      add_to_fp( 'StatusData _in ' . var_export($add, true) );
-         $this->_fill_response($add, $string_add);
-         //add_to_fp( print_r($this, true) );
-      } else {
-         $this->id = strlen($add) + 10;
-         $this->additional_data = $add . '$additional_data';
-         $this->status = $add . '$status';
-      }
-   }
-
+class StatusData extends BasicSOAPDataMethods {
+   public $list = array('id', 'additional_data', 'status');
+   public $list_new = array('id', 'additional_data', 'status');
+   public $list_update = array('id', 'additional_data', 'status');
+/*
    function _fill_response( $obj, $string_add = '') {
       $this->id = false;
       $this->status = 'TIMEOUT' . $string_add;
@@ -352,48 +289,13 @@ class StatusData {
          }
       }
       return $this;
-   }
+   }*/
 }
 
-
-class StatusDoubleData {
-   public $id_one = '';
-   public $id_two = '';
-   public $additional_data = '';
-   public $status = '';
-
-   function __construct($add = 'null', $string_add = '') {
-      if( is_object($add) || is_array($add) ) {
-         $this->_fill_response($add, $string_add);
-      } else {
-         $this->id_one = strlen($add) + 10;
-         $this->id_two = strlen($add) + 20;
-         $this->additional_data = $add . '$additional_data';
-         $this->status = $add . '$status';
-      }
-   }
-
-   function _fill_response( $obj, $string_add = '' ) {
-      $this->id_one = false;
-      $this->id_two = false;
-      $this->status = 'TIMEOUT' . $string_add;
-      $first_id_name = false;
-      foreach( $obj as $key => $variable ) {
-         if( substr($key, 0, 2) == 'id' ) {
-            if( !$first_id_name && $key != $first_id_name) {
-               $first_id_name = $key;
-               $this->id_one = $variable;
-            } else {
-               $this->id_two = $variable;
-               break;
-            }
-         }
-      }
-      return $this;
-   }
+class StatusDoubleData extends BasicSOAPDataMethods {
+   public $list = array('id_one', 'id_two', 'additional_data', 'status');
+   public $list_new = array('id_one', 'id_two', 'additional_data', 'status');
+   public $list_update = array('id_one', 'id_two', 'additional_data', 'status');
 }
-
-
-
 
 ?>

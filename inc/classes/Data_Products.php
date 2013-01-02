@@ -274,7 +274,16 @@ class Data_Products extends Data_Basket {
       }
       return $product_ret;
    }
-
+   
+   static function getProductList( $id_product_start = 0, $length = 1, $where = '' ) {
+      $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
+      p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+      from ' . TBL_SHOP_PRODUCT . ' p
+      where p.id_product >= ' . db_int($id_product_start) . $where . ' LIMIT '. db_int($length);
+      $result = db_query( $query );
+      return db_result_array_full($result);
+   }
+   
    static function get_product_info( $id_product = 0 ) {
       $F = Framework::g_global();
        

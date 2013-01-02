@@ -9,17 +9,81 @@
 if( !defined('_I_INIT') ) die();
 
 class Soap_Server_worker {
+   public $input_data_type = 'NEW';
+   public $output_data_type = 'FULL'; //
+   public $SingleParam_MultipleReturns = false;
 
-   function getProductList( $input ) {
+   
+   private function _getSingleValue( $input, $type ) {
+ 
+      if( class_exists($type) ) {
+         add_to_fp("\t _getSingleValu $type <- OK");
+         if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) == 1) {
+           $val = reset($input['values']);
+           $SingleValueClass = new $type($val, $this->input_data_type);
+           return $SingleValueClass;
+         }
+      }
+      return false;
+   }
+   
+   private function _returnError($method, $data, $info) {
+      $array_res = array('value' => array(
+               'method' => $method,
+               'data' => $data,
+               'info' => $info,
+               'debug' => ''
+            ) );
+      
+      if ( is_array($data) ) {
+         $array_res['value']['data'] =  ArrayToXML::toXml( $data );
+      }
+      if ( is_array($info) ) {
+         $array_res['value']['info'] =  ArrayToXML::toXml( $info );
+      }
+      if (defined('DEBUG_XML_QUERIES') && (DEBUG_XML_QUERIES == 'true')) {
+         $array_res['value']['debug'] =  ArrayToXML::toXml( debug_backtrace() );
+      }
+      return $array_res;
+   }
+   
+   private function _addArrayValues( $array ) {
+      $res = array();
+      foreach( $array as $key => $val ) {
+         $res['value_' . $key] = $val;
+      }
+      return $res;
+   }
 
-      $response = $this->_fill_response( $input, 'ProductData');
+   
+   function getProductList( $input ) { //ParamStartLength, ProductData
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = true;
+      
+      $ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
+      
+      if( is_object($ParamStartLength) ) {
+         if( !$ParamStartLength->is_error() ) {
+            $param_array = $ParamStartLength->return_array();
+            //add_to_fp('$param_array:'. print_r($param_array, true) );
+            $res_array = Data::getProductList((int)$param_array['id_start'], (int)$param_array['length']);
+            $response = $this->_addArrayValues($res_array);
+         } else {
+            $response = $this->_returnError('getProductList', $input, $ParamStartLength->return_error() );
+         }
+      } else {
+         $response = $this->_returnError('getProductList', $input, 'WRONG CLASS');
+      }
+      
+      $response = ArrayToXML::toXml($response);
+      add_to_fp('$response:'. print_r($response, true) );
 
-      return(ProductData);
+      return($response);
    }
 
    function doClientChange ( $input ) {
       // return serialize($input);
-      add_to_fp(print_r($input, true));
+      //add_to_fp(print_r($input, true));
 
       $response = $this->_fill_response( $input, 'StatusData');
 
@@ -187,7 +251,7 @@ class Soap_Server_worker {
    }
 
    function getOrderListNew( $input ) {
-      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
+      $response = $this->_fill_response( $input, 'OrderData', 'getProductListFromCategory');
       //$response = array( new OrderData('xyz', 'getOrderListNew') );
       //$response = array();
 
@@ -195,7 +259,7 @@ class Soap_Server_worker {
    }
 
    function getOrderList( $input ) {
-      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
+      $response = $this->_fill_response( $input, 'OrderData', 'getProductListFromCategory');
       //$response = array( new OrderData('xyz', 'getOrderList') );
       //$response = array();
 
@@ -255,21 +319,30 @@ class Soap_Server_worker {
             "CLASSNAME: $classname");
       $response = array();
 
+      
       if( isset($input['values']) ) {
          add_to_fp('ITERATE');
          foreach( $input['values'] as $key => $val ) {
-            add_to_fp("$key => $val\n");
-            $response[$key] = new $classname($val, $string_add);
+            //add_to_fp($key." => ".print_r($val,true)."\n");
+            //add_to_fp( print_r($val, true) );
+            //if( $classname == 'StatusData' || $classname == 'StatusDoubleData' ) {
+               $c_tmp = new $classname($classname . ' ' . $string_add, 'FULL');
+               $c_tmp->init(false, true);
+               $response[$key] =  $c_tmp->return_array();
+            //} else {
+             //  $c_tmp = new $classname($val, $string_add);
+            //   $response[$key] = $c_tmp->return_array();
+            //}
          }
       } else {
          $response['wew_ms_foo'] = new $classname($input, $string_add);
          $response['wew_ms_bar'] = new $classname($input, $string_add);
       }
 
-      add_to_fp("RES:\n" . print_r($response, true) . "\nEND _fill_response");
+      add_to_fp("-RES:\n" . print_r($response, true) . "\nEND _fill_response");
 
       $res_xml = ArrayToXML::toXml($response);
-      add_to_fp("RES XML:\n" . print_r($res_xml, true));
+      add_to_fp("-RES XML:\n" . print_r($res_xml, true));
 
       return $res_xml;
    }
