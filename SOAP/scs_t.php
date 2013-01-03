@@ -1,5 +1,7 @@
 <html>
 <head>
+
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 <title>Test - B2B Sklep</title>
 </head>
 <body>
@@ -23,14 +25,20 @@ $client = new SoapClient($soap_address, $soap_param_array);
 
 
 // Test Client/User
+//actualy do
+// test_getProductList( $client );
+// test_getCategoryList( $client );
+// test_getProductListFromCategory( $client );
+// test_getClientList( $client );
+test_getClientUserList( $client );
+
+//PLACEHOLDERS
 // test_doClientAdd( $client );
 // test_doClientChange( $client );
 // test_doClientUserAdd( $client );
 // test_doClientUserChange( $client );
 // test_doClientUserSetPassword( $client );
 // test_doClientUserDelete( $client );
-// test_getClientList( $client );
-// test_getClientUserList( $client );
 // test_doProductAdd( $client );
 // test_doProductChange( $client );
 // test_setProductClientPrice( $client );
@@ -38,9 +46,6 @@ $client = new SoapClient($soap_address, $soap_param_array);
 // test_doCategoryEdit( $client );
 // test_doCategoryDelete( $client );
 // test_setProduct2Category( $client );
-test_getProductList( $client );
-// test_getProductListFromCategory( $client );
-// test_getCategoryList( $client );
 // test_getClientPriceList( $client );
 // test_getClientPriceProductList( $client );
 // test_getOrderListNew( $client );

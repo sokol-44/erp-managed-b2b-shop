@@ -270,7 +270,7 @@ class Data_Person extends Data_Rights {
 	  elseif ( defined('DEFAULT_CLIENT_PRODUCT_PRICE_VIEW') ) return constant('DEFAULT_CLIENT_PRODUCT_PRICE_VIEW');
       else return false;
    }
-
+   
    static function get_client_data($id) {
       $res = db_query('select distinct h.id_client, h.name, h.description, h.email, h.phone, h.created, h.state, count(hu.id_client_user) as count_users
          	from ' . TBL_GLOBAL_CLIENT . ' h ,
@@ -289,7 +289,52 @@ class Data_Person extends Data_Rights {
       $res = db_query($sp_query);
       return db_result_array($res);
    }
+   
+   
+   
+   static function getClientUserList( $id_client = 0, $id_client_user_start = 0, $length = 1, $where = '' ) {
+      if( (int)$length == 0 ) $length = 1;
+      
+      if( $length > 0 ) {
+         $comparision_dir = ' >= ';
+         $order_dir = ' ASC ';
+      } else {
+         $comparision_dir = ' <= ';
+         $order_dir = ' DESC ';
+      }
+      $length = (int)abs($length);
+      
+      $query = 'select cu.id_client_user, cu.id_client, cu.name, cu.description,
+      cu.login, cu.password, cu.email, cu.created, cu.last_login, cu.state
+      from ' . TBL_GLOBAL_CLIENT_USER . ' cu
+      where cu.id_client = ' . db_int($id_client) . '
+      and  cu.id_client_user ' . $comparision_dir . db_int($id_client_user_start) . $where . '
+      ORDER BY cu.id_client_user ' . $order_dir . ' LIMIT '. db_int($length);
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_result_array_full($result);
+   }
+   
+   static function getClientList( $id_client_start = 0, $length = 1, $where = '' ) {
+      if( (int)$length == 0 ) $length = 1;
+      
+      if( $length > 0 ) {
+         $comparision_dir = ' >= ';
+         $order_dir = ' ASC ';
+      } else {
+         $comparision_dir = ' <= ';
+         $order_dir = ' DESC ';
+      }
+      $length = (int)abs($length);
+
+      $query = 'select h.id_client, h.name, h.description, h.email, h.phone, h.created, h.state
+       from ' . TBL_GLOBAL_CLIENT . ' h
+      where h.id_client ' . $comparision_dir . db_int($id_client_start) . $where . '
+      ORDER BY h.id_client ' . $order_dir . ' LIMIT '. db_int($length);
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_result_array_full($result);
+   }
 
 }
-
 ?>

@@ -54,12 +54,13 @@ class Soap_Server {
    
    function __call($name, array $arguments) {
       if(strstr($name, '_') === FALSE && method_exists($this->worker,$name)) {
-         return $this->call_worker($name, $arguments);//Request
+         $return_data = $this->call_worker($name, $arguments);//Request
          ///call_user_func_array( array($this->worker, $name), $arguments);
          //$this->worker->${var_name}();
       } else {
-         return false;
+         $response = $this->worker->getReturnError($name, '', 'WRONG METHOD');
       }
+      return ArrayToXML::toXml($return_data);
    }
 
 }

@@ -27,7 +27,7 @@ class Soap_Server_worker {
       return false;
    }
    
-   private function _returnError($method, $data, $info) {
+   public function getReturnError($method, $data, $info) {
       $array_res = array('value' => array(
                'method' => $method,
                'data' => $data,
@@ -55,7 +55,99 @@ class Soap_Server_worker {
       return $res;
    }
 
+
+
+   function getClientList( $input ) {//ParamStartLength, ClientData
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = true;
+      
+      $ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
+      
+      if( is_object($ParamStartLength) ) {
+         if( !$ParamStartLength->is_error() ) {
+            $param_array = $ParamStartLength->return_array();
+            //add_to_fp('$param_array:'. print_r($param_array, true) );
+            $res_array = Data::getClientList((int)$param_array['id_start'], (int)$param_array['length']);
+            $response = $this->_addArrayValues($res_array);
+         } else {
+            $response = $this->getReturnError('getClientList', $input, $ParamStartLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getClientList', $input, 'WRONG CLASS');
+      }
+
+      return($response);
+   }
+    
+   function getClientUserList( $input ) {
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = true;
+      
+      $ParamDoubleStartLength = $this->_getSingleValue($input, 'ParamDoubleStartLength');
+      
+      if( is_object($ParamDoubleStartLength) ) {
+         if( !$ParamDoubleStartLength->is_error() ) {
+            $param_array = $ParamDoubleStartLength->return_array();
+            $res_array = Data::getClientUserList((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
+            $response = $this->_addArrayValues($res_array);
+         } else {
+            $response = $this->getReturnError('getClientUserList', $input, $ParamDoubleStartLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getClientUserList', $input, 'WRONG CLASS');
+      }
+      
+      return($response);
+   }
+
+   function getClientPriceList( $input ) {
+      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
+      // $response = array( new ProductClientPriceData('xyz', 'getProductClientPriceList') );
+      //$response = array();
+       
+      return $response;
+   }
    
+
+   function getClientPriceProductList( $input ) {
+      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
+      //$response = array( new ProductClientPriceData('xyz', 'getClientPriceProductList') );
+      //$response = array();
+       
+      return $response;
+   }
+   
+   function getProductClientPriceList( $input ) {
+      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
+      //$response = array( new ProductClientPriceData('xyz', 'getProductClientPriceList') );
+      //$response = array();
+       
+      return $response;
+   }
+    
+   function getCategoryList( $input ) {//ParamStartLength, ProductData
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = true;
+      
+      $ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
+      
+      if( is_object($ParamStartLength) ) {
+         if( !$ParamStartLength->is_error() ) {
+            $param_array = $ParamStartLength->return_array();
+            //add_to_fp('$param_array:'. print_r($param_array, true) );
+            $res_array = Data::getCategoryList((int)$param_array['id_start'], (int)$param_array['length']);
+            $response = $this->_addArrayValues($res_array);
+         } else {
+            $response = $this->getReturnError('getCategoryList', $input, $ParamStartLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getCategoryList', $input, 'WRONG CLASS');
+      }
+
+      return($response);
+   }
+
+
    function getProductList( $input ) { //ParamStartLength, ProductData
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = true;
@@ -69,18 +161,52 @@ class Soap_Server_worker {
             $res_array = Data::getProductList((int)$param_array['id_start'], (int)$param_array['length']);
             $response = $this->_addArrayValues($res_array);
          } else {
-            $response = $this->_returnError('getProductList', $input, $ParamStartLength->return_error() );
+            $response = $this->getReturnError('getProductList', $input, $ParamStartLength->return_error() );
          }
       } else {
-         $response = $this->_returnError('getProductList', $input, 'WRONG CLASS');
+         $response = $this->getReturnError('getProductList', $input, 'WRONG CLASS');
       }
-      
-      $response = ArrayToXML::toXml($response);
-      add_to_fp('$response:'. print_r($response, true) );
 
       return($response);
    }
 
+   function getProductListFromCategory( $input ) { //ParamStartLength, ProductData
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = true;
+      
+      $ParamDoubleStartLength = $this->_getSingleValue($input, 'ParamDoubleStartLength');
+      
+      if( is_object($ParamDoubleStartLength) ) {
+         if( !$ParamDoubleStartLength->is_error() ) {
+            $param_array = $ParamDoubleStartLength->return_array();
+            $res_array = Data::getProductListFromCategory((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
+            $response = $this->_addArrayValues($res_array);
+         } else {
+            $response = $this->getReturnError('getProductListFromCategory', $input, $ParamDoubleStartLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getProductListFromCategory', $input, 'WRONG CLASS');
+      }
+      
+      return($response);
+   }
+
+   function getOrderListNew( $input ) {
+      $response = $this->_fill_response( $input, 'OrderData', 'getProductListFromCategory');
+      //$response = array( new OrderData('xyz', 'getOrderListNew') );
+      //$response = array();
+       
+      return $response;
+   }
+    
+   function getOrderList( $input ) {
+      $response = $this->_fill_response( $input, 'OrderData', 'getProductListFromCategory');
+      //$response = array( new OrderData('xyz', 'getOrderList') );
+      //$response = array();
+       
+      return $response;
+   }
+       
    function doClientChange ( $input ) {
       // return serialize($input);
       //add_to_fp(print_r($input, true));
@@ -131,21 +257,6 @@ class Soap_Server_worker {
    function doClientUserSetPassword( $input ) {
       $response = $this->_fill_response( $input, 'StatusDoubleData');
 
-      return $response;
-   }
-
-   function getClientList( $input ) {
-      //$response = $this->_fill_response( $input, 'ClientData');
-
-      $response = array( new ClientData('xyz') );
-
-      return $response;
-   }
-
-   function getClientUserList( $input ) {
-      $response = $this->_fill_response( $input, 'ClientUserData');
-      //$response = array( new ClientUserData('xyz') );
-      //$response = array();
       return $response;
    }
 
@@ -204,63 +315,6 @@ class Soap_Server_worker {
    function setProduct2Category( $input ) {
       $response = $this->_fill_response( $input, 'StatusData', 'setProduct2Category');
       // $response = array( new StatusDoubleData('xyz') );
-      //$response = array();
-
-      return $response;
-   }
-
-
-   function getProductListFromCategory( $input ) {
-      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      //$response = array( new ProductData('xyz', 'getProductListFromCategory') );
-      //$response = array();
-
-      return $response;
-   }
-
-   function getCategoryList( $input ) {
-      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      //$response = array( new CategoryData('xyz', 'getCategoryList') );
-      //$response = array();
-
-      return $response;
-   }
-
-   function getClientPriceList( $input ) {
-      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      // $response = array( new ProductClientPriceData('xyz', 'getProductClientPriceList') );
-      //$response = array();
-
-      return $response;
-   }
-
-   function getProductClientPriceList( $input ) {
-      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      //$response = array( new ProductClientPriceData('xyz', 'getProductClientPriceList') );
-      //$response = array();
-
-      return $response;
-   }
-
-   function getClientPriceProductList( $input ) {
-      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      //$response = array( new ProductClientPriceData('xyz', 'getClientPriceProductList') );
-      //$response = array();
-
-      return $response;
-   }
-
-   function getOrderListNew( $input ) {
-      $response = $this->_fill_response( $input, 'OrderData', 'getProductListFromCategory');
-      //$response = array( new OrderData('xyz', 'getOrderListNew') );
-      //$response = array();
-
-      return $response;
-   }
-
-   function getOrderList( $input ) {
-      $response = $this->_fill_response( $input, 'OrderData', 'getProductListFromCategory');
-      //$response = array( new OrderData('xyz', 'getOrderList') );
       //$response = array();
 
       return $response;

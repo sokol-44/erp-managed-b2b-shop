@@ -275,11 +275,46 @@ class Data_Products extends Data_Basket {
       return $product_ret;
    }
    
+
+   static function getProductListFromCategory( $id_category = 0, $id_product_start = 0, $length = 1, $where = '' ) {
+      if( (int)$length == 0 ) $length = 1;
+   
+      if( $length > 0 ) {
+         $comparision_dir = ' >= ';
+         $order_dir = ' ASC ';
+      } else {
+         $comparision_dir = ' <= ';
+         $order_dir = ' DESC ';
+      }
+      $length = (int)abs($length);
+   
+      $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
+      p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+      from ' . TBL_SHOP_PRODUCT . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY .' p2c on
+      ( p.id_product = p2c.id_product and p2c.id_category = ' . db_int($id_category) . ')
+      where p.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
+      ORDER BY p.id_product ' . $order_dir . ' LIMIT '. db_int($length);
+      $result = db_query( $query );
+      return db_result_array_full($result);
+   }
+     
    static function getProductList( $id_product_start = 0, $length = 1, $where = '' ) {
+      if( (int)$length == 0 ) $length = 1;
+      
+      if( $length > 0 ) {
+         $comparision_dir = ' >= ';
+         $order_dir = ' ASC ';
+      } else {
+         $comparision_dir = ' <= ';
+         $order_dir = ' DESC ';
+      }
+      $length = (int)abs($length);
+      
       $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
       p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
       from ' . TBL_SHOP_PRODUCT . ' p
-      where p.id_product >= ' . db_int($id_product_start) . $where . ' LIMIT '. db_int($length);
+      where p.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
+      ORDER BY p.id_product ' . $order_dir . ' LIMIT '. db_int($length);
       $result = db_query( $query );
       return db_result_array_full($result);
    }
@@ -325,7 +360,30 @@ class Data_Products extends Data_Basket {
       }
       return $product_info;
    }
-
+   
+   
+   static function getCategoryList( $id_category_start = 0, $length = 1, $where = '' ) {
+      if( (int)$length == 0 ) $length = 1;
+      
+      if( $length > 0 ) {
+         $comparision_dir = ' >= ';
+         $order_dir = ' ASC ';
+      } else {
+         $comparision_dir = ' <= ';
+         $order_dir = ' DESC ';
+      }
+      $length = (int)abs($length);
+   
+      $query = 'SELECT c.id_category, c.id_category_parent, c.sort_order,
+      c.root_number, c.name, c.description, c.date_added, c.date_modified
+   	FROM ' . TBL_SHOP_CATEGORY . ' c
+      where c.id_category ' . $comparision_dir . db_int($id_category_start) . $where . '
+      ORDER BY c.id_category ' . $order_dir . ' LIMIT '. db_int($length);
+      $result = db_query( $query );
+      return db_result_array_full($result);
+   }
+   
+   
    //FIXME - implements proper filters
    static function get_categories_list( array $filters ) {
       $F = Framework::g_global();

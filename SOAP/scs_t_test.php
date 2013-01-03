@@ -78,23 +78,38 @@ function test_doClientUserDelete( $client ) {
 // test_getClientList( $client );
 // test_getClientUserList( $client );
 
-function test_getClientList( $client ) {
+function test_getClientList( $client ) { //OK
    echo "test_getClientList\n";
-   $in_o = new ParamStartLength();
-   print_r($in_o);
-   $resC = $client->getClientList($in_o);
-   //print_lr( $client );
-   print("" . print_r( $resC, true). '<br>');
+   $in_oo = new ParamStartLength(array('id_start' => '1', 'length' => '5'));
+   //print_r("IN:".$in_oo->return_array());
+   $in_o = array( 'value_1' => $in_oo->return_array() );
+   $in_o_x = ArrayToXML::toXml($in_o, 'DocumentElement');
+   //echo $in_o_x;
+   print("IN:" . xml_b( $in_o_x ). '<br>');
+   try {
+      $resC = $client->getClientList($in_o_x);
+   } catch (Exception $e) {
+      var_dump($e);
+      print_lr( $client );
+   }
+   print("RES:" . xml_b( $resC ). '<br>');
 }
 
 function test_getClientUserList( $client ) {
    echo "test_getClientUserList\n";
-   $in_o = new stdClass();
-   $in_o = new ParamDoubleStartLength();
-   print_r($in_o);
-   $resC = $client->getClientUserList($in_o);
-   //print_lr( $client );
-   print("" . print_r( $resC, true). '<br>');
+   $in_oo = new ParamDoubleStartLength(array('id_start_one' => '1', 'id_start_two' => '1', 'length' => '5'));
+   //print_r("IN:".$in_oo->return_array());
+   $in_o = array( 'value_1' => $in_oo->return_array() );
+   $in_o_x = ArrayToXML::toXml($in_o, 'DocumentElement');
+   //echo $in_o_x;
+   print("IN:" . xml_b( $in_o_x ). '<br>');
+   try {
+      $resC = $client->getClientUserList($in_o_x);
+   } catch (Exception $e) {
+      var_dump($e);
+      print_lr( $client );
+   }
+   print("RES:" . xml_b( $resC ). '<br>');
 }
 
 function test_doClientUserSetPassword( $client ) {
@@ -199,13 +214,9 @@ function test_setProduct2Category( $client ) {
 }
 
 
-function test_getProductList( $client ) {
+function test_getProductList( $client ) { //OK
    echo "test_getProductList\n";
-   //$in_oo = new ParamStartLength('dupa');
    $in_oo = new ParamStartLength(array('id_start' => '1', 'length' => '5'));
-   //var_dump($in_oo);
-   if( $in_oo->is_error() ) print_r(array('error' => $in_oo->return_error(), 'warning' => $in_oo->return_warning()) );
-   //$resC = $client->getOrderList( $in_oo);
    //print_r("IN:".$in_oo->return_array());
    $in_o = array( 'value_1' => $in_oo->return_array() );
    $in_o_x = ArrayToXML::toXml($in_o, 'DocumentElement');
@@ -215,30 +226,43 @@ function test_getProductList( $client ) {
       $resC = $client->getProductList($in_o_x);
    } catch (Exception $e) {
       var_dump($e);
-      var_dump($client->__last_response);
+      print_lr( $client );
    }
-   //print_r($in_oo);
-   ///$resC = $client->getProductList( $in_oo );
-   //print_lr( $client );
    print("RES:" . xml_b( $resC ). '<br>');
 }
 
-function test_getProductListFromCategory( $client ) {
+function test_getProductListFromCategory( $client ) { //OK
    echo "test_getProductListFromCategory\n";
-   $in_oo = new ParamDoubleStartLength('dupa');
-   print_r($in_oo);
-   $resC = $client->getProductListFromCategory( $in_oo );
-   //print_lr( $client );
-   print_r($resC);
+   $in_oo = new ParamDoubleStartLength(array('id_start_one' => '98', 'id_start_two' => '1', 'length' => '5'));
+   print_r("IN:".$in_oo->return_array());
+   $in_o = array( 'value_1' => $in_oo->return_array() );
+   $in_o_x = ArrayToXML::toXml($in_o, 'DocumentElement');
+   //echo $in_o_x;
+   print("IN:" . xml_b( $in_o_x ). '<br>');
+   try {
+      $resC = $client->getProductListFromCategory($in_o_x);
+   } catch (Exception $e) {
+      var_dump($e);
+      print_lr( $client );
+   }
+   print("RES:" . xml_b( $resC ). '<br>');
 }
 
-function test_getCategoryList( $client ) {
+function test_getCategoryList( $client ) { //OK
    echo "test_getCategoryList\n";
-   $in_oo = new ParamStartLength('dupa');
-   print_r($in_oo);
-   $resC = $client->getCategoryList( $in_oo );
-   //print_lr( $client );
-   print_r($resC);
+   $in_oo = new ParamStartLength(array('id_start' => '1', 'length' => '15'));
+   //print_r("IN:".$in_oo->return_array());
+   $in_o = array( 'value_1' => $in_oo->return_array() );
+   $in_o_x = ArrayToXML::toXml($in_o, 'DocumentElement');
+   //echo $in_o_x;
+   print("IN:" . xml_b( $in_o_x ). '<br>');
+   try {
+      $resC = $client->getCategoryList($in_o_x);
+   } catch (Exception $e) {
+      var_dump($e);
+      print_lr( $client );
+   }
+   print("RES:" . xml_b( $resC ). '<br>');
 }
 
 function test_getProductClientPriceList( $client ) {
