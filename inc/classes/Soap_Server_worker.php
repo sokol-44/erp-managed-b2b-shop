@@ -27,24 +27,26 @@ class Soap_Server_worker {
       return false;
    }
    
-   public function getReturnError($method, $data, $info) {
-      $array_res = array('value' => array(
+   public function getReturnError($method, $data, $info, $top_array = true) {
+      $array_res = array(
                'method' => $method,
                'data' => $data,
                'info' => $info,
                'debug' => ''
-            ) );
+            ) ;
       
       if ( is_array($data) ) {
-         $array_res['value']['data'] =  ArrayToXML::toXml( $data );
+         $array_res['data'] =  ArrayToXML::toXml( $data );
       }
       if ( is_array($info) ) {
-         $array_res['value']['info'] =  ArrayToXML::toXml( $info );
+         $array_res['info'] =  ArrayToXML::toXml( $info );
       }
       if (defined('DEBUG_XML_QUERIES') && (DEBUG_XML_QUERIES == 'true')) {
-         $array_res['value']['debug'] =  ArrayToXML::toXml( debug_backtrace() );
+         $array_res['debug'] =  ArrayToXML::toXml( debug_backtrace() );
       }
-      return $array_res;
+      
+      if( $top_array ) return array('value' => $array_res);
+      else return $array_res;
    }
    
    private function _addArrayValues( $array ) {
@@ -79,7 +81,7 @@ class Soap_Server_worker {
       return($response);
    }
     
-   function getClientUserList( $input ) {
+   function getClientUserList( $input ) {//ParamStartLength, ClientUserData
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = true;
       
@@ -109,12 +111,25 @@ class Soap_Server_worker {
    }
    
 
-   function getClientPriceProductList( $input ) {
-      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      //$response = array( new ProductClientPriceData('xyz', 'getClientPriceProductList') );
-      //$response = array();
-       
-      return $response;
+   function getClientPriceProductList( $input ) { //ParamDoubleStartLength, ProductData
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = true;
+
+      $ParamDoubleStartLength = $this->_getSingleValue($input, 'ParamDoubleStartLength');
+      
+      if( is_object($ParamDoubleStartLength) ) {
+         if( !$ParamDoubleStartLength->is_error() ) {
+            $param_array = $ParamDoubleStartLength->return_array();
+            $res_array = Data::getClientPriceProductList((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
+            $response = $this->_addArrayValues($res_array);
+         } else {
+            $response = $this->getReturnError('getClientPriceProductList', $input, $ParamDoubleStartLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getClientPriceProductList', $input, 'WRONG CLASS');
+      }
+      
+      return($response);
    }
    
    function getProductClientPriceList( $input ) {
@@ -170,7 +185,7 @@ class Soap_Server_worker {
       return($response);
    }
 
-   function getProductListFromCategory( $input ) { //ParamStartLength, ProductData
+   function getProductListFromCategory( $input ) { //ParamDoubleStartLength, ProductData
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = true;
       
@@ -192,19 +207,47 @@ class Soap_Server_worker {
    }
 
    function getOrderListNew( $input ) {
-      $response = $this->_fill_response( $input, 'OrderData', 'getProductListFromCategory');
-      //$response = array( new OrderData('xyz', 'getOrderListNew') );
-      //$response = array();
-       
-      return $response;
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = true;
+      
+      $ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
+      
+      if( is_object($ParamStartLength) ) {
+         if( !$ParamStartLength->is_error() ) {
+            $param_array = $ParamStartLength->return_array();
+            add_to_fp('$param_array:'. print_r($param_array, true) );
+            $res_array = Data::getOrderList((int)$param_array['id_start'], (int)$param_array['length'], ' and `hidden_status` IS NULL ');
+            $response = $this->_addArrayValues($res_array);
+         } else {
+            $response = $this->getReturnError('getOrderListNew', $input, $ParamStartLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getOrderListNew', $input, 'WRONG CLASS');
+      }
+
+      return($response);
    }
     
-   function getOrderList( $input ) {
-      $response = $this->_fill_response( $input, 'OrderData', 'getProductListFromCategory');
-      //$response = array( new OrderData('xyz', 'getOrderList') );
-      //$response = array();
-       
-      return $response;
+   function getOrderList( $input ) { //ParamStartLength, OrderData
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = true;
+      
+      $ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
+      
+      if( is_object($ParamStartLength) ) {
+         if( !$ParamStartLength->is_error() ) {
+            $param_array = $ParamStartLength->return_array();
+            //add_to_fp('$param_array:'. print_r($param_array, true) );
+            $res_array = Data::getOrderList((int)$param_array['id_start'], (int)$param_array['length']);
+            $response = $this->_addArrayValues($res_array);
+         } else {
+            $response = $this->getReturnError('getOrderList', $input, $ParamStartLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getOrderList', $input, 'WRONG CLASS');
+      }
+
+      return($response);
    }
        
    function doClientChange ( $input ) {
@@ -276,12 +319,28 @@ class Soap_Server_worker {
 
 
    function setProductClientPrice( $input ) {
-      //$response = 'setProductClientPrice';
-      $response = $this->_fill_response( $input, 'StatusDoubleData', 'setProductClientPrice');
-      // $response = array( new StatusDoubleData('xyz') );
-      //$response = array();
-
-      return $response;
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = false;
+      add_to_fp('-------- setProductClientPrice');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new ProductClientPriceData($val, $this->input_data_type);
+            if( !$SingleValueClass->is_error() ) {
+               $pa = $SingleValueClass->return_array();
+               //add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::setProductClientPrice($pa['id_product'], $pa['id_client'], $pa['price'] , $pa['vat']);
+            } else {
+               $response_tmp[] = $this->getReturnError('setProductClientPrice', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('setProductClientPrice', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
 
 

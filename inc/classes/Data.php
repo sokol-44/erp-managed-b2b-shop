@@ -64,7 +64,7 @@ class Data extends Data_Person {
     * @param string $get_legal_subclass
     * @return string|name
     */
-   //FIXME
+   //FIXME real list of subclass
    function get_legalsubclass($get_legal_subclass) {
       return $subclass_name;
    }
@@ -215,9 +215,22 @@ class Data extends Data_Person {
 
       return $ret_array;
    }
-
-
-
+   
+   function _length_dir($length ) {
+      if( (int)$length  == 0 ) $length = 1;
+      
+      if( $length > 0 ) {
+         $comparision_dir = ' >= ';
+         $order_dir = ' ASC ';
+      } else {
+         $comparision_dir = ' <= ';
+         $order_dir = ' DESC ';
+      }
+      $length = (int)abs($length);
+      $res =  array($length, $comparision_dir, $order_dir);
+      add_to_fp( var_export($res, true) );
+      return $res;
+   }
 
 }
 

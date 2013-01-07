@@ -276,17 +276,20 @@ class Data_Products extends Data_Basket {
    }
    
 
-   static function getProductListFromCategory( $id_category = 0, $id_product_start = 0, $length = 1, $where = '' ) {
-      if( (int)$length == 0 ) $length = 1;
+   static function getClientPriceProductList( $id_client = 0, $id_product_start = 0, $length = 1, $where = '' ) {
+      list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+      
+      $query = 'select pcp.id_product, pcp.id_client, pcp.price, pcp.vat
+      from ' . SHOP_PRODUCT_CLIENT_PRICE . ' pcp
+      where pcp.id_client = ' . db_int($id_client) . ' and pcp.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
+      ORDER BY pcp.id_product ' . $order_dir . ' LIMIT '. db_int($length);
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_result_array_full($result);
+   }
    
-      if( $length > 0 ) {
-         $comparision_dir = ' >= ';
-         $order_dir = ' ASC ';
-      } else {
-         $comparision_dir = ' <= ';
-         $order_dir = ' DESC ';
-      }
-      $length = (int)abs($length);
+   static function getProductListFromCategory( $id_category = 0, $id_product_start = 0, $length = 1, $where = '' ) {
+      list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
    
       $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
       p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
@@ -299,16 +302,7 @@ class Data_Products extends Data_Basket {
    }
      
    static function getProductList( $id_product_start = 0, $length = 1, $where = '' ) {
-      if( (int)$length == 0 ) $length = 1;
-      
-      if( $length > 0 ) {
-         $comparision_dir = ' >= ';
-         $order_dir = ' ASC ';
-      } else {
-         $comparision_dir = ' <= ';
-         $order_dir = ' DESC ';
-      }
-      $length = (int)abs($length);
+      list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
       
       $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
       p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
@@ -318,6 +312,16 @@ class Data_Products extends Data_Basket {
       $result = db_query( $query );
       return db_result_array_full($result);
    }
+   
+   static function setProductClientPrice( $id_product, $id_client, $price , $vat ) {
+      $query = 'select "' . db_int($id_product) . '" as id_one, "' . db_int($id_client) . '" as id_two,
+       "" as additional_data,
+       b_func_product_client_price_add("' . db_int($id_product) . '", "' . db_int($id_client) . '", "' . db_float($price) . '", "' . db_float($vat) . '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+   
    
    static function get_product_info( $id_product = 0 ) {
       $F = Framework::g_global();
@@ -363,16 +367,7 @@ class Data_Products extends Data_Basket {
    
    
    static function getCategoryList( $id_category_start = 0, $length = 1, $where = '' ) {
-      if( (int)$length == 0 ) $length = 1;
-      
-      if( $length > 0 ) {
-         $comparision_dir = ' >= ';
-         $order_dir = ' ASC ';
-      } else {
-         $comparision_dir = ' <= ';
-         $order_dir = ' DESC ';
-      }
-      $length = (int)abs($length);
+      list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
    
       $query = 'SELECT c.id_category, c.id_category_parent, c.sort_order,
       c.root_number, c.name, c.description, c.date_added, c.date_modified

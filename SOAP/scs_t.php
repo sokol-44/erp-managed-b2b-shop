@@ -30,7 +30,13 @@ $client = new SoapClient($soap_address, $soap_param_array);
 // test_getCategoryList( $client );
 // test_getProductListFromCategory( $client );
 // test_getClientList( $client );
-test_getClientUserList( $client );
+// test_getClientUserList( $client );
+// test_getClientPriceProductList( $client );
+// test_getOrderList( $client );
+// test_getOrderListNew( $client );
+test_setProductClientPrice( $client );
+
+
 
 //PLACEHOLDERS
 // test_doClientAdd( $client );
@@ -41,15 +47,10 @@ test_getClientUserList( $client );
 // test_doClientUserDelete( $client );
 // test_doProductAdd( $client );
 // test_doProductChange( $client );
-// test_setProductClientPrice( $client );
 // test_doCategoryAdd( $client );
 // test_doCategoryEdit( $client );
 // test_doCategoryDelete( $client );
 // test_setProduct2Category( $client );
-// test_getClientPriceList( $client );
-// test_getClientPriceProductList( $client );
-// test_getOrderListNew( $client );
-// test_getOrderList( $client );
 // test_setOrderStatus( $client );
 // test_setOrderHiddenStatus( $client );
 

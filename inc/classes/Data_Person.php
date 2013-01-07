@@ -293,16 +293,7 @@ class Data_Person extends Data_Rights {
    
    
    static function getClientUserList( $id_client = 0, $id_client_user_start = 0, $length = 1, $where = '' ) {
-      if( (int)$length == 0 ) $length = 1;
-      
-      if( $length > 0 ) {
-         $comparision_dir = ' >= ';
-         $order_dir = ' ASC ';
-      } else {
-         $comparision_dir = ' <= ';
-         $order_dir = ' DESC ';
-      }
-      $length = (int)abs($length);
+      list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
       
       $query = 'select cu.id_client_user, cu.id_client, cu.name, cu.description,
       cu.login, cu.password, cu.email, cu.created, cu.last_login, cu.state
@@ -310,28 +301,19 @@ class Data_Person extends Data_Rights {
       where cu.id_client = ' . db_int($id_client) . '
       and  cu.id_client_user ' . $comparision_dir . db_int($id_client_user_start) . $where . '
       ORDER BY cu.id_client_user ' . $order_dir . ' LIMIT '. db_int($length);
-      add_to_fp($query);
+
       $result = db_query( $query );
       return db_result_array_full($result);
    }
    
    static function getClientList( $id_client_start = 0, $length = 1, $where = '' ) {
-      if( (int)$length == 0 ) $length = 1;
-      
-      if( $length > 0 ) {
-         $comparision_dir = ' >= ';
-         $order_dir = ' ASC ';
-      } else {
-         $comparision_dir = ' <= ';
-         $order_dir = ' DESC ';
-      }
-      $length = (int)abs($length);
+      list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
 
       $query = 'select h.id_client, h.name, h.description, h.email, h.phone, h.created, h.state
        from ' . TBL_GLOBAL_CLIENT . ' h
       where h.id_client ' . $comparision_dir . db_int($id_client_start) . $where . '
       ORDER BY h.id_client ' . $order_dir . ' LIMIT '. db_int($length);
-      add_to_fp($query);
+
       $result = db_query( $query );
       return db_result_array_full($result);
    }
