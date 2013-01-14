@@ -280,7 +280,7 @@ class Data_Products extends Data_Basket {
       list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
       
       $query = 'select pcp.id_product, pcp.id_client, pcp.price, pcp.vat
-      from ' . SHOP_PRODUCT_CLIENT_PRICE . ' pcp
+      from ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' pcp
       where pcp.id_client = ' . db_int($id_client) . ' and pcp.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
       ORDER BY pcp.id_product ' . $order_dir . ' LIMIT '. db_int($length);
       add_to_fp($query);
@@ -312,11 +312,89 @@ class Data_Products extends Data_Basket {
       $result = db_query( $query );
       return db_result_array_full($result);
    }
+
+   static function doProductChange($param_array) {
+       
+      extract( db_escape_array($param_array) );
+       
+      $query = 'select "' . db_int($id_product) . '" as id_one,
+          "" as additional_data,
+          b_func_product_change("' . db_int($id_product) . '", "' . db_escape($name). '", "' . db_escape($description). '",
+          "' . db_escape($picture_small_url). '", "' . db_escape($picture_big_url). '", "' . db_escape($picture_id). '",
+          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_escape($quantity_salt) . '", "' . db_escape($status) . '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+
+   static function doCategoryDelete($param_array) {
+       
+      extract( db_escape_array($param_array) );
+   
+   
+      $query = 'select "' . db_int($id_category) . '" as id_one,
+          "" as additional_data,
+          b_func_category_delete("' . db_int($id_category) . '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+    
+   static function doCategoryEdit($param_array) {
+       
+      extract( db_escape_array($param_array) );
+      
+      
+      $query = 'select "' . db_int($id_category) . '" as id_one,
+          "" as additional_data,
+          b_func_category_change("' . db_int($id_category) . '", "' . db_int($id_category_parent) . '", "' . db_int($sort_order) . '","' . db_int($root_number) . '",
+          "' . db_escape($name). '", "' . db_escape($description). '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+
+   static function doCategoryAdd($param_array) {
+       
+      extract( db_escape_array($param_array) );
+      
+      
+      $query = 'select "' . db_int($id_category) . '" as id_one,
+          "" as additional_data,
+          b_func_category_add("' . db_int($id_category) . '", "' . db_int($id_category_parent) . '", "' . db_int($sort_order) . '","' . db_int($root_number) . '",
+          "' . db_escape($name). '", "' . db_escape($description). '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+    
+   static function doProductAdd($param_array) {
+       
+      extract( db_escape_array($param_array) );
+   
+      $query = 'select "' . db_int($id_product) . '" as id_one,
+          "" as additional_data,
+          b_func_product_add("' . db_int($id_product) . '", "' . db_escape($name). '", "' . db_escape($description). '",
+          "' . db_escape($picture_small_url). '", "' . db_escape($picture_big_url). '", "' . db_escape($picture_id). '",
+          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_escape($quantity_salt) . '", "' . db_escape($status) . '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
    
    static function setProductClientPrice( $id_product, $id_client, $price , $vat ) {
       $query = 'select "' . db_int($id_product) . '" as id_one, "' . db_int($id_client) . '" as id_two,
        "" as additional_data,
        b_func_product_client_price_add("' . db_int($id_product) . '", "' . db_int($id_client) . '", "' . db_float($price) . '", "' . db_float($vat) . '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+   
+   static function setProduct2Category( $id_product, $id_category) {
+      $query = 'select "' . db_int($id_product) . '" as id_one, "' . db_int($id_category) . '" as id_two,
+       "" as additional_data,
+       b_func_product_to_category_add("' . db_int($id_product) . '", "' . db_int($id_category) . '") as status';
       add_to_fp($query);
       $result = db_query( $query );
       return db_fetch_array($result);

@@ -126,10 +126,16 @@ function db_insert_id($link = 'db_link') {
    return mysql_insert_id(${$link});
 }
 
+function db_float($value){
+   if( strtoupper($value) == 'NULL' ) return 'null';
+   else {
+      return (float)str_replace(',', '.', $value);
+   }
+}
+
 function db_int($value){
    if( strtoupper($value) == 'NULL' ) return 'null';
    else return (int)$value;
-
 }
 
 
@@ -140,9 +146,9 @@ function db_escape_array($array_in, $link = 'db_link') {
    if( is_array($array_in) ) {
       foreach($array_in as $key_in => $val_in) {
          if( is_array($val_in) ) {
-            $ret[$key_in] = db_escape_array($array_in, $link);
+            $ret[$key_in] = db_escape_array($val_in, $link);
          } else {
-            $ret[$key_in] = db_escape($array_in, $link);
+            $ret[$key_in] = db_escape($val_in, $link);
          }
       }
       return $ret;
@@ -167,6 +173,18 @@ function db_escape($string, $link = 'db_link') {
    return $ret;
 }
 
+
+function db_call_func($name, $data, $link = 'db_link') {
+   global $$link;
+   
+   $data = db_escape_array($data);
+
+   $data_str = '"' . implode('", "', $data) . '"';
+   $sql = 'select ' . $name . '(' . $data_str . ') as func_res;';
+   $res =  db_fetch_result('func_res', db_query($sql));
+   return $res;
+}
+
 function db_call_proc($name, $data, $link = 'db_link') {
    global $$link;
    
@@ -176,7 +194,7 @@ function db_call_proc($name, $data, $link = 'db_link') {
    
    $data_str = '"' . implode('", "', $data) . '"';
    $sql = $name . '(' . $data_str . ');';
-   db_query($sql);
+   return db_query($sql);
 }
 
 

@@ -251,70 +251,214 @@ class Soap_Server_worker {
    }
        
    function doClientChange ( $input ) {
-      // return serialize($input);
-      //add_to_fp(print_r($input, true));
-
-      $response = $this->_fill_response( $input, 'StatusData');
-
-      return $response;
-      //		`id_client_in` INT,
-      //		`name_in` TINYTEXT,
-      //		`description_in` TEXT,
-      //		`email_in` TINYTEXT,
-      //		`phone_in` TINYTEXT,
-      //		`state_in` TINYTEXT
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = false;
+      
+      add_to_fp('-------- doClientAdd');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new ClientData($val, $this->input_data_type);
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::doClientAdd($param_array, false);
+            } else {
+               $response_tmp[] = $this->getReturnError('doClientChange', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('doClientChange', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
 
    function doClientAdd ( $input ) {
-      // return serialize($input);
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = false;
 
-      $response = $this->_fill_response( $input, 'StatusData');
-
-      return $response;
-      //		`id_client_in` INT,
-      //		`name_in` TINYTEXT,
-      //		`description_in` TEXT,
-      //		`email_in` TINYTEXT,
-      //		`phone_in` TINYTEXT,
-      //		`state_in` TINYTEXT
+      add_to_fp('-------- doClientAdd');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new ClientData($val, $this->input_data_type);
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::doClientAdd($param_array, true);
+            } else {
+               $response_tmp[] = $this->getReturnError('doClientAdd', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('doClientAdd', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
 
    function doClientUserAdd ( $input ) {
-      $response = $this->_fill_response( $input, 'StatusDoubleData');
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = false;
 
-      return $response;
+      add_to_fp('-------- doClientUserAdd');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new ClientUserData($val, $this->input_data_type);
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::doClientUserAdd($param_array, true);
+            } else {
+               $response_tmp[] = $this->getReturnError('doClientUserAdd', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('doClientUserAdd', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
 
    function doClientUserChange ( $input ) {
-      $response = $this->_fill_response( $input, 'StatusDoubleData');
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = false;
 
-      return $response;
+      add_to_fp('-------- doClientUserAdd');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new ClientUserData($val, $this->input_data_type);
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::doClientUserAdd($param_array, false);
+            } else {
+               $response_tmp[] = $this->getReturnError('doClientUserChange', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('doClientUserChange', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
 
    function doClientUserDelete ( $input ) {
-      $response = $this->_fill_response( $input, 'StatusDoubleData');
+      $this->input_data_type = 'UPDATE';
+      $this->SingleParam_MultipleReturns = false;
 
-      return $response;
+      add_to_fp('-------- doClientUserDelete');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new ClientUserData($val, $this->input_data_type);
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::doClientUserDelete($param_array);
+            } else {
+               $response_tmp[] = $this->getReturnError('doClientUserDelete', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('doClientUserDelete', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
 
    function doClientUserSetPassword( $input ) {
-      $response = $this->_fill_response( $input, 'StatusDoubleData');
+      $this->input_data_type = 'UPDATE';
+      $this->SingleParam_MultipleReturns = false;
 
-      return $response;
+      add_to_fp('-------- doClientUserSetPassword');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new ClientUserData($val, $this->input_data_type);
+            add_to_fp(print_r($SingleValueClass, true));
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::doClientUserSetPassword($param_array);
+            } else {
+               $response_tmp[] = $this->getReturnError('doClientUserSetPassword', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('doClientUserSetPassword', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
 
    function doProductAdd( $input ) {
-      $response = $this->_fill_response( $input, 'StatusData', 'doProductAdd');
-      //$response = array( new StatusData('xyz') );
-      //$response = array();
-      return $response;
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = false;
+
+      add_to_fp('-------- doProductAdd');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new ProductData($val, $this->input_data_type);
+            add_to_fp(print_r($SingleValueClass, true));
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::doProductAdd($param_array);
+            } else {
+               $response_tmp[] = $this->getReturnError('doProductAdd', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('doProductAdd', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
 
    function doProductChange( $input ) {
-      $response = $this->_fill_response( $input, 'StatusData', 'doProductChange');
-      //$response = array( new StatusData('xyz') );
-      //$response = array();
-      return $response;
+      $this->input_data_type = 'UPDATE';
+      $this->SingleParam_MultipleReturns = false;
+
+      add_to_fp('-------- doProductChange');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new ProductData($val, $this->input_data_type);
+            add_to_fp(print_r($SingleValueClass, true));
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::doProductChange($param_array);
+            } else {
+               $response_tmp[] = $this->getReturnError('doProductChange', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('doProductChange', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
 
 
@@ -345,38 +489,112 @@ class Soap_Server_worker {
 
 
    function doCategoryAdd( $input ) {
-      //$response = 'setProductClientPrice';
-      $response = $this->_fill_response( $input, 'StatusData', 'doCategoryAdd');
-      // $response = array( new StatusDoubleData('xyz') );
-      //$response = array();
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = false;
 
-      return $response;
+      add_to_fp('-------- doCategoryAdd');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new CategoryData($val, $this->input_data_type);
+            add_to_fp(print_r($SingleValueClass, true));
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::doCategoryAdd($param_array);
+            } else {
+               $response_tmp[] = $this->getReturnError('doCategoryAdd', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('doCategoryAdd', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
 
    function doCategoryEdit( $input ) {
-      $response = $this->_fill_response( $input, 'StatusData', 'doCategoryEdit');
-      // $response = array( new StatusDoubleData('xyz') );
-      //$response = array();
+      $this->input_data_type = 'UPDATE';
+      $this->SingleParam_MultipleReturns = false;
 
-      return $response;
+      add_to_fp('-------- doCategoryEdit');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new CategoryData($val, $this->input_data_type);
+            add_to_fp(print_r($SingleValueClass, true));
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::doCategoryEdit($param_array);
+            } else {
+               $response_tmp[] = $this->getReturnError('doCategoryEdit', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('doCategoryEdit', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
 
 
    function doCategoryDelete( $input ) {
-      $response = $this->_fill_response( $input, 'StatusData', 'doCategoryDelete');
-      // $response = array( new StatusDoubleData('xyz') );
-      //$response = array();
+      $this->input_data_type = 'DELETE';
+      $this->SingleParam_MultipleReturns = false;
 
-      return $response;
+      add_to_fp('-------- doCategoryDelete');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new CategoryData($val, $this->input_data_type);
+            add_to_fp(print_r($SingleValueClass, true));
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::doCategoryDelete($param_array);
+            } else {
+               $response_tmp[] = $this->getReturnError('doCategoryDelete', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('doCategoryDelete', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
 
 
    function setProduct2Category( $input ) {
-      $response = $this->_fill_response( $input, 'StatusData', 'setProduct2Category');
-      // $response = array( new StatusDoubleData('xyz') );
-      //$response = array();
-
-      return $response;
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = false;
+      
+      add_to_fp('-------- setProduct2Category');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new Product2Category($val, $this->input_data_type);
+            if( !$SingleValueClass->is_error() ) {
+               $pa = $SingleValueClass->return_array();
+               //add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::setProduct2Category($pa['id_product'], $pa['id_category']);
+            } else {
+               $response_tmp[] = $this->getReturnError('setProduct2Category', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('setProduct2Category', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
 
    function setOrderStatus( $input ) {
@@ -387,10 +605,29 @@ class Soap_Server_worker {
    }
 
    function setOrderHiddenStatus( $input ) {
-      $response = $this->_fill_response( $input, 'StatusData', 'setOrderHiddenStatus');
-      //$response = array();
-
-      return $response;
+      $this->input_data_type = 'UPDATE';
+      $this->SingleParam_MultipleReturns = false;
+      
+      add_to_fp('-------- setOrderHiddenStatus');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new OrderData($val, $this->input_data_type);
+            if( !$SingleValueClass->is_error() ) {
+               $pa = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($pa, true) );
+               $response_tmp[] = Data::setOrderHiddenStatus($pa['id_order'], $pa['id_client'], $pa['hidden_status']);
+            } else {
+               $response_tmp[] = $this->getReturnError('setOrderHiddenStatus', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('setOrderHiddenStatus', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
 
    //   function _fill_response_param( $input, $classname, $string_add = '') {

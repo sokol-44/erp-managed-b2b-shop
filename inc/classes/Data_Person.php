@@ -218,6 +218,75 @@ class Data_Person extends Data_Rights {
       return db_result_array($res);
    }
 
+   static function doClientUserDelete($param_array) {
+       
+      extract( db_escape_array($param_array) );
+   
+      $query = 'select "' . db_int($id_client) . '" as id_one, "' . db_int($id_client_user) . '" as id_two,
+          "" as additional_data,
+          b_func_client_user_delete("' . db_int($id_client_user) . '", "' . db_int($id_client) . '") as status';
+   
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+   
+   static function doClientUserSetPassword($param_array) {
+   
+      extract( db_escape_array($param_array) );
+
+      $query = 'select "' . db_int($id_client) . '" as id_one, "' . db_int($id_client_user) . '" as id_two,
+          "" as additional_data,
+          b_func_client_user_set_password("' . db_int($id_client_user) . '", "' . db_int($id_client) . '",
+          "' . db_escape($password) . '",  "' . db_escape($password_salt) . '") as status';
+
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+   
+   static function doClientUserAdd($param_array, $add  = false) {
+      
+      extract( db_escape_array($param_array) );
+      
+      if( $add ) {
+         $query = 'select "' . db_int($id_client) . '" as id_one, "' . db_int($id_client_user) . '" as id_two,
+          "" as additional_data,
+          b_func_client_user_add("' . db_int($id_client_user) . '", "' . db_int($id_client) . '", "' . db_escape($login) . '",
+          "' . db_escape($password) . '", "' . db_escape($password_salt) . '", "' . db_escape($description) . '", "' . db_escape($name) . '",
+          "' . db_escape($email) . '", "' . db_escape($state) . '") as status';
+      } else {
+         $query = 'select "' . db_int($id_client) . '" as id_one, "' . db_int($id_client_user) . '" as id_two,
+          "" as additional_data,
+          b_func_client_user_change("' . db_int($id_client_user) . '", "' . db_int($id_client) . '", "' . db_escape($login) . '",
+          "' . db_escape($password) . '",  "' . db_escape($password_salt) . '", "' . db_escape($description) . '", "' . db_escape($name) . '",
+          "' . db_escape($email) . '", "' . db_escape($state) . '") as status';
+      }
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+   
+   static function doClientAdd($param_array, $add  = false) {
+      
+      extract( db_escape_array($param_array) );
+      
+      if( $add ) {
+         $query = 'select "' . db_int($id_client) . '" as id_one,
+          "" as additional_data,
+          b_func_client_add("' . db_int($id_client) . '", "' . db_escape($name) . '", "' . db_escape($description) . '",
+          "' . db_escape($email) . '", "' . db_escape($phone) . '", "' . db_escape($state) . '") as status';
+      } else {
+         $query = 'select "' . db_int($id_client) . '" as id_one,
+          "" as additional_data,
+          b_func_client_change("' . db_int($id_client) . '", "' . db_escape($name) . '", "' . db_escape($description) . '",
+          "' . db_escape($email) . '", "' . db_escape($phone) . '", "' . db_escape($state) . '") as status';
+      }
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+
    static function insert_client_data_id($data) {
       
       $data_sql['id_client'] =  $data['id_client'];
@@ -229,7 +298,6 @@ class Data_Person extends Data_Rights {
       
       
       $return = db_call_proc('b_func_client_add', $data_sql);
-      
    }
    
    static function insert_client_data($data) {

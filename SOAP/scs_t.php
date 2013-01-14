@@ -34,11 +34,7 @@ $client = new SoapClient($soap_address, $soap_param_array);
 // test_getClientPriceProductList( $client );
 // test_getOrderList( $client );
 // test_getOrderListNew( $client );
-test_setProductClientPrice( $client );
-
-
-
-//PLACEHOLDERS
+// test_setProductClientPrice( $client );
 // test_doClientAdd( $client );
 // test_doClientChange( $client );
 // test_doClientUserAdd( $client );
@@ -51,6 +47,9 @@ test_setProductClientPrice( $client );
 // test_doCategoryEdit( $client );
 // test_doCategoryDelete( $client );
 // test_setProduct2Category( $client );
+
+
+//PLACEHOLDERS
 // test_setOrderStatus( $client );
 // test_setOrderHiddenStatus( $client );
 

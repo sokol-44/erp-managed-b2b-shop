@@ -31,7 +31,7 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
     */
    public function __construct( $input = false, $type = true ) {
       $this->init($type);
-      
+      //var_dump(array($this->new, $this->full));
       if( $input ) {
          if( is_string($input) ) {
             $input = $this->fill_object( $input );
@@ -52,7 +52,7 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
    }
    
    public function init( $type ) {
-      if( !$type || empty($type) || $type == 'NEW') {
+      if( $type === TRUE || $type == 'NEW') {
          $this->new = true;
          $this->full = false;
       } elseif ($type == 'FULL') {
@@ -117,7 +117,7 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
       $local_list = $this->get_local_list();
       
       foreach( $local_list as $new_key ) {
-         if( isset($this->values[$new_key]) && !empty($this->values[$new_key]) ) {
+         if( isset($this->values[$new_key]) && $this->values[$new_key]!='' /*&& !empty($this->values[$new_key]) */) {
             //
          } else {
             $this->error[] = array('check_list_'.(($this->new)?'new':'update'), $new_key, $this->values[$new_key]);
@@ -193,7 +193,7 @@ class CategoryData extends BasicSOAPDataMethods {
    public $list = array('id_category', 'id_category_parent', 'sort_order', 'root_number', 'name', 'description',
          'date_added', 'date_modified');
    public $list_new = array('id_category', 'id_category_parent', 'name');
-   public $list_update = array('id_category', 'id_category_parent');
+   public $list_update = array('id_category');
 }
 
 

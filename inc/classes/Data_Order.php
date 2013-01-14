@@ -39,7 +39,19 @@ class Data_Order {
       $result = db_query( $query );
       return db_result_array_full($result);
    }
-
+   
+   static function setOrderHiddenStatus( $id_order, $id_client, $hidden_status) {
+      $query = 'select "' . db_int($id_order) . '" as id_one, "' . db_int($id_client) . '" as id_two,
+       "" as additional_data,
+       b_func_order_hidden_status_change("' . db_int($id_order) . '", "' . db_int($id_client) . '", "' . db_escape($hidden_status) . '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+   
+   
+   
+   
    static function get_order_list( $id_client = 0 ) {
       $SP = SplitPage::g_global();
       
