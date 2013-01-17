@@ -8,7 +8,7 @@
 
 if( !defined('_I_INIT') ) die();
 
-class Data_Order {
+class Data_Order extends Data_Picture {
 
    function __construct() {
       //echo 'Data_Basket';

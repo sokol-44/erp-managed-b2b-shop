@@ -76,7 +76,7 @@ class Pdb {
          return false;
       }
 
-      return$parameters_out;
+      return $parameters_out;
    }
 
    private function __scale_image() {
@@ -90,66 +90,15 @@ class Pdb {
 //      echo '__delete_picture';
 //   }
 
-   static function check_format($data) {
-
-      $stamp['pdf'] = chr(0x25) . chr(0x50) . chr(0x44) . chr(0x46);
-      $stamp['swf'] = chr(0x43) . chr(0x57) . chr(0x53);
-      $stamp['jpg'] = chr(0xFF) . chr(0xD8) . chr(0xFF);
-      $stamp['gif'] = chr(0x47) . chr(0x49) . chr(0x46) . chr(0x38);
-      $stamp['png'] = chr(0x89) . chr(0x50) . chr(0x4E) . chr(0x47) . chr(0x0D) . chr(0x0A) . chr(0x1A) . chr(0x0A);
-
-      $fdata_tmp = substr($data, 0, 10);
-      foreach($stamp as $format_name_tmp => $format_stamp_tmp ) {
-         $res = strpos($fdata_tmp, $format_stamp_tmp);
-         if( $res !== FALSE && $res == 0 ) {
-            $format_name = $format_name_tmp;
-            break;
-         }
-      }
-
-      $meta = array('width' => false, 'height' => false, 'format' => false, 'image' => false);
-
-
-      if( $format_name ) {
-         switch( $format_name ) {
-            case 'jpg':
-            case 'gif':
-            case 'png':
-               //convert & save
-               $tmpname = tempnam('','pdb_');
-               $fh = fopen($tmpname, 'wb');
-               fwrite($fh, $data);
-               fclose($fh);
-               $gis = getimagesize($tmpname);
-               unlink($tmpname);
-               if( $gis ) {
-                  $meta['width'] = $gis[0];
-                  $meta['height'] = $gis[1];
-                  $meta['format'] = strtoupper($format_name);
-                  $meta['image'] = true;
-               }
-               break;
-            case 'pdf':
-            case 'swf':
-               //save
-               $format = strtoupper($format_name);
-               break;
-            default:
-               break;
-         }
-      }
-
-      return $meta;
-   }
 
    private function __insert_picture() {
       //check data params ?
-      $new_meta = Pdb::check_format($this->content);
+      $new_meta = Data::check_image_format($this->content);
 //      print_r($this->meta);
 
       if(!$new_meta['image'] && $this->parameters['type'] != 'ORIGINAL') return false;
 
-      Data::insert_subpicture_data($this->parameters, $new_meta, $this->content);
+      Data::insert_subpicture_data($this->parameters, $this->content, $new_meta);
 //      echo '__insert_picture';
    }
 
@@ -166,8 +115,17 @@ class Pdb {
          } else {
             return false;
          }
-      } else {
-         return $pic_res;
+      } elseif ( !$pic_res ) {
+         $pic_res = Data::get_subpicture_data($this->parameters['id'], 'ORIGINAL');
+         if( $pic_res ) {
+            $pic_auto_scale = Data::autorescale_image($pic_res['data'], $this->parameters['type']);
+            if( $pic_auto_scale ) {
+               $pic_auto_scale['type'] = $this->parameters['type'];
+               $pic_auto_scale['id'] = $this->parameters['id'];
+               Data::insert_subpicture_data($pic_auto_scale, $pic_auto_scale['data']);
+               return $this->__read_picture();
+            }
+         }
       }
       return $pic_res;
    }

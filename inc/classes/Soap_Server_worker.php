@@ -603,7 +603,37 @@ class Soap_Server_worker {
 
       return $response;
    }
-
+   
+   
+   function setPicture( $input ) {
+      $this->input_data_type = 'UPDATE';
+      $this->SingleParam_MultipleReturns = false;
+   
+      add_to_fp('-------- setPicture');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new PictureData($val, $this->input_data_type);
+            if( !$SingleValueClass->is_error() ) {
+               $pa = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. $pa['id_picture'] . ',' . strlen($pa['data']) );
+               $response_tmp[] = Data::setPicture($pa);
+               //$fpc = file_put_contents(time().'.bin', base64_decode($pa['data']));
+               //add_to_fp('res:'. var_export($fpc, true));
+               //$response_tmp[] = $this->getReturnError('setPicture', 'OK', '', false);
+            } else {
+               $response_tmp[] = $this->getReturnError('setPicture', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('setPicture', '', 'EMPTY_LIST');
+      }
+   
+      return($response);
+   }
+   
    function setOrderHiddenStatus( $input ) {
       $this->input_data_type = 'UPDATE';
       $this->SingleParam_MultipleReturns = false;

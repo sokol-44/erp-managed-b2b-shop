@@ -276,4 +276,10 @@ class StatusDoubleData extends BasicSOAPDataMethods {
    public $list_update = array('id_one', 'id_two', 'additional_data', 'status');
 }
 
+class PictureData extends BasicSOAPDataMethods {
+   public $list = array('id_picture', 'name', 'description', 'data');
+   public $list_new = array('id_picture', 'name', 'data');
+   public $list_update = array('id_picture', 'data');
+}
+
 ?>

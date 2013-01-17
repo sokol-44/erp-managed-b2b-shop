@@ -164,6 +164,12 @@
 	<wsdl:message name="getClientPriceProductListResponse">
 		<wsdl:part name="getClientPriceProductListResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="setPictureRequest">
+		<wsdl:part name="setPictureRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setPictureResponse">
+		<wsdl:part name="setPictureResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
 			<wsdl:output message="tns:getProductListResponse"></wsdl:output>
@@ -363,6 +369,14 @@
 							</wsdl:input>
 							<wsdl:output
 								message="tns:getClientPriceProductListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="setPicture">
+							<wsdl:input
+								message="tns:setPictureRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:setPictureResponse">
 							</wsdl:output>
 						</wsdl:operation>
 	</wsdl:portType>
@@ -645,6 +659,17 @@
 			</wsdl:output>
 		</wsdl:operation>
 		<wsdl:operation name="getClientPriceProductList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setPicture">
 			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
 			<wsdl:input>
 				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"

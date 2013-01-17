@@ -23,6 +23,11 @@ foreach( $config['TABLES'] as $cnf_table => $local_table) {
 	define('TBL_' . $cnf_table, $local_table);
 }
 
+//image structure
+foreach( $config['IMAGE'] as $cnf => $value) {
+	define('IMAGE_' . $cnf, $value);
+}
+
 //COM names
 foreach( $config['CFG_COM'] as $cnf_com => $com_name) {
 	define('CFG_COM_' . $cnf_com, $com_name);

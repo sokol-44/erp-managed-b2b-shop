@@ -48,6 +48,7 @@ $client = new SoapClient($soap_address, $soap_param_array);
 // test_doCategoryDelete( $client );
 // test_setProduct2Category( $client );
 
+test_setPicture( $client );
 
 //PLACEHOLDERS
 // test_setOrderStatus( $client );

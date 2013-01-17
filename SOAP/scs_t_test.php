@@ -183,6 +183,14 @@ function test_getOrderListNew( $client ) {
 }
 
 
+function test_setPicture( $client ) {
+   echo "test_setPicture REAL\n";
+   $in_o_x = file_get_contents('a.xml');
+   try { $resC = $client->setPicture($in_o_x); }
+   catch (Exception $e) { /*var_dump($e);*/ echo $e->faultstring; print_lr( $client ); }
+   print("RES:" . xml_b( $resC ). '<br>');
+}
+
 function test_setOrderStatus( $client ) {
    echo "test_setOrderStatus\n";
 }

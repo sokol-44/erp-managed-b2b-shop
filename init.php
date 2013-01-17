@@ -45,6 +45,7 @@ include(DIR_INC_FUNCTIONS . DS . 'global.php');
  * Include global classes files:
  * database, session and other helpers
  */
+include(DIR_INC_CLASSES . DS . 'Data_Picture.php');
 include(DIR_INC_CLASSES . DS . 'Data_Order.php');
 include(DIR_INC_CLASSES . DS . 'Data_Basket.php');
 include(DIR_INC_CLASSES . DS . 'Data_Products.php');
