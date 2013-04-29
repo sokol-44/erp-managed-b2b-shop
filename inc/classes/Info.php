@@ -11,8 +11,8 @@ if( !defined('_I_INIT') ) die();
 
 class Info {
    static $class;
-   static $messages;
-
+   public $messages;
+   
    function __construct() {
       self::$class = $this;
       $this->reset();
@@ -51,6 +51,13 @@ class Info {
       );
    }
 
+   function sadd($message, $type = 'error') {
+      if( $type != 'error' && $type != 'warning' && $type != 'success')
+         $type = 'other';
+      $Info = Info::g_global();
+      $Info->add($message, $type);
+   }
+    
    function add($message, $type = 'error') {
       if( $type != 'error' && $type != 'warning' && $type != 'success')
       $type = 'other';

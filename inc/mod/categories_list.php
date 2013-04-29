@@ -61,7 +61,7 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
       }
    }
 
-   return $categories_string;
+   return '<div class="categories_list">' . $categories_string . '</div>';
 
 }
 

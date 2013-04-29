@@ -76,7 +76,7 @@ class Shopping_Basket_Chain {
    }
 
    public function add_basket( $force = false ) {
-      echo 'xbc:<b>' . sizeof($this->Basket_List) . '</b>,mb<b>' . self::$max_basket . '</b>,' . ($force?'t':'f') . 'x<br>';
+
       if( sizeof($this->Basket_List) < self::$max_basket ) {
          for( $id_sb = 1; $id_sb <= self::$max_basket ; $id_sb++ ){
             if( !$this->_check_valid_basket($id_sb) ) {
@@ -304,7 +304,6 @@ class Shopping_Basket_Chain {
          return false;
       }
    }
-
 
    public function return_basket( $id_shopping_basket = 0 ) {
       if( $this->_check_valid_basket($id_shopping_basket) ) {

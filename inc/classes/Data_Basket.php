@@ -28,7 +28,7 @@ class Data_Basket extends Data_Order {
       using_id_client_user, using_session_id, using_date, UNIX_TIMESTAMP(using_date) as ts_using,
       state
       from ' . TBL_SHOP_SHOPPING_BASKET . '
-      where id_client = ' . db_int($id_client) . '';
+      where state != "ORDER" and id_client = ' . db_int($id_client) . '';
       $basket_list_raw = db_result_array( db_query( $query ) );
       $basket_list = array();
       foreach( $basket_list_raw as $basket ) {
@@ -47,6 +47,18 @@ class Data_Basket extends Data_Order {
       from ' . TBL_SHOP_SHOPPING_BASKET . ' where
       id_client = ' . db_int($basket_params['id_client']) . ' and
       id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']);
+      return db_fetch_array( db_query( $query ) );
+   }
+   
+   static function get_basket_history_last($basket_params) {
+      $query = 'select bh.id_shopping_basket_history, bh.id_shopping_basket, bh.id_client_user,
+      cu.id_client, cu.login, bh.date, bh.mode, bh.description, UNIX_TIMESTAMP(bh.date) as ts_date
+      from ' . TBL_SHOP_SHOPPING_BASKET_HISTORY . ' bh
+      left join ' . TBL_GLOBAL_CLIENT_USER . ' cu on
+      (bh.id_client_user = cu.id_client_user)
+      where
+      bh.id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']) . '
+      order by bh.date asc LIMIT 1';
       return db_fetch_array( db_query( $query ) );
    }
 
@@ -187,7 +199,7 @@ class Data_Basket extends Data_Order {
    }
    
    static function put_basket_update_lock_data($basket_params) {
-       self::put_basket_update_use_data( $basket_params );
+       return self::put_basket_update_use_data( $basket_params );
    }
    
    static function put_basket_update_use_data($basket_params) {
@@ -209,10 +221,24 @@ class Data_Basket extends Data_Order {
       return true;
    }
    
+
+   static function put_basket_info($basket_params, $id_shopping_basket_history) {
+
+      $update_query = 'update ' . TBL_SHOP_SHOPPING_BASKET_HISTORY . ' set
+      description = "' . db_escape($basket_params['description'])  . '"
+      where id_shopping_basket_history = ' . db_int($id_shopping_basket_history) . ' and
+      id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']);
+      db_query( $update_query );
+       
+      $update_query2 = 'update ' . TBL_SHOP_SHOPPING_BASKET . ' set
+      description = "' . db_escape($basket_params['description'])  . '"
+      where id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']);
+      db_query( $update_query2 );
+   
+   }
+     
    static function put_basket_version_product_list($basket_contents, $basket_params) {
-   
-      // db_transaction_start();
-   
+
       $clear_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
       id_shopping_basket_version = ' . db_int($basket_params['id_shopping_basket_version']);
       db_query( $clear_query );
@@ -225,9 +251,7 @@ class Data_Basket extends Data_Order {
          quantity = ' . db_int($details['quantity']) . ', date_added = now()';
          db_query( $insert_query );
       }
-      // print_debug($basket_params);
-      // print_debug($basket_contents);
-      // db_transaction_end();
+
    }
    
    static function add_basket_new_version($basket_params, $id_client_user ) {

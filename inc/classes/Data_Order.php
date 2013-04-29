@@ -116,11 +116,12 @@ class Data_Order extends Data_Picture {
 
 
 
-   static function put_order_data($id_client, $description_basket, $order_description) {
+   static function put_order_data($id_client, $basket_params, $order_description) {
       $query = 'insert into ' . TBL_SHOP_ORDER . '
       	set id_client = ' . db_int($id_client) . ',
       	description = "' . db_escape($order_description) . '",
-      	description_basket = "' . db_escape($description_basket) . '",
+      	description_basket = "' . db_escape($basket_params['description']) . '",
+      	id_shopping_basket = "' . db_int($basket_params['id_shopping_basket']) . '",
       	date_create = now(), date_modified = NULL,
       	id_order_status = 1';
 

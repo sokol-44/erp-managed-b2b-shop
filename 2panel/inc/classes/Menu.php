@@ -21,7 +21,7 @@ class Menu {
       $F = Framework::g_global();
 
 
-      //XXX do actual menu contraction
+      //TODO do actual menu contraction
       if( $P->com != 'login' )
       $this->menu = array(
       array('href' => '#', 'name' => 'Użytkownicy',

@@ -12,12 +12,13 @@ if( $P->logged_in ) $F->redirect( $F->make_link('account') );
 if( $F->check_login('CLIENT') ) {
 //   list($login, $password) = $F->get_login_data(PERSON_TYPE);
    $status = $P->check_person_login($F->POST['lgn_CLIENT'], $F->POST['pswrd_CLIENT'], 'CLIENT');
+   $Info = Info::g_global();
    if( $status ) {
       //login
       $Shopping_Basket_Chain->login_user();
+      $Info->add(Lang::_('LOGGED_IN_USER') . ' ' . $P->login, 'success');
       $Page->redirect( $F->make_link('main') );
    } else {
-      $Info = Info::g_global();
       $Info->add(Lang::_('wrong user or password'));
       $Page->redirect( $F->make_link('login') );
    }

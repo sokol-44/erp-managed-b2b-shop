@@ -408,8 +408,9 @@ class HTML {
     * @param string $text - name and value of button
     * @param string $parameters = ''
     */
-   function draw_submit($text, $parameters = '') {
-      return self::draw_input_field($text, $text, $parameters = '', $type = 'submit', false);
+   function draw_submit($text, $parameters = '', $value = false) {
+      if( !$value ) $value = $text;
+      return self::draw_input_field($text, $value, $parameters = '', $type = 'submit', false);
    }
 
    /**

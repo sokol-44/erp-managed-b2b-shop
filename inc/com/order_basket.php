@@ -15,10 +15,12 @@ if( $F->check_get('id_nr_shopping_basket') ) {
    $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
 }
 
-if( !$P->check_roles('ADMIN,OPERATOR') || !$Shopping_Basket->contents || sizeof($Shopping_Basket->contents) == 0 ) {
+//FIXME magic mode for order LEVEL_99 -> move to CLASS::Rights
+if( !$P->check_roles('LEVEL_99') || !$Shopping_Basket->contents || sizeof($Shopping_Basket->contents) == 0 ) {
+   Info::sadd(Lang::_('NOT_ENOUGH_RIGHTS'));
    $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode') ) );
 }
-
+// die();
 //STR: end
 
 $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_COM_BASKET) ) );
@@ -26,13 +28,19 @@ $BC->add_crumb( array( 'name' => Lang::_('ORDER_BASKET'), 'path' => $F->make_lin
 
 if( $F->check_get('mode') ) {
    switch($F->GET['mode']) {
+      case 'prepare_order_basket':
+         require 'order_basket' . DS . 'prepare_order_basket.php';
+         break;
       case 'order_basket':
          list($id_order, $count_product) = Order::make_new_order($Shopping_Basket, $F->POST['order_description']);
          //FIXME - mail
+         if(!$id_order) {
+            Info::sadd(Lang::_('NOT_ENOUGH_RIGHTS'));
+         }
          Mail2Send::order( (int)$Shopping_Basket->get_id_client(), (int)$id_order);
-         ///$Shopping_Basket_Chain->remove_basket( $Shopping_Basket->id_nr_shopping_basket );
-         //$Shopping_Basket_Chain->set_default_basket();
+         
          $get = $F->add_local_get( array('mode' => 'show_order', 'id_order' => (int)$id_order ));
+         //die($F->GET['mode']);
          $F->redirect( $F->make_link(CFG_COM_ORDER_BASKET, $get) );
          break;
       case 'show_order':
@@ -42,14 +50,16 @@ if( $F->check_get('mode') ) {
             if( $Order->check_rights() ) {
                require 'order' . DS . 'show.php';
             } else {
+               Info::sadd(Lang::_('NOT_ENOUGH_RIGHTS'));
                $F->redirect( $F->make_link(CFG_COM_BASKET), array());
             }
          } else {
+            Info::sadd(Lang::_('NOT_ENOUGH_DATA'));
             $F->redirect( $F->make_link(CFG_COM_BASKET));
          }
-
          break;
       default:
+         Info::sadd(Lang::_('NOT_ENOUGH_DATA'));
          $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode')));
          break;
    }

@@ -63,6 +63,9 @@ class Shopping_Basket {
       if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
          $this->params['using_id_client_user'] = (int)$P->id;
          $this->params['using_session_id'] = $P->session_id;
+      } elseif( $this->params['state'] == 'ORDER' ) {
+         $this->params['using_id_client_user'] = NULL;
+         $this->params['using_session_id'] = NULL;
       } else {
          $this->params['using_id_client_user'] = NULL;
          $this->params['using_session_id'] = NULL;
@@ -99,6 +102,19 @@ class Shopping_Basket {
       return Data::put_basket_update_lock_data( $this->params );
    }
 
+   function state_archive_order() {
+      if( $this->check_rights('MAKE_ORDER') ) {
+      
+         $this->params['using_id_client_user'] = NULL;
+         $this->params['using_session_id'] = NULL;
+         $this->params['state'] = 'ORDER';
+      
+         return Data::put_basket_update_use_data( $this->params );
+      } else {
+         return false;
+      }
+   }
+   
    function add_from_basket( $Shopping_Basket ) {
 
       $res = $this->check_rights('MODIFY_CONTENTS');
@@ -268,6 +284,8 @@ class Shopping_Basket {
        
       if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
          Data::put_basket_version_product_list($this->contents, $this->params);
+         $history_last = Data::get_basket_history_last($this->params);
+         Data::put_basket_info($this->params, (int)$history_last['id_shopping_basket_history']);
       }
    }
     

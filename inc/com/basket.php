@@ -41,12 +41,16 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
             $Shopping_Basket->remove_from_basket( $F->GET['product_key'] );
             break;
          case 'update_basket':
+            //FIXME
             $Shopping_Basket->update_basket_quantity_list($F->POST['product_quantity'], $F->POST['description']);
-            if( $F->check_post('PREPARE ORDER_BASKET', true) ) {
+            if( $F->check_post('PREPARE_ORDER_BASKET') ) {
                $GET_tmp = $F->make_get('mode');
-               $GET_id  = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_id);
-               $F->redirect( $F->make_link(CFG_COM_ORDER_BASKET, $GET_id) );
+               $GET_tmp = $F->add_local_get('mode', 'prepare_order_basket', $GET_tmp);
+               $GET_tmp = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_tmp);
+               $F->redirect( $F->make_link(CFG_COM_ORDER_BASKET, $GET_tmp) );
             }
+         case 'change_level':
+       
          default:
             break;
       }

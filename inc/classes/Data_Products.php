@@ -501,6 +501,7 @@ class Data_Products extends Data_Basket {
    static function get_categorie_tree( $filters = array(), $purge_empty = false ) {
       $category_list = self::get_categories_list($filters);
       $category_tree = self::__categories_make_tree($category_list);
+
       //if( $purge_empty )
       return $category_tree;
 
@@ -566,13 +567,13 @@ class Data_Products extends Data_Basket {
       if( $id_category_parent > 0 ) {
          $path .= $id_category_parent . '_';
       }
-
+      
       $tree = array();
 
       foreach($category_list as $category) {
          if( $id_category_parent == $category['id_category_parent'] ) {
             $products_in_subcategories = 0;
-
+            
             $children = self::__categories_make_tree($category_list, ($level+1), $category['id_category'], $path);
             $all_children = array_keys($children);
             foreach($all_children as $children_keys) {
@@ -591,6 +592,7 @@ class Data_Products extends Data_Basket {
                   'path' => $path . $category['id_category']);
          }
       }
+      
       return $tree;
    }
 

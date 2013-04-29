@@ -618,9 +618,6 @@ class Soap_Server_worker {
                $pa = $SingleValueClass->return_array();
                add_to_fp('$param_array:'. $pa['id_picture'] . ',' . strlen($pa['data']) );
                $response_tmp[] = Data::setPicture($pa);
-               //$fpc = file_put_contents(time().'.bin', base64_decode($pa['data']));
-               //add_to_fp('res:'. var_export($fpc, true));
-               //$response_tmp[] = $this->getReturnError('setPicture', 'OK', '', false);
             } else {
                $response_tmp[] = $this->getReturnError('setPicture', $val, $SingleValueClass->return_error(), false);
             }

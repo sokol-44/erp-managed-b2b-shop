@@ -148,6 +148,10 @@ class Rights {
                      return array(false, $res_debug);
                   }
                   break;
+               case 'ORDER':
+                  $res_debug .= 'o1';
+                  return array(false, $res_debug);;
+                  break;
                case '':
                   die('ERROR');
                   break;
@@ -184,6 +188,9 @@ class Rights {
                   } else {
                      return array(false, $res_debug);
                   }
+                  break;
+               case 'ORDER':
+                  return array(false, $res_debug);;
                   break;
                default:
                   return array(false, $res_debug);
@@ -228,6 +235,9 @@ class Rights {
                   //TODO Rights error
                   return array(false, $res_debug);
                   break;
+               case 'ORDER':
+                  return array(false, $res_debug);;
+                  break;
                default:
                   return array(false, $res_debug);
                   break;
@@ -252,6 +262,9 @@ class Rights {
                   } else {
                      return array(false, $res_debug);
                   }
+                  break;
+               case 'ORDER':
+                  return array(false, $res_debug);;
                   break;
                default:
                   return array(false, $res_debug);
@@ -284,6 +297,9 @@ class Rights {
                   } else {
                      return array(false, $res_debug);
                   }
+                  break;
+               case 'ORDER':
+                  return array(false, $res_debug);;
                   break;
                default:
                   return array(false, $res_debug);
@@ -320,6 +336,9 @@ class Rights {
                      return array(false, $res_debug);
                   }
                   break;
+               case 'ORDER':
+                  return array(false, $res_debug);;
+                  break;
                default:
                   return array(false, $res_debug);
                   break;
@@ -352,6 +371,9 @@ class Rights {
                      return array(false, $res_debug);
                   }
                   break;
+               case 'ORDER':
+                  return array(false, $res_debug);;
+                  break;
                default:
                   return array(false, $res_debug);
                   break;
@@ -383,6 +405,9 @@ class Rights {
                      return array(false, $res_debug);
                   }
                   break;
+               case 'ORDER':
+                  return array(false, $res_debug);;
+                  break;
                default:
                   return array(false, $res_debug);
                   break;
@@ -412,6 +437,9 @@ class Rights {
                   } else {
                      return array(false, $res_debug);
                   }
+                  break;
+               case 'ORDER':
+                  return array(false, $res_debug);;
                   break;
                default:
                   return array(false, $res_debug);

@@ -71,24 +71,24 @@ class Page {
    public function put_css() {
       echo implode("\r", $this->css_array) . "\n";
    }
-   
+    
    public function put_js() {
       global $config;
-      
+
       if( $this->js_jq_init ) {
          echo '<script type="text/javascript" src="http://www.google.com/jsapi"></script>' . NL .
-   		'<script type="text/javascript">' . NL .
+         '<script type="text/javascript">' . NL .
          'if ( window[\'google\'] && window[\'google\'][\'loader\']) {' . NL .
          '  google.load("jquery", "1.4"); ' . NL .
          '} else {' . NL .
          '  document.write(\'<script type="text/javascript" src="' . $this->path_js . $config['TEMPLATES']['jquery'] . '"><\/script>\');' . NL .
          '}' . NL .
          '</script>' . NL .
-   		'<script type="text/javascript">' . NL .
-   		'$(document).ready(function(){' . NL .
-            implode(NL, $this->js_jq_body) . NL .
-   		'})' . NL .
-   		'</script>' . NL;
+         '<script type="text/javascript">' . NL .
+         '$(document).ready(function(){' . NL .
+         implode(NL, $this->js_jq_body) . NL .
+         '})' . NL .
+         '</script>' . NL;
       }
       if( $this->jq_files && count($this->jq_files) > 0 ) {
          foreach($this->jq_files as $js_file) {
@@ -98,7 +98,7 @@ class Page {
       if( $this->js_body ) {
          echo '<script type="text/javascript">' . NL .
          implode(NL, $this->js_body) . NL .
-          '</script>' . NL;
+         '</script>' . NL;
       }
    }
 
@@ -129,17 +129,20 @@ class Page {
       //TODO more generic obj
 
       $list_places = array(
-         'component_html' => array('script' => '', 'type' => 'COM'),
-         'component_info' => array('script' => 'info', 'type' => 'MOD'),
-         'masterhead_html' => array('script' => 'empty', 'type' => 'MOD'),
-         'mastermenu_html' => array('script' => 'master_menu', 'type' => 'MOD'),
-         'second_head_html' => array('script' => 'breadcrumbs', 'type' => 'MOD'),
-         'left_column_html' => array('script' => 'categories_list', 'type' => 'MOD'),
-         'right_column_html' => array('script' => 'basket_list', 'type' => 'MOD'),
-         'bottom_html' => array('script' => 'empty', 'type' => 'MOD'),
-         'footer_html' => array('script' => 'empty', 'type' => 'MOD'),
+            'component_html' => array('script' => '', 'type' => 'COM'),
+            'component_info' => array('script' => 'info', 'type' => 'MOD'),
+            'masterhead_html' => array('script' => 'empty', 'type' => 'MOD'),
+            'mastermenu_html' => array('script' => 'master_menu', 'type' => 'MOD'),
+            'second_head_html' => array('script' => 'breadcrumbs', 'type' => 'MOD'),
+            'left_column_html' => array(
+                  array('script' => 'categories_list', 'type' => 'MOD'),
+                  array('script' => 'basket_list', 'type' => 'MOD')
+                  ),
+            'right_column_html' => array('script' => 'basket_list', 'type' => 'MOD'),
+            'bottom_html' => array('script' => 'empty', 'type' => 'MOD'),
+            'footer_html' => array('script' => 'empty', 'type' => 'MOD'),
       );
-      
+
       //TODO - chose script to login
       if( !$P->logged_in ) {
          $list_places['right_column_html']['script'] = 'empty';
@@ -162,25 +165,45 @@ class Page {
    }
 
    function render_places() {
+      
+      foreach($this->list_places as $place_name => $place) {
+         $content = '';
+         if( Framework::not_null($place['script']) ) {
+            $content = $this->_render_place($place);
+         } elseif(Framework::not_null($place[0]) && is_array($place[0]) ) {
+            foreach($place as $idx_place => $place_arr) {
+               if( Framework::not_null($place_arr['script']) ) {
+                  $content .= $this->_render_place($place_arr, $idx_place);
+               }
+            }
+         }
+         $this->${place_name} = $content;
+      }
+   }
+    
+   private function _render_place($place, $idx_place = 0) {
       $F = Framework::g_global();
       $P = Person::g_global();
       $Page = Page::g_global();
       $BC = Breadcrumbs::g_global();
-      foreach($this->list_places as $place_name => $place) {
-         if( Framework::not_null($place['script']) ) {
-            ob_start();
-            //$this->include_element($place['script'], $place['type']);
-            switch( $place['type']) {
-               case 'COM': include(DIR_INC_COMPONENTS . DS . $place['script'] . '.php');
-               break;
-               case 'MOD': include(DIR_INC_MODULES . DS . $place['script'] . '.php');
-               break;
-               default: break;
-            }
-            $this->${place_name} = ob_get_clean();
-         }
+      ob_start();
+      //$this->include_element($place['script'], $place['type']);
+      switch( $place['type']) {
+         case 'COM':
+            echo '<div class="content_container content_container_nr' . $idx_place . '">';
+            include(DIR_INC_COMPONENTS . DS . $place['script'] . '.php');
+            echo '</div>';
+         break;
+         case 'MOD':
+            echo '<div class="module_container module_container_nr' . $idx_place . '">';
+            include(DIR_INC_MODULES . DS . $place['script'] . '.php');
+            echo '</div>';
+         break;
+         default: break;
       }
+      return ob_get_clean();
    }
+    
 
    function include_element($name, $type = 'COM') {
       //TODO check if exist
@@ -199,21 +222,21 @@ class Page {
 
    /*
     $Page->put_head_description()
-    $Page->put_path_css();
-    $Page->put_js();
-    $Page->put_head_js();
-    $Page->put_masterhead_html();
-    $Page->put_component_html();
-    $Page->put_bottom_html();
-    $Page->put_footer_html();
-    $Page->put_head_title();
-    */
+   $Page->put_path_css();
+   $Page->put_js();
+   $Page->put_head_js();
+   $Page->put_masterhead_html();
+   $Page->put_component_html();
+   $Page->put_bottom_html();
+   $Page->put_footer_html();
+   $Page->put_head_title();
+   */
 
    function __call($name, array $arguments) {
       if( strstr($name, 'put_') ) {
          $var_name = str_replace('put_', '', $name);
          if( Framework::not_null($this->${var_name}) ) return $this->${var_name};
-         //else return 'PLACE ' . $var_name;
+               //else return 'PLACE ' . $var_name;
       } else {
          echo "$name not defined!";
       }

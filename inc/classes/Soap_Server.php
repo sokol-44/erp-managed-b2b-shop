@@ -11,16 +11,50 @@ if( !defined('_I_INIT') ) die();
 class Soap_Server {
    public $auth = false;
    public $nr_req = 0;
+   private $acces_array = array(
+         'empty' => 'dfsfi8CTRJHnoOI243NvirtdsHMIU216asiudnfpou',
+         '1' => 'dfsfi8CTRJHnoOI243NvirtdsHMIU216asiudnfpou');
    private static $worker = false;
 
-   function Authenticate($login) {
-
-      // Authenticate the user
-      //if ($login->username === "a.single.sign.on.user@your.organization.org" && $login->password === "the-password-of-that-user") {
-      //return array('Authenticated'=>true);
-      // } else {
-      return array('Authenticated'=>false);
-      // }
+   function __auth() {
+      $get = $_GET;
+      $F = Framework::g_global();
+      
+      if( Framework::not_null($get['h']) && Framework::not_null($get['s']) ) {
+            
+         if( Framework::is_null($get['u']) ) $get['u'] = 'empty';
+         $secret = $this->acces_array[$get['u']];
+         if( Framework::is_null($get['hf']) ) $get['hf'] = 'md5';
+         
+         if ( Framework::not_null($secret) && abs( (int)$get['s']-time() ) < 72000 ) {
+            if( ctype_xdigit($get['h']) ) {
+               $hash = $get['h'];
+            } elseif ( ctype_alnum($get['h']) ) {
+               $hash = base64_decode($get['h'], true);
+               if( $hash ) {
+                  $hash = bin2hex( $hash );
+               } else {
+                  $hash = false;
+               }
+            } else {
+               $hash = false;
+            }
+            
+            if( $hash ) {
+               $hash_local = hash($get['hf'], $secret . $get['s']);
+               if( $hash_local == $hash ) $this->auth = true;
+            }
+         }
+      }
+      
+       /*Array
+      (
+            [u] => 1
+            [h] => aJhJrVjAntZZVwmZfLdeW929RZwxMzYzNjEyMjU5
+            [s] => 1363612259
+            [hf] => sha1
+      )
+      */
    }
    
    private function __init_worker() {
@@ -33,13 +67,15 @@ class Soap_Server {
       $this->nr_req++;
       add_to_fp("Soap_Server.php\n");
       $this->__init_worker();
+      $this->__auth();
    }
   
    
    function call_worker($name, array $arguments) {
       $xml_data = $this->translate_xml($arguments);
+      add_to_fp('$xml_data'.print_r($xml_data, true));
       $response = call_user_func_array( array($this->worker, $name), array($xml_data));
-      add_to_fp(print_r($response, true));
+      add_to_fp('$response'.print_r($response, true));
       return $response;
    }
    
@@ -53,7 +89,9 @@ class Soap_Server {
    }
    
    function __call($name, array $arguments) {
-      if(strstr($name, '_') === FALSE && method_exists($this->worker,$name)) {
+      if ( !$this->auth ) {
+         $response = $this->worker->getReturnError('AUTH', '', 'WRONG USER PASSWORD');
+      } elseif(strstr($name, '_') === FALSE && method_exists($this->worker,$name)) {
          $return_data = $this->call_worker($name, $arguments);//Request
          ///call_user_func_array( array($this->worker, $name), $arguments);
          //$this->worker->${var_name}();

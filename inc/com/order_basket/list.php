@@ -9,6 +9,11 @@ $Page->add_jq_init('set_toolbox_table(".tableBox");');
 
 $Page->head_title = Lang::_('BASKET');
 
+//magic mode for order LEVEL_99 -> move to CLASS::Rights
+if( !$P->check_roles('LEVEL_99') || !$Shopping_Basket->contents || sizeof($Shopping_Basket->contents) == 0 ) {
+   $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode') ) );
+}
+
 $id_nr_shopping_basket = $Shopping_Basket->id_nr_shopping_basket;
 
 $GET_tmp = $F->make_get();

@@ -88,6 +88,7 @@ $F = new Framework();
 $Page = new Page();
 $Lang = new Lang();
 $Rights = new Rights();
+$Info = new Info();
 
 /**
  * session objects
@@ -95,9 +96,13 @@ $Rights = new Rights();
 $session_object = array('P' => 'Person', 'Info' => 'Info',
 		'Shopping_Basket_Chain' => 'Shopping_Basket_Chain', 'BackTrail' => 'BackTrail');
 
+
+
 foreach($session_object as $var_name => $class_name ) {
+//      echo $var_name.' '.(!session_check($var_name)?'t':'f').' o:'.(!is_object(${$var_name})?'t':'f')."<br>\n";
    if ( !session_check($var_name) || !is_object(${$var_name}) ) {
       ${$var_name} = new ${class_name}();
+      //echo "$var_name => $class_name";
       session_put($var_name);
    }
 }

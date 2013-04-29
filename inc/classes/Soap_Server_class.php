@@ -37,7 +37,7 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
             $input = $this->fill_object( $input );
          } elseif (is_array($input) ) {
             //ok -> $input = $input;
-            add_to_fp("input_array\n");
+            add_to_fp("input_array\n".print_r($input, true));
          } else {
             $input = array();
          }
@@ -117,10 +117,10 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
       $local_list = $this->get_local_list();
       
       foreach( $local_list as $new_key ) {
-         if( isset($this->values[$new_key]) && $this->values[$new_key]!='' /*&& !empty($this->values[$new_key]) */) {
+         if( isset($this->values[$new_key]) && $this->values[$new_key]!='' ) {
             //
          } else {
-            $this->error[] = array('check_list_'.(($this->new)?'new':'update'), $new_key, $this->values[$new_key]);
+            $this->error[] = array(0 => 'check_list_'.(($this->new)?'new':'update'), 1 => $new_key, 2=>$this->values[$new_key]);
          }
       }
    }
@@ -128,7 +128,7 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
    private function check_list( $input ) {
       var_dump($input);
       foreach ($input as $key => $val ) {
-       if( !empty($val) && in_array($key, $this->list) ) {
+       if( in_array($key, $this->list) && $val!='' ) {
             $this->values[$key] = $val;
          } else {
             $this->warning[] = array('check_list', $key.'=>'.$val);

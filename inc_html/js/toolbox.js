@@ -15,3 +15,11 @@ function clear_password() {
 function go_to_href(url) {
 	location.href = url;
 }
+
+function change_form_target(target) }
+
+
+
+}
+
+

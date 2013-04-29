@@ -79,6 +79,9 @@ echo Lang::_('Basket help for icons');
 	$unlock_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'unlock_basket', $GET_id));
 	$unlock_basket = $F->draw_link($unlock_basket_link, 'title="' . Lang::_('unlock this BASKET') . '"', $F->static_image('icon/stock_lock_open_16.png', Lang::_('unlock this BASKET')));
 
+	$show_basket_link = $F->make_link(CFG_COM_BASKET, array('id_shopping_basket' => $Shopping_Basket->id_shopping_basket));
+	$show_basket = $F->draw_link($show_basket_link, 'title="' . Lang::_('show BASKET') . '"', $Shopping_Basket->id_shopping_basket);
+	
 	$currently_user_locked  = $Shopping_Basket->currently_user_locked();
 	if( $currently_user_locked ) {
 	   $class_add = ' class="lockedbasket_user"';
@@ -97,7 +100,7 @@ echo Lang::_('Basket help for icons');
 	$state_html = '0 ' . $Shopping_Basket->basket_level_text();
 	?>
 	<tr>
-		<td class="mainbasket"><?php echo $Shopping_Basket->id_shopping_basket; ?>
+		<td class="mainbasket"><?php echo $show_basket; ?>
 		</td>
 		<td <?php echo $class_add; ?>><?php echo $state_html; ?></td>
 		<td><?php echo $total['product_total']; ?></td>
@@ -146,6 +149,9 @@ echo Lang::_('Basket help for icons');
 	      $unlock_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'unlock_basket', $GET_id));
 	      $unlock_basket = $F->draw_link($unlock_basket_link, 'title="' . Lang::_('unlock this BASKET') . '"', $F->static_image('icon/stock_lock_open_16.png', Lang::_('unlock this BASKET')));
 
+	      $show_basket_link = $F->make_link(CFG_COM_BASKET, array('id_shopping_basket' => $Shopping_Basket->id_shopping_basket));
+	      $show_basket = $F->draw_link($show_basket_link, 'title="' . Lang::_('show BASKET') . '"', $Shopping_Basket->id_shopping_basket);
+	       
 	      $rights['MODIFY_CONTENTS'] = $Shopping_Basket->check_rights('MODIFY_CONTENTS', false);
 	      if( $rights['MODIFY_CONTENTS'] ) {
 	         $available_actions = $addup_basket . $remove_basket . $clean_basket;
@@ -159,12 +165,13 @@ echo Lang::_('Basket help for icons');
 	      }
 	   } else {
 	      $class_add = ' class="na_basket"';
+	      $show_basket = $Shopping_Basket->id_shopping_basket;
 	   }
 	   $state_html = $Shopping_Basket->basket_level_nr() .'(' . $basket_lvl_diff . ')<br>' .
 	     	   $Shopping_Basket->basket_level_text();
 	   ?>
 	<tr>
-		<td <?php echo $class_add; ?>><?php echo $Shopping_Basket->id_shopping_basket; ?>
+		<td <?php echo $class_add; ?>><?php echo $show_basket; ?>
 		</td>
 		<td <?php echo $class_add; ?>><?php echo $state_html; ?></td>
 		<td><?php echo $total['product_total']; ?></td>

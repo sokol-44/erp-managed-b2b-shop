@@ -182,6 +182,7 @@ class XMLToArray {
          switch ($this->XMLReader->nodeType) {
             case XMLReader::END_ELEMENT:
                if( $this->XMLReader->name == $el_name ) {
+                  if( sizeof($assoc) == 0 ) $assoc = '';
                   break 2;
                }
                break;
@@ -205,6 +206,8 @@ class XMLToArray {
             case XMLReader::CDATA: if($this->XMLReader->value!='') $assoc = $this->XMLReader->value;
          }
       }
+      
+//       if( sizeof($assoc) == 0 ) $assoc = $this->XMLReader->nodeType;
 
       if( !$res_read ) {
          // echo '$#' . $this->XMLReader->name . '$' . $this->XMLReader->value . "$\r\n";

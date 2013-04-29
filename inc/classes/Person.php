@@ -15,7 +15,7 @@ if( !defined('_I_INIT') ) die();
 class Person {
    static $class;
    var $all;
-   public $login, $logged_in, $role, $id, $session_id;
+   public $login, $logged_in, $roles, $id, $session_id;
    public $data;
 
    function __construct() {

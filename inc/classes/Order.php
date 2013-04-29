@@ -79,7 +79,7 @@ class Order {
       $F = Framework::g_global();
       $P = Person::g_global();
 
-      if( $Shopping_Basket->params['id_client'] != $P->data['id_client'] || !$P->check_roles('ADMIN,OPERATOR') ||
+      if( $Shopping_Basket->params['id_client'] != $P->data['id_client'] || !$P->check_roles('LEVEL_99') ||
       !Shopping_Basket::_check_valid_basket($Shopping_Basket) )  {
          return false;
       }
@@ -88,9 +88,10 @@ class Order {
 
       if( !$F->not_null($order_description) ) $order_description = 'NULL';
        
-      $id_order = Data::put_order_data($P->data['id_client'], $Shopping_Basket->params['description'], $order_description);
+      $id_order = Data::put_order_data($P->data['id_client'], $Shopping_Basket->params, $order_description);
       if( $id_order > 0 ) {
-         $count_product = Data::put_order_product_list($id_order, $product_list);
+         $Shopping_Basket->state_archive_order();
+         $count_product   = Data::put_order_product_list($id_order, $product_list);
          $count_product_2 = Data::change_product_quantity_list($product_list);
          Data::put_order_status($id_order, '1', $order_description);
          return array($id_order, $count_product);
