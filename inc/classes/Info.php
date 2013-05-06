@@ -13,7 +13,7 @@ class Info {
    static $class;
    public $messages;
    
-   function __construct() {
+   public function __construct() {
       self::$class = $this;
       $this->reset();
    }
@@ -38,11 +38,11 @@ class Info {
    }
 
 
-   function __wakeup() {
+   public function __wakeup() {
       self::$class = $this;
    }
 
-   function reset() {
+   public function reset() {
       $this->messages = array(
          'error' => array(),
          'warning' => array(),
@@ -51,21 +51,21 @@ class Info {
       );
    }
 
-   function sadd($message, $type = 'error') {
+   static function sadd($message, $type = 'error') {
       if( $type != 'error' && $type != 'warning' && $type != 'success')
          $type = 'other';
       $Info = Info::g_global();
       $Info->add($message, $type);
    }
     
-   function add($message, $type = 'error') {
+   public function add($message, $type = 'error') {
       if( $type != 'error' && $type != 'warning' && $type != 'success')
       $type = 'other';
 
       $this->messages[$type][] = array('text' => $message);
    }
 
-   function output($show_type = '') {
+   public function output($show_type = '') {
       $output = array();
 
       if( Framework::is_null($show_type) ) $all = true;

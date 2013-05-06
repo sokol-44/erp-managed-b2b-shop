@@ -16,7 +16,7 @@ function go_to_href(url) {
 	location.href = url;
 }
 
-function change_form_target(target) }
+function change_form_target(target) {
 
 
 

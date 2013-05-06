@@ -32,6 +32,14 @@ class Data_Rights extends Data_Products {
       return db_result_array($res);
 
    }
+   
+   function get_client_rights_max_level() {
+      $res = db_query('select substring(name,7) as ml from global_rights
+               where scope="CLIENT" and name like "LEVEL_%" and name!="LEVEL_99"
+               order by substring(name,7) desc limit 1');
+      if( db_rows($res) ) return db_fetch_result('ml', $res);
+      return false;
+   }
 
 
 }

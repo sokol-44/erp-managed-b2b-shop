@@ -3,8 +3,11 @@
 Global
 */
 
-input { padding: 3px; }
-
+input, textarea { padding: 3px; }
+input[disabled], input:disabled, textarea[disabled], textarea[disabled="disabled"], textarea:disabled, input[readonly="readonly"], textarea[readonly="readonly"]
+{
+    background-color: gainsboro;
+}
 /*
 Product Info
 */
@@ -95,6 +98,12 @@ Basket list
 }
 .usedbasket {
 	background-color: moccasin;
+}
+.lockedbasket_user {
+	background-color: SpringGreen;
+}
+.lockedbasket_other {
+	background-color: Coral;
 }
 
 .basket_number {

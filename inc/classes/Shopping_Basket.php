@@ -73,8 +73,18 @@ class Shopping_Basket {
 
       return Data::put_basket_update_use_data( $this->params );
    }
-    
+   
+   function state_change_level($new_lvl) {
+      $this->params['using_id_client_user'] = NULL;
+      $this->params['using_session_id'] = NULL;
+      $this->params['state'] = 'FREE_'  . $new_lvl;
+
+      return Data::put_basket_update_use_data( $this->params );
+   }
+   
    function state_using_clear() {
+      $st = Rights::split_state( $this->params['state'] );
+      
       $this->params['using_id_client_user'] = NULL;
       $this->params['using_session_id'] = NULL;
       $this->params['state'] = 'FREE_'  . $st['state_lvl'];
@@ -92,6 +102,7 @@ class Shopping_Basket {
     
    function state_lock_unset( $id_basket_default = 0 ) {
       $P = Person::g_global();
+      $st = Rights::split_state( $this->params['state'] );
       
       if( $id_basket_default == $this->id_shopping_basket ) { //$this->params['id_client'] = (int)$P->id;
          $this->params['state'] = 'USE_'  . $st['state_lvl'];
@@ -149,6 +160,25 @@ class Shopping_Basket {
       if( $save ) self::db_save_contents();
    }
 
+   function basket_level_change($direction, $history_description ) {
+      if( ( $direction == 'UP'   && $this->check_move('UP') ) ||
+          ( $direction == 'DOWN' && $this->check_move('DOWN') ) ) {
+
+         $level_in = array();
+         $level_in['now'] = $this->basket_level_nr();
+         if( $direction == 'UP' ) {
+            $level_in['new'] = $level_in['now'] + 1;
+         } else {
+            $level_in['new'] = $level_in['now'] - 1;
+         }
+         $new_id = Data::put_basket_history($this->params, $level_in, $history_description);
+         $this->state_change_level($level_in['new']);
+         return $new_id;
+      } else {
+         return false;
+      }
+   }
+
    function basket_level_text( ) {
       $st = Rights::split_state($this->params['state']);
       return $st['state_type'];
@@ -200,6 +230,22 @@ class Shopping_Basket {
 
       return false;
    }
+   
+
+   function check_move( $direction = 'UP') {
+      $Rights = Rights::g_global();
+      
+      if( !$this->check_rights('MODIFY_CONTENTS') ) return false;
+      
+      if( $direction == 'UP' ) {
+         return ($Rights->get_client_max_level() > $this->basket_level_nr());
+      } elseif ( $direction == 'DOWN' ) {
+         return ($this->basket_level_nr()>0);
+      } else {
+         return false;
+      }
+   }
+    
 
    function check_rights( $action, $show_info = true) {
       $P = Person::g_global();
@@ -544,13 +590,13 @@ class Shopping_Basket {
       $res = $this->check_rights('MODIFY_CONTENTS');
 
       if( !$res ) {
-         Info::g('add', Lang::_('You don\'t have rights for REMOVE BASKET to basket: ' . $this->id_shopping_basket));
+         Info::sadd(Lang::_('You don\'t have rights for REMOVE BASKET to basket: ' . $this->id_shopping_basket));
          return false;
       }
 
       // Data::remove_basket( $this->id_client, $id_nr_shopping_basket );
       $version_list = $this->get_version_list();
-      Data::remove_basket( $this->params, $version_list );
+      return Data::remove_basket( $this->params, $version_list );
    }
     
     

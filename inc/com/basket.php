@@ -31,6 +31,10 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
             'id_product' => (int)$F->GET['id_product'],
             'id_product_subtype' => (int)$F->GET['id_product_subtype']
       );
+      if( !$Shopping_Basket->check_rights('MODIFY_CONTENTS') ) {
+         Info::sadd('NOT_ENOUGH_RIGHTS');
+         $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode')));
+      }
       switch($F->GET['mode']) {
          //   case 'add_basket':
          //   case 'remove_basket':
@@ -48,9 +52,27 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
                $GET_tmp = $F->add_local_get('mode', 'prepare_order_basket', $GET_tmp);
                $GET_tmp = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_tmp);
                $F->redirect( $F->make_link(CFG_COM_ORDER_BASKET, $GET_tmp) );
+            } elseif ( $F->check_post('CHANGE_LEVEL_UP') ) {
+               if( $Shopping_Basket->check_move('UP') ) {
+                  //$Shopping_Basket->change_level('UP');
+                  $GET_tmp = $F->make_get(array('mode', 'show'));
+                  $GET_tmp = $F->add_local_get('show', 'change_level_up', $GET_tmp);
+                  $GET_tmp = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_tmp);
+                  $F->redirect( $F->make_link(CFG_COM_BASKET, $GET_tmp) );
+               } else {
+                  Info::sadd('NOT_ENOUGH_RIGHTS');
+               }
+            } elseif ( $F->check_post('CHANGE_LEVEL_DOWN') ) {
+               if( $Shopping_Basket->check_move('DOWN') ) {
+                  //$Shopping_Basket->change_level('DOWN');
+                  $GET_tmp = $F->make_get(array('mode', 'show'));
+                  $GET_tmp = $F->add_local_get('show', 'change_level_down', $GET_tmp);
+                  $GET_tmp = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_tmp);
+                  $F->redirect( $F->make_link(CFG_COM_BASKET, $GET_tmp) );
+               } else {
+                  Info::sadd('NOT_ENOUGH_RIGHTS');
+               }
             }
-         case 'change_level':
-       
          default:
             break;
       }
@@ -59,14 +81,24 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
    //multi basket
    } elseif( $F->check_get('action') ) {
       //group basket action
+      if( !$Shopping_Basket->check_rights('MODIFY_CONTENTS') ) {
+         Info::sadd('NOT_ENOUGH_RIGHTS');
+         $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode')));
+      }
       switch($F->GET['action']) {
          case 'remove_basket':
             //FIXME
             //trow some error
-            if( $P->logged_in && $F->check_get('id_shopping_basket') )
-               $Shopping_Basket_Chain->remove_basket( (int)$F->GET['id_shopping_basket'] );
-            else
-               ;
+            if( $P->logged_in && $F->check_get('id_shopping_basket') ) {
+               $res = $Shopping_Basket_Chain->remove_basket( (int)$F->GET['id_shopping_basket'] );
+               if( $res ) Info::sadd('BASKET DELETED', 'success');
+               else Info::sadd('DELETE ERROR', 'success');
+            } else {
+               Info::sadd('NOT_ENOUGH_RIGHTS');
+            }
+            $info = Info::g_global();
+            print_debug($info);
+            die();
             break;
          case 'clean_basket':
             //FIXME
@@ -96,7 +128,7 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
             //FIXME
             //trow some error
             if( $F->check_get('id_shopping_basket') ) {
-               var_dump( $Shopping_Basket_Chain->set_unlock_basket( (int)$F->GET['id_shopping_basket'] ) ) ;
+               $Shopping_Basket_Chain->set_unlock_basket( (int)$F->GET['id_shopping_basket'] );
                die();
             } else
                ;
@@ -114,10 +146,17 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
             else
                ;
             break;
+         case 'change_level_up':
+            $new_id = $Shopping_Basket->basket_level_change('UP', $F->POST['history_description']);
+            break;
+         case 'change_level_down':
+            $new_id = $Shopping_Basket->basket_level_change('DOWN', $F->POST['history_description']);
+            break;
          default:
             break;
       }
       $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('action,id_shopping_basket', false)) );
+//       $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('action,id_shopping_basket', false)) );
 } elseif( $F->check_get('show') ) {
    //show
    switch($F->GET['show']) {
@@ -125,10 +164,14 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
          require 'basket' . DS . 'list_all.php';
          break;
       case 'version_details':
-         require 'basket' . DS . 'list.php';
+         require 'basket' . DS . 'details.php';
          break;
       case 'history_details':
-         require 'basket' . DS . 'list.php';
+         require 'basket' . DS . 'details.php';
+         break;
+      case 'change_level_up':
+      case 'change_level_down':
+         require 'basket' . DS . 'basket_change_level.php';
          break;
       default:
          $F->redirect( $F->make_link(CFG_COM_BASKET));
@@ -140,6 +183,6 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
    $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode')));
 } else {
    //display basket
-   require 'basket' . DS . 'list.php';
+   require 'basket' . DS . 'details.php';
 }
 ?>

@@ -13,9 +13,15 @@ define('RIGHTS_LEVEL_NAME', 'LEVEL_');
 class Rights {
    static $class;
    private $show_info;
+   private $client_max_level;
 
    function __construct() {
       self::$class = $this;
+      $this->client_max_level=Data::get_client_rights_max_level();
+   }
+   
+   function get_client_max_level() {
+      return $this->client_max_level;
    }
 
    static function g_global() {
@@ -64,7 +70,12 @@ class Rights {
       }
       return false;
    }
-    
+
+   
+   
+   /*
+    * Sprawdza czy ma prawa grzebania ze stanami koszyków
+    */
    public function basket_level_rights( $basket_params) {
       $P = Person::g_global();
       $res_debug = '';
@@ -74,7 +85,7 @@ class Rights {
       
       if( $P->check_roles($st['level_role']) ) {
          return array(0, '#DF:0<br>');
-      } else {
+      } else {  //FIXME - WTF ?
          for( $dif_lvl=1; $dif_lvl<100; $dif_lvl++ ) {
             if( $P->check_roles(RIGHTS_LEVEL_NAME . (int)($st['state_lvl']+$dif_lvl)) ) {
                return array('-'.$dif_lvl, '#DF:-'.$dif_lvl.'<br>');

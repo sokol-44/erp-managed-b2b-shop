@@ -97,13 +97,13 @@ class Shopping_Basket_Chain {
    public function remove_basket( $id_shopping_basket = 0) {
       if( $this->_check_valid_basket($id_shopping_basket) &&
             $this->Basket_List[ $id_shopping_basket ]->check_rights('MODIFY_CONTENTS') ) {
-         $this->Basket_List[$id_shopping_basket]->remove_basket();
+         $res = $this->Basket_List[$id_shopping_basket]->remove_basket();
          unset($this->Basket_List[$id_shopping_basket]);
          if( (int)$id_shopping_basket == (int)$this->id_basket_current ) {
             $this->id_basket_set = false;
             $this->set_default_basket_by_date();
          }
-         return true;
+         return $res;
       } else {
          return false;
       }

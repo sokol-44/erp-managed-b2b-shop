@@ -17,7 +17,7 @@ class Soap_Server {
    private static $worker = false;
 
    function __auth() {
-      $get = $_GET;
+      $get = Framework::$GET;
       $F = Framework::g_global();
       
       if( Framework::not_null($get['h']) && Framework::not_null($get['s']) ) {
@@ -39,14 +39,21 @@ class Soap_Server {
             } else {
                $hash = false;
             }
-            
-            if( $hash ) {
+            add_to_fp(var_export($hash ,true));
+			
+            if( $hash && in_array($get['hf'],hash_algos()) ) {
                $hash_local = hash($get['hf'], $secret . $get['s']);
-               if( $hash_local == $hash ) $this->auth = true;
+               add_to_fp("HASH  ");
+               if( $hash_local == $hash ) {
+                  add_to_fp("AUTH\n");
+                  $this->auth = true;
+               }
             }
          }
       }
       
+      //TODO - remove prom production
+      $this->auth = true;
        /*Array
       (
             [u] => 1
@@ -81,22 +88,25 @@ class Soap_Server {
    
    function translate_xml($arguments) {
       global $fp_xml;
-      if( isset($fp_xml) && is_resource($fp_xml) ) {
+      add_to_fp("translate_xml\n");
+      if( strlen($arguments[0]) > 0 && $fp_xml && is_resource($fp_xml)  ) {
          fwrite($fp_xml, $arguments[0]);
       }
-      
       return ArrayToXML::Xmlto($arguments[0]);
    }
    
    function __call($name, array $arguments) {
       if ( !$this->auth ) {
-         $response = $this->worker->getReturnError('AUTH', '', 'WRONG USER PASSWORD');
+         add_to_fp(' not auth ' . $name);
+         $return_data = $this->worker->getReturnError('AUTH', '', 'WRONG USER PASSWORD');
       } elseif(strstr($name, '_') === FALSE && method_exists($this->worker,$name)) {
+         add_to_fp('     auth & method ' . $name);
          $return_data = $this->call_worker($name, $arguments);//Request
          ///call_user_func_array( array($this->worker, $name), $arguments);
          //$this->worker->${var_name}();
       } else {
-         $response = $this->worker->getReturnError($name, '', 'WRONG METHOD');
+         add_to_fp('     auth & not method ' . $name);
+         $return_data = $this->worker->getReturnError($name, '', 'WRONG METHOD');
       }
       return ArrayToXML::toXml($return_data);
    }

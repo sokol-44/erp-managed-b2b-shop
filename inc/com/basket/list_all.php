@@ -10,7 +10,8 @@ $Price = Price::g_global();
 if( $Shopping_Basket === FALSE ) die('sasa');
 
 $total = $Shopping_Basket->calculate_total();
-
+// $info = Info::g_global();
+// print_debug($info);
 $Page->head_title = Lang::_('BASKET list');
 
 echo Lang::_('Basket help for icons');
@@ -61,12 +62,13 @@ echo Lang::_('Basket help for icons');
 		<th><?php echo Lang::_('PRODUCTS TYPES'); ?></th>
 		<th><?php echo Lang::_('sum gross'); ?></th>
 		<th><?php echo Lang::_('sum netto'); ?></th>
-		<th>kto</th>
+		<th><?php echo Lang::_('WHO_IS_USING'); ?></th>
 		<th><?php echo Lang::_('available actions'); ?></th>
 	</tr>
 	<?php
 	$GET_tmp = $F->make_get();
 	$GET_id = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_tmp);
+	if( !empty($F->GET['show']) ) $GET_id = $F->add_local_get('show', $F->GET['show'], $GET_id);
 	$remove_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'remove_basket', $GET_id));
 	$remove_basket = $F->draw_link($remove_basket_link, 'title="' . Lang::_('remove BASKET') . '"', $F->static_image('icon/delete_16.png', Lang::_('remove BASKET')));
 	$clean_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'clean_basket', $GET_id));
@@ -107,9 +109,7 @@ echo Lang::_('Basket help for icons');
 		<td><?php echo $total['product_types']; ?></td>
 		<td><?php echo Price::val($total['sum_gross']); ?></td>
 		<td><?php echo Price::val($total['sum_netto']); ?></td>
-		<td><?php echo 'IDC:<b>'.$Shopping_Basket->params['id_client'] . '</b>,
-		IDUC:<b>' . $Shopping_Basket->params['using_id_client_user'] . '</b>;<br>'
-		. '"' . $Shopping_Basket->res_debug; ?></td>
+		<td><?php echo $Shopping_Basket->params['using_id_client_user'] ?></td>
 		<td><div class="basket_menu">
 				<?php echo $available_actions; ?>
 			</div></td>
@@ -178,9 +178,7 @@ echo Lang::_('Basket help for icons');
 		<td><?php echo $total['product_types']; ?></td>
 		<td><?php echo Price::val($total['sum_gross']); ?></td>
 		<td><?php echo Price::val($total['sum_netto']); ?></td>
-		<td><?php echo 'IDC:<b>'.$Shopping_Basket->params['id_client'] . '</b>,
-		IDUC:<b>' . $Shopping_Basket->params['using_id_client_user'] . '</b>;<br>'
-		. '"' . $Shopping_Basket->res_debug; ?></td>
+		<td><?php echo $Shopping_Basket->params['using_id_client_user'] ?></td>
 		<td><div class="basket_menu">
 				<?php echo $available_actions; ?>
 			</div></td>
