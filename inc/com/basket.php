@@ -96,9 +96,6 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
             } else {
                Info::sadd('NOT_ENOUGH_RIGHTS');
             }
-            $info = Info::g_global();
-            print_debug($info);
-            die();
             break;
          case 'clean_basket':
             //FIXME
@@ -129,7 +126,8 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
             //trow some error
             if( $F->check_get('id_shopping_basket') ) {
                $Shopping_Basket_Chain->set_unlock_basket( (int)$F->GET['id_shopping_basket'] );
-               die();
+               print_debug($Shopping_Basket_Chain, true);
+               die('D1');
             } else
                ;
             break;

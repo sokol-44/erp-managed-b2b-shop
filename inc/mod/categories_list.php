@@ -18,11 +18,11 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
    $F = Framework::g_global();
 
    foreach($local_tree as $current_id => $category) {
-      if( $category['parent'] == $parent_id) {
+      $all_products =  ($category['products_in_category'] + $category['products_in_subcategories']);
+      
+      if( $category['parent'] == $parent_id && !(DEFAULT_SHOW_EMPTY!='true' && $all_products==0) ) {
 
-         $all_products =  ($category['products_in_category'] + $category['products_in_subcategories']);
-
-         if (SHOW_COUNTS == 'true') {
+         if (DEFAULT_SHOW_COUNTS == 'true') {
             $category['description'] .= "\n" . TEXT_PRODUCTS_IN_CATEGORY . $all_products ;
          }
 
