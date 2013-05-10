@@ -6,12 +6,13 @@ class ArrayToXML
     * The main function for converting to an XML document.
     * Pass in a multi dimensional array and this recrusively loops through and builds up an XML document.
     *
-    * @param array $data
+    * @param array $data_in
     * @param string $rootNodeName - what you want the root node to be - defaultsto data.
     * @param SimpleXMLElement $xml - should only be used recursively
+    * @param info $xml - should only be used recursively
     * @return string XML
     */
-   public static function toXml($data, $rootNodeName = 'DocumentElement', $xml=null)
+   public static function toXml($data_in, $rootNodeName = 'DocumentElement', $xml=null, $info = null)
    {
       // turn off compatibility mode as simple xml throws a wobbly if you don't.
       if (ini_get('zend.ze1_compatibility_mode') == 1)
@@ -21,11 +22,15 @@ class ArrayToXML
 
       if ($xml == null)
       {
-         $xml = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$rootNodeName />");
+        $xml = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$rootNodeName />");
+         if( is_array($info) ) {
+            $node = $xml->addChild('Info');
+            ArrayToXML::toXml($info, 'Info', $node);
+         }
       }
 
       // loop through the data passed in.
-      foreach($data as $key => $value)
+      foreach($data_in as $key => $value)
       {
          $key_a = explode('_', $key);
          if( is_array($key_a) && sizeof($key_a)==2 && $key_a[0] == 'value') {

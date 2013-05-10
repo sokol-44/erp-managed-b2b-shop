@@ -26,7 +26,7 @@ class Data_Order extends Data_Picture {
      
     */
    static function getOrderList( $id_order_start = 0, $length = 1, $where = '' ) {
-      add_to_fp("length: $length");
+      add_to_fp("getOrderList:\nlength: $length");
       list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
       add_to_fp("$length, $comparision_dir, $order_dir");
       
@@ -38,6 +38,20 @@ class Data_Order extends Data_Picture {
       add_to_fp($query);
       $result = db_query( $query );
       return db_result_array_full($result);
+   }
+   
+   static function getOrderListRest( $id_order_start = 0, $length = 1, $where = '' ) {
+      add_to_fp("getOrderListRest:");
+      list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+      
+      $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
+      o.description, o.description_basket, o.id_shopping_basket
+      from ' . TBL_SHOP_ORDER . ' o
+      where o.id_order ' . $comparision_dir . db_int($id_order_start) . $where . '
+      ORDER BY o.id_order ' . $order_dir;
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_rows($result)-1;
    }
    
    static function setOrderHiddenStatus( $id_order, $id_client, $hidden_status) {

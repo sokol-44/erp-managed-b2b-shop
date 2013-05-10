@@ -51,8 +51,44 @@ class Soap_Server_worker {
    
    private function _addArrayValues( $array ) {
       $res = array();
+      $res['Info'] = array();
+      $ainfo = array('id_one_name'=>'', 'id_one_min'=>false, 'id_one_max'=>false,
+                     'id_two_name'=>'', 'id_two_min'=>false, 'id_two_max'=>false);
       foreach( $array as $key => $val ) {
+         if( $ainfo['id_one_name'] === false ) {
+         } elseif( $ainfo['id_one_name'] === '' ) {
+            foreach($val as $kname => $kval) {
+               if( strpos($kname, 'id_') == 0 && strpos($kname, 'id_') !== FALSE ) {
+                  $ainfo['id_one_name'] = $kname;
+                  $ainfo['id_one_max'] = $kval;
+                  $ainfo['id_one_min'] = $kval;
+                  break;
+               }
+            }
+            if( $ainfo['id_one_name'] == '' ) $ainfo['id_one_name'] = false;
+         } else {
+            if( $val[$ainfo['id_one_name']] > $ainfo['id_one_max'] ) $ainfo['id_one_max'] = $val[$ainfo['id_one_name']];
+            if( $val[$ainfo['id_one_name']] < $ainfo['id_one_min'] ) $ainfo['id_one_min'] = $val[$ainfo['id_one_name']];
+         }
+         
+         if( $ainfo['id_two_name'] === false ) {
+         } elseif( $ainfo['id_two_name'] === '' ) {
+            foreach($val as $kname => $kval) {
+               if( strpos($kname, 'id_') == 0 && strpos($kname, 'id_') !== FALSE && $kname != $ainfo['id_one_name'] ) {
+                  $ainfo['id_two_name'] = $kname;
+                  $ainfo['id_two_max'] = $kval;
+                  $ainfo['id_two_min'] = $kval;
+                  break;
+               }
+            }
+            if( $ainfo['id_two_name'] == '' ) $ainfo['id_two_name'] = false;
+         } else {
+            if( $val[$ainfo['id_two_name']] > $ainfo['id_two_max'] ) $ainfo['id_two_max'] = $val[$ainfo['id_two_name']];
+            if( $val[$ainfo['id_two_name']] < $ainfo['id_two_min'] ) $ainfo['id_two_min'] = $val[$ainfo['id_two_name']];
+         }
+         
          $res['value_' . $key] = $val;
+         $res['Info']['DataInfo'] = $ainfo;
       }
       return $res;
    }
@@ -237,9 +273,19 @@ class Soap_Server_worker {
       if( is_object($ParamStartLength) ) {
          if( !$ParamStartLength->is_error() ) {
             $param_array = $ParamStartLength->return_array();
-            //add_to_fp('$param_array:'. print_r($param_array, true) );
+            add_to_fp('$param_array:'. print_r($param_array, true) );
             $res_array = Data::getOrderList((int)$param_array['id_start'], (int)$param_array['length']);
-            $response = $this->_addArrayValues($res_array);
+            $response = array();
+            
+            if( sizeof($res_array) > 0 ) {
+               $response = $this->_addArrayValues($res_array);
+               add_to_fp('$response:'.print_r($response, true) );
+               if( (int)$param_array['length'] > 0  ) $id_chk = (int)$response['Info']['DataInfo']['id_one_max'];
+               else $id_chk = (int)$response['Info']['DataInfo']['id_one_min'];
+               add_to_fp('rest in');
+               $response['Info']['Rest'] = Data::getOrderListRest((int)$id_chk, (int)$param_array['length']);
+               add_to_fp('rest out');
+            }
          } else {
             $response = $this->getReturnError('getOrderList', $input, $ParamStartLength->return_error() );
          }
@@ -247,6 +293,7 @@ class Soap_Server_worker {
          $response = $this->getReturnError('getOrderList', $input, 'WRONG CLASS');
       }
 
+      add_to_fp('return out');
       return($response);
    }
        
@@ -596,14 +643,6 @@ class Soap_Server_worker {
       
       return($response);
    }
-
-   function setOrderStatus( $input ) {
-      $response = $this->_fill_response( $input, 'StatusData', 'setOrderStatus');
-      //$response = array();
-
-      return $response;
-   }
-   
    
    function setPicture( $input ) {
       $this->input_data_type = 'UPDATE';
@@ -630,7 +669,14 @@ class Soap_Server_worker {
    
       return($response);
    }
+
+   function setOrderStatus( $input ) {
+      $response = $this->_fill_response( $input, 'StatusData', 'setOrderStatus');
+      //$response = array();
    
+      return $response;
+   }
+       
    function setOrderHiddenStatus( $input ) {
       $this->input_data_type = 'UPDATE';
       $this->SingleParam_MultipleReturns = false;
@@ -656,22 +702,6 @@ class Soap_Server_worker {
       
       return($response);
    }
-
-   //   function _fill_response_param( $input, $classname, $string_add = '') {
-   //      //      $count = sizeof($input);
-   //      add_to_fp('START _fill_response_param');
-   //      add_to_fp(print_r($input, true));
-   //      add_to_fp($classname);
-   //      $response = array();
-   //      for($input->values as $key => $val) {
-   //         //eval('$response["' . $key . '"] = ' . $classname . '::_fill_response();');
-   //         add_to_fp(print_r($val, true));
-   //         $response[$key] = new $classname($val, $string_add);
-   //      }
-   //      add_to_fp(print_r($response, true));
-   //      add_to_fp('END _fill_response');
-   //      return $response;
-   //   }
 
    function getParamStartLength( $input ) {
       $in_o = array(

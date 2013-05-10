@@ -96,18 +96,26 @@ class Soap_Server {
    }
    
    function __call($name, array $arguments) {
+      $utime = microtime(true);
       if ( !$this->auth ) {
          add_to_fp(' not auth ' . $name);
          $return_data = $this->worker->getReturnError('AUTH', '', 'WRONG USER PASSWORD');
       } elseif(strstr($name, '_') === FALSE && method_exists($this->worker,$name)) {
          add_to_fp('     auth & method ' . $name);
-         $return_data = $this->call_worker($name, $arguments);//Request
+         $return_data = $this->call_worker($name, $arguments);
+         //Request
          ///call_user_func_array( array($this->worker, $name), $arguments);
          //$this->worker->${var_name}();
       } else {
          add_to_fp('     auth & not method ' . $name);
          $return_data = $this->worker->getReturnError($name, '', 'WRONG METHOD');
       }
+      $return_data['Info'] = array_merge($return_data['Info'], array(
+            'Elements' => sizeof($return_data),
+            'Method' => $name,
+            'RunningTime' => round(microtime(true)-$utime, 2),
+            'DateTime' => date("Y-m-d\TH:i:sP")
+            ) );
       return ArrayToXML::toXml($return_data);
    }
 
