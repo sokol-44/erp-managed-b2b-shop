@@ -1,34 +1,16 @@
 <?php
-$filers = array();
 
-   $category['description'] .= "\n" . TEXT_PRODUCTS_IN_CATEGORY . $all_products ;
-   
-   $name_long = trim(str_replace( array("\r\n", "\r", "\n"), '<br>', $category['description']));
-   
-   $GET_tmp = $F->make_get();
-   
-   $id_select ='';
-   if ( $F->check_request_split_array('catpath', $current_id) ) {
-      $id_select = 'id="category_selected"';
-   }
-   
-   $categories_string_tmp =
-   '<div class="cat_href" ' . $id_select . '>' . str_repeat('&nbsp;&nbsp;', $category['level']) .
-   '<a href="' . $F->make_link(CFG_COM_CATALOG, $F->add_local_get('catpath', $category['path'], $GET_edit)) . '"';
-   
-   if( $name_long != '') {
-      $categories_string_tmp .= ' title="' . $category['name'] . ' # ' . $name_long . '">';
-   } else {
-      $categories_string_tmp .= ' title="' . $category['name'] . '">';
-   }
-    
-   $categories_string_tmp .= $category['name'];
-    
-   if ( count($category['children']) > 0 ) $categories_string_tmp .= '-&gt;';
-   
-   $categories_string_tmp .= '</a>';
+$GET_tmp = $F->make_get();
 
-
-return '<div class="categories_list">' . $categories_string . '</div>';
+$a2 = $F->make_link(CFG_COM_ARTICLE, $F->add_local_get('key', '2', $GET_tmp));
+$a3 = $F->make_link(CFG_COM_ARTICLE, $F->add_local_get('key', '3', $GET_tmp));
+$a4 = $F->make_link(CFG_COM_ARTICLE, $F->add_local_get('key', '4', $GET_tmp));
 
 ?>
+<div class="article_menu_left">
+  <div class="article article_first article01"><a href="/">Strona główna</a></div>
+  <div class="article article02"><a href="<?php echo $a2; ?>">Platforma ZEBRA on-line</a></div>
+  <div class="article article03"><a href="<?php echo $a3; ?>">Warunki sprzedaży</a></div>
+  <div class="article article04"><a href="<?php echo $a4; ?>">Kontakt bezpośredni</a></div>
+
+</div>

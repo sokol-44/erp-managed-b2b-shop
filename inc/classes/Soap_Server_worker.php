@@ -137,14 +137,6 @@ class Soap_Server_worker {
       
       return($response);
    }
-
-   function getClientPriceList( $input ) {
-      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      // $response = array( new ProductClientPriceData('xyz', 'getProductClientPriceList') );
-      //$response = array();
-       
-      return $response;
-   }
    
 
    function getClientPriceProductList( $input ) { //ParamDoubleStartLength, ProductData
@@ -168,10 +160,25 @@ class Soap_Server_worker {
       return($response);
    }
    
-   function getProductClientPriceList( $input ) {
-      $response = $this->_fill_response( $input, 'ProductData', 'getProductListFromCategory');
-      //$response = array( new ProductClientPriceData('xyz', 'getProductClientPriceList') );
-      //$response = array();
+   function getProductClientPriceList( $input ) { //ParamDoubleStartLength, ProductData
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = true;
+
+      $ParamDoubleStartLength = $this->_getSingleValue($input, 'ParamDoubleStartLength');
+      
+      if( is_object($ParamDoubleStartLength) ) {
+         if( !$ParamDoubleStartLength->is_error() ) {
+            $param_array = $ParamDoubleStartLength->return_array();
+            $res_array = Data::getProductClientPriceList((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
+            $response = $this->_addArrayValues($res_array);
+         } else {
+            $response = $this->getReturnError('getProductClientPriceList', $input, $ParamDoubleStartLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getProductClientPriceList', $input, 'WRONG CLASS');
+      }
+      
+      return($response);
        
       return $response;
    }

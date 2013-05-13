@@ -274,7 +274,18 @@ class Data_Products extends Data_Basket {
       }
       return $product_ret;
    }
+
+   static function getProductClientPriceList( $id_product_start = 0, $id_client = 0, $length = 1, $where = '' ) {
+      list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
    
+      $query = 'select pcp.id_product, pcp.id_client, pcp.price, pcp.vat
+      from ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' pcp
+      where pcp.id_client = ' . db_int($id_client) . ' and pcp.id_product ' . $comparision_dir . db_int($id_client) . $where . '
+      ORDER BY pcp.id_client ' . $order_dir . ' LIMIT '. db_int($length);
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_result_array_full($result);
+   }
 
    static function getClientPriceProductList( $id_client = 0, $id_product_start = 0, $length = 1, $where = '' ) {
       list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);

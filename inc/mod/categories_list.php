@@ -37,7 +37,7 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
 
          $categories_string_tmp =
 			'<div class="cat_href" ' . $id_select . '>' . str_repeat('&nbsp;&nbsp;', $category['level']) .
-			'<a href="' . $F->make_link(CFG_COM_CATALOG, $F->add_local_get('catpath', $category['path'], $GET_edit)) . '"';
+			'<a href="' . $F->make_link(CFG_COM_CATALOG, $F->add_local_get('catpath', $category['path'], $GET_tmp)) . '"';
 
          if( $name_long != '') {
             $categories_string_tmp .= ' title="' . $category['name'] . ' # ' . $name_long . '">';

@@ -135,8 +135,8 @@ class Page {
             'mastermenu_html' => array('script' => 'master_menu', 'type' => 'MOD'),
             'second_head_html' => array('script' => 'breadcrumbs', 'type' => 'MOD'),
             'left_column_html' => array(
-                  array('script' => 'categories_list', 'type' => 'MOD'),
-                  array('script' => 'basket_list', 'type' => 'MOD')
+                  array('script' => 'menu_left', 'type' => 'MOD'),
+                  array('script' => 'categories_list', 'type' => 'MOD')
                   ),
             'right_column_html' => array('script' => 'basket_list', 'type' => 'MOD'),
             'bottom_html' => array('script' => 'empty', 'type' => 'MOD'),

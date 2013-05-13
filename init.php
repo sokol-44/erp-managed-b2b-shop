@@ -45,6 +45,8 @@ include(DIR_INC_FUNCTIONS . DS . 'global.php');
  * Include global classes files:
  * database, session and other helpers
  */
+include(DIR_INC_CLASSES . DS . 'Data_Contact.php');
+include(DIR_INC_CLASSES . DS . 'Data_Article.php');
 include(DIR_INC_CLASSES . DS . 'Data_Picture.php');
 include(DIR_INC_CLASSES . DS . 'Data_Order.php');
 include(DIR_INC_CLASSES . DS . 'Data_Basket.php');
@@ -69,6 +71,8 @@ include(DIR_INC_CLASSES . DS . 'Order.php');
 include(DIR_INC_CLASSES . DS . 'Mail.php');
 include(DIR_INC_CLASSES . DS . 'Mail2Send.php');
 include(DIR_INC_CLASSES . DS . 'Rights.php');
+include(DIR_INC_CLASSES . DS . 'Article.php');
+include(DIR_INC_CLASSES . DS . 'Contact.php');
 
 /**
  * initialize engine

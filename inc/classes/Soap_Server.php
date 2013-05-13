@@ -80,7 +80,7 @@ class Soap_Server {
    
    function call_worker($name, array $arguments) {
       $xml_data = $this->translate_xml($arguments);
-      add_to_fp('$xml_data'.print_r($xml_data, true));
+      add_to_fp('$xml_data il:'.sizof($xml_data)."\nData:".print_r($xml_data, true));
       $response = call_user_func_array( array($this->worker, $name), array($xml_data));
       add_to_fp('$response'.print_r($response, true));
       return $response;

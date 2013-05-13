@@ -147,7 +147,7 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
       $val_out = false;
       
       if( in_array($key, $this->list_type) ) {
-         /* types: INT,INT+ (>zero),FLOAT,FLOAT+ (>zero),PATH,TXT,HTML,DATE,EMAIL   */
+         /* types: INT,INT+ (>zero),FLOAT,FLOAT+ (>zero),PATH,TXT,HTML,DATE,EMAIL,ARRAY   */
          switch ($this->list_type[$key]) {
             case 'INT':
                if( ctype_digit($val) ) $val_out = (int)$val;
@@ -182,6 +182,11 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
                break;
             case 'EMAIL':
                if( filter_var($val,FILTER_VALIDATE_EMAIL) ) $val_out = $val;
+               break;
+            case 'ARRAY':
+               if( is_array($val) ) {
+                  $val_out = $val;
+               }
                break;
          }
          if( $val_out === false ) $status = 'NOT ' . $key;
@@ -291,10 +296,11 @@ class Product2Category extends BasicSOAPDataMethods {
 
 class ProductData extends BasicSOAPDataMethods {
    public $list = array('id_product', 'name', 'description', 'picture_small_url', 'picture_big_url',
-          'picture_id', 'price', 'vat', 'quantity', 'status');
+          'picture_id', 'price', 'vat', 'quantity', 'status', 'category', 'price');
    public $list_type = array('id_product' => 'INT+', 'name' => 'TEXT', 'description' => 'TEXT',
           'picture_small_url' => 'PATH', 'picture_big_url' => 'PATH', 'picture_id' => 'INT+',
-          'price' => 'FLOAT+', 'vat' => 'FLOAT', 'quantity' => 'INT+', 'status' => 'TEXT');
+          'price' => 'FLOAT+', 'vat' => 'FLOAT', 'quantity' => 'INT+', 'status' => 'TEXT',
+          'Product2Category' => 'ARRAY', 'ProductClientPriceData' => 'ARRAY');
    public $list_new = array('id_product', 'price', 'vat', 'quantity');
    public $list_update = array('id_product');
 }

@@ -16,7 +16,7 @@ if( !defined('_I_INIT') ) die();
  * @author ms
  *
  */
-class Data_Picture {
+class Data_Picture extends Data_Article {
 
 
    static function autorescale_image($data, $type = 'NORMAL') {

@@ -1,11 +1,11 @@
 <?php
-$Article = new Article('1');
+$Article = new Article($F->GET['key']);
 
 if( !$Article ) {
    $F->redirect( $F->make_link(CNF_DEFAULT_PAGE));
 }
 
-$BC->add_crumb( array( 'name' => Lang::_('MAIN_PAGE'), 'path' => $F->make_link(CFG_COM_ARTICLE) ) );
+$BC->add_crumb( array( 'name' => $Article->param['title'], 'path' => $F->make_link(CFG_COM_ARTICLE) ) );
    
 $Page->head_title = $Article->param['title'];
 ?>
