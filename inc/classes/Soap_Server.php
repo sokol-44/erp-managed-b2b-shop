@@ -92,6 +92,13 @@ class Soap_Server {
       if( strlen($arguments[0]) > 0 && $fp_xml && is_resource($fp_xml)  ) {
          fwrite($fp_xml, $arguments[0]);
       }
+      if( function_exists('mb_get_info') ) {
+         $de =  mb_detect_encoding($arguments[0]);
+         if( $de != 'UTF-8' ) {
+            add_to_fp("mb_convert_encoding $de \n");
+            $arguments[0] = mb_convert_encoding($arguments[0], 'UTF-8', $de);
+         }
+      }
       return ArrayToXML::Xmlto($arguments[0]);
    }
    
@@ -116,7 +123,10 @@ class Soap_Server {
             'RunningTime' => round(microtime(true)-$utime, 2),
             'DateTime' => date("Y-m-d\TH:i:sP")
             ) );
-      return ArrayToXML::toXml($return_data);
+      
+      $res_xml = ArrayToXML::toXml($return_data);
+      add_to_fp('$res_xml ' . $res_xml);
+      return $res_xml;
    }
 
 }

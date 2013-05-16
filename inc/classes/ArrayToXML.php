@@ -22,7 +22,13 @@ class ArrayToXML
 
       if ($xml == null)
       {
-        $xml = simplexml_load_string("<?xml version='1.0' encoding='utf-8'?><$rootNodeName />");
+//          if( function_exists('mb_get_info') && defined('DEFAULT_XML_OUTPUT_ENCODING')
+//                && DEFAULT_XML_OUTPUT_ENCODING != 'UTF=8' ) {
+//             $enc=DEFAULT_XML_OUTPUT_ENCODING ;
+//          } else {
+            $enc='UTF-8';
+//          }
+         $xml = simplexml_load_string('<?xml version="1.0" encoding="'.$enc.'"?><'.$rootNodeName.' />"');
          if( is_array($info) ) {
             $node = $xml->addChild('Info');
             ArrayToXML::toXml($info, 'Info', $node);
@@ -50,6 +56,10 @@ class ArrayToXML
          } else {
             // add single node.
             //$value = htmlentities($value);
+//             if( function_exists('mb_get_info') && defined('DEFAULT_XML_OUTPUT_ENCODING')
+//                && DEFAULT_XML_OUTPUT_ENCODING != 'UTF=8' ) {
+//                $value = mb_convert_encoding($value, DEFAULT_XML_OUTPUT_ENCODING, 'UTF-8');
+//             }
             $xml->addChild($xml_key,$value);
          }
          	
