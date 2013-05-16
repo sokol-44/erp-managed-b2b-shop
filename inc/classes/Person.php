@@ -40,7 +40,6 @@ class Person {
       $this->session_id = session_id();
    }
 
-
    function logout() {
       $this->login = false;
       $this->logged_in = false;
@@ -63,6 +62,7 @@ class Person {
       unset($this->data['password']);
 
       $this->roles = $P_rights;
+      natsort( $this->roles );
       $this->session_id = session_id();
    }
 

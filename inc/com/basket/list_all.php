@@ -54,7 +54,7 @@ echo Lang::_('Basket help for icons');
 ?>
 
 <?php echo Lang::_('Basket list');?>
-<table class="tableBox" style="border: 0">
+<table class="tableBox">
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('BASKET NUMBER'); ?></th>
 		<th><?php echo Lang::_('STATE'); ?></th>

@@ -26,18 +26,37 @@ class Data_Order extends Data_Picture {
      
     */
    static function getOrderList( $id_order_start = 0, $length = 1, $where = '' ) {
-      add_to_fp("getOrderList:\nlength: $length");
       list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
-      add_to_fp("$length, $comparision_dir, $order_dir");
       
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
       o.description, o.description_basket, o.id_shopping_basket
       from ' . TBL_SHOP_ORDER . ' o
       where o.id_order ' . $comparision_dir . db_int($id_order_start) . $where . '
       ORDER BY o.id_order ' . $order_dir . ' LIMIT '. db_int($length);
-      add_to_fp($query);
+      
       $result = db_query( $query );
-      return db_result_array_full($result);
+      $ret_tmp = db_result_array_full($result);
+      
+      $ret_array = array();
+      foreach($ret_tmp as $order ) {
+         $order['ProductOrder'] = self::getProductOrder((int)$order['id_order']);
+         $ret_array[] = $order;
+      }
+      return $ret_array;
+   }
+   
+   static function getProductOrder( $id_order ) {
+      $query = 'select op.id_product, op.name, op.price, op.vat, op.quantity
+      from ' . TBL_SHOP_ORDER_PRODUCT . ' op where op.id_order = ' . db_int($id_order);
+      
+      $result = db_query( $query );
+      $ret_tmp = db_result_array_full($result);
+      
+      $ret_array = array();
+      foreach($ret_tmp as $product ) {
+         $ret_array['value_'.$product['id_product']] = $product;
+      }
+      return $ret_array;
    }
    
    static function getOrderListRest( $id_order_start = 0, $length = 1, $where = '' ) {
@@ -103,7 +122,7 @@ class Data_Order extends Data_Picture {
 
    static function get_order_product_list( $id_order ) {
       $query = 'select op.id_product, op.name, op.price, op.vat, op.quantity,
-      p.name as p_name, p.description, p.picture_small_url, p.picture_big_url
+      p.name as p_name, p.description, p.picture_small_url, p.picture_big_url, p.picture_id
       from ' . TBL_SHOP_ORDER_PRODUCT . ' op left outer join ' . TBL_SHOP_PRODUCT . ' p
       on (op.id_product = p.id_product and p.status = "ACTIVE")
       where id_order = ' . db_int($id_order);

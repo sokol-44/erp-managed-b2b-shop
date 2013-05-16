@@ -9,26 +9,83 @@ input[disabled], input:disabled, textarea[disabled], textarea[disabled="disabled
     background-color: gainsboro;
 }
 /*
+Container
+*/
+ 
+.content_container {
+	border: 3px solid blue;
+	border-radius: 5px;
+	padding: 2px;
+	-moz-box-shadow: 5px 5px 5px #888;
+	-webkit-box-shadow: 5px 5px 5px #888;
+	box-shadow: 5px 5px 5px #888;
+}
+
+#col1_content > .module_container {
+	border: 3px solid #DDFFDD;
+	border-radius: 3px;
+	-moz-box-shadow: 2px 2px 2px #888;
+	-webkit-box-shadow: 2px 2px 2px #888;
+	box-shadow: 2px 2px 2px #888;
+	margin: 0px 0 15px 0;
+}
+
+/*
+Article
+*/
+.article {
+	padding: 2px 0 2px 2px;
+}
+
+.title_container {
+	padding: 4px;
+   border-bottom: 1px dotted brown;
+   background-color: #EEEEFF;
+	font-weight: bold;
+	font-size: larger;
+	margin: -2px -2px 0 -2px;
+}
+
+.menu_header {
+	padding: 2px;
+   border-bottom: 1px dotted brown;
+   background-color: #EEEEFF;
+	font-weight: bold;
+	font-size: larger;
+}
+
+/*
 Product Info
 */
-.product_info {}
+.product_info {
+	position: relative;
+	min-height: 150px;
+}
+
 .product_image { 
 	float: right;
-	border: 1px solid grey;
+	border: 2px solid grey;
+	border-radius: 2px;
+	position: absolute;
+	top:0;
+	right:0;
 	cursor: pointer;
-	padding: 1px;
-	background-color: black;
 	margin: 10px;
 	vertical-align: top;
-	clear: none;
+	-moz-box-shadow: 2px 2px 2px #888;
+	-webkit-box-shadow: 2px 2px 2px #888;
+	box-shadow: 2px 2px 2px #888;
 }
+
 .product_add_basket {
-	float: right;
 	margin: 10px;
-	border: 1px dotted green;
 	text-align: justify;
 	padding: 2px;
+	position: absolute;
+	bottom:0;
+	right:0;
 }
+
 .product_add_basket img {
 	margin-left: 5px;
 }
@@ -89,21 +146,31 @@ product_add_basket
 Basket list
 */
 .basket {
-	background-color: lightgrey;
+	border: 3px solid lightgrey;
+	/*background-color: lightgrey;*/
+	background-color: #EEEEFF;
 	padding: 5px;
 	margin-bottom: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 2px 2px 2px #888;
+	-webkit-box-shadow: 2px 2px 2px #888;
+	box-shadow: 2px 2px 2px #888;
 }
 .mainbasket {
-	background-color: lightblue;
+	/*background-color: lightblue;*/
+	border: 3px solid lightblue;
 }
 .usedbasket {
-	background-color: moccasin;
+	/*background-color: moccasin;*/
+	border: 3px solid moccasin;
 }
 .lockedbasket_user {
-	background-color: SpringGreen;
+	/*background-color: SpringGreen;*/
+	border: 3px solid SpringGreen;
 }
 .lockedbasket_other {
-	background-color: Coral;
+	/*background-color: Coral;*/
+	border: 3px solid Coral;
 }
 
 .basket_number {
@@ -146,8 +213,13 @@ basket_add_icon
 */
 
 .basket_add {
-	background-color: lightgreen;
+	border: 2px solid lightgreen;
+	/*background-color: lightgreen;*/
 	padding: 5px;
+	border-radius: 5px;
+	-moz-box-shadow: 2px 2px 2px #888;
+	-webkit-box-shadow: 2px 2px 2px #888;
+	box-shadow: 2px 2px 2px #888;
 }
 
 
@@ -158,7 +230,7 @@ Menu
 .cat_href {
 	border-color: #7b9ebd;
 	border-style: solid;
-	border-width: 1px 0px 0px 0px;
+	border-width: 0px 0px 1px 0px;
 	/*background-color: #eeeeff;*/
 	margin: 2px;
 	padding: 3px 0px 3px 3px;
@@ -203,8 +275,10 @@ TD.headerNavigation {
 }
 
 .tableBox {
+	margin: 1px;
+	border: 2px solid blueviolet;
 	background: #f6f7f6;
-	width: 99%;
+	/*width: 99%;*/
 }
 
 .tableBorder {
@@ -259,7 +333,8 @@ TD.headerNavigation {
 }
 
 .tableBox TR.tableRow-odd {
-	background: #f8f8f9;
+	background: #d8d8d9;
+	/*background: #f8f8f9;*/
 }
 
 .tableBox TR.tableRow-even {

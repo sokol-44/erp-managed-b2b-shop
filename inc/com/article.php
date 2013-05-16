@@ -6,10 +6,10 @@ if( !$Article ) {
 }
 
 $BC->add_crumb( array( 'name' => $Article->param['title'], 'path' => $F->make_link(CFG_COM_ARTICLE) ) );
-   
+
 $Page->head_title = $Article->param['title'];
 ?>
 <div class="article_container">
   <div class="title_container"><?php echo $Article->param['title']; ?></div>
-  <div class="content_container"><?php echo $Article->param['content']; ?></div>
+  <div class="article_content"><?php echo $Article->param['content']; ?></div>
 </div>

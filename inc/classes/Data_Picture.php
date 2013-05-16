@@ -17,7 +17,22 @@ if( !defined('_I_INIT') ) die();
  *
  */
 class Data_Picture extends Data_Article {
+   static $Data_Picture_params = array();
 
+   static function get_picture_id_link($id_picture, $type = 'NORMAL') {
+      
+      if( $type != 'ORIGINAL' && $type != 'NORMAL' && $type != 'SMALL' ) {
+         $type = 'NORMAL';
+      }
+      
+      $id_picture = (int)$id_picture;
+      if( $id_picture > 0 ) {
+//          return IMAGE_SCRIPT . '&id=' . $id_picture . '&type=' . $type;
+         return URL_FULL . IMAGE_SCRIPT . '?id=' . $id_picture . '&type=' . $type;
+      }
+      
+      return false;
+   }
 
    static function autorescale_image($data, $type = 'NORMAL') {
       if( $type == 'NORMAL' ) {
@@ -321,6 +336,12 @@ class Data_Picture extends Data_Article {
       //return db_result_array($res);
 
    }
+   
+   static function check_picture_exist( $id_picture ) {
+      $query = 'select pic.id_picture from ' . TBL_GLOBAL_PICTURES . ' pic where pic.id_picture = ' . (int)$id_picture;
+      if( db_rows( db_query($query) ) == 0 ) return false;
+      return true;
+   }
 
    static function get_picture_data($id_picture) {
       $query = 'select pic.id_picture, pic.name, pic.description,
@@ -357,7 +378,10 @@ class Data_Picture extends Data_Article {
       $data = base64_decode($param_array['data']);
       $new_meta = Data::check_image_format( $data );
 
-      if(!$new_meta['image']) return false;
+      if(!$new_meta['image']) {
+         $res_array['status'] = 'ERROR,WRONG_PICTURE_DATA';
+         return $res_array;
+      }
       
       $parameters = array('id' => (int)$param_array['id_picture'], 'type' => 'ORIGINAL');
       

@@ -79,7 +79,7 @@ class Page {
          echo '<script type="text/javascript" src="http://www.google.com/jsapi"></script>' . NL .
          '<script type="text/javascript">' . NL .
          'if ( window[\'google\'] && window[\'google\'][\'loader\']) {' . NL .
-         '  google.load("jquery", "1.4"); ' . NL .
+         '  google.load("jquery", "1"); ' . NL .
          '} else {' . NL .
          '  document.write(\'<script type="text/javascript" src="' . $this->path_js . $config['TEMPLATES']['jquery'] . '"><\/script>\');' . NL .
          '}' . NL .

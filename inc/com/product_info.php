@@ -5,11 +5,19 @@ $id_product = (int)$F->GET['id_product'];
 
 $product_info = Data::get_product_info( $id_product );
 
-//print_debug($product_info);
 
-$small_image_path = Data::get_product_image_path( $product_info['picture_small_url'] );
-$small_image_html = $F->static_image($small_image_path, Lang::_('show_big_image'));;
-$big_image_path = Data::get_product_image_path( $product_info['picture_big_url'] );
+$image_type = Data::get_product_image_type($product_info);
+$small_image_html='';
+
+if( $F->not_null($image_type) ) {
+   $Page->add_js_file('jquery.colorbox.js');
+   //$small_image_html = $F->static_image($image_type['small_image_path'], Lang::_('show_big_image'));
+   //$small_image_html = $image_type['small_image_path'];
+   $small_image_html = '<img src="' . $image_type['small_image_path'] .'">';
+   $Page->add_jq_init('$(".product_image").colorbox({
+   	href:"' . $F->js_escape($image_type['big_image_path']) . '",
+   	photo:true});');
+}
 
 $price_html = $F->output_string_html( Price::val($product_info['price']) . ' (' . Price::tax($product_info['vat']) . ')' );
 $description_html = nl2br( $F->output_string_html( $product_info['description'] ) );
@@ -22,19 +30,13 @@ $add_basket_html = $F->draw_link($link_basket,
    
 $product_quantity = (int)(($product_info['quantity']>0)?$product_info['quantity']:0);
 
-$Page->add_js_file('jquery.colorbox.js');
-$Page->add_jq_init('$(".product_image").colorbox({
-	href:"' . $F->js_escape($big_image_path) . '",
-	photo:true});');
 $Page->head_title = $F->output_string_html( $product_info['name'] );
-
-
 
 if( $P->logged_in ) {
 ?>
 <div class="product_info">
    <div class="product_name"><?php echo $F->output_string_html( $product_info['name'] ); ?></div>
-   <div class="product_image"><?php echo $small_image_html; ?></div>
+   <?php if( $F->not_null($image_type) ) echo '<div class="product_image">' . $small_image_html . "</div>\n"; ?>
    <div class="product_price"><?php echo Lang::_('QUANTITY_IN_WAREHAUSE') . ': ' . $product_quantity; ?></div>
    <div class="product_price"><?php echo Lang::_('PRICE') . ': ' . $price_html; ?></div>
    <div class="product_description"><?php echo $description_html; ?></div>
@@ -43,7 +45,6 @@ if( $P->logged_in ) {
 <?php } else { ?>
 <div class="product_info">
    <div class="product_name"><?php echo $F->output_string_html( $product_info['name'] ); ?></div>
-   <div class="product_image"><?php echo $small_image_html; ?></div>
    <div class="product_description"><?php echo $description_html; ?></div>
 </div>
 <?php } ?>

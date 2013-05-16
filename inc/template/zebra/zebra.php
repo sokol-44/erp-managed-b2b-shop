@@ -76,7 +76,7 @@ if( !defined('_I_INIT') ) die();
       <!-- begin: #footer -->
       <div id="footer">
       <?php echo $Page->put_bottom_html(); ?>
-      Layout based on <a href="http://www.yaml.de/">YAML</a>
+      <!--Layout based on <a href="http://www.yaml.de/">YAML</a>-->
       </div>
     </div>
     <div id="border-bottom">

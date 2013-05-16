@@ -411,6 +411,38 @@ class Data_Products extends Data_Basket {
       return db_fetch_array($result);
    }
    
+
+   static function get_product_search( $length = 1, $where = '' ) {
+      ///list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+       
+      $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
+      p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+      from ' . TBL_SHOP_PRODUCT . ' p
+      where p.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
+      ORDER BY p.id_product ' . $order_dir . ' LIMIT '. db_int($length);
+      $result = db_query( $query );
+      return db_result_array_full($result);
+   }
+   
+   static function get_product_image_type( $product_info ) {
+      $image_type = array('small_image_path' => false, 'big_image_path' => false);
+      
+      if( class_exists('Data_Picture') &&
+            Framework::not_null($product_info['picture_id']) &&
+            Data::check_picture_exist((int)$product_info['picture_id']) ) {
+      
+         $image_type['small_image_path'] = Data::get_picture_id_link($product_info['picture_id'], 'SMALL');
+         //$image_type['small_image_path'] = Framework::image_db(($product_info['picture_id']), 'SMALL', $product_info['name']);
+         $image_type['big_image_path'] = Data::get_picture_id_link($product_info['picture_id'], 'NORMAL');
+         
+      } elseif( Framework::not_null( $product_info['picture_small_url'] ) ) {
+         $image_type['small_image_path'] = Data::get_product_image_path( $product_info['picture_small_url'] );
+         $image_type['big_image_path'] = Data::get_product_image_path( $product_info['picture_big_url'] );
+      } else {
+         $image_type = false;
+      }
+      return $image_type;
+   }
    
    static function get_product_info( $id_product = 0 ) {
       $F = Framework::g_global();
@@ -455,18 +487,39 @@ class Data_Products extends Data_Basket {
    }
    
    
-   static function getCategoryList( $id_category_start = 0, $length = 1, $where = '' ) {
-      list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
-   
-      $query = 'SELECT c.id_category, c.id_category_parent, c.sort_order,
-      c.root_number, c.name, c.description, c.date_added, c.date_modified
-   	FROM ' . TBL_SHOP_CATEGORY . ' c
-      where c.id_category ' . $comparision_dir . db_int($id_category_start) . $where . '
-      ORDER BY c.id_category ' . $order_dir . ' LIMIT '. db_int($length);
-      $result = db_query( $query );
-      return db_result_array_full($result);
+   static function get_search_product_list(array $filters = array(), array $sort = array()) {
+      global $category_tree;
+      $F = Framework::g_global();
+      $SP = SplitPage::g_global();
+
+      if( false && SHOW_PRODUCTS_FROM_SUBCATEGORIES == 'true' ) {
+         // TODO
+         // Show products from subcategories
+      } else {
+         $where = $filters;
+
+         if( $F->not_null(self::$Data_Products_params['client_view']) ) {
+            if( defined('DEFAULT_CLIENT_PRICE_MODE') &&
+                  constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+               $where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
+            } else {
+               $where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
+            }
+            $product_from = self::$Data_Products_params['client_view'];
+         } else {
+            $product_from = TBL_SHOP_PRODUCT;
+         }
+
+         if( $F->not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
+
+         $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
+         p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+         from ' . $product_from . ' p ' . $where_str;
+         $sp_query = $SP->prepare_sql( $query );
+      }
+      $res = db_query( $sp_query );
+      return db_result_array($res);
    }
-   
    
    //FIXME - implements proper filters
    static function get_categories_list( array $filters ) {

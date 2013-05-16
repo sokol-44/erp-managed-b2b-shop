@@ -107,9 +107,11 @@ function db_unroll_conditions($conditions_array, $type = 'and', $field_name = fa
          } else {
             if( Framework::not_null($field_name) ) $attr = $field_name;
             if( strtoupper(trim($val)) == 'NULL' || strtoupper(trim($val)) == 'NOT NULL') {
-               $return_array[] = $attr . ' IS ' . trim($val);
+               $return_array[] = db_escape($attr) . ' IS ' . trim($val);
+            } elseif( strpos($val, '%') !== FALSE ) {
+               $return_array[] = db_escape($attr) . ' LIKE \'' . db_escape($val) . '\'';
             } else {
-               $return_array[] = $attr . '=\'' . $val . '\'';
+               $return_array[] = db_escape($attr) . '=\'' . db_escape($val) . '\'';
             }
          }
       }

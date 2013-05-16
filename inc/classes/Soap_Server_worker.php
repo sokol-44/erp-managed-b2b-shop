@@ -276,22 +276,18 @@ class Soap_Server_worker {
       $this->SingleParam_MultipleReturns = true;
       
       $ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
-      
       if( is_object($ParamStartLength) ) {
          if( !$ParamStartLength->is_error() ) {
             $param_array = $ParamStartLength->return_array();
-            add_to_fp('$param_array:'. print_r($param_array, true) );
             $res_array = Data::getOrderList((int)$param_array['id_start'], (int)$param_array['length']);
             $response = array();
             
             if( sizeof($res_array) > 0 ) {
                $response = $this->_addArrayValues($res_array);
-               add_to_fp('$response:'.print_r($response, true) );
                if( (int)$param_array['length'] > 0  ) $id_chk = (int)$response['Info']['DataInfo']['id_one_max'];
                else $id_chk = (int)$response['Info']['DataInfo']['id_one_min'];
-               add_to_fp('rest in');
+               
                $response['Info']['Rest'] = Data::getOrderListRest((int)$id_chk, (int)$param_array['length']);
-               add_to_fp('rest out');
             }
          } else {
             $response = $this->getReturnError('getOrderList', $input, $ParamStartLength->return_error() );
@@ -300,7 +296,6 @@ class Soap_Server_worker {
          $response = $this->getReturnError('getOrderList', $input, 'WRONG CLASS');
       }
 
-      add_to_fp('return out');
       return($response);
    }
        

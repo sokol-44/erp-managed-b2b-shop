@@ -23,7 +23,7 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
       if( $category['parent'] == $parent_id && !(DEFAULT_SHOW_EMPTY!='true' && $all_products==0) ) {
 
          if (DEFAULT_SHOW_COUNTS == 'true') {
-            $category['description'] .= "\n" . TEXT_PRODUCTS_IN_CATEGORY . $all_products ;
+            $category['description'] .= "\n" . Lang::_("PRODUCTS_IN_CATEGORY") . ' ' . $all_products ;
          }
 
          $name_long = trim(str_replace( array("\r\n", "\r", "\n"), '<br>', $category['description']));
@@ -61,7 +61,7 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
       }
    }
 
-   return '<div class="categories_list">' . $categories_string . '</div>';
+   return '<div class="categories_list"><div class="menu_header">Kategorie</div>' . $categories_string . '</div>';
 
 }
 

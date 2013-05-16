@@ -35,6 +35,7 @@ if( $template != '' && is_file($template) ) {
    //throw error
 }
 
+echo '<!--';
 //print_debug($Shopping_Basket_Chain);
 // print_debug($_SESSION);
 print_debug($query_log);
@@ -46,4 +47,5 @@ print_debug($query_log);
 print_debug(Lang::$STR);
 //print_debug($_GET);
 $Info->reset();
+echo '-->';
 ?>
