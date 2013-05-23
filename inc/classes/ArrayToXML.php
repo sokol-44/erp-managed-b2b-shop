@@ -28,7 +28,7 @@ class ArrayToXML
 //          } else {
             $enc='UTF-8';
 //          }
-         $xml = simplexml_load_string('<?xml version="1.0" encoding="'.$enc.'"?><'.$rootNodeName.' />"');
+         $xml = simplexml_load_string('<?xml version="1.0" encoding="'.$enc.'"?><'.$rootNodeName.'/>');
          if( is_array($info) ) {
             $node = $xml->addChild('Info');
             ArrayToXML::toXml($info, 'Info', $node);
@@ -70,11 +70,13 @@ class ArrayToXML
 
 
    public static function Xmlto($string, $MainNodeName = 'DocumentElement', $ArrayNodeName = 'value') {
-      $tmpfname = tempnam(sys_get_temp_dir(), 'b2b_xml_');
-      file_put_contents($tmpfname, $string);
+      $tmpfname = tempnam(get_best_tmp_dir(), 'b2b_xml_');
+      $fd = fopen($tmpfname, 'w');
+      fwrite($fd, $string); fflush($fd); fclose($fd);
+      add_to_fp(" $tmpfname ");
       $x2a = new XMLToArray($tmpfname, $MainNodeName, $ArrayNodeName);
       $res = $x2a->get_all_product_array();
-      unlink($tmpfname);
+      //unlink($tmpfname);
       return $res;
    }
 }
@@ -93,25 +95,27 @@ class XMLToArray {
       $this->ArrayNodeName = $ArrayNodeName;
       $this->xml_end = false;
       $this->xml_file = $fn;
-      print_r($this->init_products_data());
+      $this->init_products_data();
       // 		echo 'a'; echo var_dump($this->xml_end);
    }
 
    function init_products_data($skip = 0) {
-
+      add_to_fp(' init_products_data ');
+      $fd = fopen($this->xml_file, 'r');
+      $fc = stream_get_contents( $fd );
+      add_to_fp($this->xml_file.' fc:'.$fc);
       $this->XMLReader = new XMLReader();
       if( $this->XMLReader->open($this->xml_file) ) {
-         $products_start = false;
+         $node_count = false;
          $this->xml_end = false;
          $node_count = 0;
          $this->status = array('STATUS' => false, 'TYPE' => '0', 'DESCRIPTION' => 'NO_XML_VALID');
       } else {
          $this->status = array('STATUS' => false, 'TYPE' => '0', 'DESCRIPTION' => 'NO_XML_OPEN');
       }
-
+      
       while ( ($res_read = $this->XMLReader->read() ) ) {
          //skip till
-         echo '$' . $this->XMLReader->name . ' #' . $this->XMLReader->value . "#\r\n";
          	
          if(	$this->XMLReader->nodeType==XMLReader::SIGNIFICANT_WHITESPACE ) continue;
          	
@@ -188,12 +192,12 @@ class XMLToArray {
       return !$this->xml_end;
    }
 
-   function xml2assoc($el_name) {
+   function xml2assoc($el_name, $level = 0) {
       $assoc = array();
+      $deb = array();
 
       // echo '$' . $this->XMLReader->name . "$\r\n";
       while( ($res_read = @$this->XMLReader->read()) ){
-         	
          switch ($this->XMLReader->nodeType) {
             case XMLReader::END_ELEMENT:
                if( $this->XMLReader->name == $el_name ) {
@@ -212,7 +216,13 @@ class XMLToArray {
                   if( $this->XMLReader->isEmptyElement ) {
                      $assoc[$this->XMLReader->name] =  '';
                   } else {
-                     $assoc[$this->XMLReader->name] = $this->xml2assoc($this->XMLReader->name);
+                     if( $this->XMLReader->name == $this->ArrayNodeName ) {
+                        $assoc[] = $this->xml2assoc($this->XMLReader->name, $level+1);
+//                         $deb[] = '___ l:'.$level.' t:'  . $this->XMLReader->nodeType .' n:'.$this->XMLReader->name . ' #v:' . $this->XMLReader->value . "#";
+                     } else {
+                        $assoc[$this->XMLReader->name] = $this->xml2assoc($this->XMLReader->name, $level+1);
+//                         $deb[] = '    l:'.$level.' t:'  . $this->XMLReader->nodeType .' n:'.$this->XMLReader->name . ' #v:' . $this->XMLReader->value . "#";
+                     }
                   }
                    
                }
@@ -220,6 +230,7 @@ class XMLToArray {
             case XMLReader::TEXT:
             case XMLReader::CDATA: if($this->XMLReader->value!='') $assoc = $this->XMLReader->value;
          }
+         //add_to_fp('$xml2assoc'.$level.':'  . $this->XMLReader->nodeType .'n'.$this->XMLReader->name . ' #' . $this->XMLReader->value . "#");;
       }
       
 //       if( sizeof($assoc) == 0 ) $assoc = $this->XMLReader->nodeType;
@@ -230,7 +241,7 @@ class XMLToArray {
          return false;
       }
 
-      if($el_name == $this->ArrayNodeName) {
+      if($el_name == $this->ArrayNodeName && $level==0) {
          while($this->XMLReader->read()){
             if($this->XMLReader->nodeType == XMLReader::ELEMENT && $this->XMLReader->name == $this->ArrayNodeName)
                break;
@@ -243,6 +254,7 @@ class XMLToArray {
          }
       }
 
+//       add_to_fp(print_r($deb, true));
       return $assoc;
    }
     

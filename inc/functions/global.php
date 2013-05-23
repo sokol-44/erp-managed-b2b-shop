@@ -31,6 +31,13 @@ function print_debug($var, $vd = false ) {
 }
 
 
+function get_best_tmp_dir() {
+   if( ini_get('upload_tmp_dir')!='' ) return ini_get('upload_tmp_dir');
+   if( ini_get('session.save_path')!='' ) return ini_get('upload_tmp_dir');
+   return sys_get_temp_dir();
+}
+
+
 
 class File_Debug {
    private $save_debug_fd = false;

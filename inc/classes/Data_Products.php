@@ -20,12 +20,14 @@ class Data_Products extends Data_Basket {
 
    static function _load_client_params() {
       $P = Person::g_global();
-      if( $P->logged_in ) {
+      
+      if( $P->logged_in && !defined('DEFAULT_CLIENT_PRICE_MODE_SET') ) {
          self::$Data_Products_params['id_client'] = (int)$P->data['id_client'];
          $view_name = Data_Person::get_client_attribute((int)$P->data['id_client'], 'PRODUCT_VIEW_NAME');
          if( $view_name ) {
             self::$Data_Products_params['client_view'] = $view_name;
          }
+         define('DEFAULT_CLIENT_PRICE_MODE_SET', true);
       }
    }
 
@@ -342,7 +344,6 @@ class Data_Products extends Data_Basket {
        
       extract( db_escape_array($param_array) );
    
-   
       $query = 'select "' . db_int($id_category) . '" as id_one,
           "" as additional_data,
           b_func_category_delete("' . db_int($id_category) . '") as status';
@@ -354,7 +355,6 @@ class Data_Products extends Data_Basket {
    static function doCategoryEdit($param_array) {
        
       extract( db_escape_array($param_array) );
-      
       
       $query = 'select "' . db_int($id_category) . '" as id_one,
           "" as additional_data,
@@ -391,6 +391,32 @@ class Data_Products extends Data_Basket {
       add_to_fp($query);
       $result = db_query( $query );
       return db_fetch_array($result);
+   }
+   
+   
+   static function doProductClientPriceClean( $id_client ) {
+//       $query = 'select "' . db_int($id_client) . '" as id_one, "" as additional_data,
+//        b_func_product_client_price_all_del("' . db_int($id_client) . '") as status';
+      $query = 'delete from ' . SHOP_PRODUCT_CLIENT_PRICE . ' where id_client = "' . db_int($id_client) . '"';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_affected_rows();
+   }
+   
+   static function setClientProductPriceList( $id_client, $id_product_array) {
+//       $query = 'select "' . db_int($id_product) . '" as id_one, "' . db_int($id_client) . '" as id_two,
+//        "" as additional_data,
+//        b_func_product_client_price_add("' . db_int($id_product) . '", "' . db_int($id_client) . '", "' . db_float($price) . '", "' . db_float($vat) . '") as status';
+      $query_start='insert ignore into  ' . SHOP_PRODUCT_CLIENT_PRICE . ' (`id_product`, `id_client`, `price`) values ';
+      $val_array = array();
+      foreach( $id_product_array as $prod_val ) {
+         $val_array[] = '(' . db_int($prod_val['id_product']) . ',' . db_int($id_client) . ',' . db_float($prod_val['price']) . ' )';
+      }
+      $query = $query_start . implode(',', $val_array);
+ 
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_affected_rows();
    }
    
    static function setProductClientPrice( $id_product, $id_client, $price , $vat ) {

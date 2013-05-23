@@ -14,7 +14,7 @@ class Soap_Server {
    private $acces_array = array(
          'empty' => 'dfsfi8CTRJHnoOI243NvirtdsHMIU216asiudnfpou',
          '1' => 'dfsfi8CTRJHnoOI243NvirtdsHMIU216asiudnfpou');
-   private static $worker = false;
+   private $worker = false;
 
    function __auth() {
       $get = Framework::$GET;
@@ -24,6 +24,7 @@ class Soap_Server {
             
          if( Framework::is_null($get['u']) ) $get['u'] = 'empty';
          $secret = $this->acces_array[$get['u']];
+         
          if( Framework::is_null($get['hf']) ) $get['hf'] = 'md5';
          
          if ( Framework::not_null($secret) && abs( (int)$get['s']-time() ) < 72000 ) {
@@ -97,6 +98,7 @@ class Soap_Server {
          if( $de != 'UTF-8' ) {
             add_to_fp("mb_convert_encoding $de \n");
             $arguments[0] = mb_convert_encoding($arguments[0], 'UTF-8', $de);
+            $arguments[0] = str_ireplace('encoding="utf-16"', 'encoding="utf-8"', $arguments[0]);
          }
       }
       return ArrayToXML::Xmlto($arguments[0]);
@@ -117,8 +119,9 @@ class Soap_Server {
          add_to_fp('     auth & not method ' . $name);
          $return_data = $this->worker->getReturnError($name, '', 'WRONG METHOD');
       }
+      $elements = (isset($return_data['Info'])?(sizeof($return_data)-1):sizeof($return_data));
       $return_data['Info'] = array_merge($return_data['Info'], array(
-            'Elements' => sizeof($return_data),
+            'Elements' => $elements,
             'Method' => $name,
             'RunningTime' => round(microtime(true)-$utime, 2),
             'DateTime' => date("Y-m-d\TH:i:sP")

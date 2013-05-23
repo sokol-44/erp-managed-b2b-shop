@@ -178,8 +178,6 @@ class Soap_Server_worker {
          $response = $this->getReturnError('getProductClientPriceList', $input, 'WRONG CLASS');
       }
       
-      return($response);
-       
       return $response;
    }
     
@@ -535,7 +533,40 @@ class Soap_Server_worker {
       
       return($response);
    }
-
+   
+   function setClientProductPriceList( $input ) {
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = false;
+      add_to_fp('-------- setClientProductPriceList');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         $del_count = 0;
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new ClientProductPriceListData($val, $this->input_data_type);
+            add_to_fp('$param_array:'. print_r($SingleValueClass, true) );
+            if( !$SingleValueClass->is_error() ) {
+               $pa = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($pa, true) );
+               $del_count = Data::doProductClientPriceClean($pa['id_client']);
+               $ins_count = Data::setClientProductPriceList($pa['id_client'],  $pa['ProductPriceData']);
+               if( $ins_count > 0 ) $status_res = 'SUCCESS';
+               else $status_res = 'ERROR';
+               $additional_data = "DEL: $del_count, INS: $ins_count";
+               $response_tmp[] = array('id' => $pa['id_client'], 'additional_data' => $additional_data,  'status' => $status_res );
+            } else {
+               $response_tmp[] = $this->getReturnError('setProductClientPrice', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+         $response['Info']['Deleted'] = $del_count;
+         $response['Info']['Inserted'] = $ins_count;
+      } else {
+         $response = $this->getReturnError('setClientProductPriceList', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
+   }
 
    function doCategoryAdd( $input ) {
       $this->input_data_type = 'NEW';
@@ -628,7 +659,7 @@ class Soap_Server_worker {
       if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
          $response_tmp = array();
          foreach($input['values'] as $key => $val) {
-            $SingleValueClass = new Product2Category($val, $this->input_data_type);
+            $SingleValueClass = new Product2CategoryData($val, $this->input_data_type);
             if( !$SingleValueClass->is_error() ) {
                $pa = $SingleValueClass->return_array();
                //add_to_fp('$param_array:'. print_r($param_array, true) );

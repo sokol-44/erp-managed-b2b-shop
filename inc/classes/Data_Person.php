@@ -220,7 +220,7 @@ class Data_Person extends Data_Rights {
 
    static function doClientUserDelete($param_array) {
        
-      extract( db_escape_array($param_array) );
+      extract( $param_array );
    
       $query = 'select "' . db_int($id_client) . '" as id_one, "' . db_int($id_client_user) . '" as id_two,
           "" as additional_data,
@@ -233,7 +233,7 @@ class Data_Person extends Data_Rights {
    
    static function doClientUserSetPassword($param_array) {
    
-      extract( db_escape_array($param_array) );
+      extract( $param_array );
 
       $query = 'select "' . db_int($id_client) . '" as id_one, "' . db_int($id_client_user) . '" as id_two,
           "" as additional_data,
@@ -247,7 +247,7 @@ class Data_Person extends Data_Rights {
    
    static function doClientUserAdd($param_array, $add  = false) {
       
-      extract( db_escape_array($param_array) );
+      extract( $param_array );
       
       if( $add ) {
          $query = 'select "' . db_int($id_client) . '" as id_one, "' . db_int($id_client_user) . '" as id_two,
@@ -269,7 +269,7 @@ class Data_Person extends Data_Rights {
    
    static function doClientAdd($param_array, $add  = false) {
       
-      extract( db_escape_array($param_array) );
+      extract( $param_array );
       
       if( $add ) {
          $query = 'select "' . db_int($id_client) . '" as id_one,
@@ -330,12 +330,13 @@ class Data_Person extends Data_Rights {
 
    static function get_client_attribute( $id, $attribute_type) {
 
-      $result = db_query('select value
+      $query = 'select value
          	from ' . TBL_GLOBAL_CLIENT_ATTRIBUTES . ' ca ,
          	' . TBL_GLOBAL_CLIENT . ' c
-         	where ca.id_client = c.id_client and ca.id_client = "' . db_escape($attribute_type) . '"');
-      if( db_rows($result) ) return db_fetch_result('val');
-	  elseif ( defined('DEFAULT_CLIENT_PRODUCT_PRICE_VIEW') ) return constant('DEFAULT_CLIENT_PRODUCT_PRICE_VIEW');
+         	where ca.id_client = c.id_client and ca.id_client = "' . db_escape($attribute_type) . '"';
+      if ( $attribute_type == 'PRODUCT_VIEW_NAME' && Data_Products::$Data_Products_params['client_view'] ) return Data_Products::$Data_Products_params['client_view'];
+      elseif( db_rows( db_query($query) ) ) return db_fetch_result('val');
+	   elseif ( defined('DEFAULT_CLIENT_PRODUCT_PRICE_VIEW') ) return constant('DEFAULT_CLIENT_PRODUCT_PRICE_VIEW');
       else return false;
    }
    

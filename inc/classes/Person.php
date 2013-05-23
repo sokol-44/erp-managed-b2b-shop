@@ -15,6 +15,7 @@ if( !defined('_I_INIT') ) die();
 class Person {
    static $class;
    var $all;
+   static $person_rights_cache = array();
    public $login, $logged_in, $roles, $id, $session_id;
    public $data;
 
@@ -158,7 +159,12 @@ class Person {
 
    static public function get_client_user_data( $id, $table = 'CLIENT') {
       //'CLIENT', 'ADMIN'
-      $client_client_data = Data::get_person_data( $table, $id );
+      $idx=$id.'.'.$table;
+      if( isset(self::$person_rights_cache[$idx]) ) $client_client_data = $person_rights_cache[$idx];
+      else {
+         $client_client_data = Data::get_person_data( $table, $id );
+         self::$person_rights_cache[$idx] = $client_client_data;
+      }
 
       return $client_client_data;
    }
