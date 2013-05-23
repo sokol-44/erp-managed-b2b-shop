@@ -533,8 +533,12 @@ class Soap_Server_worker {
       
       return($response);
    }
+
+   function setClientProductPriceListUpdate( $input ) {
+      return setClientProductPriceList( $input, true);
+   }
    
-   function setClientProductPriceList( $input ) {
+   function setClientProductPriceList( $input, $update = false) {
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = false;
       add_to_fp('-------- setClientProductPriceList');
@@ -547,7 +551,7 @@ class Soap_Server_worker {
             if( !$SingleValueClass->is_error() ) {
                $pa = $SingleValueClass->return_array();
                add_to_fp('$param_array:'. print_r($pa, true) );
-               $del_count = Data::doProductClientPriceClean($pa['id_client']);
+               if( !$update ) $del_count = Data::doProductClientPriceClean($pa['id_client']);
                $ins_count = Data::setClientProductPriceList($pa['id_client'],  $pa['ProductPriceData']);
                if( $ins_count > 0 ) $status_res = 'SUCCESS';
                else $status_res = 'ERROR';
