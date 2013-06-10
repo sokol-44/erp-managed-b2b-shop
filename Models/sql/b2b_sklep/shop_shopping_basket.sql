@@ -1,24 +1,33 @@
-# --------------------------------------------------------
-# Host:                         localhost
-# Server version:               5.1.40-community-log
-# Server OS:                    Win32
-# HeidiSQL version:             6.0.0.3603
-# Date/time:                    2010-12-03 15:45:00
-# --------------------------------------------------------
+-- --------------------------------------------------------
+-- Host:                         localhost
+-- Wersja serwera:               5.1.40-community-log - MySQL Community Server (GPL)
+-- Serwer OS:                    Win32
+-- HeidiSQL Wersja:              8.0.0.4396
+-- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-# Dumping data for table b2b_sklep.shop_shopping_basket: ~3 rows (approximately)
-DELETE FROM `shop_shopping_basket`;
-/*!40000 ALTER TABLE `shop_shopping_basket` DISABLE KEYS */;
-INSERT INTO `shop_shopping_basket` (`id_client`, `id_nr_shopping_basket`, `description`, `date_create`, `date_modified`, `using_id_client_user`, `using_session_id`, `using_date`) VALUES
-	(1, 3, '', '2010-11-29 15:23:21', NULL, 2, '7knp1gmnjl7eufm633gnulvb12', '2010-11-29 15:23:21'),
-	(1, 4, '', '2010-11-29 15:23:22', NULL, 2, '7knp1gmnjl7eufm633gnulvb12', '2010-11-29 15:23:22'),
-	(1, 5, '', '2010-11-29 15:23:24', '2010-12-03 14:27:53', 2, 'peopkovtck7eqh6305ue9p9sm2', '2010-12-03 14:27:53');
-/*!40000 ALTER TABLE `shop_shopping_basket` ENABLE KEYS */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+-- Zrzut struktury tabela b2b_sklep.shop_shopping_basket
+DROP TABLE IF EXISTS `shop_shopping_basket`;
+CREATE TABLE IF NOT EXISTS `shop_shopping_basket` (
+  `id_shopping_basket` int(11) NOT NULL AUTO_INCREMENT,
+  `id_client` int(11) DEFAULT NULL,
+  `description` text,
+  `date_create` datetime DEFAULT NULL,
+  `date_modified` datetime DEFAULT NULL,
+  `using_id_client_user` int(11) DEFAULT NULL,
+  `using_session_id` tinytext,
+  `using_date` datetime DEFAULT NULL,
+  `state` varchar(10) DEFAULT NULL COMMENT 'USE_0, FREE_0, LOCK_0; USE_1, FREE_1, LOCK_1; USE_2, FREE_2, LOCK_2; # ORDER, FAV ',
+  PRIMARY KEY (`id_shopping_basket`),
+  KEY `fk.shopping_basket.id_client_user` (`using_id_client_user`),
+  KEY `fk.shopping_basket.id_client` (`id_client`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- Data exporting was unselected.
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

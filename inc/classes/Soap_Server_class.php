@@ -319,9 +319,11 @@ class Product2CategoryData extends BasicSOAPDataMethods {
 }
 
 class ProductData extends BasicSOAPDataMethods {
-   public $list = array('id_product', 'name', 'description', 'picture_small_url', 'picture_big_url',
-          'picture_id', 'price', 'vat', 'quantity', 'status', 'category', 'price');
+   public $list = array('id_product', 'name', 'description', 'producer', 'catalog_index',
+          'picture_small_url', 'picture_big_url', 'picture_id', 'price', 'vat', 'quantity',
+          'status', 'category', 'price');
    public $list_type = array('id_product' => 'INT+', 'name' => 'TEXT', 'description' => 'TEXT',
+          'producer' => 'TEXT', 'catalog_index' => 'TEXT',
           'picture_small_url' => 'PATH', 'picture_big_url' => 'PATH', 'picture_id' => 'INT+',
           'price' => 'FLOAT+', 'vat' => 'FLOAT', 'quantity' => 'INT+', 'status' => 'TEXT',
           'CategoryListData' => 'OBJ', 'ClientPriceListData' => 'OBJ');

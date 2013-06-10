@@ -30,7 +30,7 @@ class Soap_Server {
          if ( Framework::not_null($secret) && abs( (int)$get['s']-time() ) < 72000 ) {
             if( ctype_xdigit($get['h']) ) {
                $hash = $get['h'];
-            } elseif ( ctype_alnum($get['h']) ) {
+            } elseif ( ctype_alnum(str_replace('=', '', $get['h'])) ) {
                $hash = base64_decode($get['h'], true);
                if( $hash ) {
                   $hash = bin2hex( $hash );
@@ -90,9 +90,6 @@ class Soap_Server {
    function translate_xml($arguments) {
       global $fp_xml;
       add_to_fp("translate_xml\n");
-      if( strlen($arguments[0]) > 0 && $fp_xml && is_resource($fp_xml)  ) {
-         fwrite($fp_xml, $arguments[0]);
-      }
       if( function_exists('mb_get_info') ) {
          $de =  mb_detect_encoding($arguments[0]);
          if( $de != 'UTF-8' ) {
@@ -100,6 +97,9 @@ class Soap_Server {
             $arguments[0] = mb_convert_encoding($arguments[0], 'UTF-8', $de);
             $arguments[0] = str_ireplace('encoding="utf-16"', 'encoding="utf-8"', $arguments[0]);
          }
+      }
+      if( strlen($arguments[0]) > 0 && $fp_xml && is_resource($fp_xml)  ) {
+         fwrite($fp_xml, $arguments[0]);
       }
       return ArrayToXML::Xmlto($arguments[0]);
    }

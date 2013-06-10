@@ -12,6 +12,8 @@ $GET_tmp = $F->make_get('mode,action,show');
 
 $all_basket = $F->draw_link( $F->make_link(CFG_COM_BASKET, array('show' => 'all')), 'title="' . Lang::_('show all BASKETS') . '"', Lang::_('show all BASKETS') . ' ' . $F->static_image('icon/folder_16.png', Lang::_('show all BASKETS')));
 ?>
+<div class="basket_container">
+<div class="basket menu_header">Koszyki</div>
 <div class="basket basket_show_all"><?php echo $all_basket; ?></div>
 <?php
 $GET_id = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_tmp);
@@ -109,6 +111,7 @@ if( $P->logged_in && $Shopping_Basket_Chain->get_can_add_basket() ) {
 ?>
 <div class="basket_add">
 <div class="basket_add_icon"><?php echo $add_basket; ?></div>
+</div>
 </div>
 <?php
 }

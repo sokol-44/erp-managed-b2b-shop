@@ -125,10 +125,40 @@ class HTML {
 
       return $image;
    }
+   
+   // The HTML image wrapper function
+   /**
+    * @param mixed $template
+    * @return full image string
+    */
+   function dynamic_image_src($text = '', $template = '') {
+      
+      if( $text == '' ) $text = '       ';
+      $txt_param = '?' . IMAGE_BUTTON_SCRIPT_TEXT_PARAM . '=' . rawurlencode($text);
 
+      return DIR_HTTP_ROOT_CATALOG . IMAGE_BUTTON_SCRIPT . $txt_param;
+   }
 
-   function put_js_redirect($page) {
-      return "<script>location.href='$page';</script>";
+   function dynamic_image($text = '', $template = '') {
+   
+      $src = $this->dynamic_image_src($text, $template);
+   
+      $image = '<img src="' . $src . '" border="0" alt="' . $this->output_string($text) .
+      '" title="' . $this->output_string($text) . '">';
+       
+      return $image;
+   }
+     
+   function dynamic_image_button($text = '', $template = '') {
+      return $this->dynamic_image($text, $template);
+   }
+   
+   function dynamic_image_submit($name = '', $parameters = '') {
+      global $language;
+      
+      $src = $this->dynamic_image_src($name);
+   
+      return $this->static_image_submit($src, $name, $parameters);
    }
 
    ////
@@ -156,6 +186,10 @@ class HTML {
       return $this->static_image(DIR_WS_LANGUAGES . $language . '/images/buttons/' . $image, $alt, $parameters, '', '');
    }
 
+   function put_js_redirect($page) {
+      return "<script>location.href='$page';</script>";
+   }
+   
    ////
    // Output a separator either through whitespace, or with an image
    function draw_separator($image = 'pixel_black.gif', $width = '100%', $height = '1') {
@@ -366,7 +400,7 @@ class HTML {
     * Output a form input field
     * @param string $name
     * @param string $value
-    * @param string $param$parameterseters
+    * @param string $parameterseters
     * @param string $type = 'text'pe
     * @param bool $reinsert_value = true
     * @return string
@@ -460,6 +494,7 @@ class HTML {
     * @return string
     */
    function draw_checkbox_field($name, $value = '', $checked = false, $parameters = '') {
+      if( $value == '' ) $value = 'on';
       return $this->draw_selection_field($name, 'checkbox', $value, $checked, $parameters);
    }
 

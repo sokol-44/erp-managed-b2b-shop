@@ -73,10 +73,10 @@ class ArrayToXML
       $tmpfname = tempnam(get_best_tmp_dir(), 'b2b_xml_');
       $fd = fopen($tmpfname, 'w');
       fwrite($fd, $string); fflush($fd); fclose($fd);
-      add_to_fp(" $tmpfname ");
+      //add_to_fp(" $tmpfname ");
       $x2a = new XMLToArray($tmpfname, $MainNodeName, $ArrayNodeName);
       $res = $x2a->get_all_product_array();
-      //unlink($tmpfname);
+      unlink($tmpfname);
       return $res;
    }
 }
@@ -100,10 +100,9 @@ class XMLToArray {
    }
 
    function init_products_data($skip = 0) {
-      add_to_fp(' init_products_data ');
+      add_to_fp(' init_products_data ' . $this->xml_file);
       $fd = fopen($this->xml_file, 'r');
       $fc = stream_get_contents( $fd );
-      add_to_fp($this->xml_file.' fc:'.$fc);
       $this->XMLReader = new XMLReader();
       if( $this->XMLReader->open($this->xml_file) ) {
          $node_count = false;
@@ -216,12 +215,12 @@ class XMLToArray {
                   if( $this->XMLReader->isEmptyElement ) {
                      $assoc[$this->XMLReader->name] =  '';
                   } else {
-                     if( $this->XMLReader->name == $this->ArrayNodeName ) {
+                     if( $this->XMLReader->name == $this->ArrayNodeName && $level>0) {
                         $assoc[] = $this->xml2assoc($this->XMLReader->name, $level+1);
-//                         $deb[] = '___ l:'.$level.' t:'  . $this->XMLReader->nodeType .' n:'.$this->XMLReader->name . ' #v:' . $this->XMLReader->value . "#";
+                        $deb[] = '___ l:'.$level.' t:'  . $this->XMLReader->nodeType .' n:'.$this->XMLReader->name . ' #v:' . $this->XMLReader->value . "#";
                      } else {
                         $assoc[$this->XMLReader->name] = $this->xml2assoc($this->XMLReader->name, $level+1);
-//                         $deb[] = '    l:'.$level.' t:'  . $this->XMLReader->nodeType .' n:'.$this->XMLReader->name . ' #v:' . $this->XMLReader->value . "#";
+                        $deb[] = '    l:'.$level.' t:'  . $this->XMLReader->nodeType .' n:'.$this->XMLReader->name . ' #v:' . $this->XMLReader->value . "#";
                      }
                   }
                    
@@ -254,7 +253,7 @@ class XMLToArray {
          }
       }
 
-//       add_to_fp(print_r($deb, true));
+      //if( sizeof($deb) > 0 ) add_to_fp(print_r($deb, true));
       return $assoc;
    }
     

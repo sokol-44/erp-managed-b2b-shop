@@ -333,6 +333,7 @@ class Data_Products extends Data_Basket {
       $query = 'select "' . db_int($id_product) . '" as id_one,
           "" as additional_data,
           b_func_product_change("' . db_int($id_product) . '", "' . db_escape($name). '", "' . db_escape($description). '",
+          "' . db_escape($producer). '", "' . db_escape($catalog_index). '",
           "' . db_escape($picture_small_url). '", "' . db_escape($picture_big_url). '", "' . db_escape($picture_id). '",
           "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_escape($quantity_salt) . '", "' . db_escape($status) . '") as status';
       add_to_fp($query);
@@ -386,8 +387,9 @@ class Data_Products extends Data_Basket {
       $query = 'select "' . db_int($id_product) . '" as id_one,
           "" as additional_data,
           b_func_product_add("' . db_int($id_product) . '", "' . db_escape($name). '", "' . db_escape($description). '",
+          "' . db_escape($producer). '", "' . db_escape($catalog_index). '",
           "' . db_escape($picture_small_url). '", "' . db_escape($picture_big_url). '", "' . db_escape($picture_id). '",
-          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_escape($quantity_salt) . '", "' . db_escape($status) . '") as status';
+          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_escape($quantity) . '", "' . db_escape($status) . '") as status';
       add_to_fp($query);
       $result = db_query( $query );
       return db_fetch_array($result);
@@ -407,16 +409,34 @@ class Data_Products extends Data_Basket {
 //       $query = 'select "' . db_int($id_product) . '" as id_one, "' . db_int($id_client) . '" as id_two,
 //        "" as additional_data,
 //        b_func_product_client_price_add("' . db_int($id_product) . '", "' . db_int($id_client) . '", "' . db_float($price) . '", "' . db_float($vat) . '") as status';
+      
       $query_start='insert ignore into  ' . SHOP_PRODUCT_CLIENT_PRICE . ' (`id_product`, `id_client`, `price`) values ';
+      
       $val_array = array();
+      $count=1;
+      $ins_count=0;
+      $id_client_db = db_int($id_client);
       foreach( $id_product_array as $prod_val ) {
-         $val_array[] = '(' . db_int($prod_val['id_product']) . ',' . db_int($id_client) . ',' . db_float($prod_val['price']) . ' )';
+         $val_array[] = '(' . db_int($prod_val['id_product']) . ',' . $id_client_db . ',' . db_float($prod_val['price']) . ' )';
+         if( $count%1000 == 0 ) {
+            $query = $query_start . implode(',', $val_array);
+            $val_array = array();
+            
+            add_to_fp($query);
+            $result = db_query( $query );
+            $ins_count += db_affected_rows();
+         }
       }
-      $query = $query_start . implode(',', $val_array);
+      
+      if( sizeof($val_array) > 0 ) {
+         $query = $query_start . implode(',', $val_array);
+
+         add_to_fp($query);
+         $result = db_query( $query );
+         $ins_count += db_affected_rows();
+      }
  
-      add_to_fp($query);
-      $result = db_query( $query );
-      return db_affected_rows();
+      return $ins_count;
    }
    
    static function setProductClientPrice( $id_product, $id_client, $price , $vat ) {

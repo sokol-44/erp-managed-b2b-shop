@@ -26,12 +26,9 @@ $GET_tmp = $F->make_get();
 <?php echo $F->draw_hidden_field('com', 'search'); ?>
 <table class="pass_table" style="border: 0">
 	<tr>
-		<td><strong><?php echo Lang::_('Product Name'); ?></strong></td>
-		<td colspan="3"><?php echo $F->draw_input_field('product_name', '', ' style="width: 220px"'); ?></td>
-	</tr>
-	<tr>
-		<td><strong><?php echo Lang::_('Product Description'); ?></strong></td>
-		<td colspan="3"><?php echo $F->draw_input_field('product_description', '', ' style="width: 220px"'); ?></td>
+		<td><strong><?php echo Lang::_('Text'); ?></strong></td>
+		<td colspan="2"><?php echo $F->draw_input_field('product_text', '', ' style="width: 220px"'); ?></td>
+		<td><?php echo Lang::_('product all text') . $F->draw_checkbox_field('product_text_all'); ?></td>
 	</tr>
 	<tr>
 		<td><strong><?php echo Lang::_('Price') . ' ' . Lang::_('Max'); ?></strong></td>
@@ -40,9 +37,8 @@ $GET_tmp = $F->make_get();
 		<td><?php echo $F->draw_input_field('product_price_min', '', ' style="width: 120px"'); ?></td>
 	</tr>
 	<tr>
-		<td colspan="2"><?php echo $F->static_image_submit($Page->path_img . 'guzik-zaloguj.jpg', TEXT_LOGIN,''); ?></td>
+		<td colspan="2"><?php echo $F->dynamic_image_submit(Lang::_('SEARCH'),''); ?></td>
 	</tr>
-	
 </table>
 <?php echo $F->draw_form_close(); ?>
 <?php

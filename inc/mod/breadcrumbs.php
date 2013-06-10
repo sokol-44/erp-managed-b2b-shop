@@ -27,9 +27,9 @@ if( $F->com == CFG_COM_CATALOG ||
    $array_bc = $BC->get_list();
 }
 
-echo "<ul>\n";
+echo "<div class=\"hlist\"><ul>\n";
 foreach($array_bc as $bc) {
    echo "<li><a href=\"$bc[path]\">$bc[name]</a></li>\n";
 }
-echo "</ul>\n";
+echo "</ul></div>\n";
 ?>

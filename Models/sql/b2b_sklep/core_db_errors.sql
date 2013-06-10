@@ -1,20 +1,28 @@
-# --------------------------------------------------------
-# Host:                         localhost
-# Server version:               5.1.40-community-log
-# Server OS:                    Win32
-# HeidiSQL version:             6.0.0.3603
-# Date/time:                    2010-12-03 15:44:58
-# --------------------------------------------------------
+-- --------------------------------------------------------
+-- Host:                         localhost
+-- Wersja serwera:               5.1.40-community-log - MySQL Community Server (GPL)
+-- Serwer OS:                    Win32
+-- HeidiSQL Wersja:              8.0.0.4396
+-- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-# Dumping data for table b2b_sklep.core_db_errors: ~0 rows (approximately)
-DELETE FROM `core_db_errors`;
-/*!40000 ALTER TABLE `core_db_errors` DISABLE KEYS */;
-/*!40000 ALTER TABLE `core_db_errors` ENABLE KEYS */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+-- Zrzut struktury tabela b2b_sklep.core_db_errors
+DROP TABLE IF EXISTS `core_db_errors`;
+CREATE TABLE IF NOT EXISTS `core_db_errors` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `sql` text,
+  `error_code` text,
+  `backtrace` mediumtext,
+  `environment` mediumtext,
+  `date` datetime DEFAULT NULL,
+  UNIQUE KEY `id` (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- Data exporting was unselected.
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

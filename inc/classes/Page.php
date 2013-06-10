@@ -133,6 +133,10 @@ class Page {
             'component_info' => array('script' => 'info', 'type' => 'MOD'),
             'masterhead_html' => array('script' => 'empty', 'type' => 'MOD'),
             'mastermenu_html' => array('script' => 'master_menu', 'type' => 'MOD'),
+            'bottomhead_html' => array(
+                  array('script' => 'vertical_menu', 'type' => 'MOD'),
+                  array('script' => 'search_mini', 'type' => 'MOD')
+                  ),
             'second_head_html' => array('script' => 'breadcrumbs', 'type' => 'MOD'),
             'left_column_html' => array(
                   array('script' => 'menu_left', 'type' => 'MOD'),

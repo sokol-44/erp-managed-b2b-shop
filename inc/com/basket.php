@@ -39,7 +39,9 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
          //   case 'add_basket':
          //   case 'remove_basket':
          case 'add_to_basket':
-            $Shopping_Basket->add_to_basket( $product_params );
+            if( $F->check_get('quantity') && (int)$F->GET['quantity'] > 1 ) $quantity = (int)$F->GET['quantity'];
+            else $quantity = 1;
+            $Shopping_Basket->add_to_basket( $product_params, $quantity );
             break;
          case 'remove_from_basket':
             $Shopping_Basket->remove_from_basket( $F->GET['product_key'] );

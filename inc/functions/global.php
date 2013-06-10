@@ -139,6 +139,7 @@ function gl_check_password($password_in, $password_db) {
 function gl_make_password($password_in, $salt_add = '', $pure_salt = false) {
 
    //if avaiable get 32 bytes of randomness
+   $str_rand = 'RAND'; //placeholder
    $filename = '/dev/urandom';
    if ( is_readable($filename) ) {
       $h = fopen($filename, 'rb');
@@ -153,10 +154,38 @@ function gl_make_password($password_in, $salt_add = '', $pure_salt = false) {
    else $pass_salt = hash_hmac('ripemd160', $salt_add, $random );
 
    echo 'gl_make_password<br>:' . $password_in . '<br>s:' . $pass_salt . '<br>';
+   
+   if( defined('DEFAULT_PASSWORD_HASH_TYPE') ) $password_hash = DEFAULT_PASSWORD_HASH_TYPE;
+   else $password_hash = 'HM_RMD320';
+   
+   switch ($password_hash) {
+      case 'MD53':
+         $pass_hash = md5(
+         md5( $password_in . $pass_salt, true) .
+         $password_in .
+         md5( $pass_salt . $password_in, true)
+         );
+         break;
+      case 'SH52':
+         $pass_hash_in = hash('SHA512', $password_in . $pass_salt .
+            hash('SHA512', $password_in . $pass_salt) );
+         break;
+      case 'SH32':
+         $pass_hash_in = hash('SHA384', $password_in . $pass_salt .
+            hash('SHA384', $password_in . $pass_salt) );
+         break;
+      case 'SH22':
+         $pass_hash_in = hash('SHA256', $password_in . $pass_salt .
+            hash('SHA256', $password_in . $pass_salt) );
+         break;
+      case 'HM_RMD320':
+      default:
+        $pass_hash = hash_hmac('ripemd320', $password_in . str_rot13($password_in), $pass_salt);
+        break;
+   }
+   
 
-   $pass_hash = hash_hmac('ripemd320', $password_in . str_rot13($password_in), $pass_salt);
-
-   return $pass_hash . ':' . $pass_salt;
+   return $password_hash . ':' . $pass_hash . ':' . $pass_salt;
 }
 
 

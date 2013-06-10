@@ -209,7 +209,9 @@ function db_query($query, $link = 'db_link') {
 
    if (defined('DEBUG_DB_QUERIES') && (DEBUG_DB_QUERIES == 'true')) {
       $dbg = debug_backtrace();
+      
       $query_log[] = array ('q' => $query, 'f' => $dbg[0]['file'], 'l' => $dbg[0]['line'], 't' => microtime(TRUE));
+//       $query_log[] = array ('q' => $query, 'f' => $dbg[0]['file'], 'l' => $dbg[0]['line'], 't' => microtime(TRUE), 'b' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
    }
 
    $db_result = $result;

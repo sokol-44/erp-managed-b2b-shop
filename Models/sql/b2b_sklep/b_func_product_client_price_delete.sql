@@ -1,0 +1,35 @@
+-- --------------------------------------------------------
+-- Host:                         localhost
+-- Wersja serwera:               5.1.40-community-log - MySQL Community Server (GPL)
+-- Serwer OS:                    Win32
+-- HeidiSQL Wersja:              8.0.0.4396
+-- --------------------------------------------------------
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET NAMES utf8 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+
+-- Zrzut struktury funkcja b2b_sklep.b_func_product_client_price_delete
+DROP FUNCTION IF EXISTS `b_func_product_client_price_delete`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` FUNCTION `b_func_product_client_price_delete`(`id_client_in` INT, `id_product_in` INT) RETURNS tinytext CHARSET utf8
+    MODIFIES SQL DATA
+    DETERMINISTIC
+BEGIN
+	DECLARE status TINYTEXT DEFAULT NULL;
+	DECLARE status_product TINYTEXT DEFAULT NULL;
+
+	SELECT id_product INTO status_product FROM shop_product_client_price WHERE `id_product` = id_product_in and `id_client` = id_client_in;
+	IF status_product IS NULL THEN
+		SET status = 'ERROR,PRODUCT_CLIENT_PRICE_DONT_EXIST';
+	ELSE
+		DELETE FROM shop_product_client_price WHERE `id_product` = id_product_in and `id_client` = id_client_in;
+		SET status = 'SUCCESS';
+	END IF;
+	return status;
+END//
+DELIMITER ;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
