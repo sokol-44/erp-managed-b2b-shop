@@ -14,11 +14,17 @@ function db_init($config_db = false, $link = 'db_link') {
 
    if( !$config_db )
    $config_db = $GLOBALS['config']['DB'];
-
-   if ($config_db['plink'] == 'true') {
-      $$link = mysql_pconnect($config_db['server'], $config_db['username'], $config_db['password']);
+   
+   if( !empty($config_db['port']) && $config_db['port']!='3305' && (int)$config_db['port']>1024 ) { 
+	$server = $config_db['server'] . ':' . $config_db['port'];
    } else {
-      $$link = mysql_connect($config_db['server'], $config_db['username'], $config_db['password']);
+    $server = $config_db['server'];
+   }
+   
+   if ($config_db['plink'] == 'true') {
+      $$link = mysql_pconnect($server, $config_db['username'], $config_db['password']);
+   } else {
+      $$link = mysql_connect($server, $config_db['username'], $config_db['password']);
    }
 
    if ($$link && is_resource($$link)) {

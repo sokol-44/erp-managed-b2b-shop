@@ -254,13 +254,13 @@ class Data_Person extends Data_Rights {
           "" as additional_data,
           b_func_client_user_add("' . db_int($id_client_user) . '", "' . db_int($id_client) . '", "' . db_escape($login) . '",
           "' . db_escape($password) . '", "' . db_escape($password_salt) . '", "' . db_escape($description) . '", "' . db_escape($name) . '",
-          "' . db_escape($email) . '", "' . db_escape($state) . '") as status';
+          "' . db_escape($email) . '", "' . db_escape($phone) . '", "' . db_escape($phone_cell) . '", "' . db_escape($state) . '") as status';
       } else {
          $query = 'select "' . db_int($id_client) . '" as id_one, "' . db_int($id_client_user) . '" as id_two,
           "" as additional_data,
           b_func_client_user_change("' . db_int($id_client_user) . '", "' . db_int($id_client) . '", "' . db_escape($login) . '",
           "' . db_escape($password) . '",  "' . db_escape($password_salt) . '", "' . db_escape($description) . '", "' . db_escape($name) . '",
-          "' . db_escape($email) . '", "' . db_escape($state) . '") as status';
+          "' . db_escape($email) . '", "' . db_escape($phone) . '", "' . db_escape($phone_cell) . '", "' . db_escape($state) . '") as status';
       }
       add_to_fp($query);
       $result = db_query( $query );

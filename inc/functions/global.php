@@ -105,28 +105,27 @@ function shutdown() {
 function gl_check_password($password_in, $password_db) {
 
    $pass_array = explode(':', $password_db);
-
-   if( sizeof($pass_array) == 2 ) {
-      $pass_hash = $pass_array[0];
-      $pass_salt = $pass_array[1];
-      $pass_hash_in = hash_hmac('ripemd320', $password_in . str_rot13($password_in), $pass_salt);
-   } elseif ( sizeof($pass_array) == 3 ) {
-      $pass_hash = $pass_array[1];
-      $pass_salt = $pass_array[2];
-      switch( $pass_array[0] ) {
-         case 'HM_RMD320':
-            $pass_hash_in = hash_hmac('ripemd320', $password_in . str_rot13($password_in), $pass_salt);
-            break;
-         case 'MD53':
-            $pass_hash_in = md5(
-            md5( $password_in . $pass_salt, true) .
-            $password_in .
-            md5( $pass_salt . $password_in, true)
-            );
-            break;
-         default:
-            return false;
+   if( sizeof($pass_array) == 1 ) {
+      $pass_hash_in = $password_db;
+      $pass_salt = '';
+      if( strlen($password_db) == 32 ) {
+         $password_hash = 'MD5';
+      } elseif( strlen($password_db) == 40 ) {
+         $password_hash = 'SHA1';
+      } else {
+         return false;
       }
+   } elseif( sizeof($pass_array) == 2 || sizeof($pass_array) == 3 ) {
+      if( sizeof($pass_array) == 2 ) {
+         $password_hash = 'HM_RMD320';
+         $pass_hash_in = $pass_array[0];
+         $pass_salt = $pass_array[1];
+      } else {
+         $password_hash = $pass_array[0];
+         $pass_hash_in = $pass_array[1];
+         $pass_salt = $pass_array[2];
+      }
+      $pass_hash = gl_compute_hash($password_hash, $password_in, $pass_salt);
    } else {
       return false;
    }
@@ -158,7 +157,24 @@ function gl_make_password($password_in, $salt_add = '', $pure_salt = false) {
    if( defined('DEFAULT_PASSWORD_HASH_TYPE') ) $password_hash = DEFAULT_PASSWORD_HASH_TYPE;
    else $password_hash = 'HM_RMD320';
    
+   $pass_hash = gl_compute_hash($password_hash, $password_in, $pass_salt);
+
+   return $password_hash . ':' . $pass_hash . ':' . $pass_salt;
+}
+
+function gl_compute_hash($password_hash, $password_in, $pass_salt) {
+   
    switch ($password_hash) {
+      case 'MD5':
+         $pass_hash = md5( $password_in );
+         break;
+      case 'SHA1':
+         $pass_hash = sha1( $password_in );
+         break;
+      case 'MDSHA':
+         $pass_md5 = md5( $password_in );
+         $pass_hash = sha1( $pass_md5 . $pass_salt . strrev($pass_md5) );
+         break;
       case 'MD53':
          $pass_hash = md5(
          md5( $password_in . $pass_salt, true) .
@@ -168,26 +184,23 @@ function gl_make_password($password_in, $salt_add = '', $pure_salt = false) {
          break;
       case 'SH52':
          $pass_hash_in = hash('SHA512', $password_in . $pass_salt .
-            hash('SHA512', $password_in . $pass_salt) );
+         hash('SHA512', $password_in . $pass_salt) );
          break;
       case 'SH32':
          $pass_hash_in = hash('SHA384', $password_in . $pass_salt .
-            hash('SHA384', $password_in . $pass_salt) );
+         hash('SHA384', $password_in . $pass_salt) );
          break;
       case 'SH22':
          $pass_hash_in = hash('SHA256', $password_in . $pass_salt .
-            hash('SHA256', $password_in . $pass_salt) );
+         hash('SHA256', $password_in . $pass_salt) );
          break;
       case 'HM_RMD320':
       default:
-        $pass_hash = hash_hmac('ripemd320', $password_in . str_rot13($password_in), $pass_salt);
-        break;
+         $pass_hash = hash_hmac('ripemd320', $password_in . str_rot13($password_in), $pass_salt);
+         break;
    }
-   
-
-   return $password_hash . ':' . $pass_hash . ':' . $pass_salt;
+   return $pass_hash;
 }
-
 
 //TODO
 // set_error_handler

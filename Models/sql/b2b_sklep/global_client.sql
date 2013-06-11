@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `global_client` (
   `email` tinytext,
   `phone` tinytext,
   `created` datetime DEFAULT NULL,
-  `modified` datetime DEFAULT NULL,
+  `modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `state` enum('ACTIVE','BLOCKED','SUSPENDED','ERASED') DEFAULT NULL,
   PRIMARY KEY (`id_client`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

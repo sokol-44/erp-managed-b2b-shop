@@ -259,19 +259,18 @@ class ClientData extends BasicSOAPDataMethods {
           'email' => 'EMAIL', 'phone' => 'TEXT', 'state' => 'TEXT');
    public $list_new = array('id_client', 'name');
    public $list_update = array('id_client');
-
 }
 
 
 class ClientUserData extends BasicSOAPDataMethods {
    public $list = array('id_client_user', 'id_client', 'login', 'password', 'password_salt',
-         'description', 'name', 'email', 'created', 'last_login', 'state');
+         'description', 'name', 'email', 'phone', 'phone_cell', 'created', 'last_login', 'state');
    public $list_type = array('id_client_user' => 'INT+', 'id_client' => 'INT+', 'login' => 'TEXT',
          'password' => 'TEXT', 'password_salt' => 'TEXT', 'description' => 'TEXT', 'name' => 'TEXT',
-          'email' => 'EMAIL', 'created' => 'DATE', 'last_login' => 'DATE', 'state' => 'TEXT');
-   public $list_new = array('id_client_user', 'id_client', 'login', 'password', 'name', 'email');
+          'email' => 'EMAIL', 'phone' => 'TEXT', 'phone_cell' => 'TEXT',
+          'created' => 'DATE', 'last_login' => 'DATE', 'state' => 'TEXT');
+   public $list_new = array('id_client_user', 'id_client', 'login', 'password', 'name');
    public $list_update = array('id_client_user', 'id_client');
-
 }
 
 class ClientUserPasswordData extends BasicSOAPDataMethods {

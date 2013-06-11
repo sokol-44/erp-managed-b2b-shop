@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `global_client_user` (
   `password` tinytext,
   `email` tinytext,
   `created` datetime DEFAULT NULL,
+  `modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `last_login` datetime DEFAULT NULL,
   `last_login_ip` tinytext,
   `old_blob` text,
