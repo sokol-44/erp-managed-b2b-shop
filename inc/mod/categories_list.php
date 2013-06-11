@@ -36,7 +36,7 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
          }
 
          $categories_string_tmp =
-			'<div class="cat_href" ' . $id_select . '>' . str_repeat('&nbsp;&nbsp;', $category['level']) .
+			'<div class="categories cat_href" ' . $id_select . '>' . str_repeat('&nbsp;&nbsp;', $category['level']) .
 			'<a href="' . $F->make_link(CFG_COM_CATALOG, $F->add_local_get('catpath', $category['path'], $GET_tmp)) . '"';
 
          if( $name_long != '') {
@@ -61,7 +61,12 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
       }
    }
 
-   return '<div class="categories_list"><div class="menu_header">Kategorie</div>' . $categories_string . '</div>';
+   return '
+   <div class="categories categories_list">
+     <div class="categories menu_header">Kategorie<div class="icon"></div></div>
+         ' . $categories_string . '
+      <div class="categories menu_bottom"></div>
+   </div>';
 
 }
 

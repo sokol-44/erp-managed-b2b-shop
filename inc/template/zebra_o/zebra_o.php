@@ -61,7 +61,7 @@ if( !defined('_I_INIT') ) die();
       
         <div class="yui3-u-3-5" id="1main">
             <div class="content">
-             	<div><?php echo $Page->put_component_info(); ?></div>
+             	<div class="content_info"><?php echo $Page->put_component_info(); ?></div>
                <!-- add your content here -->
                <?php echo $Page->put_component_html(); ?>
             </div>

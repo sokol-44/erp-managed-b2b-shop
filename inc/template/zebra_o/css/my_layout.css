@@ -22,6 +22,10 @@ input[disabled], input:disabled, textarea[disabled], textarea[disabled="disabled
 	right: 0px;
 }
 
+.icon {
+	margin: 2px;
+}
+
 .search_mini input {
 	float: left;
 	}
@@ -41,6 +45,7 @@ input[disabled], input:disabled, textarea[disabled], textarea[disabled="disabled
   	}
   #header_all { 
 	background-image: url("images/background_head.png");
+	margin-bottom: 10px;
   }
 	
   #header_left { position:absolute; padding: 2px 2em 1em 20px; float: left; margin-top: 15px; }
@@ -48,8 +53,12 @@ input[disabled], input:disabled, textarea[disabled], textarea[disabled="disabled
   #footer { padding: 10px 20px; color:#666; background: #f9f9f9; border-top: 5px #efefef solid; }
 
   /* (en) navigation: horizontal adjustment | (de) horizontale Ausrichtung  */
-  #navigation { margin-bottom: 35px; max-width: 1050px;
-	margin: auto; /* center in viewport */}
+  #navigation { 
+  	margin-bottom: 35px;
+  	max-width: 1050px;
+	margin: auto; /* center in viewport */
+	padding-bottom: 15px;
+}
 
 .vertical_menu01 {
 	background-image: url("../images/segregator.png");
@@ -89,6 +98,7 @@ everything below is custom styling to demonstrate how to create a page layout us
 /* 3 column fluid layout (either side column is optional, just omit the layout padding) */
 #layout {
 	margin: auto; /* center in viewport */
+	padding-top: 20px;
 	max-width: 1050px;
 }
 
@@ -122,7 +132,6 @@ everything below is custom styling to demonstrate how to create a page layout us
 body {
 	min-width: 768px;
 	margin: auto; /* center in viewport */
-	background-color: #f2f2f2;
 }
 
 
@@ -136,7 +145,7 @@ Container
 }
 
 .left_menu .module_container {
-	margin: 0px 0 15px 0;
+	margin: 0px 0 10px 0;
    background-color: white;
 	
 }
@@ -148,13 +157,27 @@ Article
 }
 
 .article.menu_header {
+	position:relative;
+	text-shadow: 0.12em 0.12em #999;
+}
+
+.article.menu_header > .icon {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 20px;
+	height: 20px;
 	background-image: url("images/info_16.png");
 	background-position: center right;
 	background-repeat: no-repeat; 
 }
 
 .article_menu_left {
-	padding-bottom: 5px;
+	/*padding-bottom: 5px;*/
+}
+
+.article_container  {
+	padding-top: 11px;
 }
 
 .article_content {
@@ -164,21 +187,37 @@ Article
 
 .title_container {
 	padding: 4px;
-   border: 5px solid lightgrey;
-   background-color: lightgrey;
+	background-image: url("images/container_header.png");
+	background-position: left bottom;
+	background-repeat: no-repeat;
 	font-weight: bold;
 	font-size: larger;
 }
 
 .menu_header {
 	padding: 2px;
+	background-image: url("images/column_border_bottom.png");
+	background-position: left bottom;
+	background-repeat: no-repeat;
+   /*border: 1px solid white;
+	
    border: 5px solid lightgrey;
    background-color: lightgrey;
-   background-color: lightgrey;
+   background-color: lightgrey;*/
    margin: 0;
 	font-weight: bold;
 	font-size: larger;
 	font-style: italic;
+}
+
+.menu_bottom {
+   margin: 0;
+	padding: 0;
+	background-image: url("images/column_bottom_bottom.png");
+	background-position: bottom;
+	background-size: auto 10px;
+	background-repeat: no-repeat;
+   height: 15px;
 }
 
 /*
@@ -271,13 +310,19 @@ Basket list
 	background-color: white;
 }
 
-.basket.menu_header{
-   border: 5px solid lightgrey;
-   background-color: lightgrey;
-	border-top-left-radius: 5px;
-	border-top-right-radius: 5px;
-	border-bottom: 1px dotted brown;
-	margin: 0 0px 5px 0;
+.basket.menu_header {
+	position:relative;
+	text-shadow: 0.12em 0.12em #999;
+	padding: 2px;
+	border: 0;
+}
+
+.basket.menu_header > .icon {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 20px;
+	height: 20px;
 	background-image: url("images/wallet_16.png");
 	background-position: center right;
 	background-repeat: no-repeat; 
@@ -287,27 +332,41 @@ Basket list
 	background-color: white;
 	padding: 5px;
 	margin: 0 5px 5px 5px;
-	border: 1px dotted black;
+	border: 2px solid grey;
 }
 
 .mainbasket {
-	/*background-color: lightblue;
-	border: 3px solid lightblue;*/
+	border: 3px solid lightblue;
+	border-bottom-left-radius: 12px;
+	border-top-right-radius: 12px;
+	border-bottom-right-radius: 12px;
+}
+
+.cleanstate_basket {
+	border: 3px solid grey;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	border-top-left-radius: 12px;
 }
 
 .usedbasket {
-	/*background-color: moccasin;
-	border: 3px solid moccasin;*/
+	background-color: moccasin;
+	border: 3px solid moccasin;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
 }
 
 .lockedbasket_user {
-	/*background-color: SpringGreen;
-	border: 3px solid SpringGreen;*/
+	background-color: SpringGreen;
+	border: 3px solid SpringGreen;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
 }
 
 .lockedbasket_other {
-	/*background-color: Coral;
-	border: 3px solid Coral;*/
+	background-color: Coral;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
 }
 
 .basket_number {
@@ -349,8 +408,15 @@ basket_sum_netto
 
 /*
 usedbasket
-basket_add_icon
+
 */
+
+.basket_add_icon {
+	padding: 5px 5px 5px 20px;
+	margin-right: 2px;
+	border-radius: 1px;
+}
+
 
 .basket_add {
 	/*border: 2px solid lightgreen;
@@ -365,8 +431,17 @@ basket_add_icon
 Menu
 */
 
+.categories.menu_header {
+	position:relative;
+	text-shadow: 0.12em 0.12em #999;
+}
 
-.categories_list > .menu_header {
+.categories.menu_header > .icon {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 20px;
+	height: 20px;
 	background-image: url("images/bookmark_16.png");
 	background-position: center right;
 	background-repeat: no-repeat; 

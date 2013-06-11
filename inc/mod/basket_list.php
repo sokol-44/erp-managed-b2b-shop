@@ -10,10 +10,11 @@ $total = $Shopping_Basket->calculate_total();
 
 $GET_tmp = $F->make_get('mode,action,show');
 
-$all_basket = $F->draw_link( $F->make_link(CFG_COM_BASKET, array('show' => 'all')), 'title="' . Lang::_('show all BASKETS') . '"', Lang::_('show all BASKETS') . ' ' . $F->static_image('icon/folder_16.png', Lang::_('show all BASKETS')));
+$all_basket = $F->draw_link( $F->make_link(CFG_COM_BASKET, array('show' => 'all')), 'title="' . Lang::_('show all BASKETS') . '"',
+      $F->static_image('icon/folder_16.png', Lang::_('show all BASKETS')) . ' ' . Lang::_('show all BASKETS') . ' ' . $F->static_image('icon/folder_16.png', Lang::_('show all BASKETS')));
 ?>
 <div class="basket_container">
-<div class="basket menu_header">Koszyki</div>
+<div class="basket menu_header">Koszyki<div class="icon"></div></div>
 <div class="basket basket_show_all"><?php echo $all_basket; ?></div>
 <?php
 $GET_id = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_tmp);
@@ -40,7 +41,7 @@ while( $Shopping_Basket = $Shopping_Basket_Chain->return_basket_next( true ) ) {
    
 $total = $Shopping_Basket->calculate_total();
 	   $state_html = '';
-	   $class_add = '';
+	   $class_add = ' cleanstate_basket';
 	   $available_actions = '';
 	    
 	   $basket_lvl_diff = $Shopping_Basket->basket_level_rights();
@@ -51,9 +52,9 @@ $total = $Shopping_Basket->calculate_total();
 	      $currently_other_locked = $Shopping_Basket->currently_other_locked();
 	      $currently_user_locked  = $Shopping_Basket->currently_user_locked();
 
-	      if( $currently_other_locked ) $class_add = ' class="lockedbasket_other"';
-	      elseif( $currently_user_locked ) $class_add = ' class="lockedbasket_user"';
-	      elseif( $currently_other_using ) $class_add = ' class="usedbasket"';
+	      if( $currently_other_locked ) $class_add = ' lockedbasket_other';
+	      elseif( $currently_user_locked ) $class_add = ' lockedbasket_user';
+	      elseif( $currently_other_using ) $class_add = ' usedbasket';
 
 	      $GET_id = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_tmp);
 	      $remove_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'remove_basket', $GET_id));
@@ -107,7 +108,7 @@ $total = $Shopping_Basket->calculate_total();
 
 if( $P->logged_in && $Shopping_Basket_Chain->get_can_add_basket() ) {
    $add_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('add_basket', 'add_basket', $GET_tmp));
-   $add_basket = $F->draw_link($add_basket_link, 'title="' . Lang::_('add BASKET') . '"', Lang::_('add BASKET') . ' ' . $F->static_image('icon/plus_16.png', Lang::_('add BASKET')));
+   $add_basket = $F->draw_link($add_basket_link, 'title="' . Lang::_('add BASKET') . '"', $F->static_image('icon/plus_16.png', Lang::_('add BASKET')) . ' ' . Lang::_('add BASKET') . ' ' . $F->static_image('icon/plus_16.png', Lang::_('add BASKET')));
 ?>
 <div class="basket_add">
 <div class="basket_add_icon"><?php echo $add_basket; ?></div>
