@@ -253,18 +253,23 @@ class Data_Person extends Data_Rights {
          $query = 'select "' . db_int($id_client) . '" as id_one, "' . db_int($id_client_user) . '" as id_two,
           "" as additional_data,
           b_func_client_user_add("' . db_int($id_client_user) . '", "' . db_int($id_client) . '", "' . db_escape($login) . '",
-          "' . db_escape($password) . '", "' . db_escape($password_salt) . '", "' . db_escape($description) . '", "' . db_escape($name) . '",
+          "' . db_escape($description) . '", "' . db_escape($name) . '",
           "' . db_escape($email) . '", "' . db_escape($phone) . '", "' . db_escape($phone_cell) . '", "' . db_escape($state) . '") as status';
       } else {
          $query = 'select "' . db_int($id_client) . '" as id_one, "' . db_int($id_client_user) . '" as id_two,
           "" as additional_data,
           b_func_client_user_change("' . db_int($id_client_user) . '", "' . db_int($id_client) . '", "' . db_escape($login) . '",
-          "' . db_escape($password) . '",  "' . db_escape($password_salt) . '", "' . db_escape($description) . '", "' . db_escape($name) . '",
+          "' . db_escape($description) . '", "' . db_escape($name) . '",
           "' . db_escape($email) . '", "' . db_escape($phone) . '", "' . db_escape($phone_cell) . '", "' . db_escape($state) . '") as status';
       }
       add_to_fp($query);
-      $result = db_query( $query );
-      return db_fetch_array($result);
+      $result = db_query( db_fetch_array($result) );
+      
+      if( $password!='' && substr_count($password, ':') < 1 ) {
+         $res_pass = doClientUserSetPassword($param_array);
+         $result['additional_data'] = 'ClientUserSetPassword:' . $res_pass['status'];
+      }
+      return $result;
    }
    
    static function doClientAdd($param_array, $add  = false) {

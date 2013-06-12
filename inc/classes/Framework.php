@@ -359,7 +359,8 @@ class Framework extends Framework_Data {
          } else {
             $val = (string)trim($val);
             if( strlen($val) > 0
-               && !( $type == 'POST' && ($key == 'x' || $key == 'y'))
+               && !(($key == 'x' || $key == 'y'))
+//                && !( $type == 'POST' && ($key == 'x' || $key == 'y'))
                //&& !( $type == 'GET' && ($key == 'virtualdir'))
                ) {
                $ret_array[$key] = $val;

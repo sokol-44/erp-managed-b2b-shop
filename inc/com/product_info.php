@@ -19,36 +19,50 @@ if( $F->not_null($image_type) ) {
    	photo:true});');
 }
 
-$price_html = $F->output_string_html( Price::val($product_info['price']) . ' (' . Price::tax($product_info['vat']) . ')' );
+$price_html = Price::val($product_info['price']) . ' <span class="product_vat">(' . Price::tax($product_info['vat']) . ')</span>';
 $description_html = nl2br( $F->output_string_html( $product_info['description'] ) );
 
 $GET_basket = array('mode' => 'add_to_basket', 'id_product' => $id_product);
 $link_basket = $F->make_link(CFG_COM_BASKET, $F->add_local_get($GET_basket, '', $GET_tmp) );
-$add_basket_html = $F->draw_link($link_basket,
-	'onclick="add_to_basket()" title="' . Lang::_('add_to_basket') . '"',
-   Lang::_('add_to_basket'));
 
-echo $F->static_image_submit($F->static_image('icon/buy_16.png', Lang::_('add_to_basket')));
+$add_basket_quantity = '<div class="add_basket_quantity">' . Lang::_('QUANTITY') . $F->draw_input_field('quantity' , 1, 'size="1"') . '</div>';
+$add_basket_form = $F->draw_form('add_to_basket', $link_basket, 'GET') .
+   $F->draw_hidden_field('com', CFG_COM_BASKET) .
+   $F->draw_hidden_field('mode', 'add_to_basket') .
+   $F->draw_hidden_field('id_product', $id_product);
 
+$add_basket_html = $add_basket_form .
+   $add_basket_quantity .
+   $F->static_image_submit($F->static_image_path('icon/buy_16.png'), Lang::_('add_to_basket')) .
+   $F->draw_form_close()
+;
 
 $product_quantity = (int)(($product_info['quantity']>0)?$product_info['quantity']:0);
-
+$product_producent = $F->output_string_html( $product_info['producent'] );
+$product_index = $F->output_string_html( $product_info['catalog_index'] );
 $Page->head_title = $F->output_string_html( $product_info['name'] );
 
 if( $P->logged_in ) {
 ?>
-<div class="product_info">
-   <div class="product_name"><?php echo $F->output_string_html( $product_info['name'] ); ?></div>
-   <?php if( $F->not_null($image_type) ) echo '<div class="product_image">' . $small_image_html . "</div>\n"; ?>
-   <div class="product_quantity"><?php echo Lang::_('QUANTITY_IN_WAREHAUSE') . ': ' . $product_quantity; ?></div>
-   <div class="product_price"><?php echo Lang::_('PRICE') . ': ' . $price_html; ?></div>
-   <div class="product_description"><?php echo $description_html; ?></div>
-   <div class="product_add_basket"><?php echo $add_basket_html; ?></div>
+<div class="product product_info">
+   <div class="product product_name"><?php echo $F->output_string_html( $product_info['name'] ); ?></div>
+   <?php if( $F->not_null($image_type) ) echo '<div class="product product_image">' . $small_image_html . "</div>\n"; ?>
+   <div class="product product_price"><span><?php echo Lang::_('PRICE') . '</span>: ' . $price_html; ?></div>
+   <?php
+   if ( $product_quantity > 0 )
+      echo '<div class="product product_quantity"><span>' . Lang::_('QUANTITY_IN_WAREHAUSE') . '</span>: ' . $product_quantity . "</div>\n";
+   if ( $F->not_null($product_producent) )
+      echo '<div class="product product_producent"><span>' . Lang::_('PRODUCENT') . '</span>: ' . $product_producent . "</div>\n";
+   if ( $F->not_null($product_index) )
+      echo '<div class="product product_index"><span>' . Lang::_('INDEX') . '</span>: ' . $product_index . "</div>\n";
+   ?>
+   <div class="product product_description"><?php echo $description_html; ?></div>
+   <div class="product product_add_basket"><?php echo $add_basket_html; ?></div>
 </div>
 <?php } else { ?>
-<div class="product_info">
-   <div class="product_name"><?php echo $F->output_string_html( $product_info['name'] ); ?></div>
-   <?php if( $F->not_null($image_type) ) echo '<div class="product_image">' . $small_image_html . "</div>\n"; ?>
-   <div class="product_description"><?php echo $description_html; ?></div>
+<div class="product product_info">
+   <div class="product product_name"><?php echo $F->output_string_html( $product_info['name'] ); ?></div>
+   <?php if( $F->not_null($image_type) ) echo '<div class="product product_image">' . $small_image_html . "</div>\n"; ?>
+   <div class="product product_description"><?php echo $description_html; ?></div>
 </div>
 <?php } ?>

@@ -164,6 +164,13 @@ class HTML {
    ////
    // The HTML form submit button wrapper function
    // Outputs a button in the selected language
+   function static_image_path($image) {
+      return DIR_WWW_IMG . $image;
+   }
+    
+   ////
+   // The HTML form submit button wrapper function
+   // Outputs a button in the selected language
    function static_image_submit($image, $alt = '', $parameters = '') {
       global $language;
 

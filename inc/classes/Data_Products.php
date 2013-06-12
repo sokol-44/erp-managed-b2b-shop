@@ -119,8 +119,8 @@ class Data_Products extends Data_Basket {
 
          if( $F->not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
 
-         $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
-         p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+         $query = 'select p.id_product, p.name, p.description, p.producer, p.catalog_index,
+         p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
          from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
          ( p.id_product = p2c.id_product ) ' . $where_str;
          $sp_query = $SP->prepare_sql( $query );
@@ -180,8 +180,8 @@ class Data_Products extends Data_Basket {
          
          //MYSQL group_concat( column_name )
          //POSTGRESQL = array_to_string(array_agg( column_name ),',')
-         $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
-         p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
+         $query = 'select p.id_product, p.name, p.description, p.producer, p.catalog_index,
+         p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
          group_concat(p2c.id_category) as id_category_list
          from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
          ( p.id_product = p2c.id_product )
@@ -265,6 +265,8 @@ class Data_Products extends Data_Basket {
                   'id_product_subtype' => (int)$id_product_subtype,
                   'name' => $product_info['name'],
                   'description' => $product_info['description'],
+                  'producer' =>$product_info['producer'],
+                  'catalog_index' => $product_info['catalog_index'],
                   'picture_small_url' => $product_info['picture_small_url'],
                   'picture_big_url' => $product_info['picture_big_url'],
                   'picture_id' => $product_info['picture_id'],
@@ -304,8 +306,8 @@ class Data_Products extends Data_Basket {
    static function getProductListFromCategory( $id_category = 0, $id_product_start = 0, $length = 1, $where = '' ) {
       list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
    
-      $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
-      p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+      $query = 'select p.id_product, p.name, p.description, p.producer, p.catalog_index,
+      p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
       from ' . TBL_SHOP_PRODUCT . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY .' p2c on
       ( p.id_product = p2c.id_product and p2c.id_category = ' . db_int($id_category) . ')
       where p.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
@@ -317,8 +319,8 @@ class Data_Products extends Data_Basket {
    static function getProductList( $id_product_start = 0, $length = 1, $where = '' ) {
       list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
       
-      $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
-      p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+      $query = 'select p.id_product, p.name, p.description, p.producer, p.catalog_index,
+      p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
       from ' . TBL_SHOP_PRODUCT . ' p
       where p.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
       ORDER BY p.id_product ' . $order_dir . ' LIMIT '. db_int($length);
@@ -461,7 +463,7 @@ class Data_Products extends Data_Basket {
    static function get_product_search( $length = 1, $where = '' ) {
       ///list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
        
-      $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
+      $query = 'select p.id_product, p.name, p.description, p.producer, p.catalog_index, p.picture_small_url,
       p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
       from ' . TBL_SHOP_PRODUCT . ' p
       where p.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
@@ -508,8 +510,8 @@ class Data_Products extends Data_Basket {
 
       //MYSQL group_concat( column_name )
       //POSTGRESQL = array_to_string(array_agg( column_name ),',')
-      $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
-      p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
+      $query = 'select p.id_product, p.name, p.description, p.producer, p.catalog_index,
+      p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
       group_concat(p2c.id_category) as id_category_list
       from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
       ( p.id_product = p2c.id_product )
@@ -558,8 +560,8 @@ class Data_Products extends Data_Basket {
 
          if( $F->not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
 
-         $query = 'select p.id_product, p.name, p.description, p.picture_small_url,
-         p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+         $query = 'select p.id_product, p.name, p.description,  p.producer, p.catalog_index,
+         p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
          from ' . $product_from . ' p ' . $where_str;
          $sp_query = $SP->prepare_sql( $query );
       }

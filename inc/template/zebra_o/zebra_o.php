@@ -52,14 +52,14 @@ if( !defined('_I_INIT') ) die();
 		  </div>
 	  </div>
       <div class="yui3-g" id="layout">
-        <div class="yui3-u-1-5" id="1nav">
+        <div class="yui3-u-1-5" id="lnav">
             <div class="content left_menu">
             <!-- add your content here -->
             <?php echo $Page->put_left_column_html(); ?>
             </div>
         </div>
       
-        <div class="yui3-u-3-5" id="1main">
+        <div class="yui3-u-3-5" id="lmain">
             <div class="content">
              	<div class="content_info"><?php echo $Page->put_component_info(); ?></div>
                <!-- add your content here -->
@@ -67,7 +67,7 @@ if( !defined('_I_INIT') ) die();
             </div>
         </div>
       
-        <div class="yui3-u-1-5" id="1extra">
+        <div class="yui3-u-1-5" id="lextra">
             <div class="content right_menu">
                <!-- add your content here -->
                <?php echo $Page->put_right_column_html(); ?>

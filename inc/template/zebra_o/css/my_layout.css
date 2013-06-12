@@ -60,6 +60,10 @@ input[disabled], input:disabled, textarea[disabled], textarea[disabled="disabled
 	padding-bottom: 15px;
 }
 
+#lmain > .content {
+	padding: 0 5px 0 5px;
+}
+
 .vertical_menu01 {
 	background-image: url("../images/segregator.png");
 }
@@ -223,9 +227,36 @@ Article
 /*
 Product Info
 */
+.product {
+	padding: 2px 0 2px 0;
+}
+
 .product_info {
 	position: relative;
 	min-height: 150px;
+	padding-bottom: 15px;
+	background-image: url("images/column_bottom_bottom.png");
+	background-position: bottom;
+	background-size: 100% 10px;
+	background-repeat: no-repeat;
+}
+
+.product_name {
+	text-transform: uppercase;
+	font-weight: bolder;
+	font-size: large;
+	padding: 13px 0 5px 5px;
+	margin-bottom: 10px;
+	background-image: url("images/container_header.png");
+	background-position: left bottom;
+	background-repeat: no-repeat;
+	text-shadow: 0.12em 0.12em #999;
+}
+
+.product_description {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-right: 50px;
 }
 
 .product_image { 
@@ -240,28 +271,41 @@ Product Info
 	vertical-align: top;
 }
 
-.product_add_basket {
-	margin: 10px;
-	text-align: justify;
-	padding: 2px;
-	position: absolute;
-	bottom:0;
-	right:0;
-}
-
-.product_add_basket img {
-	margin-left: 5px;
-}
-.product_name {
-	text-transform: uppercase;
+.product_price {
 	font-weight: bolder;
 	font-size: large;
-	padding-top: 10px;
-	padding-bottom: 10px;
 }
-.product_description {
-	padding-top: 10px;
-	padding-bottom: 10px;
+
+.product_vat {
+	font-weight: normal;
+	font-size: small;
+}
+
+/*
+product_price
+product_quantity
+product_producent
+product_index
+product_description
+product_add_basket
+*/
+.product_add_basket {
+	text-align: right;
+	padding: 3px;
+	position: absolute;
+	bottom: 15px;
+	right:0;
+	background-color: #ddd;
+	border: 3px solid #ccc;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	border-top-right-radius: 12px;
+}
+
+.product_add_basket input {
+	margin-left: 5px;
+}
+div.add_basket_quantity {
 }
 /*
 Catalog
@@ -456,7 +500,7 @@ Menu
 	padding: 3px 0px 3px 3px;
 }
 
-.cat_href#category_selected { font-weight: bolder; }
+.cat_href.category_selected { font-weight: bolder; }
 
 .cat_href a:link {text-decoration: none; color: #111111;}
 .cat_href a:visited {text-decoration: none; color: #111111;}

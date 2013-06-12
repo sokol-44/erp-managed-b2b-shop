@@ -12,7 +12,13 @@ $Page->add_jq_init('$(\'.cat_href a\').tooltip({
 $F->request_split_array('catpath', '_', 'GET');
 
 $category_tree = Data::get_categorie_tree();
-echo show_category($category_tree);
+$categories_string = show_category($category_tree);
+
+echo '<div class="categories categories_list">
+<div class="categories menu_header">Kategorie<div class="icon"></div></div>
+' . $categories_string . '
+      <div class="categories menu_bottom"></div>
+      </div>';
 
 function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
    $F = Framework::g_global();
@@ -32,11 +38,11 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
 
          $id_select ='';
          if ( $F->check_request_split_array('catpath', $current_id) ) {
-            $id_select = 'id="category_selected"';
+            $id_select = ' category_selected';
          }
 
          $categories_string_tmp =
-			'<div class="categories cat_href" ' . $id_select . '>' . str_repeat('&nbsp;&nbsp;', $category['level']) .
+			'<div class="categories cat_href' . $id_select . '" id="idcat_'.$category['path'].'">' . str_repeat('&nbsp;&nbsp;', $category['level']) .
 			'<a href="' . $F->make_link(CFG_COM_CATALOG, $F->add_local_get('catpath', $category['path'], $GET_tmp)) . '"';
 
          if( $name_long != '') {
@@ -61,13 +67,7 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
       }
    }
 
-   return '
-   <div class="categories categories_list">
-     <div class="categories menu_header">Kategorie<div class="icon"></div></div>
-         ' . $categories_string . '
-      <div class="categories menu_bottom"></div>
-   </div>';
-
+   return $categories_string;
 }
 
 ?>
