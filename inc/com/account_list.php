@@ -32,8 +32,10 @@ $Page->add_jq_init('set_toolbox_table(".tableBox");');
 $GET_tmp = $F->make_get();
 
 //for all
-echo Lang::_('Account list');
 ?>
+<div class="account_list_container">
+  <div class="account_list_container account_list_title container_header"><?php echo Lang::_('Account list'); ?><div class="icon"></div></div>
+  <div class="account_list_container account_list_content">
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('ID') ?></th>
@@ -68,3 +70,6 @@ echo Lang::_('Account list');
 		<td colspan="5"><?php echo $SP->display_links(); ?></td>
 	</tr>
 </table>
+  </div>
+  <div class="account_list_container account_list_bottom container_bottom"></div>
+</div>

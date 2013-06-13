@@ -97,7 +97,9 @@ class Mail extends PHPMailerLite {
    }
 
    public function SendAddSubject() {
-      $this->Subject = $this->Subject_Begin . $this->Subject;
+      if( Framework::not_null($this->Subject) ) $this->Subject = $this->Subject_Begin . ' - ' . $this->Subject;
+      else $this->Subject = $this->Subject_Begin;
+      
       return $this->Send();
    }
 

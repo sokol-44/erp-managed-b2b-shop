@@ -130,12 +130,21 @@ class Person {
       }
    }
     
-   public function get_account_manager_address() {
+   public function get_account_manager_address( $id_client = false ) {
 
       //TODO add field and data to client: account_manager
       //Data::get_account_manager_address( (int)$this->data['id_client'] )
       $cfg_mail = $GLOBALS['config']['MAIL'];
 
+      if( $id_client === true ) {
+         if( is_numeric($id_client) ) {
+            $email_addres = Data_Person::get_client_attribute((int)$id_client, 'ACCOUNT_MANAGER_ADDRESS');
+         } elseif ( is_bool($id_client) ) {
+            $email_addres = Data_Person::get_client_attribute((int)$P->data['id_client'], 'ACCOUNT_MANAGER_ADDRESS');
+         }
+         if( $email_address ) return array('email' => $email_address,'name' =>  '');
+      }
+      
       if( Framework::not_null($cfg_mail['default_to_address']) ) {
          return array('email' => $cfg_mail['default_to_address'], 'name' => $cfg_mail['default_to_name']);
       } elseif( Framework::not_null($cfg_mail['main_from_address']) ) {

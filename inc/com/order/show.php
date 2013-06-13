@@ -13,6 +13,10 @@ if( $F->not_null( $Order ) ) {
    $F->redirect( $F->make_link(CFG_COM_DEFAULT) );
 }
 ?>
+
+<div class="order_show_container">
+  <div class="order_show_container order_show_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
+  <div class="order_show_container order_show_content">
 <table width="100%" style="border: 0">
 	<tr>
 		<td colspan="5"></td>
@@ -98,3 +102,6 @@ if( $F->not_null( $Order ) ) {
 </table>
 	<?php
 	?>
+  </div>
+  <div class="order_show_container order_show_bottom container_bottom"></div>
+</div>

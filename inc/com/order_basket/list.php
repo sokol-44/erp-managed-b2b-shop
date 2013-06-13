@@ -23,6 +23,9 @@ $form_link = $F->make_link(CFG_COM_ORDER_BASKET, $get_form_link, $GET_tmp);
 
 echo $F->draw_form('basket_order', $form_link);
 ?>
+<div class="list_order_container">
+  <div class="list_order_container list_order_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
+  <div class="list_order_container list_order_content">
 <table width="100%" style="border: 0">
 	<tr>
 		<td colspan="5"></td>
@@ -87,6 +90,9 @@ echo $F->draw_form('basket_order', $form_link);
 		<td colspan="5"><?php //echo $SP->display_links(); ?></td>
 	</tr>
 </table>
+  </div>
+  <div class="list_order_container list_order_bottom container_bottom"></div>
+</div>
 <?php
 echo $F->draw_form_close();
 ?>

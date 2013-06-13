@@ -9,8 +9,12 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
 
    //edit rights
    $Shopping_Basket = FALSE;
-      
-   if ( $Shopping_Basket_Chain->id_basket_set ) {
+
+   if ( $F->check_get('id_shopping_basket') && $F->not_null($F->GET['id_shopping_basket']) ) {
+      $Shopping_Basket = $Shopping_Basket_Chain->return_basket_modify((int)$F->GET['id_shopping_basket']);
+   }
+   
+   if ( $Shopping_Basket === FALSE && $Shopping_Basket_Chain->id_basket_set ) {
       $Shopping_Basket = $Shopping_Basket_Chain->return_basket_modify($Shopping_Basket_Chain->id_basket_current);
    }
    
@@ -19,7 +23,7 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
       $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
    }
    
-   if( $Shopping_Basket === FALSE ) {
+   if( $Shopping_Basket == FALSE ) {
       print_debug($Shopping_Basket, true);
       die();
       //$F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode')));

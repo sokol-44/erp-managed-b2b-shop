@@ -79,7 +79,7 @@ class Shopping_Basket_Chain {
    public function add_basket( $force = false ) {
       //foreach($this->Basket_List as $basket ) print_debug($basket->params);
       //echo sizeof($this->Basket_List)." < ".self::$max_basket ."<br>\n";
-      if( sizeof($this->Basket_List) < self::$max_basket ) {
+      if( $this->get_can_add_basket() ) {
          for( $id_sb = 1; $id_sb <= self::$max_basket ; $id_sb++ ){
             if( !$this->_check_valid_basket($id_sb) ) {
                $this->init_basket( $id_sb );
@@ -131,7 +131,11 @@ class Shopping_Basket_Chain {
    public function get_basket_list_count() {
       //FIXME
       //params to get list of baskets belonging to specific ID
-      return count($this->Basket_List);
+      $count=0;
+      foreach($this->Basket_List as $Basket ) {
+         if( $Basket->params['state'] != 'ORDER' ) $count++;
+      }
+      return $count;
    }
 
    public function init_basket( $number = 1, $create = true ) {

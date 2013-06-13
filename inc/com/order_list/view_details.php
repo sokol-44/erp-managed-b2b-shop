@@ -7,8 +7,10 @@ $Page->head_title =Lang::_('Order details');
 if( !$Order->check_rights() )  $F->redirect($F->make_link(CFG_COM_ORDER_LIST));
 
 $BC->add_crumb(Lang::_('Orders details'), $F->self_link() );
-echo Lang::_('Order details');
 ?>
+<div class="order_container">
+  <div class="order_container order_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
+  <div class="order_container order_content">
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('Field') ?></th>
@@ -99,3 +101,7 @@ echo Lang::_('Order details');
 <?php
 
 ?>
+
+  </div>
+  <div class="order_container order_bottom container_bottom"></div>
+</div>

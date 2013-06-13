@@ -13,7 +13,11 @@ $total = $Shopping_Basket->calculate_total();
 // $info = Info::g_global();
 // print_debug($info);
 $Page->head_title = Lang::_('BASKET list');
-
+?>
+<div class="basket_list_container">
+  <div class="basket_list_container basket_list_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
+  <div class="basket_list_container basket_list_content">
+<?php
 echo Lang::_('Basket help for icons');
 ?>
 <ul>
@@ -187,3 +191,6 @@ echo Lang::_('Basket help for icons');
 }
 ?>
 </table>
+  </div>
+  <div class="basket_list_container basket_list_bottom container_bottom"></div>
+</div>

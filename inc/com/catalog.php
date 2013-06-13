@@ -22,6 +22,9 @@ $Page->add_jq_init('set_toolbox_table(".tableBox");');
 $GET_tmp = $F->make_get();
 
 ?>
+<div class="catalog_container">
+<div class="catalog_container catalog_title container_header"><?php echo Lang::_('Catalog'); ?><div class="icon"></div></div>
+<div class="catalog_container catalog_content">
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('PICTURE') ?></th>
@@ -83,3 +86,6 @@ $GET_tmp = $F->make_get();
 		<td colspan="5"><?php echo $SP->display_links(); ?></td>
 	</tr>
 </table>
+</div>
+<div class="catalog_container catalog_bottom container_bottom"></div>
+</div>

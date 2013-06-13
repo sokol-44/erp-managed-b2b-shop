@@ -339,9 +339,14 @@ class Data_Person extends Data_Rights {
          	from ' . TBL_GLOBAL_CLIENT_ATTRIBUTES . ' ca ,
          	' . TBL_GLOBAL_CLIENT . ' c
          	where ca.id_client = c.id_client and ca.id_client = "' . db_escape($attribute_type) . '"';
-      if ( $attribute_type == 'PRODUCT_VIEW_NAME' && Data_Products::$Data_Products_params['client_view'] ) return Data_Products::$Data_Products_params['client_view'];
-      elseif( db_rows( db_query($query) ) ) return db_fetch_result('val');
-	   elseif ( defined('DEFAULT_CLIENT_PRODUCT_PRICE_VIEW') ) return constant('DEFAULT_CLIENT_PRODUCT_PRICE_VIEW');
+      
+      if ( $attribute_type == 'PRODUCT_VIEW_NAME' ) {
+         if ( Data_Products::$Data_Products_params['client_view'] ) return Data_Products::$Data_Products_params['client_view'];
+         elseif ( defined('DEFAULT_CLIENT_PRODUCT_PRICE_VIEW') ) return constant('DEFAULT_CLIENT_PRODUCT_PRICE_VIEW');
+         else return false;
+      } elseif( db_rows( db_query($query) ) ) {
+         return db_fetch_result('val');
+      }
       else return false;
    }
    

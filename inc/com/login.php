@@ -1,6 +1,5 @@
 <?php
 
-
 $Page->head_title = Lang::_('Login');
 
 
@@ -29,6 +28,9 @@ if( $F->check_login('CLIENT') ) {
 }
 
 ?>
+<div class="login_container">
+  <div class="login_container login_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
+  <div class="login_container login_content">
 <?php echo $F->draw_form('login', $F->make_link(CFG_COM_LOGIN), 'post'); ?><br>
 <table class="pass_table" style="border: 0">
 	<tr>
@@ -42,3 +44,6 @@ if( $F->check_login('CLIENT') ) {
 	</tr>
 </table>
 <?php echo $F->draw_form_close(); ?>
+</div>
+<div class="login_container login_bottom container_bottom"></div>
+</div>

@@ -3,12 +3,12 @@
 Global
 */
 
-input, textarea { padding: 3px; }
+input, textarea { padding: 3px; margin: 1px;}
 input[disabled], input:disabled, textarea[disabled], textarea[disabled="disabled"], textarea:disabled, input[readonly="readonly"], textarea[readonly="readonly"]
 {
     background-color: gainsboro;
 }
-
+textarea { width: 99%; }
 
   /*-------------------------------------------------------------------------*/
 #header_bottom {
@@ -153,6 +153,24 @@ Container
    background-color: white;
 	
 }
+.container_header {
+	background-image: url("images/container_header.png");
+	background-position: left bottom;
+	background-repeat: no-repeat;
+	padding: 13px 0 5px 5px;
+	margin-bottom: 10px;
+	font-weight: bolder;
+	font-size: large;
+	text-shadow: 0.12em 0.12em #999;
+}
+.container_bottom {
+	padding-bottom: 15px;
+	background-image: url("images/column_bottom_bottom.png");
+	background-position: bottom;
+	background-size: 100% 10px;
+	background-repeat: no-repeat;
+}
+
 /*
 Article
 */
@@ -189,11 +207,9 @@ Article
    border: 5px solid white;
 }
 
-.title_container {
+
+.article_title {
 	padding: 4px;
-	background-image: url("images/container_header.png");
-	background-position: left bottom;
-	background-repeat: no-repeat;
 	font-weight: bold;
 	font-size: larger;
 }
@@ -228,29 +244,17 @@ Article
 Product Info
 */
 .product {
-	padding: 2px 0 2px 0;
+	padding: 2px 0 12px 0;
 }
 
 .product_info {
 	position: relative;
 	min-height: 150px;
-	padding-bottom: 15px;
-	background-image: url("images/column_bottom_bottom.png");
-	background-position: bottom;
-	background-size: 100% 10px;
-	background-repeat: no-repeat;
 }
 
 .product_name {
 	text-transform: uppercase;
-	font-weight: bolder;
-	font-size: large;
 	padding: 13px 0 5px 5px;
-	margin-bottom: 10px;
-	background-image: url("images/container_header.png");
-	background-position: left bottom;
-	background-repeat: no-repeat;
-	text-shadow: 0.12em 0.12em #999;
 }
 
 .product_description {
@@ -293,7 +297,7 @@ product_add_basket
 	text-align: right;
 	padding: 3px;
 	position: absolute;
-	bottom: 15px;
+	bottom: 5px;
 	right: 0;
 	background-color: #ddd;
 	border: 3px solid #ccc;
@@ -539,7 +543,7 @@ TD.headerNavigation {
 }
 
 .tableBox {
-	margin: 1px;
+	margin: 2px 5px 0 2px;
 	border: 2px solid blueviolet;
 	background: #f6f7f6;
 	/*width: 99%;*/

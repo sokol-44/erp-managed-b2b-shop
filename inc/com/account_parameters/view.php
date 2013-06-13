@@ -1,10 +1,12 @@
 <?php
-
+$Page->head_title =Lang::_('account details');
 //FIXME
 //remember backtrack
 if( !$P->logged_in ) $F->redirect(  );
 
 ?>
+<div class="account_param_container account_param_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
+<div class="account_param_container account_param_content">
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('Field') ?></th>
@@ -43,6 +45,8 @@ if( !$P->logged_in ) $F->redirect(  );
 		<td><?php echo $F->output_string_html( implode(', ', $P->roles)); ?></td>
 	</tr>
 </table>
+</div>
 <?php
 
 ?>
+<div class="account_param_container account_param_bottom container_bottom"></div>

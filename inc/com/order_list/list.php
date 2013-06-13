@@ -15,8 +15,10 @@ $BC->add_crumb(Lang::_('Orders list'), $F->make_link(CFG_COM_ORDER_LIST) );
 $GET_tmp = $F->make_get('mode');
 $GET_tmp = $F->add_local_get('mode', 'show_details', $GET_tmp);
 //for all
-echo Lang::_('Orders list');
 ?>
+<div class="list_order_container">
+  <div class="list_order_container list_order_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
+  <div class="list_order_container list_order_content">
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('ID') ?></th>
@@ -66,3 +68,6 @@ echo Lang::_('Orders list');
 		<td colspan="5"><?php echo $SP->display_links(); ?></td>
 	</tr>
 </table>
+  </div>
+  <div class="list_order_container list_order_bottom container_bottom"></div>
+</div>

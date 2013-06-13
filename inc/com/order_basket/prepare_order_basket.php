@@ -25,6 +25,9 @@ echo $F->draw_form('prepare_order_basket', $form_link);
 <script>
 function remove_from_basked() { return true; }
 </script>
+<div class="prepare_order_container">
+  <div class="prepare_order_container prepare_order_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
+  <div class="prepare_order_container prepare_order_content">
 <table style="border: 0; width: 100%;">
 	<tr>
 		<td colspan="5"><?php //print_debug($product_list); ?></td>
@@ -37,7 +40,7 @@ function remove_from_basked() { return true; }
 	<tr>
 		<td colspan="5">
       <?php echo Lang::_('order description'); ?><br>
-      <?php echo $F->draw_textarea_field('order_description', 'auto', '95%', 6); ?>
+      <?php echo $F->draw_textarea_field('order_description', 'auto', '', 6); ?>
       </td>
 	</tr>
 	<tr>
@@ -47,7 +50,7 @@ function remove_from_basked() { return true; }
 	<tr>
 		<td colspan="5">
       <?php echo Lang::_('basket description'); ?><br>
-      <?php echo $F->draw_textarea_field('description', 'auto', '95%', 6, $Shopping_Basket->params['description'], array('readonly', 'style'=>'background-color: lightgrey;')); ?>
+      <?php echo $F->draw_textarea_field('description', 'auto', '', 6, $Shopping_Basket->params['description'], array('readonly', 'style'=>'background-color: lightgrey;')); ?>
       </td>
 	</tr>
 </table>
@@ -155,6 +158,9 @@ function remove_from_basked() { return true; }
 	}
 	?>
 </table>
+  </div>
+  <div class="prepare_order_container prepare_order_bottom container_bottom"></div>
+</div>
 <?php
 echo $F->draw_form_close();
 ?>

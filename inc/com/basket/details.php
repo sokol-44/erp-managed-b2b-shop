@@ -16,7 +16,7 @@ $Page->add_js_file('jquery.colorbox.js');
 $Page->add_jq_init('colorize_table(".tableBox");');
 $Page->add_jq_init('set_toolbox_table(".tableBox");');
 
-$Page->head_title = Lang::_('BASKET');
+$Page->head_title = Lang::_('BASKET NR:') . ' ' . $id_shopping_basket_version;
 // print_debug($Shopping_Basket);
 $GET_tmp = $F->make_get();
 $form_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('mode', 'update_basket', $GET_tmp));
@@ -36,10 +36,11 @@ if( $Shopping_Basket->check_move('DOWN') )
    $basket_down  = $F->draw_submit('CHANGE_LEVEL_DOWN', false, Lang::_('SEND_BASKET_LOWER'));
 
 
-
-
 echo $F->draw_form('basket_edit', $form_link);
 ?>
+<div class="basket_container">
+  <div class="basket_container basket_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
+  <div class="basket_container basket_content">
 <script>
 function remove_from_basked() { return true; }
 </script>
@@ -49,13 +50,8 @@ function remove_from_basked() { return true; }
 	</tr>
 	<tr>
 		<td colspan="5">
-      <h3><?php echo Lang::_('basket nr:') . ' ' . $Shopping_Basket->id_shopping_basket; ?></h3>
-      </td>
-	</tr>
-	<tr>
-		<td colspan="5">
       <?php echo Lang::_('basket description'); ?><br>
-      <?php echo $F->draw_textarea_field('description', 'auto', '95%', 6, $Shopping_Basket->params['description']); ?>
+      <?php echo $F->draw_textarea_field('description', 'auto', '', 6, $Shopping_Basket->params['description']); ?>
       </td>
 	</tr>
 <?php
@@ -193,6 +189,9 @@ function remove_from_basked() { return true; }
 	}
 	?>
 </table>
+  </div>
+  <div class="basket_container basket_bottom container_bottom"></div>
+</div>
 <?php
 echo $F->draw_form_close();
 ?>

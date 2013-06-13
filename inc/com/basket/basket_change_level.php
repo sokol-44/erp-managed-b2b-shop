@@ -24,7 +24,7 @@ $Page->add_js_file('jquery.colorbox.js');
 $Page->add_jq_init('colorize_table(".tableBox");');
 $Page->add_jq_init('set_toolbox_table(".tableBox");');
 
-$Page->head_title = Lang::_('BASKET');
+$Page->head_title = Lang::_('BASKET NR:') . ' ' . $id_shopping_basket_version . ' ' . Lang::_($F->GET['show']);
 // print_debug($Shopping_Basket);
 
 $GET_tmp = $F->make_get(array('mode', 'show'));
@@ -34,18 +34,15 @@ $GET_id  = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_sho
 
 echo $F->draw_form('basket_edit', $form_link);
 ?>
+<div class="basket_container">
+  <div class="basket_container basket_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
+  <div class="basket_container basket_content">
 <script>
 function remove_from_basked() { return true; }
 </script>
 <table style="border: 0; width: 100%;">
 	<tr>
 		<td colspan="5"><?php //print_debug($product_list); ?></td>
-	</tr>
-	<tr>
-		<td colspan="5">
-      <h3><?php echo Lang::_('basket nr:') . ' ' . $Shopping_Basket->id_shopping_basket; ?></h3>
-      <?php echo Lang::_($F->GET['show']); ?>
-      </td>
 	</tr>
 	<tr>
 		<td colspan="5">
@@ -171,6 +168,9 @@ function remove_from_basked() { return true; }
 	}
 	?>
 </table>
+  </div>
+  <div class="basket_container basket_bottom container_bottom"></div>
+</div>
 <?php
 echo $F->draw_form_close();
 ?>

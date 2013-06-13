@@ -45,7 +45,7 @@ $Page->head_title = $F->output_string_html( $product_info['name'] );
 if( $P->logged_in ) {
 ?>
 <div class="product product_info">
-   <div class="product product_name"><?php echo $F->output_string_html( $product_info['name'] ); ?></div>
+   <div class="product product_name container_header" ><?php echo $F->output_string_html( $product_info['name'] ); ?></div>
    <?php if( $F->not_null($image_type) ) echo '<div class="product product_image">' . $small_image_html . "</div>\n"; ?>
    <div class="product product_price"><span><?php echo Lang::_('PRICE') . '</span>: ' . $price_html; ?></div>
    <?php
@@ -66,3 +66,5 @@ if( $P->logged_in ) {
    <div class="product product_description"><?php echo $description_html; ?></div>
 </div>
 <?php } ?>
+<div class="product product_bottom container_bottom"></div>
+</div>

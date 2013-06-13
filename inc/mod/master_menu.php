@@ -11,9 +11,7 @@ if( $P->logged_in ) {
 }
 $array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_CATALOG),'', Lang::_('Catalog') );
 $array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_BASKET),'', Lang::_('Basket') );
-
-//FIXME - ugly hack
-$array_mastermenu[] = '<a href="http://zebra.waw.pl/other.php">' . Kontakt . '</a>';
+$array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_CONTACT),'', Lang::_('Contact') );
 
 echo implode(' | ', $array_mastermenu);
 ?>

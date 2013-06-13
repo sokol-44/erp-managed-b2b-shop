@@ -9,7 +9,9 @@ $BC->add_crumb( array( 'name' => Lang::_('MAIN_PAGE'), 'path' => $F->make_link(C
    
 $Page->head_title = $Article->param['title'];
 ?>
+
 <div class="article_container">
-  <div class="title_container"><?php echo $Article->param['title']; ?></div>
-  <div class="article_content"><?php echo $Article->param['content']; ?></div>
+  <div class="article_container article_title container_header"><?php echo $Article->param['title']; ?><div class="icon"></div></div>
+  <div class="article_container article_content"><?php echo $Article->param['content']; ?></div>
+  <div class="article_container article_bottom container_bottom"></div>
 </div>

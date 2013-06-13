@@ -4,8 +4,15 @@ $SP = new SplitPage('PRODUCTS_LIST');
 if( $F->check_get('search') ) {
    $Page->head_title = $F->output_string_html( Lang::_('search result') );
    $filters = array();
-   if( $F->check_get('product_name') ) $filters['p.name'] = '%'.$F->GET['product_name'].'%';
-   if( $F->check_get('product_description') ) $filters['p.description'] = '%'.$F->GET['product_description'].'%';
+   //FIXME - move to Data_Products, Products class ?
+   if( $F->check_get('product_text_all') ) {
+      if( $F->check_get('product_name') ) $filters['p.name'] = '%'.$F->GET['product_text'].'%';
+      if( $F->check_get('product_description') ) $filters['p.description'] = '%'.$F->GET['product_text'].'%';
+   } else {
+      if( $F->check_get('product_name') ) $filters['p.name'] = '%'.$F->GET['product_text'].'%';
+   }
+   if( $F->check_get('product_catalog_index') ) $filters['p.catalog_index'] = '%'.$F->GET['product_catalog_index'].'%';
+
    $product_list = Data::get_search_product_list($filters);
 } else {
    $product_list = array();
@@ -21,6 +28,9 @@ $Page->add_jq_init('set_toolbox_table(".tableBox");');
 $GET_tmp = $F->make_get();
 
 ?>
+<div class="search_container">
+  <div class="search_container search_title container_header">Szukaj<div class="icon"></div></div>
+  <div class="search_container search_form">
 <?php echo $F->draw_form('search', $F->make_link(CFG_COM_SEARCH), 'GET'); ?><br>
 <?php echo $F->draw_hidden_field('search', 'search'); ?>
 <?php echo $F->draw_hidden_field('com', 'search'); ?>
@@ -29,6 +39,10 @@ $GET_tmp = $F->make_get();
 		<td><strong><?php echo Lang::_('Text'); ?></strong></td>
 		<td colspan="2"><?php echo $F->draw_input_field('product_text', '', ' style="width: 220px"'); ?></td>
 		<td><?php echo Lang::_('product all text') . $F->draw_checkbox_field('product_text_all'); ?></td>
+	</tr>
+	<tr>
+		<td><strong><?php echo Lang::_('catalog index'); ?></strong></td>
+		<td colspan="2"><?php echo $F->draw_input_field('product_catalog_index', '', ' style="width: 220px"'); ?></td>
 	</tr>
 	<tr>
 		<td><strong><?php echo Lang::_('Price') . ' ' . Lang::_('Max'); ?></strong></td>
@@ -40,12 +54,12 @@ $GET_tmp = $F->make_get();
 		<td colspan="2"><?php echo $F->dynamic_image_submit(Lang::_('SEARCH'),''); ?></td>
 	</tr>
 </table>
+</div>
 <?php echo $F->draw_form_close(); ?>
 <?php
-
-
 if( $F->not_null($product_list) && sizeof($product_list) > 0 ) {
 ?>
+<div class="search_container search_result">
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('PICTURE') ?></th>
@@ -107,6 +121,9 @@ if( $F->not_null($product_list) && sizeof($product_list) > 0 ) {
 		<td colspan="5"><?php echo $SP->display_links(); ?></td>
 	</tr>
 </table>
+</div>
 <?php
 }
 ?>
+<div class="search_container search_bottom container_bottom"></div>
+</div>

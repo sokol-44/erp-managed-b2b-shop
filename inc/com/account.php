@@ -9,14 +9,12 @@ $GET_tmp = $F->make_get();
 
 $BC->add_crumb(Lang::_('Account'), $F->make_link(CFG_COM_ACCOUNT) );
 
-//for all
-echo Lang::_('This Account data');
 ?>
-<div class="account_box">
-<div id="account_box_title"></div>
-<div id="account_box_graph"></div>
+<div class="account_container">
+  <div class="account_container account_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
+  <div class="account_container account_content">
 <div id="account_box_list">
-<ul class="account_box_list">
+<ul class="account_container account_box_list">
 <li><?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_PARAMETERS, array('mode' => 'change_password')),'', Lang::_('change password') ); ?></li>
 <li><?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_PARAMETERS, array('mode' => 'show_details')),'', Lang::_('show details') ); ?></li>
 <!-- <li><?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_PARAMETERS, array('mode' => 'change_details')),'', Lang::_('change details') ); ?></li>-->
@@ -29,7 +27,7 @@ echo Lang::_('This Account data');
 if( $P->check_roles('ADMIN,OPERATOR') ) {
 echo Lang::_('Orders');
 ?>
-<div class="account_box">
+<div class="account_container account_box">
 <div id="account_box_title"></div>
 <div id="account_box_graph"></div>
 <div id="account_box_list">
@@ -45,7 +43,7 @@ echo Lang::_('Orders');
 if( $P->check_roles('ADMIN') ) {
 echo Lang::_('Account list');
 ?>
-<div class="account_box">
+<div class="account_container count_box">
 <div id="account_box_title"></div>
 <div id="account_box_graph"></div>
 <div id="account_box_list">
@@ -67,3 +65,5 @@ echo Lang::_('Account list');
 <?php
 }
 ?>
+  <div class="account_container aaccount_bottom container_bottom"></div>
+</div>
