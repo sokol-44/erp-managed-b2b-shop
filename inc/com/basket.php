@@ -178,9 +178,8 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
          break;
    }
 } elseif( $F->check_get('add_basket') ) {
-   if( $P->logged_in )
-      $Shopping_Basket_Chain->add_basket();
-   $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode')));
+   if( $P->logged_in ) $Shopping_Basket_Chain->add_basket();
+   $F->redirect( $F->make_link(CFG_COM_BASKET));
 } else {
    //display basket
    require 'basket' . DS . 'details.php';

@@ -17,7 +17,8 @@ class Shopping_Basket_Chain {
    static $nr2id = array();
    static $Basket_List = array();
    static $nr_basket = 0;
-   private static $max_basket = 24;
+//    private static $max_basket = 24;
+   private static $max_basket = 4;
 
    public function __construct() {
       self::$class = $this;
@@ -76,7 +77,8 @@ class Shopping_Basket_Chain {
    }
 
    public function add_basket( $force = false ) {
-
+      //foreach($this->Basket_List as $basket ) print_debug($basket->params);
+      //echo sizeof($this->Basket_List)." < ".self::$max_basket ."<br>\n";
       if( sizeof($this->Basket_List) < self::$max_basket ) {
          for( $id_sb = 1; $id_sb <= self::$max_basket ; $id_sb++ ){
             if( !$this->_check_valid_basket($id_sb) ) {
@@ -86,7 +88,6 @@ class Shopping_Basket_Chain {
          }
          return false;
       } elseif ( $force ) {
-         
          $this->init_basket(self::$max_basket+1, true);
          return true;
       } else {
