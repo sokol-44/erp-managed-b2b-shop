@@ -286,6 +286,11 @@ class Framework extends Framework_Data {
       $str = str_replace($search, $replace, $str);
       return $str;
    }
+   
+   static function array_recursive_strip_tags( $array ) {
+      array_walk_recursive($array, 'strip_tags');
+      return $array;
+   }
 
    static function array_recursive_compare($array1, $array2) {
       //FIXME

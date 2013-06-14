@@ -15,17 +15,18 @@ $GET = $F->add_local_get('action', 'send', $GET_tmp);
   <div class="contact_form_container contact_form_form">
 <?php echo $F->draw_form('contect_form', $F->make_link(CFG_COM_CONTACT, $GET), 'POST'); ?><br>
 <?php echo $F->draw_hidden_field('time', microtime(true)); ?>
-<table class="pass_table" style="border: 0">
+<span class="need_el"></span> - <?php echo Lang::_('required information'); ?>
+<table class="tableBox">
 	<tr>
-		<td><strong><?php echo Lang::_('firstname and secondname'); ?></strong></td>
+		<td><strong><?php echo Lang::_('firstname and secondname'); ?></strong><span class="need_el"></span></td>
 		<td colspan="2"><?php echo $F->draw_input_field('cf_name', '', ' style="width: 220px"'); ?></td>
 	</tr>
 	<tr>
-		<td><strong><?php echo Lang::_('Address email'); ?></strong></td>
+		<td><strong><?php echo Lang::_('Address email'); ?><span class="need_el"></span></strong></td>
 		<td colspan="2"><?php echo $F->draw_input_field('cf_email', '', ' style="width: 220px"'); ?></td>
 	</tr>
 	<tr>
-		<td><strong><?php echo Lang::_('Telephone'); ?></strong></td>
+		<td><strong><?php echo Lang::_('Telephone'); ?><span class="need_el"></span></strong></td>
 		<td colspan="2"><?php echo $F->draw_input_field('cf_telephone', '', ' style="width: 220px"'); ?></td>
 	</tr>
 	<tr>
@@ -33,11 +34,11 @@ $GET = $F->add_local_get('action', 'send', $GET_tmp);
 		<td colspan="2"><?php echo $F->draw_input_field('cf_second_telephone', '', ' style="width: 220px"'); ?></td>
 	</tr>
 	<tr>
-		<td><strong><?php echo Lang::_('text'); ?></strong></td>
-		<td colspan="2"><?php echo $F->draw_textarea_field('cf_text', 'auto'); ?></td>
+		<td><strong><?php echo Lang::_('CONTENTS'); ?></strong><span class="need_el"></span></td>
+		<td colspan="2"><?php echo $F->draw_textarea_field('cf_contents', 'auto'); ?></td>
 	</tr>
 	<tr>
-		<td colspan="2"><?php echo $F->dynamic_image_submit(Lang::_('SEND'),''); ?></td>
+		<td colspan="2" align="center"><?php echo $F->dynamic_image_submit(Lang::_('SEND'),''); ?></td>
 	</tr>
 </table>
 <?php echo $F->draw_form_close(); ?>

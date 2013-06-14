@@ -89,7 +89,7 @@ class Mail2Send {
          $array_rep = array('data' => $F->get_current_datetime(),
                'cf_name' => $post_data['cf_name'], 'cf_email' => $post_data['cf_email'],
                'cf_telephone' => $post_data['cf_telephone'],
-               'cf_second_telephone' => $post_data['cf_second_telephone'], 'cf_text' => $post_data['cf_text'],
+               'cf_second_telephone' => $post_data['cf_second_telephone'], 'cf_contents' => $post_data['cf_contents'],
                'ip_address' => $_SERVER['REMOTE_ADDR'], 'browser' => $_SERVER['HTTP_USER_AGENT'] );
          $array_rep = array_merge($array_rep, $array_ad);
 

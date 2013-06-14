@@ -34,20 +34,24 @@ $add_basket_form = $F->draw_form('add_to_basket', $link_basket, 'GET') .
 $add_basket_html = $add_basket_form .
    $add_basket_quantity .
    $F->static_image_submit($F->static_image_path('icon/buy_16.png'), Lang::_('add_to_basket')) .
-   $F->draw_form_close()
-;
+   $F->draw_form_close();
 
 $product_quantity = (int)(($product_info['quantity']>0)?$product_info['quantity']:0);
 $product_producent = $F->output_string_html( $product_info['producent'] );
 $product_index = $F->output_string_html( $product_info['catalog_index'] );
 $Page->head_title = $F->output_string_html( $product_info['name'] );
-
-if( $P->logged_in ) {
+if ( $F->not_null($product_producent) )
+  $Page->head_title .= $Page->head_title . ', ' . $product_producent;
+if ( $F->not_null($product_index) )
+  $Page->head_title .= $Page->head_title . ', ' . $product_index;
 ?>
 <div class="product product_info">
+<?php
+if( $P->logged_in ) {
+?>
    <div class="product product_name container_header" ><?php echo $F->output_string_html( $product_info['name'] ); ?></div>
    <?php if( $F->not_null($image_type) ) echo '<div class="product product_image">' . $small_image_html . "</div>\n"; ?>
-   <div class="product product_price"><span><?php echo Lang::_('PRICE') . '</span>: ' . $price_html; ?></div>
+   <div class="product product_price"><?php echo '<span>' . Lang::_('PRICE') . '</span>: ' . $price_html; ?></div>
    <?php
    if ( $product_quantity > 0 )
       echo '<div class="product product_quantity"><span>' . Lang::_('QUANTITY_IN_WAREHAUSE') . '</span>: ' . $product_quantity . "</div>\n";
@@ -58,13 +62,10 @@ if( $P->logged_in ) {
    ?>
    <div class="product product_description"><?php echo $description_html; ?></div>
    <div class="product product_add_basket"><?php echo $add_basket_html; ?></div>
-</div>
 <?php } else { ?>
-<div class="product product_info">
    <div class="product product_name"><?php echo $F->output_string_html( $product_info['name'] ); ?></div>
    <?php if( $F->not_null($image_type) ) echo '<div class="product product_image">' . $small_image_html . "</div>\n"; ?>
    <div class="product product_description"><?php echo $description_html; ?></div>
-</div>
 <?php } ?>
-<div class="product product_bottom container_bottom"></div>
 </div>
+<div class="product product_bottom container_bottom"></div>

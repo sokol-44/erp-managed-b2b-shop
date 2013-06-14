@@ -92,7 +92,6 @@ $F = new Framework();
 $Page = new Page();
 $Lang = new Lang();
 $Rights = new Rights();
-$Info = new Info();
 
 /**
  * session objects

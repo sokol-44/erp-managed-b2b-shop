@@ -15,7 +15,7 @@ class Info {
    
    public function __construct() {
       self::$class = $this;
-      $this->reset();
+      $this->fill();
    }
 
    static function g_global() {
@@ -40,6 +40,10 @@ class Info {
 
    public function __wakeup() {
       self::$class = $this;
+      $this->fill();
+   }
+   
+   public function __destruct() {
    }
 
    public function reset() {
@@ -50,10 +54,16 @@ class Info {
          'other' => array(),
       );
    }
+   
+   public function fill() {
+      if( !isset($this->messages) || !is_array($this->messages) )
+         $this->reset();
+   }
 
    static function sadd($message, $type = 'error') {
       if( $type != 'error' && $type != 'warning' && $type != 'success')
          $type = 'other';
+      echo 'INFO sadd';
       $Info = Info::g_global();
       $Info->add($message, $type);
    }

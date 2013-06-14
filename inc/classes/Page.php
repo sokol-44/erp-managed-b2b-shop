@@ -18,6 +18,7 @@ class Page {
    //   static $js_body, $jq_files;
    static $F;
    static $class;
+   private $PLACE = array();
 
    public function __construct() {
       self::$class = $this;
@@ -181,7 +182,7 @@ class Page {
                }
             }
          }
-         $this->${place_name} = $content;
+         $this->PLACE[${place_name}] = $content;
       }
    }
     
@@ -190,6 +191,8 @@ class Page {
       $P = Person::g_global();
       $Page = Page::g_global();
       $BC = Breadcrumbs::g_global();
+      //echo $place['type'].': '.$place['script'].' '.microtime(true)."<br>\n";
+      
       ob_start();
       //$this->include_element($place['script'], $place['type']);
       switch( $place['type']) {
@@ -239,7 +242,7 @@ class Page {
    function __call($name, array $arguments) {
       if( strstr($name, 'put_') ) {
          $var_name = str_replace('put_', '', $name);
-         if( Framework::not_null($this->${var_name}) ) return $this->${var_name};
+         if( Framework::not_null($this->PLACE[${var_name}]) ) return $this->PLACE[${var_name}];
                //else return 'PLACE ' . $var_name;
       } else {
          echo "$name not defined!";

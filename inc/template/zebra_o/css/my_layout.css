@@ -26,9 +26,18 @@ textarea { width: 99%; }
 	margin: 2px;
 }
 
+.need_el:after {
+	content: "*";
+	color: red;
+	clear: none;
+	font-weight: bolder;
+	font-size: large;
+}
+
 .search_mini input {
 	float: left;
-	}
+}
+
 .search_mini input[type=text] {
 	}
 .search_mini > input[type=image] {
@@ -169,6 +178,7 @@ Container
 	background-position: bottom;
 	background-size: 100% 10px;
 	background-repeat: no-repeat;
+	clean: both;
 }
 
 /*
@@ -544,7 +554,8 @@ TD.headerNavigation {
 
 .tableBox {
 	margin: 2px 5px 0 2px;
-	border: 2px solid blueviolet;
+	/*border: 2px solid blueviolet;*/
+	width: 100%;
 	background: #f6f7f6;
 	/*width: 99%;*/
 }
