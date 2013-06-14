@@ -15,7 +15,7 @@ function db_init($config_db = false, $link = 'db_link') {
    if( !$config_db )
    $config_db = $GLOBALS['config']['DB'];
    
-   if( !empty($config_db['port']) && $config_db['port']!='3305' && (int)$config_db['port']>1024 ) { 
+   if( !empty($config_db['port']) && $config_db['port']!='3305' && (int)$config_db['port']>1024 ) {
 	$server = $config_db['server'] . ':' . $config_db['port'];
    } else {
     $server = $config_db['server'];
@@ -109,12 +109,18 @@ function db_unroll_conditions($conditions_array, $type = 'and', $field_name = fa
    if( is_array($conditions_array) ) {
       foreach( $conditions_array as $attr => $val ) {
          if( is_array($val) ) {
-            $return_array[] = ' (' . db_unroll_conditions($val, 'or', $attr) . ')';
+            if( strtoupper($attr) == 'OR' ) {
+               $return_array[] = ' (' . db_unroll_conditions($val, 'or') . ')';
+            } elseif( strtoupper($attr) == 'AND' ) { //FIXME - WTF ?
+               $return_array[] = ' (' . db_unroll_conditions($val, 'and') . ')';
+            } else {
+               $return_array[] = ' (' . db_unroll_conditions($val, 'or', $attr) . ')';
+            }
          } else {
             if( Framework::not_null($field_name) ) $attr = $field_name;
             if( strtoupper(trim($val)) == 'NULL' || strtoupper(trim($val)) == 'NOT NULL') {
                $return_array[] = db_escape($attr) . ' IS ' . trim($val);
-            } elseif( strpos($val, '%') !== FALSE ) {
+            } elseif( (strpos($val, '%') == 0 || strpos(strrev($val), '%') == 0 ) && strpos($val, '%') !== FALSE ) {
                $return_array[] = db_escape($attr) . ' LIKE \'' . db_escape($val) . '\'';
             } else {
                $return_array[] = db_escape($attr) . '=\'' . db_escape($val) . '\'';

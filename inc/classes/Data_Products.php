@@ -125,6 +125,7 @@ class Data_Products extends Data_Basket {
          ( p.id_product = p2c.id_product ) ' . $where_str;
          $sp_query = $SP->prepare_sql( $query );
       }
+      echo $sp_query;
       $res = db_query( $sp_query );
       return db_result_array($res);
    }
@@ -467,8 +468,9 @@ class Data_Products extends Data_Basket {
       p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
       from ' . TBL_SHOP_PRODUCT . ' p
       where p.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
-      ORDER BY p.id_product ' . $order_dir . ' LIMIT '. db_int($length);
+      ORDER BY p.id_product ' . $order_dir . ' LIMIT ' . db_int($length);
       $result = db_query( $query );
+
       return db_result_array_full($result);
    }
    
@@ -560,11 +562,12 @@ class Data_Products extends Data_Basket {
 
          if( $F->not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
 
-         $query = 'select p.id_product, p.name, p.description,  p.producer, p.catalog_index,
+         $query = 'select distinct p.id_product, p.name, p.description,  p.producer, p.catalog_index,
          p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
          from ' . $product_from . ' p ' . $where_str;
          $sp_query = $SP->prepare_sql( $query );
       }
+      
       $res = db_query( $sp_query );
       return db_result_array($res);
    }
