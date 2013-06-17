@@ -30,7 +30,7 @@ $GET_tmp = $F->make_get();
 		<th><?php echo Lang::_('PICTURE') ?></th>
 		<th><?php echo Lang::_('NAME') . ', ' . Lang::_('DESCRIPTION')?></th>
 		<?php if( $P->logged_in ) { ?>
-		<th><?php echo Lang::_('QUANTITY') ?></th>
+		<th><?php echo Lang::_('CATALOG INDEX') ?></th>
 		<th><?php echo Lang::_('PRICE') ?></th>
 		<th><?php echo Lang::_('ADD TO BASKET') ?></th>
 		<?php } ?>
@@ -40,7 +40,7 @@ $GET_tmp = $F->make_get();
 	   $GET_tmp = $F->add_local_get('id_product', $product['id_product'], $GET_tmp);
 
 	   if( $P->logged_in ) {
-	      $product_quantity = (int)(($product['quantity']>0)?$product['quantity']:0);
+	      $product_index = $F->output_string_html( $product['catalog_index'] );
 	      $link_basket = $F->make_link(CFG_COM_BASKET, $F->add_local_get('mode', 'add_to_basket', $GET_tmp));
 	      $cell_basket = $F->draw_link($link_basket, 'onclick="add_basked()" title="' . Lang::_('add_to_basket') . '"', $F->static_image('icon/buy_16.png', Lang::_('add_to_basket')));
 	   }

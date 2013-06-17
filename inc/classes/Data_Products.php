@@ -125,7 +125,7 @@ class Data_Products extends Data_Basket {
          ( p.id_product = p2c.id_product ) ' . $where_str;
          $sp_query = $SP->prepare_sql( $query );
       }
-      echo $sp_query;
+      //echo $sp_query;
       $res = db_query( $sp_query );
       return db_result_array($res);
    }
@@ -601,9 +601,9 @@ class Data_Products extends Data_Basket {
       //AND p.quantity > 0
 
       $query = 'SELECT c.id_category, c.name, c.description, c.id_category_parent,
-      COUNT(p2c.id_category) AS products_in_category, c.sort_order
+      COUNT(distinct p2c.id_product) AS products_in_category, c.sort_order
    	  FROM ' . TBL_SHOP_CATEGORY . ' c LEFT OUTER JOIN (
-   	  SELECT p2c.id_category FROM ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c, ' . $product_from . ' p
+   	  SELECT p2c.id_category, p2c.id_product FROM ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c, ' . $product_from . ' p
    	  WHERE p2c.id_product = p.id_product AND p.status = \'ACTIVE\' ' . $where_client . ') p2c
    	  ON (c.id_category = p2c.id_category) ' . $where_root_number . '
    	  GROUP BY c.id_category, c.name, c.description, c.id_category_parent, c.sort_order

@@ -58,7 +58,7 @@ if( $P->logged_in ) {
    if ( $F->not_null($product_producent) )
       echo '<div class="product product_producent"><span>' . Lang::_('PRODUCENT') . '</span>: ' . $product_producent . "</div>\n";
    if ( $F->not_null($product_index) )
-      echo '<div class="product product_index"><span>' . Lang::_('INDEX') . '</span>: ' . $product_index . "</div>\n";
+      echo '<div class="product product_index"><span>' . Lang::_('CATALOG INDEX') . '</span>: ' . $product_index . "</div>\n";
    ?>
    <div class="product product_description"><?php echo $description_html; ?></div>
    <div class="product product_add_basket"><?php echo $add_basket_html; ?></div>
