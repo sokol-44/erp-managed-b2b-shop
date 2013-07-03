@@ -14,7 +14,7 @@
 DROP VIEW IF EXISTS `product_with_client_price_only`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `product_with_client_price_only`;
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `b2b_sklep`.`product_with_client_price_only` AS SELECT p.id_product, p.name, p.description, p.picture_small_url, p.picture_big_url, p.picture_id
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `b2b_sklep`.`product_with_client_price_only` AS SELECT p.id_product, p.name, p.description, p.producer, p.catalog_index, p.picture_small_url, p.picture_big_url, p.picture_id
     ,IF(pcp.price, pcp.price, p.price) as price
     ,pcp.vat
     ,p.quantity, p.status, pcp.id_client

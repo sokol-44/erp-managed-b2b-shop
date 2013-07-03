@@ -15,6 +15,7 @@ DROP VIEW IF EXISTS `product_with_client_price`;
 -- Removing temporary table and create final VIEW structure
 DROP TABLE IF EXISTS `product_with_client_price`;
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` VIEW `b2b_sklep`.`product_with_client_price` AS select `p`.`id_product` AS `id_product`,`p`.`name` AS `name`,`p`.`description` AS `description`
+ ,`p`.`producer` AS `producer`, `p`.`catalog_index` AS `catalog_index`
  ,`p`.`picture_small_url` AS `picture_small_url`,`p`.`picture_big_url` AS `picture_big_url`
  ,`p`.`picture_id` AS `picture_id`
  ,if(`pcp`.`price`,`pcp`.`price`,`p`.`price`) AS `price`

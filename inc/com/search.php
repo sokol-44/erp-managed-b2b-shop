@@ -40,7 +40,7 @@ $GET_tmp = $F->make_get();
 		<td><?php echo Lang::_('product all text') . $F->draw_checkbox_field('product_text_all'); ?></td>
 	</tr>
 	<tr>
-		<td><strong><?php echo Lang::_('index'); ?></strong></td>
+		<td><strong><?php echo Lang::_('catalog index'); ?></strong></td>
 		<td colspan="2"><?php echo $F->draw_input_field('product_catalog_index', '', ' style="width: 220px"'); ?></td>
 	</tr>
 	<tr>

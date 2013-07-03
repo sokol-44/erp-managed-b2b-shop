@@ -329,21 +329,6 @@ class Data_Products extends Data_Basket {
       return db_result_array_full($result);
    }
 
-   static function doProductChange($param_array) {
-       
-      extract( db_escape_array($param_array) );
-       
-      $query = 'select "' . db_int($id_product) . '" as id_one,
-          "" as additional_data,
-          b_func_product_change("' . db_int($id_product) . '", "' . db_escape($name). '", "' . db_escape($description). '",
-          "' . db_escape($producer). '", "' . db_escape($catalog_index). '",
-          "' . db_escape($picture_small_url). '", "' . db_escape($picture_big_url). '", "' . db_escape($picture_id). '",
-          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_escape($quantity_salt) . '", "' . db_escape($status) . '") as status';
-      add_to_fp($query);
-      $result = db_query( $query );
-      return db_fetch_array($result);
-   }
-
    static function doCategoryDelete($param_array) {
        
       extract( db_escape_array($param_array) );
@@ -382,7 +367,21 @@ class Data_Products extends Data_Basket {
       $result = db_query( $query );
       return db_fetch_array($result);
    }
-    
+
+   static function setCategoryList($param_array) {
+       
+      extract( db_escape_array($param_array) );
+   
+   
+      $query = 'select "' . db_int($id_category) . '" as id_one,
+          "" as additional_data,
+          b_func_category_set("' . db_int($id_category) . '", "' . db_int($id_category_parent) . '", "' . db_int($sort_order) . '","' . db_int($root_number) . '",
+          "' . db_escape($name). '", "' . db_escape($description). '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+   
    static function doProductAdd($param_array) {
        
       extract( db_escape_array($param_array) );
@@ -397,7 +396,36 @@ class Data_Products extends Data_Basket {
       $result = db_query( $query );
       return db_fetch_array($result);
    }
+
+   static function doProductChange($param_array) {
+       
+      extract( db_escape_array($param_array) );
+       
+      $query = 'select "' . db_int($id_product) . '" as id_one,
+          "" as additional_data,
+          b_func_product_change("' . db_int($id_product) . '", "' . db_escape($name). '", "' . db_escape($description). '",
+          "' . db_escape($producer). '", "' . db_escape($catalog_index). '",
+          "' . db_escape($picture_small_url). '", "' . db_escape($picture_big_url). '", "' . db_escape($picture_id). '",
+          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_escape($quantity_salt) . '", "' . db_escape($status) . '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
    
+   static function setProductList($param_array) {
+       
+      extract( db_escape_array($param_array) );
+       
+      $query = 'select "' . db_int($id_product) . '" as id_one,
+          "" as additional_data,
+          b_func_product_set("' . db_int($id_product) . '", "' . db_escape($name). '", "' . db_escape($description). '",
+          "' . db_escape($producer). '", "' . db_escape($catalog_index). '",
+          "' . db_escape($picture_small_url). '", "' . db_escape($picture_big_url). '", "' . db_escape($picture_id). '",
+          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_escape($quantity_salt) . '", "' . db_escape($status) . '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
    
    static function doProductClientPriceClean( $id_client ) {
 //       $query = 'select "' . db_int($id_client) . '" as id_one, "" as additional_data,

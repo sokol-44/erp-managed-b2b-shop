@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `core_translation` (
   `translation` text NOT NULL,
   PRIMARY KEY (`id_translation`),
   KEY `search` (`language`,`definition`(10),`com`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

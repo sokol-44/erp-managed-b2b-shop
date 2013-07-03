@@ -507,6 +507,33 @@ class Soap_Server_worker {
       
       return($response);
    }
+   
+   function setProductList( $input ) {
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = false;
+
+      add_to_fp('-------- setProductList');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new ProductData($val, $this->input_data_type);
+            add_to_fp(print_r($SingleValueClass, true));
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::setProductList($param_array);
+            } else {
+               $response_tmp[] = $this->getReturnError('setProductList', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('setProductList', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
+   }
 
 
    function setProductClientPrice( $input ) {
@@ -599,6 +626,33 @@ class Soap_Server_worker {
       return($response);
    }
 
+   function setCategoryList( $input ) {
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = false;
+   
+      add_to_fp('-------- setCategoryList');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new CategoryData($val, $this->input_data_type);
+            add_to_fp(print_r($SingleValueClass, true));
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::setCategoryList($param_array);
+            } else {
+               $response_tmp[] = $this->getReturnError('setCategoryList', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('setCategoryList', '', 'EMPTY_LIST');
+      }
+   
+      return($response);
+   }
+   
    function doCategoryEdit( $input ) {
       $this->input_data_type = 'UPDATE';
       $this->SingleParam_MultipleReturns = false;

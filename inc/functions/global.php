@@ -171,11 +171,14 @@ function gl_compute_hash($password_hash, $password_in, $pass_salt) {
       case 'SHA1':
          $pass_hash = sha1( $password_in );
          break;
+      case 'SHA12':
+         $pass_hash = sha1( sha1( $password_in . $pass_salt ) . $pass_salt );
+		 break;
       case 'SHA2S':
          $pass_hash = hash('SHA256', $password_in . $pass_salt);
          break;
-      case 'MDSHA':
-         $pass_md5 = md5( $password_in );
+      case 'MDSHA': 
+         $pass_md5 = md5( $password_in ); //md5(haslo)
          $pass_hash = sha1( $pass_md5 . $pass_salt . strrev($pass_md5) );
          break;
       case 'MD53':
