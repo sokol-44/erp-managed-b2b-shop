@@ -52,6 +52,22 @@ class Person {
       $BackTrail->reset();
    }
 
+   public function get_public_data() {
+      
+      $ar_flt = array('id_client_user' => '', 'id_client' => '', 'name' => '', 'description' => '',
+                      'login' => '', 'email' => '', 'phone' => '', 'phone_cell' => '');
+      //array_intersect_key
+      return array(
+           'logged_in' => $this->logged_in,
+           'id' => $this->id,
+           'login' => $this->login,
+           'roles' => $this->roles,
+           'data' => array_intersect_key($this->data, $ar_flt)
+            );
+      
+   }
+   
+   
    public function set_person_data(array $P_data, array $P_rights) {
 
       $this->logged_in = true;

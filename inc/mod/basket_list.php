@@ -12,11 +12,13 @@ $GET_tmp = $F->make_get('mode,action,show');
 
 $all_basket = $F->draw_link( $F->make_link(CFG_COM_BASKET, array('show' => 'all')), 'title="' . Lang::_('show all BASKETS') . '"',
       $F->static_image('icon/folder_16.png', Lang::_('show all BASKETS')) . ' ' . Lang::_('show all BASKETS') . ' ' . $F->static_image('icon/folder_16.png', Lang::_('show all BASKETS')));
+
 ?>
 <div class="basket_container">
 <div class="basket menu_header">Koszyki<div class="icon"></div></div>
 <div class="basket basket_show_all"><?php echo $all_basket; ?></div>
 <?php
+echo '<script>json_data.basket_list_default="'.$F->json_string($Shopping_Basket->params).'";</script>';
 $GET_id = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_tmp);
 $remove_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('action', 'remove_basket', $GET_id));
 $remove_basket = $F->draw_link($remove_basket_link, 'title="' . Lang::_('remove BASKET') . '"', $F->static_image('icon/delete_16.png', Lang::_('remove BASKET')));
@@ -33,6 +35,7 @@ $show_basket = $F->draw_link($show_basket_link, 'title="' . Lang::_('show BASKET
 <div class="basket_sum_gross"><?php echo Lang::_('sum gross'); ?><span id="nr"><?php echo Price::val($total['sum_gross']); ?></span></div>
 <div class="basket_sum_netto"><?php echo Lang::_('sum_netto'); ?><span id="nr"><?php echo Price::val($total['sum_netto']); ?></span></div>
 </div>
+<script>json_data.basket_list = new Array();</script>
 <?php
 $Shopping_Basket_Chain->reset_basket_list();
 
@@ -88,12 +91,9 @@ $total = $Shopping_Basket->calculate_total();
          }
 	   } else {
          continue;
-         /*
-	      $class_add = ' class="na_basket"';
-	      $show_basket = $Shopping_Basket->id_shopping_basket;
-	      */
 	   }
 	   $state_html = $Shopping_Basket->basket_level_nr() .'(' . $basket_lvl_diff . ')<br>' . $Shopping_Basket->basket_level_text();
+	   echo '<script>json_data.basket_list.push("'.$F->json_string(array_merge($Shopping_Basket->params, $rights)).'");</script>';
 	   ?>
 <div class="basket<?php echo $class_add; ?>" id="basket_prev_<?php echo (int)$Shopping_Basket->id_shopping_basket; ?>">
 <div class="basket_menu"><?php echo $available_actions; ?></div>

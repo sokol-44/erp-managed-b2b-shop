@@ -22,4 +22,13 @@ function change_form_target(target) {
 
 }
 
+var json_data = {
+	    "categories_list": false,
+	    "basket_list_default": false,
+	    "basket_list": false,
+	    "basket_current": false,
+	    "order_current": false,
+	    "user_curent": false
+	  };
+
 

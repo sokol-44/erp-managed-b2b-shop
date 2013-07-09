@@ -16,5 +16,7 @@ $array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_BASKET),'', Lang::_('B
 $a4 = $F->make_link(CFG_COM_ARTICLE, $F->add_local_get('key', '4', $GET_tmp));
 $array_mastermenu[] = $F->draw_link( $a4 ,'', Lang::_('Contact') );
 
+echo '<script>json_data.user_curent = "'.$F->json_string( $P->get_public_data() ).'";</script>';
+
 echo implode(' | ', $array_mastermenu);
 ?>

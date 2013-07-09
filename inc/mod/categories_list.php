@@ -13,12 +13,14 @@ $F->request_split_array('catpath', '_', 'GET');
 
 $category_tree = Data::get_categorie_tree();
 $categories_string = show_category($category_tree);
+$json_string = $F->json_string($category_tree);
 
-echo '<div class="categories categories_list">
-<div class="categories menu_header">Kategorie<div class="icon"></div></div>
-' . $categories_string . '
+echo '<script>json_data.categories_list="'.$json_string.'";</script>
+<div class="categories categories_list">
+      <div class="categories menu_header">Kategorie<div class="icon"></div></div>
+      ' . $categories_string . '
       <div class="categories menu_bottom"></div>
-      </div>';
+</div>';
 
 function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
    $F = Framework::g_global();

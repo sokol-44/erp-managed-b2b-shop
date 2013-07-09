@@ -38,6 +38,11 @@ class Framework extends Framework_Data {
       return self::$class;
    }
 
+   static function json_string($data) {
+      return addslashes(json_encode($data));
+   }
+   
+   
    static function output_string_html($string, $lenght = false) {
       if( $lenght && strlen($string) > $lenght ) {
          $substring = substr($string,0, $lenght);

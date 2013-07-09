@@ -16,7 +16,13 @@ if( function_exists('get_magic_quotes_runtime') && get_magic_quotes_runtime() ) 
 /**
  * root for php scripts constant
  */
-define('_I_ROOT_DIR', '.');
+    if( isset($_SERVER['DOCUMENT_ROOT']) ) $root = $_SERVER['DOCUMENT_ROOT'];
+elseif( isset($_SERVER['SCRIPT_FILENAME']) ) $root = pathinfo($_SERVER['SCRIPT_FILENAME'], PATHINFO_DIRNAME);
+elseif( isset($_SERVER['PATH_TRANSLATED']) ) $root = pathinfo($_SERVER['PATH_TRANSLATED'], PATHINFO_DIRNAME);
+elseif( isset($_ENV['HOME']) ) $root = $_ENV['HOME'];
+else   $root = '.';
+define('_I_ROOT_DIR', $root);
+unset($root);
 
 /**
  * set init for blocking direct access
