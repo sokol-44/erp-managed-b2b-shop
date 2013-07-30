@@ -270,7 +270,14 @@ class Framework extends Framework_Data {
       $this->REQUEST = array_merge_recursive($this->POST, $this->GET);
 
       if( self::not_null($this->GET['com']) ) {
-         $this->com = $this->GET['com'];
+         //FIXME check permisions
+         
+         
+//          if( $this->GET['com'] == 'catalog' ) {
+            //
+//          } else {
+            $this->com = $this->GET['com'];
+//          }
          //unset($this->GET['com']);
       }
 
@@ -361,20 +368,26 @@ class Framework extends Framework_Data {
 
       $ret_array = array();
       foreach( $array as $key => $val ) {
-         if( get_magic_quotes_gpc() === TRUE ) $key = stripslashes($key);
-         if( get_magic_quotes_gpc() === TRUE ) $val = stripslashes($val);
+         if( get_magic_quotes_gpc() === TRUE ) {
+         	$key = stripslashes($key);
+         	$val = stripslashes($val);
+         }
          
          if( is_array($val) ) {
             $ret_array[$key] = self::_request_normalize_rec($val, $type);
          } else {
             $val = (string)trim($val);
-            if( strlen($val) > 0
-               && !(($key == 'x' || $key == 'y'))
-//                && !( $type == 'POST' && ($key == 'x' || $key == 'y'))
-               //&& !( $type == 'GET' && ($key == 'virtualdir'))
-               ) {
-               $ret_array[$key] = $val;
+            $key_len = strlen($key);
+            if( strlen($val) > 0 ) {
+               if ( !(($key == 'x' || $key == 'y')) ) {
+               	 $ret_array[$key] = $val;
+               }
+               if( $key_len>2 && strpos($key, '_x') == ($key_len-2) && 
+      			isset($array[substr($key, 0, -2).'_y']) ) {
+               	 $ret_array[substr($key, 0, -2)] = substr($key, 0, -2);
+               }
             }
+            
          }
       }
 

@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- Host:                         localhost
--- Wersja serwera:               5.1.40-community-log - MySQL Community Server (GPL)
--- Serwer OS:                    Win32
+-- Host:                         sql.company.nazwa.pl
+-- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
+-- Serwer OS:                    Linux
 -- HeidiSQL Wersja:              8.0.0.4396
 -- --------------------------------------------------------
 
@@ -10,10 +10,10 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury funkcja b2b_sklep.b_func_product_to_category_add
+-- Zrzut struktury funkcja company_1.b_func_product_to_category_add
 DROP FUNCTION IF EXISTS `b_func_product_to_category_add`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `b_func_product_to_category_add`(`id_product_in` INT, `id_category_in` INT) RETURNS tinytext CHARSET utf8
+CREATE DEFINER=`company_1`@`%` FUNCTION `b_func_product_to_category_add`(`id_product_in` INT, `id_category_in` INT) RETURNS tinytext CHARSET latin2
     READS SQL DATA
 BEGIN
 	DECLARE `status` TINYTEXT DEFAULT NULL;
@@ -28,7 +28,7 @@ BEGIN
 	ELSE
 		SELECT id_category INTO status_product_category FROM shop_product_to_category 
 		WHERE `id_category` = id_category_in and `id_product` = id_product_in;
-		IF status_category IS NULL and status_product_category IS NOT NULL THEN
+		IF status_product_category IS NULL THEN
 			INSERT INTO shop_product_to_category (`id_category`, `id_product`)
 			VALUES (id_category_in, id_product_in);
 			SET status = 'SUCCESS,PRODUCT_TO_CATEGORY_NEW';

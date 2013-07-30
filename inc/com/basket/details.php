@@ -27,13 +27,16 @@ $GET_id  = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_sho
 $basket_order = ''; $basket_up = ''; $basket_down = '';
 
 if( $Shopping_Basket->check_rights('MAKE_ORDER', false) )
-   $basket_order = $F->draw_submit('PREPARE_ORDER_BASKET', false, Lang::_('PREPARE_ORDER_BASKET'));
+   $basket_order = $F->dynamic_image_submit(Lang::_('PREPARE_ORDER_BASKET'),'PREPARE_ORDER_BASKET');
+   //$basket_order = $F->draw_submit('PREPARE_ORDER_BASKET', false, Lang::_('PREPARE_ORDER_BASKET'));
 
 if( $Shopping_Basket->check_move('UP') )
-   $basket_up    = $F->draw_submit('CHANGE_LEVEL_UP', false, Lang::_('SEND_BASKET_HIGHER'));
+   $basket_up    = $F->dynamic_image_submit(Lang::_('CHANGE_LEVEL_UP'), 'CHANGE_LEVEL_UP');
+   //$basket_up    = $F->draw_submit('CHANGE_LEVEL_UP', false, Lang::_('SEND_BASKET_HIGHER'));
 
 if( $Shopping_Basket->check_move('DOWN') )
-   $basket_down  = $F->draw_submit('CHANGE_LEVEL_DOWN', false, Lang::_('SEND_BASKET_LOWER'));
+   $basket_down  = $F->dynamic_image_submit(Lang::_('CHANGE_LEVEL_DOWN'),'SEND_BASKET_LOWER');
+   //$basket_down  = $F->draw_submit('CHANGE_LEVEL_DOWN', false, Lang::_('SEND_BASKET_LOWER'));
 
 
 echo $F->draw_form('basket_edit', $form_link);
@@ -64,7 +67,7 @@ function remove_from_basked() { return true; }
 		<td align="left"><?php echo $basket_down; ?></td>
 		<td>&nbsp;</td>
 		<td align="right"><?php echo $basket_order; ?></td>
-		<td align="right"><?php echo $F->draw_submit('UPDATE_BASKET', false, Lang::_('UPDATE_BASKET')); ?></td>
+		<td align="right"><?php echo $F->dynamic_image_submit(Lang::_('UPDATE_BASKET'),'UPDATE_BASKET'); ?></td>
 	</tr>
 </table>
 <table class="tableBox" style="border: 0">
@@ -109,7 +112,7 @@ function remove_from_basked() { return true; }
 		<td align="left"><?php echo $basket_down; ?></td>
 		<td>&nbsp;</td>
 		<td align="right"><?php echo $basket_order; ?></td>
-		<td align="right"><?php echo $F->draw_submit('UPDATE_BASKET', false, Lang::_('UPDATE_BASKET')); ?></td>
+		<td align="right"><?php echo $F->dynamic_image_submit(Lang::_('UPDATE_BASKET'),'UPDATE_BASKET'); ?></td>
 	</tr>
 	<tr>
 		<td colspan="5"><?php //echo $SP->display_links(); ?></td>

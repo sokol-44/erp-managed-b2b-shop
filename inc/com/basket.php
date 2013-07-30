@@ -53,6 +53,7 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
          case 'update_basket':
             //FIXME
             $Shopping_Basket->update_basket_quantity_list($F->POST['product_quantity'], $F->POST['description']);
+            //print_debug($F); die();
             if( $F->check_post('PREPARE_ORDER_BASKET') ) {
                $GET_tmp = $F->make_get('mode');
                $GET_tmp = $F->add_local_get('mode', 'prepare_order_basket', $GET_tmp);

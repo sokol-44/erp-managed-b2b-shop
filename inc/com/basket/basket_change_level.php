@@ -52,7 +52,7 @@ function remove_from_basked() { return true; }
 	</tr>
 	<tr>
 		<td align="left" colspan="4"></td>
-		<td align="right"><?php echo $F->draw_submit($direction_name, false, Lang::_($direction_name)); ?></td>
+		<td align="right"><?php echo $F->dynamic_image_submit(Lang::_($direction_name), $direction_name); ?></td>
 	</tr>
 	<tr>
 		<td colspan="5">

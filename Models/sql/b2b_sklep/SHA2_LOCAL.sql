@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- Host:                         localhost
--- Wersja serwera:               5.1.40-community-log - MySQL Community Server (GPL)
--- Serwer OS:                    Win32
+-- Host:                         sql.company.nazwa.pl
+-- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
+-- Serwer OS:                    Linux
 -- HeidiSQL Wersja:              8.0.0.4396
 -- --------------------------------------------------------
 
@@ -10,10 +10,10 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury funkcja b2b_sklep.SHA2_LOCAL
+-- Zrzut struktury funkcja company_1.SHA2_LOCAL
 DROP FUNCTION IF EXISTS `SHA2_LOCAL`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `SHA2_LOCAL`(message MEDIUMBLOB, bits SMALLINT) RETURNS char(64) CHARSET utf8
+CREATE DEFINER=`company_1`@`%` FUNCTION `SHA2_LOCAL`(message MEDIUMBLOB, bits SMALLINT) RETURNS char(64) CHARSET utf8
     DETERMINISTIC
 BEGIN
     DECLARE k, w BLOB;

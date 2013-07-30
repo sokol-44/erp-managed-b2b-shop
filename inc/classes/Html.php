@@ -149,16 +149,16 @@ class HTML {
       return $image;
    }
      
-   function dynamic_image_button($text = '', $template = '') {
+   function dynamic_image_button($text = '', $name='', $template = '') {
       return $this->dynamic_image($text, $template);
    }
    
-   function dynamic_image_submit($name = '', $parameters = '') {
+   function dynamic_image_submit($text = '', $name='', $parameters = '') {
       global $language;
       
-      $src = $this->dynamic_image_src($name);
+      $src = $this->dynamic_image_src($text);
    
-      return $this->static_image_submit($src, $name, $parameters);
+      return $this->static_image_submit($src, $text, 'name="' . $this->output_string($name) . '"');
    }
 
    ////
@@ -267,7 +267,8 @@ class HTML {
          if( is_array($params) ) {
             $tr_parm = array();
             foreach( $params as $attr => $val ) {
-               $tr_parm[] = $attr . '="' . $val . '" ';
+            	if( is_numeric($attr) ) $tr_parm[] = $val . '="' . $val . '" ';
+                else $tr_parm[] = $attr . '="' . $val . '" ';
             }
             return ' ' . implode(' ', $tr_parm);
          } else {

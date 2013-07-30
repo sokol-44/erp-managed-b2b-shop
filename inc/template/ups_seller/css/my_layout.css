@@ -1,0 +1,809 @@
+
+/*
+Global
+*/
+
+input, textarea { padding: 3px; margin: 1px;}
+input[disabled], input:disabled, textarea[disabled], textarea[disabled="disabled"], textarea:disabled, input[readonly="readonly"], textarea[readonly="readonly"]
+{
+    background-color: gainsboro;
+}
+textarea { width: 99%; }
+
+  /*-------------------------------------------------------------------------*/
+#header_bottom {
+	height: 82px; 
+}
+#header_bottom  div{
+	clean: none;
+}
+#header_bottom_cont .search_mini {
+	margin-left: 10px;
+	float: right;
+	position: relative;
+	top: 25px;
+	right: 0px;
+}
+
+#header_bottom_cont .person_data_main {
+	float: right;
+	position: relative;
+	top: 25px;
+	right: 0px;
+	text-align:right;
+	color: #eee;
+	padding: 2px;
+	background: #012652;
+	border: #012652 2px solid;
+	border-radius: 5px;
+}
+
+.person_data_main .person_data_info {
+	clear: both;
+	float: right;
+}
+
+.icon {
+	margin: 2px;
+}
+
+.need_el:after {
+	content: "*";
+	color: red;
+	clear: none;
+	font-weight: bolder;
+	font-size: large;
+}
+
+.search_mini input {
+	float: left;
+}
+
+.search_mini input[type=text] {
+	}
+.search_mini > input[type=image] {
+	padding-top: 0px;
+	margin-top: -1px;
+}
+
+.picture_container  {
+	background-repeat:no-repeat;
+	background-position: top left;
+	background-size: 100% auto;
+	width: 210px;
+	height: 1000px;
+}
+
+.picture_container_left {
+	background-image: url("../images/power_suply.jpg");
+}
+
+.picture_container_right {
+	background-image: url("../images/generator.jpg");
+}
+
+/*
+.picture_container_left > .placeholder:after {
+	content:'<img src="../images/power_suply.jpg">';
+}
+*/
+  .header_part { 
+  	height: 55px; 
+  	padding: 2px 2em 1em 10px; 
+  	color: #000;
+	margin: auto; /* center in viewport */
+	max-width: 1050px;
+  	}
+  #header_all { 
+	background-image: url("images/background_head.jpg");
+	background-repeat:no-repeat;
+	background-position:center; 
+	margin-bottom: 10px;
+  }
+	
+  #header_left { position:absolute; padding: 2px 2em 1em 20px; float: left; margin-top: 15px; }
+  #topnav { 
+	float: right;
+	clean: none;
+	margin-top: 35px;
+	padding: 7px 5px 7px 5px;
+	text-align:right;
+	color: #eee;
+	background: #012652;
+	border: #012652 2px solid;
+	border-radius: 5px;
+  }
+  
+  #master_menu a {
+	color: #eee;
+	font-weight: bold;
+	padding: 5px;
+  }
+  
+  #master_menu a:hover {
+	font-weight: bold;
+	background: #eee;
+	padding: 3px;
+	color: #e02122;
+	border: #eee 2px solid;
+	border-radius: 3px;
+  }
+  
+  #footer { padding: 10px 20px; color:#666; background: #f9f9f9; border-top: 5px #efefef solid; }
+
+  /* (en) navigation: horizontal adjustment | (de) horizontale Ausrichtung  */
+  #navigation { 
+  	margin-bottom: 35px;
+  	max-width: 1050px;
+	margin: auto; /* center in viewport */
+	padding-bottom: 15px;
+}
+
+#lmain > .content {
+	padding: 0 5px 0 5px;
+}
+
+.vertical_menu01 {
+	background-image: url("../images/box-icon-1.png");
+	background-repeat:no-repeat;
+	background-position: bottom;
+}
+.vertical_menu02 {
+	background-image: url("../images/box-icon-2.png");
+	background-repeat:no-repeat;
+	background-position: bottom;
+}
+.vertical_menu03 {
+	background-image: url("../images/box-icon-3.png");
+	background-repeat:no-repeat;
+	background-position: bottom;
+}
+.vertical_menu04 {
+	background-image: url("../images/box-icon-4.png");
+	background-repeat:no-repeat;
+	background-position: bottom;
+}
+.vertical_menu05 {
+	background-image: url("../images/box-icon-5.png");
+	background-repeat:no-repeat;
+	background-position: bottom;
+}
+/*
+.vertical_menu01:hover {
+	background-image: url("../images/segregator_s.png");
+}
+.vertical_menu02:hover {
+	background-image: url("../images/dlugopis_s.png");
+}
+.vertical_menu03:hover {
+	background-image: url("../images/zywieniowe_s.png");
+}
+*/
+.vertical_menu_item {
+	float: left;
+	margin: 10px 10px;
+	width: 80px;
+	height: 80px;
+}
+.vertical_menu {
+	float: left;
+	margin-left: 10px;
+}
+
+
+/*
+YUI params
+everything below is custom styling to demonstrate how to create a page layout using yui grid units 
+*/
+/* 3 column fluid layout (either side column is optional, just omit the layout padding) */
+#layout {
+	margin: auto; /* center in viewport */
+	padding-top: 20px;
+	max-width: 1050px;
+}
+
+#page {
+    margin: auto; /* center in viewport */
+}
+
+#nav {
+    margin-left:-200px; /* "left col" width */
+    width:200px;
+}
+
+#extra {
+    width:200px;
+    margin-right:-200px; /* "right col" width */
+}
+
+#main {
+    width:978px;
+}
+
+/* arbitrary content styling */
+#hd, #nav .content, #main .content, #extra .content, #ft {
+    margin: 2px;
+    min-height: 400px;
+}
+
+#hd, #ft {
+    height: 40px;
+}
+body {
+	min-width: 768px;
+	margin: auto; /* center in viewport */
+}
+
+
+/*
+Container
+*/
+ 
+.content_container {
+	border: 0px solid white;
+	padding: 2px;
+}
+
+.left_menu .module_container {
+	margin: 0px 0 10px 0;
+   background-color: white;
+	
+}
+.container_header {
+	background-image: url("images/container_header.png");
+	background-position: left bottom;
+	background-repeat: no-repeat;
+	padding: 13px 0 5px 5px;
+	margin-bottom: 10px;
+	font-weight: bolder;
+	font-size: large;
+	text-shadow: 0.12em 0.12em #999;
+}
+
+.container_subheader  {
+	background-image: url("images/container_header.png");
+	background-position: left bottom;
+	background-repeat: no-repeat;
+	padding: 13px 0 5px 5px;
+	margin-bottom: 10px;
+	font-style: italic;
+	font-size: large;
+	text-shadow: 0.12em 0.12em #999;
+}
+
+.container_bottom {
+	padding-bottom: 15px;
+	background-image: url("images/column_bottom_bottom.png");
+	background-position: bottom;
+	background-size: 100% 10px;
+	background-repeat: no-repeat;
+	clean: both;
+}
+
+/*
+Article
+*/
+.article {
+	margin-left:4px;
+}
+
+.article.menu_header {
+	position:relative;
+	text-shadow: 0.12em 0.12em #999;
+}
+
+.article.menu_header > .icon {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 20px;
+	height: 20px;
+	background-image: url("images/info_16.png");
+	background-position: center right;
+	background-repeat: no-repeat; 
+}
+
+.article_menu_left {
+	/*padding-bottom: 5px;*/
+}
+
+.article_container  {
+	padding-top: 11px;
+}
+
+.article_content {
+   background-color: white;
+   border: 5px solid white;
+}
+
+
+.article_title {
+	padding: 4px;
+	font-weight: bold;
+	font-size: larger;
+}
+
+.menu_header {
+	padding: 2px;
+	background-image: url("images/column_border_bottom.png");
+	background-position: left bottom;
+	background-repeat: no-repeat;
+   /*border: 1px solid white;
+	
+   border: 5px solid lightgrey;
+   background-color: lightgrey;
+   background-color: lightgrey;*/
+   margin: 0;
+	font-weight: bold;
+	font-size: larger;
+	font-style: italic;
+}
+
+.menu_bottom {
+   margin: 0;
+	padding: 0;
+	background-image: url("images/column_bottom_bottom.png");
+	background-position: bottom;
+	background-size: auto 10px;
+	background-repeat: no-repeat;
+   height: 15px;
+}
+
+/*
+Product Info
+*/
+.product {
+	padding: 2px 0 12px 0;
+}
+
+.product_info {
+	position: relative;
+	min-height: 150px;
+}
+
+.product_name {
+	text-transform: uppercase;
+	padding: 13px 0 5px 5px;
+}
+
+.product_description {
+	padding-top: 10px;
+	padding-bottom: 10px;
+	margin-right: 50px;
+}
+
+.product_image { 
+	float: right;
+	border: 2px solid grey;
+	border-radius: 1px;
+	position: absolute;
+	top:0;
+	right:0;
+	cursor: pointer;
+	margin: 10px;
+	vertical-align: top;
+}
+
+.product_price {
+	font-weight: bolder;
+	font-size: large;
+}
+
+.product_vat {
+	font-weight: normal;
+	font-size: small;
+}
+
+/*
+product_price
+product_quantity
+product_producent
+product_index
+product_description
+product_add_basket
+*/
+.product_add_basket {
+	text-align: right;
+	padding: 3px;
+	position: absolute;
+	bottom: 5px;
+	right: 0;
+	background-color: #ddd;
+	border: 3px solid #ccc;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	border-top-right-radius: 12px;
+}
+
+.product_add_basket input {
+	margin-left: 5px;
+}
+div.add_basket_quantity {
+}
+/*
+Catalog
+*/
+.catalog_box {
+	margin: 2px;
+	padding: 0px;
+	border: 1px solid blue;
+	border-radius: 1px;
+	-moz-border-radius: 1px;
+	-webkit-border-radius: 1px;
+	background-color: #eeeeff;
+}
+
+.catalog_header {
+	margin: 0;
+	padding: 4px;
+	font-weight: bold;
+	background-color: blue;
+	color: #ffffee;
+	font-size: larger;
+}
+
+.catalog_product_name {
+	font-size: small;
+	font-weight: bolder;
+	padding-bottom: 10px;
+	padding-left: 7px;
+}
+.catalog_product_description {
+	padding-top: 10px;
+}
+/*
+product_info
+product_name
+product_image
+product_price
+product_description
+product_add_basket
+*/
+/*
+Basket list
+*/
+
+.basket_container {
+	background-color: white;
+}
+
+.basket.menu_header {
+	position:relative;
+	text-shadow: 0.12em 0.12em #999;
+	padding: 2px;
+	border: 0;
+}
+
+.basket.menu_header > .icon {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 20px;
+	height: 20px;
+	background-image: url("images/wallet_16.png");
+	background-position: center right;
+	background-repeat: no-repeat; 
+}
+
+.basket {
+	background-color: white;
+	padding: 5px;
+	margin: 0 5px 5px 5px;
+	border: 2px solid grey;
+}
+
+.mainbasket {
+	border: 3px solid lightblue;
+	border-bottom-left-radius: 12px;
+	border-top-right-radius: 12px;
+	border-bottom-right-radius: 12px;
+}
+
+.cleanstate_basket {
+	border: 3px solid grey;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+	border-top-left-radius: 12px;
+}
+
+.usedbasket {
+	background-color: moccasin;
+	border: 3px solid moccasin;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+}
+
+.lockedbasket_user {
+	background-color: SpringGreen;
+	border: 3px solid SpringGreen;
+	border-top-left-radius: 12px;
+	border-top-right-radius: 12px;
+}
+
+.lockedbasket_other {
+	background-color: Coral;
+	border-bottom-left-radius: 12px;
+	border-bottom-right-radius: 12px;
+}
+
+.basket_number {
+	padding: 0px 0 5px 0;
+	border-bottom: 1px dotted brown;
+	margin:  0px 0 5px 0;
+}
+
+.basket #nr {
+	text-decoration: underline;
+	padding: 2px;
+	margin-left: 3px;
+}
+
+.basket_menu {
+	float: right;
+}
+.basket_menu img{
+	margin-left: 5px;
+}
+
+.basket_show_all {
+	margin-left: 1px;
+	background-color: white;
+	border: 0;
+}
+
+.order_total {
+	background-color: transparent;
+}
+
+/*
+basket_number
+basket_product_total
+basket_product_types
+basket_sum_gross
+basket_sum_netto
+*/
+
+/*
+usedbasket
+
+*/
+
+.basket_add_icon {
+	padding: 5px 5px 5px 20px;
+	margin-right: 2px;
+	border-radius: 1px;
+}
+
+
+.basket_add {
+	/*border: 2px solid lightgreen;
+	background-color: lightgreen;*/
+	padding: 5px;
+	margin-right: 2px;
+	border-radius: 1px;
+}
+
+
+/*
+Menu
+*/
+
+.categories.menu_header {
+	position:relative;
+	text-shadow: 0.12em 0.12em #999;
+}
+
+.categories.menu_header > .icon {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 20px;
+	height: 20px;
+	background-image: url("images/bookmark_16.png");
+	background-position: center right;
+	background-repeat: no-repeat; 
+}
+
+.cat_href {
+	border-color: #7b9ebd;
+	border-style: solid;
+	border-width: 0px 0px 1px 0px;
+	/*background-color: #eeeeff;*/
+	margin: 2px;
+	padding: 3px 0px 3px 3px;
+}
+
+.cat_href.category_selected { font-weight: bolder; }
+
+.cat_href a:link {text-decoration: none; color: #111111;}
+.cat_href a:visited {text-decoration: none; color: #111111;}
+.cat_href a:active {text-decoration: none; color: #111111;}
+.cat_href a:hover {text-decoration: none; color: #881111;}
+
+#tooltip {
+	position: absolute;
+	z-index: 3000;
+	border: 1px solid #111;
+	background-color: #9a9a9a;
+	padding: 5px;
+	opacity: 0.95;
+	color: red;
+	font-family: Verdana, Arial, sans-serif;
+	font-size: 14px;
+}
+
+#tooltip h3,#tooltip div {
+	margin: 0;
+}
+
+/*
+Table things
+*/
+TR.header {
+	background: #ffffff;
+}
+
+TD.headerNavigation {
+	font-size: 12px;
+	background: #6a7000;
+	color: #ffffff;
+	padding-bottom: 2px;
+	font-weight: bold;
+}
+
+.tableBox {
+	margin: 2px 5px 0px 2px;
+	/*border: 2px solid blueviolet;*/
+	width: 100%;
+	background: #f6f7f6;
+	/*width: 99%;*/
+}
+
+.tableBorder {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+.tableBorder td {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+.tableBorder th {
+	border: 1px solid black;
+	border-collapse: collapse;
+}
+
+.tableBox td {
+	padding: 5px;
+	border: 1px solid white;
+	border-collapse: collapse;
+	color: #111111;
+}
+
+.tableBox td a{
+	color: #212121;
+}
+
+.tableBox th {
+	padding: 5px;
+	border: 1px solid white;
+	border-collapse: collapse;
+}
+
+.tableBoxContents {
+	background: blue;
+	font-size: 10px;
+}
+
+.tableBoxHeading {
+	font-size: 12px;
+	font-weight: bold;
+	background: blue;
+	color: #ffffff;
+}
+
+.tableBoxHeading th {
+	font-size: 13px;
+	font-weight: bold;
+	background: #012652;
+	color: #ffffff;
+}
+
+.tableBox TR.tableRow-odd {
+	background: #d8d8d9;
+	/*background: #f8f8f9;*/
+}
+
+.tableBox TR.tableRow-even {
+	background: #d8d8d9;
+}
+
+tbody tr:hover td { background:transparent; }
+/*
+"InfoBox"
+*/
+div.InfoBox {
+	float: left;
+	display: block;
+	background-color: pink;
+	font-size: 20;
+}
+
+/*
+Toolbox
+*/
+div.ToolBox {
+	float: right;
+	clear: right;
+	display: block;
+	background-color: pink;
+	padding: 4px;
+}
+
+.ToolBox img {
+	margin: 2px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+.ToolBox img:hover {
+	cursor: pointer;
+	margin: 2px;
+}
+
+/*
+Pagination
+*/
+div.SplitPageContainer {
+	float: left;
+	display: block;
+	width: 700px;
+	height: 50px;
+	overflow: hidden;
+}
+
+.SplitPageContainer div {
+	float: left;
+	display: block;
+	height: 50px;
+	overflow: hidden;
+	padding: 0 7px 0 7px;
+}
+
+.SplitPageContainer a:link {text-decoration: none; color: grey;}
+.SplitPageContainer a:visited {text-decoration: none; color: grey;}
+.SplitPageContainer a:active {text-decoration: none; color: grey;}
+.SplitPageContainer a:hover {text-decoration: none; color: darkred;}
+
+/*
+SplitPageContainer
+SplitPagePrev
+SplitPageGroup
+SplitPageThis
+SplitPagePage
+SplitPageNext
+*/
+/*
+Info
+*/
+.messageInfo {
+	margin-bottom: 1px;
+	padding: 3px;
+}
+
+.messageInfoError {
+	background: Crimson;
+}
+
+.messageInfoWarning {
+	background: Orange;
+}
+
+.messageInfoSuccess {
+	background: DarkSeaGreen;
+}
+
+.messageInfoOther {
+	background: Azure;
+}

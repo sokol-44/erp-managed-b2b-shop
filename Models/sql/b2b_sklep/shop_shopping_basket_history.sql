@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- Host:                         localhost
--- Wersja serwera:               5.1.40-community-log - MySQL Community Server (GPL)
--- Serwer OS:                    Win32
+-- Host:                         sql.company.nazwa.pl
+-- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
+-- Serwer OS:                    Linux
 -- HeidiSQL Wersja:              8.0.0.4396
 -- --------------------------------------------------------
 
@@ -10,15 +10,15 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury tabela b2b_sklep.shop_shopping_basket_history
+-- Zrzut struktury tabela company_1.shop_shopping_basket_history
 DROP TABLE IF EXISTS `shop_shopping_basket_history`;
 CREATE TABLE IF NOT EXISTS `shop_shopping_basket_history` (
   `id_shopping_basket_history` int(11) NOT NULL AUTO_INCREMENT,
   `id_shopping_basket` int(11) DEFAULT NULL,
   `id_client_user` int(11) DEFAULT NULL,
   `date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `mode` enum('START','FREE','LOCK','LEVEL1ACC','LEVEL2ACC','BACK0ACC','BACK1ACC','ORDER','FAVORITE') DEFAULT NULL COMMENT 'ENUM(''START'', ''FREE'', ''LOCK'', ''LEVEL1ACC'', ''LEVEL2ACC'', ''BACK0ACC'', ''BACK1ACC'', ''ORDER'', ''FAVORITE'')',
   `description` text,
-  `mode` varchar(10) DEFAULT NULL COMMENT 'USE_0, FREE_0, LOCK_0; USE_1, FREE_1, LOCK_1; USE_2, FREE_2, LOCK_2; # ORDER, FAV ',
   PRIMARY KEY (`id_shopping_basket_history`),
   KEY `fk.shop_shopping_basket_history.id_shopping_basket` (`id_shopping_basket`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

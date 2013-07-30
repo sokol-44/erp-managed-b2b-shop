@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- Host:                         localhost
--- Wersja serwera:               5.1.40-community-log - MySQL Community Server (GPL)
--- Serwer OS:                    Win32
+-- Host:                         sql.company.nazwa.pl
+-- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
+-- Serwer OS:                    Linux
 -- HeidiSQL Wersja:              8.0.0.4396
 -- --------------------------------------------------------
 
@@ -10,10 +10,10 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury funkcja b2b_sklep.b_func_product_delete
+-- Zrzut struktury funkcja company_1.b_func_product_delete
 DROP FUNCTION IF EXISTS `b_func_product_delete`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `b_func_product_delete`(`id_product_in` INT) RETURNS tinytext CHARSET utf8
+CREATE DEFINER=`company_1`@`%` FUNCTION `b_func_product_delete`(`id_product_in` INT) RETURNS tinytext CHARSET utf8
     READS SQL DATA
 BEGIN
 	DECLARE status TINYTEXT DEFAULT NULL;

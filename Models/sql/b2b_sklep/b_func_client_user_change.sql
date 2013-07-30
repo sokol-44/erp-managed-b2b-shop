@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- Host:                         localhost
--- Wersja serwera:               5.1.40-community-log - MySQL Community Server (GPL)
--- Serwer OS:                    Win32
+-- Host:                         sql.company.nazwa.pl
+-- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
+-- Serwer OS:                    Linux
 -- HeidiSQL Wersja:              8.0.0.4396
 -- --------------------------------------------------------
 
@@ -10,10 +10,10 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury funkcja b2b_sklep.b_func_client_user_change
+-- Zrzut struktury funkcja company_1.b_func_client_user_change
 DROP FUNCTION IF EXISTS `b_func_client_user_change`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `b_func_client_user_change`(`id_client_user_in` INT, `id_client_in` INT, `login_in` TINYTEXT, `password_in` TINYTEXT, `password_salt_in` BLOB, `name_in` TINYTEXT, `description_in` TEXT, `email_in` TINYTEXT, `phone_in` TINYTEXT, `phone_cell_in` TINYTEXT, `state_in` TINYTEXT) RETURNS tinytext CHARSET utf8
+CREATE DEFINER=`company_1`@`%` FUNCTION `b_func_client_user_change`(`id_client_user_in` INT, `id_client_in` INT, `login_in` TINYTEXT, `name_in` TINYTEXT, `description_in` TEXT, `email_in` TINYTEXT, `phone_in` TINYTEXT, `phone_cell_in` TINYTEXT, `state_in` TINYTEXT) RETURNS tinytext CHARSET latin2
     READS SQL DATA
 BEGIN
 	DECLARE status TINYTEXT DEFAULT NULL;
@@ -29,12 +29,12 @@ BEGIN
 		IF status_client_user IS NULL THEN
 			SET status = 'ERROR,CLIENT_USER_DONT_EXIST';
 		ELSE
-			CALL b_proc_client_user_add(id_client_user_in, id_client_in, login_in, password_in, password_salt_in, name_in,
-			description_in, email_in, phone_in, phone_cell_in, state_in);
-			SET status = CONCAT(@status_proc,',CLIENT_USER_EXIST');
+	      UPDATE global_client_user SET `name` = name_in, `description` = description_in, `login` = login,
+	      `email` = email_in, `phone` = phone_in, `phone_cell` = phone_cell_in, `state` = state_in 
+         WHERE `id_client_user` = id_client_user_in and `id_client` = id_client_in;
+			SET status = 'SUCCESS,CLIENT_USER_EXIST';
 		END IF;
 	END IF;
-
 
 	return status;
 END//

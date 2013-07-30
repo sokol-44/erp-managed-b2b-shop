@@ -508,11 +508,11 @@ class Soap_Server_worker {
       return($response);
    }
    
-   function setProductList( $input ) {
+   function doProductAddOrUpdate( $input ) {
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = false;
 
-      add_to_fp('-------- setProductList');
+      add_to_fp('-------- doProductAddOrUpdate');
       if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
          $response_tmp = array();
          foreach($input['values'] as $key => $val) {
@@ -521,15 +521,15 @@ class Soap_Server_worker {
             if( !$SingleValueClass->is_error() ) {
                $param_array = $SingleValueClass->return_array();
                add_to_fp('$param_array:'. print_r($param_array, true) );
-               $response_tmp[] = Data::setProductList($param_array);
+               $response_tmp[] = Data::doProductAddOrUpdate($param_array);
             } else {
-               $response_tmp[] = $this->getReturnError('setProductList', $val, $SingleValueClass->return_error(), false);
+               $response_tmp[] = $this->getReturnError('doProductAddOrUpdate', $val, $SingleValueClass->return_error(), false);
             }
          }
          add_to_fp(print_r($response_tmp, true));
          $response = $this->_addArrayValues($response_tmp);
       } else {
-         $response = $this->getReturnError('setProductList', '', 'EMPTY_LIST');
+         $response = $this->getReturnError('doProductAddOrUpdate', '', 'EMPTY_LIST');
       }
       
       return($response);
@@ -562,13 +562,17 @@ class Soap_Server_worker {
    }
 
    function setClientProductPriceListUpdate( $input ) {
-      return setClientProductPriceList( $input, true);
+      return doClientProductPriceListAddOrUpdate( $input, true);
+   }
+  
+   function setClientProductPriceList( $input ) {
+      return doClientProductPriceListAddOrUpdate( $input, false);
    }
    
-   function setClientProductPriceList( $input, $update = false) {
+   function doClientProductPriceListAddOrUpdate( $input, $update = false) {
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = false;
-      add_to_fp('-------- setClientProductPriceList');
+      add_to_fp('-------- doClientProductPriceListAddOrUpdate ');
       if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
          $response_tmp = array();
          $del_count = 0;
@@ -585,7 +589,7 @@ class Soap_Server_worker {
                $additional_data = "DEL: $del_count, INS: $ins_count";
                $response_tmp[] = array('id' => $pa['id_client'], 'additional_data' => $additional_data,  'status' => $status_res );
             } else {
-               $response_tmp[] = $this->getReturnError('setProductClientPrice', $val, $SingleValueClass->return_error(), false);
+               $response_tmp[] = $this->getReturnError('doClientProductPriceListAddOrUpdate', $val, $SingleValueClass->return_error(), false);
             }
          }
          add_to_fp(print_r($response_tmp, true));
@@ -593,7 +597,7 @@ class Soap_Server_worker {
          $response['Info']['Deleted'] = $del_count;
          $response['Info']['Inserted'] = $ins_count;
       } else {
-         $response = $this->getReturnError('setClientProductPriceList', '', 'EMPTY_LIST');
+         $response = $this->getReturnError('doClientProductPriceListAddOrUpdate ', '', 'EMPTY_LIST');
       }
       
       return($response);
@@ -626,11 +630,11 @@ class Soap_Server_worker {
       return($response);
    }
 
-   function setCategoryList( $input ) {
+   function doCategoryAddOrUpdate( $input ) {
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = false;
    
-      add_to_fp('-------- setCategoryList');
+      add_to_fp('-------- doCategoryAddOrUpdate');
       if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
          $response_tmp = array();
          foreach($input['values'] as $key => $val) {
@@ -639,15 +643,15 @@ class Soap_Server_worker {
             if( !$SingleValueClass->is_error() ) {
                $param_array = $SingleValueClass->return_array();
                add_to_fp('$param_array:'. print_r($param_array, true) );
-               $response_tmp[] = Data::setCategoryList($param_array);
+               $response_tmp[] = Data::doCategoryAddOrUpdate($param_array);
             } else {
-               $response_tmp[] = $this->getReturnError('setCategoryList', $val, $SingleValueClass->return_error(), false);
+               $response_tmp[] = $this->getReturnError('doCategoryAddOrUpdate', $val, $SingleValueClass->return_error(), false);
             }
          }
          add_to_fp(print_r($response_tmp, true));
          $response = $this->_addArrayValues($response_tmp);
       } else {
-         $response = $this->getReturnError('setCategoryList', '', 'EMPTY_LIST');
+         $response = $this->getReturnError('doCategoryAddOrUpdate', '', 'EMPTY_LIST');
       }
    
       return($response);
@@ -733,6 +737,10 @@ class Soap_Server_worker {
       }
       
       return($response);
+   }
+   
+   function doPictureAddOrUpdate( $input ) {
+   	return self::setPicture( $input );
    }
    
    function setPicture( $input ) {

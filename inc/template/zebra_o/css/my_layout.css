@@ -18,9 +18,28 @@ textarea { width: 99%; }
 	margin-left: 10px;
 	float: right;
 	position: relative;
-	top: 55px;
+	top: 25px;
 	right: 0px;
 }
+
+#header_bottom_cont .person_data_main {
+	float: right;
+	position: relative;
+	top: 25px;
+	right: 0px;
+	text-align:right;
+	color: #222;
+	padding: 2px;
+	background: #aaa6a2;
+	border: #aaa6a2 2px solid;
+	border-radius: 5px;
+}
+
+.person_data_main .person_data_info {
+	clear: both;
+	float: right;
+}
+
 
 .icon {
 	margin: 2px;
@@ -162,6 +181,7 @@ Container
    background-color: white;
 	
 }
+
 .container_header {
 	background-image: url("images/container_header.png");
 	background-position: left bottom;
@@ -172,6 +192,18 @@ Container
 	font-size: large;
 	text-shadow: 0.12em 0.12em #999;
 }
+
+.container_subheader  {
+	background-image: url("images/container_header.png");
+	background-position: left bottom;
+	background-repeat: no-repeat;
+	padding: 13px 0 5px 5px;
+	margin-bottom: 10px;
+	font-style: italic;
+	font-size: large;
+	text-shadow: 0.12em 0.12em #999;
+}
+
 .container_bottom {
 	padding-bottom: 15px;
 	background-image: url("images/column_bottom_bottom.png");

@@ -6,6 +6,6 @@ echo  $F->draw_hidden_field('search', 'search') .
 ?>
 <div class="search_mini">
 <?php echo $F->draw_input_field('product_text', '', ' style="width: 220px"'); ?>
-<?php echo $F->dynamic_image_submit(Lang::_('SEARCH'),''); ?>
+<?php echo $F->dynamic_image_submit(Lang::_('SEARCH'),'SEARCH'); ?>
 </div>
 <?php echo $F->draw_form_close(); ?>

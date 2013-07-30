@@ -16,7 +16,7 @@ if( $F->check_login('CLIENT') ) {
       //login
       $Shopping_Basket_Chain->login_user();
       $Info->add(Lang::_('LOGGED_IN_USER') . ' ' . $P->login, 'success');
-      $Page->redirect( $F->make_link('main') );
+      $Page->redirect( $F->make_link(CFG_COM_ACCOUNT) );
    } else {
       $Info->add(Lang::_('wrong user or password'));
       $Page->redirect( $F->make_link(CFG_COM_LOGIN) );

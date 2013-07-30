@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- Host:                         localhost
--- Wersja serwera:               5.1.40-community-log - MySQL Community Server (GPL)
--- Serwer OS:                    Win32
+-- Host:                         sql.company.nazwa.pl
+-- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
+-- Serwer OS:                    Linux
 -- HeidiSQL Wersja:              8.0.0.4396
 -- --------------------------------------------------------
 
@@ -10,17 +10,17 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury tabela b2b_sklep.core_sessions
+-- Zrzut struktury tabela company_1.core_sessions
 DROP TABLE IF EXISTS `core_sessions`;
 CREATE TABLE IF NOT EXISTS `core_sessions` (
-  `sesskey` varchar(64) NOT NULL,
+  `sesskey` varchar(64) CHARACTER SET ascii NOT NULL,
   `active` tinyint(1) unsigned NOT NULL,
   `init` int(11) unsigned NOT NULL,
   `expiry` int(11) unsigned NOT NULL,
   `value` mediumtext NOT NULL,
   PRIMARY KEY (`sesskey`),
   KEY `active` (`active`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

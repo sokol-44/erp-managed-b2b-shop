@@ -38,7 +38,7 @@ $GET = $F->add_local_get('action', 'send', $GET_tmp);
 		<td colspan="2"><?php echo $F->draw_textarea_field('cf_contents', 'auto'); ?></td>
 	</tr>
 	<tr>
-		<td colspan="2" align="center"><?php echo $F->dynamic_image_submit(Lang::_('SEND'),''); ?></td>
+		<td colspan="2" align="center"><?php echo $F->dynamic_image_submit(Lang::_('SEND'),'SEND'); ?></td>
 	</tr>
 </table>
 <?php echo $F->draw_form_close(); ?>

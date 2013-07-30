@@ -29,13 +29,13 @@ class Data extends Data_Person {
       parent::__construct();
    }
 
-   function get_translation_all($com_str) {
+   static function get_translation_all($com_str) {
       $query = 'select definition, translation from ' . TBL_CORE_TRANSLATION . '
       	where com is NULL or com = "' . db_escape($com_str) . '"';
       return db_result_array( db_query($query) );
    }
 
-   function get_translation($com_str, $name) {
+   static function get_translation($com_str, $name) {
       $query = 'select definition, translation from ' . TBL_CORE_TRANSLATION . '
       	where com = "' . db_escape($com_str) . '" and definition = "' . db_escape($name) . '"';
       return db_fetch_array( db_query($query) );
@@ -65,16 +65,16 @@ class Data extends Data_Person {
     * @return string|name
     */
    //FIXME real list of subclass
-   function get_legalsubclass($get_legal_subclass) {
+   static function get_legalsubclass($get_legal_subclass) {
       return $subclass_name;
    }
 
-   function get_currences_list() {
+   static function get_currences_list() {
       $query = 'SELECT id_currency, currency_txt, currency_symbol FROM ' . TBL_GLOBAL_CURRENCES . ' ';
       return db_result_array( db_query($query) );
    }
 
-   function get_errors() {
+   static function get_errors() {
       // $this->db->query("select * from t_db_errors");
       $res = db_query('select * from ' . TBL_CORE_DB_ERRORS);
       while( $row = db_fetch_array($res) ) {
@@ -83,7 +83,7 @@ class Data extends Data_Person {
 
    }
 
-   function get_com_1() {}
+   static function get_com_1() {}
 
    /**
     * Check validity of component name
@@ -103,7 +103,7 @@ class Data extends Data_Person {
     * @param string $component_name
     * @return string|valid component name
     */
-   function get_admin_com_menu_login () {
+   static function get_admin_com_menu_login () {
 
    }
 
@@ -112,7 +112,7 @@ class Data extends Data_Person {
     * @param string $component_name
     * @return string|valid component name
     */
-   function check_admin_com_legal($component_name) {
+   static function check_admin_com_legal($component_name) {
       return $component_name;
 
    }
@@ -121,7 +121,7 @@ class Data extends Data_Person {
     * Get default component name
     * @return string|valid component name
     */
-   function get_admin_com_default() {
+   static function get_admin_com_default() {
       //FIXME - some logic
       return 'login';
    }
@@ -130,26 +130,26 @@ class Data extends Data_Person {
     * Get default component name
     * @return string|valid component name
     */
-   function get_admin_com_login() {
+   static function get_admin_com_login() {
       //FIXME - some logic
       return 'login';
    }
 
 
-   function get_admin_com_menu_model_inc( $com_name ) {
+   static function get_admin_com_menu_model_inc( $com_name ) {
       //FIXME - some logic
       return DIR_ADM_INC_MENUS . DS . $com_name . '_model.php';
    }
 
-   function get_admin_com_menu_view_inc( $com_name ) {
+   static function get_admin_com_menu_view_inc( $com_name ) {
       return DIR_ADM_INC_MENUS . DS . $com_name . '_viewer.php';
    }
 
-   function get_admin_com_model_inc( $com_name ) {
+   static function get_admin_com_model_inc( $com_name ) {
       return DIR_ADM_INC_COMPONENTS . DS . $com_name . '_model.php';
    }
 
-   function get_admin_com_viewer_inc( $com_name ) {
+   static function get_admin_com_viewer_inc( $com_name ) {
       return DIR_ADM_INC_COMPONENTS . DS . $com_name . '_viewer.php';
    }
 
@@ -162,7 +162,7 @@ class Data extends Data_Person {
     * @param string $table
     * @return array|name
     */
-   function get_login_data($login, $table) {
+   static function get_login_data($login, $table) {
       
       if( $table == 'CLIENT' && defined('TBL_GLOBAL_CLIENT_USER') ) {
          $tbl_name = TBL_GLOBAL_CLIENT_USER;
@@ -182,7 +182,7 @@ class Data extends Data_Person {
       }
    }
 
-   function get_login_rights($id, $table) {
+   static function get_login_rights($id, $table) {
 
       if( $table == 'CLIENT' ) {
          if( defined('TBL_GLOBAL_CLIENT_USER') ) $tbl_person = TBL_GLOBAL_CLIENT_USER;
@@ -216,7 +216,7 @@ class Data extends Data_Person {
       return $ret_array;
    }
    
-   function _length_dir($length ) {
+   static function _length_dir($length ) {
       if( (int)$length  == 0 ) $length = 1;
       
       if( $length > 0 ) {
@@ -230,6 +230,41 @@ class Data extends Data_Person {
       $res =  array($length, $comparision_dir, $order_dir);
       add_to_fp( var_export($res, true) );
       return $res;
+   }
+
+   static function get_component_rights( $component_name  ) {
+   
+      $query = 'SELECT `glp`.`place_name`, `glp`.`script`, `glp`.`type`, `glp`.`logged`, `glp`.`sequence`
+             FROM ' . TBL_GLOBAL_TEMPLATE_PLACES . ' glp WHERE `enabled`="1" and `type`="COM" and
+             `script` = "' . db_escape($component_name) . '" ORDER BY `glp`.`sequence` ASC';
+   
+      $result = db_query( $query );
+      return db_result_array_full($result);
+   
+   }
+    
+   static function get_page_places( $list = array() ) {
+      
+      $query = 'SELECT `glp`.`place_name`, `glp`.`script`, `glp`.`type`, `glp`.`logged`, `glp`.`sequence`
+             FROM ' . TBL_GLOBAL_TEMPLATE_PLACES . ' glp WHERE enabled="1" and type!="COM"
+             ORDER BY `glp`.`sequence` ASC';
+
+      $result = db_query( $query );
+      $ret_tmp = db_result_array_full($result);
+      
+      $list_places = array_flip($list);
+      $list_places['component_html'] = array( array('script' => '', 'type' => 'COM') );
+      
+      foreach($ret_tmp as $place ) {
+         if( !isset($list_places[$place['place_name']]) ) {
+            continue;
+         } elseif( !is_array($list_places[$place['place_name']]) ) {
+            $list_places[$place['place_name']] = array();
+         }
+         $list_places[$place['place_name']][] = $place;
+      }
+          
+      return $list_places;
    }
 
 }

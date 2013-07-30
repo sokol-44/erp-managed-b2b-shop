@@ -7,7 +7,7 @@ $Page->add_js_file('jquery.colorbox.js');
 $Page->add_jq_init('colorize_table(".tableBox");');
 $Page->add_jq_init('set_toolbox_table(".tableBox");');
 
-$Page->head_title = Lang::_('BASKET');
+$Page->head_title = Lang::_('ORDER_FROM_BASKET');
 
 //magic mode for order LEVEL_99 -> move to CLASS::Rights
 if( !$P->check_roles('LEVEL_99') || !$Shopping_Basket->contents || sizeof($Shopping_Basket->contents) == 0 ) {
@@ -38,7 +38,7 @@ echo $F->draw_form('basket_order', $form_link);
    </tr>
 	<tr>
 		<td width="100%" colspan="4"></td>
-		<td align="right"><?php echo $F->draw_submit(Lang::_('ORDER_BASKET')); ?></td>
+		<td align="right"><?php echo $F->draw_submit(Lang::_('ORDER_FROM_BASKET')); ?></td>
 	</tr>
 	<tr>
 		<td colspan="5">

@@ -18,10 +18,12 @@ class Page {
    //   static $js_body, $jq_files;
    static $F;
    static $class;
-   private $PLACE = array();
+   private $PLACE, $TEMPLATE_places, $jq_init, $jq_body, $css_array, $jq_files, $js_body, $list_places;
 
    public function __construct() {
       self::$class = $this;
+      $this->PLACE = array();
+      $this->TEMPLATE_places = false;
       $this->jq_init = false;
       $this->jq_body = array();
       $this->css_array = array();
@@ -45,7 +47,8 @@ class Page {
       $this->F = Framework::g_global();
 
       $this->set_raw_paths();
-      $this->list_places = $this->get_components();
+      $this->get_template_places();
+      $this->get_component();
    }
 
    function get_form_get_string() {
@@ -123,54 +126,82 @@ class Page {
    //      $this->com_menu_viewer_inc = Data::get_admin_com_menu_view_inc($this->com);
    //   }
 
+   function get_template_places() {
 
-   function get_components() {
-      $P = Person::g_global();
-      $F = Framework::g_global();
-      //TODO more generic obj
-
-      $list_places = array(
+      $this->TEMPLATE_places = array(
             'component_html' => array('script' => '', 'type' => 'COM'),
-            'component_info' => array('script' => 'info', 'type' => 'MOD'),
+            'info_html' => array('script' => 'info', 'type' => 'MOD'),
             'masterhead_html' => array('script' => 'empty', 'type' => 'MOD'),
             'mastermenu_html' => array('script' => 'master_menu', 'type' => 'MOD'),
             'bottomhead_html' => array(
                   array('script' => 'vertical_menu', 'type' => 'MOD'),
-                  array('script' => 'search_mini', 'type' => 'MOD')
-                  ),
+                  array('script' => 'search_mini', 'type' => 'MOD'),
+                  array('script' => 'person_data', 'type' => 'MOD')
+            ),
             'second_head_html' => array('script' => 'breadcrumbs', 'type' => 'MOD'),
             'left_column_html' => array(
-                  array('script' => 'menu_left', 'type' => 'MOD'),
-                  array('script' => 'categories_list', 'type' => 'MOD')
-                  ),
-            'right_column_html' => array('script' => 'basket_list', 'type' => 'MOD'),
+                  array('script' => 'menu_left', 'type' => 'MOD', 'enabled' => false),
+                  array('script' => 'categories_list', 'type' => 'MOD', 'logged' => 'YES'),
+                  array('script' => 'banner_left', 'type' => 'MOD', 'logged' => 'NO')
+            ),
+            'right_column_html' => array(
+                  array('script' => 'basket_list', 'type' => 'MOD', 'logged' => 'YES'),
+                  array('script' => 'banner_right', 'type' => 'MOD', 'logged' => 'NO')
+            ),
             'bottom_html' => array('script' => 'empty', 'type' => 'MOD'),
             'footer_html' => array('script' => 'empty', 'type' => 'MOD'),
       );
-
-      //TODO - chose script to login
-      if( !$P->logged_in ) {
-         $list_places['right_column_html']['script'] = 'empty';
+      
+      if( defined('TEMPLATE_conf') && defined('TEMPLATE_places') && substr_count(constant('TEMPLATE_places'), ':')>0 ) {
+         $template_places = explode(':', constant('TEMPLATE_places'));
+         $this->TEMPLATE_places = Data::get_page_places($template_places);
       }
+      return $this->TEMPLATE_places;
+   }
 
-      $list_places['component_html']['script'] = $this->com;
+   function get_component() {
+      $F = Framework::g_global();
+      $P = Person::g_global();
 
-      //$list_places['component_html']['script'] = 'sasa';
-
+      $this->list_places = $this->TEMPLATE_places;
+   
       //FIXME
       //add rights to coponent
       if( $F->check_get('com') ) {
-         //check if component exist
-         $list_places['component_html']['script'] = $F->com;
+         if ( $this->check_component_rights($F->com) ) {
+            $this->list_places['component_html'][0]['script'] = $F->com;
+         } else {
+            $this->redirect( $F->make_link(DEFAULT_COM) );
+         }
       } else {
-         $list_places['component_html']['script'] = DEFAULT_COM;
+         $this->list_places['component_html'][0]['script'] = DEFAULT_COM;
       }
 
-      return $list_places;
+   }
+   
+   function check_component_rights( $component_name ) {
+      $F = Framework::g_global();
+      $P = Person::g_global();
+      
+      if( $F->not_null($component_name) ) {
+         $component_name_info = Data::get_component_rights( $component_name );
+         if( sizeof($component_name_info) == 1 ) {
+            $place = $component_name_info[0];
+            if( !isset($place['logged']) ) $display_logged = true;
+            elseif ( $place['logged'] == 'BOTH' ) $display_logged = true;
+            elseif ( $place['logged'] == 'YES' && $P->logged_in ) $display_logged = true;
+            elseif ( $place['logged'] == 'NO' && !$P->logged_in ) $display_logged = true;
+            else $display_logged = false;
+            
+            return $display_logged;
+         }
+      } else {
+         return false;
+      }
+
    }
 
    function render_places() {
-      
       foreach($this->list_places as $place_name => $place) {
          $content = '';
          if( Framework::not_null($place['script']) ) {
@@ -183,6 +214,7 @@ class Page {
             }
          }
          $this->PLACE[${place_name}] = $content;
+         //echo ${place_name} . strlen($content) . "<br>\n";
       }
    }
     
@@ -191,24 +223,37 @@ class Page {
       $P = Person::g_global();
       $Page = Page::g_global();
       $BC = Breadcrumbs::g_global();
-      //echo $place['type'].': '.$place['script'].' '.microtime(true)."<br>\n";
+      //echo $place['type'].': '.$place['script'].' ; '.$place['logged']."<br>\n";
       
-      ob_start();
-      //$this->include_element($place['script'], $place['type']);
-      switch( $place['type']) {
-         case 'COM':
-            echo '<div class="content_container content_container_nr' . $idx_place . '">';
-            include(DIR_INC_COMPONENTS . DS . $place['script'] . '.php');
-            echo '</div>';
-         break;
-         case 'MOD':
-            echo '<div class="module_container module_container_nr' . $idx_place . '">';
-            include(DIR_INC_MODULES . DS . $place['script'] . '.php');
-            echo '</div>';
-         break;
-         default: break;
+      if( !isset($place['logged']) ) $display_logged = true;
+      elseif ( $place['logged'] == 'BOTH' ) $display_logged = true;
+      elseif ( $place['logged'] == 'YES' && $P->logged_in ) $display_logged = true;
+      elseif ( $place['logged'] == 'NO' && !$P->logged_in ) $display_logged = true;
+      else $display_logged = false;
+      
+      if( !isset($place['enabled']) ) $display_enabled = true;
+      else $display_enabled = $place['enabled'];
+      
+      if( $display_enabled && $display_logged ) {
+         ob_start();
+         //$this->include_element($place['script'], $place['type']);
+         switch( $place['type'] ) {
+            case 'COM':
+               echo '<div class="content_container content_container_nr' . $idx_place . '">';
+               include(DIR_INC_COMPONENTS . DS . $place['script'] . '.php');
+               echo '</div>';
+            break;
+            case 'MOD':
+               echo '<div class="module_container module_container_nr' . $idx_place . '">';
+               include(DIR_INC_MODULES . DS . $place['script'] . '.php');
+               echo '</div>';
+            break;
+            default: break;
+         }
+         return ob_get_clean();
+      } else {
+         return '';
       }
-      return ob_get_clean();
    }
     
 
@@ -243,7 +288,7 @@ class Page {
       if( strstr($name, 'put_') ) {
          $var_name = str_replace('put_', '', $name);
          if( Framework::not_null($this->PLACE[${var_name}]) ) return $this->PLACE[${var_name}];
-               //else return 'PLACE ' . $var_name;
+         else return 'PLACE ' . $var_name;
       } else {
          echo "$name not defined!";
       }

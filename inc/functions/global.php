@@ -24,8 +24,10 @@ function print_debug($var, $vd = false ) {
    } else{
       $res = print_r($var, true);
    }
-
+   $db = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS );
+   
    echo '<p align="left" style="background-color: white; color: #606060;">' .
+   ':' . $db[0]['file'] . ' [' . $db[1]['function'] . '] (' . $db[0]['line'] . ') ' .
    str_replace('  ', '&nbsp;', nl2br(htmlspecialchars($res))) .
    '</p>';
 }
@@ -177,7 +179,7 @@ function gl_compute_hash($password_hash, $password_in, $pass_salt) {
       case 'SHA2S':
          $pass_hash = hash('SHA256', $password_in . $pass_salt);
          break;
-      case 'MDSHA': 
+      case 'MDSHA':
          $pass_md5 = md5( $password_in ); //md5(haslo)
          $pass_hash = sha1( $pass_md5 . $pass_salt . strrev($pass_md5) );
          break;

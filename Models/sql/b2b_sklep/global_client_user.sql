@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- Host:                         localhost
--- Wersja serwera:               5.1.40-community-log - MySQL Community Server (GPL)
--- Serwer OS:                    Win32
+-- Host:                         sql.company.nazwa.pl
+-- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
+-- Serwer OS:                    Linux
 -- HeidiSQL Wersja:              8.0.0.4396
 -- --------------------------------------------------------
 
@@ -10,7 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury tabela b2b_sklep.global_client_user
+-- Zrzut struktury tabela company_1.global_client_user
 DROP TABLE IF EXISTS `global_client_user`;
 CREATE TABLE IF NOT EXISTS `global_client_user` (
   `id_client_user` int(11) NOT NULL AUTO_INCREMENT,
@@ -20,12 +20,14 @@ CREATE TABLE IF NOT EXISTS `global_client_user` (
   `login` tinytext,
   `password` tinytext,
   `email` tinytext,
+  `phone` tinytext,
+  `phone_cell` tinytext,
   `created` datetime DEFAULT NULL,
   `modified` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `last_login` datetime DEFAULT NULL,
-  `last_login_ip` tinytext,
+  `last_login_ip` tinyint(4) DEFAULT NULL,
   `old_blob` text,
-  `state` enum('ACTIVE','BLOCKED','SUSPENDED','ERASED') DEFAULT NULL,
+  `state` enum('ACTIVE','BLOCKED','SUSPENDED','ER`ASED') DEFAULT NULL,
   PRIMARY KEY (`id_client_user`),
   KEY `fk.global_client_user.id_client` (`id_client`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

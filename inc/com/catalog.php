@@ -19,6 +19,8 @@ $Page->add_js_file('jquery.colorbox.js');
 $Page->add_jq_init('colorize_table(".tableBox");');
 $Page->add_jq_init('set_toolbox_table(".tableBox");');
 
+if( !$P->logged_in ) $F->redirect( $F->make_link(CFG_COM_LOGIN) );
+
 $GET_tmp = $F->make_get();
 
 ?>

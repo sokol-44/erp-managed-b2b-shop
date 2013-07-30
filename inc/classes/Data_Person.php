@@ -342,7 +342,7 @@ class Data_Person extends Data_Rights {
       
       if ( $attribute_type == 'PRODUCT_VIEW_NAME' ) {
          if ( Data_Products::$Data_Products_params['client_view'] ) return Data_Products::$Data_Products_params['client_view'];
-         elseif ( defined('DEFAULT_CLIENT_PRODUCT_PRICE_VIEW') ) return constant('DEFAULT_CLIENT_PRODUCT_PRICE_VIEW');
+         elseif ( defined('SHOP_CLIENT_PRODUCT_PRICE_VIEW') ) return constant('SHOP_CLIENT_PRODUCT_PRICE_VIEW');
          else return false;
       } elseif( db_rows( db_query($query) ) ) {
          return db_fetch_result('val');

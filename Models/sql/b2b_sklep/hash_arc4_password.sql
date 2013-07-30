@@ -1,7 +1,7 @@
 -- --------------------------------------------------------
--- Host:                         localhost
--- Wersja serwera:               5.1.40-community-log - MySQL Community Server (GPL)
--- Serwer OS:                    Win32
+-- Host:                         sql.company.nazwa.pl
+-- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
+-- Serwer OS:                    Linux
 -- HeidiSQL Wersja:              8.0.0.4396
 -- --------------------------------------------------------
 
@@ -10,10 +10,10 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury funkcja b2b_sklep.hash_arc4_password
+-- Zrzut struktury funkcja company_1.hash_arc4_password
 DROP FUNCTION IF EXISTS `hash_arc4_password`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `hash_arc4_password`(`password` BLOB, `salt` BLOB) RETURNS tinytext CHARSET utf8
+CREATE DEFINER=`company_1`@`%` FUNCTION `hash_arc4_password`(`password` BLOB, `salt` BLOB) RETURNS tinytext CHARSET utf8
     DETERMINISTIC
 BEGIN
 	DECLARE hash_res TINYTEXT;

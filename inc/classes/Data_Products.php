@@ -21,13 +21,13 @@ class Data_Products extends Data_Basket {
    static function _load_client_params() {
       $P = Person::g_global();
       
-      if( $P->logged_in && !defined('DEFAULT_CLIENT_PRICE_MODE_SET') ) {
+      if( $P->logged_in && !defined('SHOP_CLIENT_PRICE_MODE_SET') ) {
          self::$Data_Products_params['id_client'] = (int)$P->data['id_client'];
          $view_name = Data_Person::get_client_attribute((int)$P->data['id_client'], 'PRODUCT_VIEW_NAME');
          if( $view_name ) {
             self::$Data_Products_params['client_view'] = $view_name;
          }
-         define('DEFAULT_CLIENT_PRICE_MODE_SET', true);
+         define('SHOP_CLIENT_PRICE_MODE_SET', true);
       }
    }
 
@@ -106,8 +106,8 @@ class Data_Products extends Data_Basket {
          if( $id_category != 0 ) $where['p2c.id_category'] = (int)$id_category;
 
          if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-            if( defined('DEFAULT_CLIENT_PRICE_MODE') &&
-                  constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+            if( defined('SHOP_CLIENT_PRICE_MODE') &&
+                  constant('SHOP_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
                $where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
             } else {
                $where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
@@ -161,8 +161,8 @@ class Data_Products extends Data_Basket {
       $F = Framework::g_global();
 
       if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-         if( defined('DEFAULT_CLIENT_PRICE_MODE') &&
-               constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+         if( defined('SHOP_CLIENT_PRICE_MODE') &&
+               constant('SHOP_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
             $where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
          } else {
             $where = ' and (p.id_client = ' . (int)self::$Data_Products_params['id_client'] . ' or p.id_client IS NULL)';
@@ -368,11 +368,10 @@ class Data_Products extends Data_Basket {
       return db_fetch_array($result);
    }
 
-   static function setCategoryList($param_array) {
+   static function doCategoryAddOrUpdate($param_array) {
        
       extract( db_escape_array($param_array) );
-   
-   
+
       $query = 'select "' . db_int($id_category) . '" as id_one,
           "" as additional_data,
           b_func_category_set("' . db_int($id_category) . '", "' . db_int($id_category_parent) . '", "' . db_int($sort_order) . '","' . db_int($root_number) . '",
@@ -412,7 +411,7 @@ class Data_Products extends Data_Basket {
       return db_fetch_array($result);
    }
    
-   static function setProductList($param_array) {
+   static function doProductAddOrUpdate($param_array) {
        
       extract( db_escape_array($param_array) );
        
@@ -526,8 +525,8 @@ class Data_Products extends Data_Basket {
       $F = Framework::g_global();
        
       if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-         if( defined('DEFAULT_CLIENT_PRICE_MODE') &&
-               constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+         if( defined('SHOP_CLIENT_PRICE_MODE') &&
+               constant('SHOP_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
             $where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
          } else {
             $where = ' and (p.id_client = ' . (int)self::$Data_Products_params['id_client'] . ' or p.id_client IS NULL)';
@@ -577,8 +576,8 @@ class Data_Products extends Data_Basket {
          $where = $filters;
 
          if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-            if( defined('DEFAULT_CLIENT_PRICE_MODE') &&
-                  constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+            if( defined('SHOP_CLIENT_PRICE_MODE') &&
+                  constant('SHOP_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
                $where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
             } else {
                $where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
@@ -608,8 +607,8 @@ class Data_Products extends Data_Basket {
       $where = array();
 
       if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-         if( defined('DEFAULT_CLIENT_PRICE_MODE') &&
-               constant('DEFAULT_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+         if( defined('SHOP_CLIENT_PRICE_MODE') &&
+               constant('SHOP_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
             $where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
          } else {
             $where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
