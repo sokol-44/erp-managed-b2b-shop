@@ -296,6 +296,34 @@ class Soap_Server_worker {
 
       return($response);
    }
+    
+   function getOrderHiddenStatusList( $input ) { //ParamStartLength, OrderData
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = true;
+      
+      $ParamStartWhereLength = $this->_getSingleValue($input, 'ParamStartWhereLength');
+      if( is_object($ParamStartWhereLength) ) {
+         if( !$ParamStartWhereLength->is_error() ) {
+            $param_array = $ParamStartWhereLength->return_array();
+            $res_array = Data::getOrderList((int)$param_array['id_start'], (int)$param_array['length'], $param_array['where']);
+            $response = array();
+            
+            if( sizeof($res_array) > 0 ) {
+               $response = $this->_addArrayValues($res_array);
+               if( (int)$param_array['length'] > 0  ) $id_chk = (int)$response['Info']['DataInfo']['id_one_max'];
+               else $id_chk = (int)$response['Info']['DataInfo']['id_one_min'];
+               
+               $response['Info']['Rest'] = Data::getOrderListRest((int)$id_chk, (int)$param_array['length'], $param_array['where']);
+            }
+         } else {
+            $response = $this->getReturnError('getOrderHiddenStatusList', $input, $ParamStartWhereLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getOrderHiddenStatusList', $input, 'WRONG CLASS');
+      }
+
+      return($response);
+   }
        
    function doClientChange ( $input ) {
       $this->input_data_type = 'NEW';
@@ -770,10 +798,29 @@ class Soap_Server_worker {
    }
 
    function setOrderStatus( $input ) {
-      $response = $this->_fill_response( $input, 'StatusData', 'setOrderStatus');
-      //$response = array();
-   
-      return $response;
+	  $this->input_data_type = 'UPDATE';
+      $this->SingleParam_MultipleReturns = false;
+      
+      add_to_fp('-------- setOrderStatus');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new OrderData($val, $this->input_data_type);
+            if( !$SingleValueClass->is_error() ) {
+               $pa = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($pa, true) );
+               $response_tmp[] = Data::setOrderStatus($pa['id_order'], $pa['description']);
+            } else {
+               $response_tmp[] = $this->getReturnError('setOrderStatus', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('setOrderStatus', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
    }
        
    function setOrderHiddenStatus( $input ) {

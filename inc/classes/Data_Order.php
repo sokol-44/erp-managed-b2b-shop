@@ -82,8 +82,25 @@ class Data_Order extends Data_Picture {
       return db_fetch_array($result);
    }
    
-   
-   
+   static function setOrderStatus( $id_order, $id_order_status, $status) {
+   	  $res = self::put_order_status((int)$id_order, (int)$id_order_status, $status);
+   	  switch($res) {
+   	  	case 1:
+   	  		$status = 'SUCCESS,NEW_STATUS';
+   	  		break;
+   	  	case 2:
+   	  		$status = 'SUCCESS,UPDATE_STATUS';
+   	  		break;
+   	  	//case false:
+   	  	//case 0:
+   	  	default:
+   	  		$status = 'ERROR,WRONG_ORDER_ID';
+   	  		break;
+   	  }
+      return array( 'id' => $id_order, 
+      				'additional_data' => 'id_order_status=' . $id_order_status,
+      				'status' => $status );
+   }
    
    static function get_order_list( $id_client = 0 ) {
       $SP = SplitPage::g_global();
@@ -168,11 +185,26 @@ class Data_Order extends Data_Picture {
 
 
    static function put_order_status($id_order, $id_order_status, $description) {
-      $query = 'insert into ' . TBL_SHOP_ORDER_STATUS_HISTORY . '
-      	set id_order = ' . db_int($id_order) . ',
-      	id_order_status = ' . db_int($id_order_status) . ',
-      	description = "' . db_escape($description) . '"';
-      db_query( $query );
+   	$query_chk = 'select `id_order` from ' . TBL_SHOP_ORDER . '
+      	where id_order = ' . db_int($id_order);
+   	
+   	  if( db_rows( db_query($query_chk) ) == 1 ) {
+	   	$query = 'insert into ' . TBL_SHOP_ORDER_STATUS_HISTORY . '
+	      	set id_order = ' . db_int($id_order) . ',
+	   		id_order_status = ' . db_int($id_order_status) . ',
+	      	description = "' . db_escape($description) . '" 
+	      	on duplicate keys update description = "' . db_escape($description) . '"';
+	      $res = db_query( $query );
+	      $af_rows = db_affected_rows();
+	      $query = 'update ' . TBL_SHOP_ORDER . ' 
+	        set id_order_status = ' . db_int($id_order_status) . '
+	      	where id_order = ' . db_int($id_order);	
+	      $res = db_query( $query );
+	      return  $af_rows;
+      } else {
+      	return false;
+      }
+      
    }
 
    static function put_order_product_list($id_order, $product_list) {

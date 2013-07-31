@@ -39,7 +39,7 @@ $BC->add_crumb(Lang::_('Account'), $F->make_link(CFG_COM_ACCOUNT) );
 	</tr>
 </table>
 
-<div class="account_container container_subheader">Dane<div class="icon"></div></div>
+<div class="basket_container container_subheader"><?php echo Lang::_('basket history'); ?><div class="icon"></div></div>
 <table class="tableBox" style="border: 0; width: 400px;" >
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('Field') ?></th>
@@ -58,7 +58,7 @@ $BC->add_crumb(Lang::_('Account'), $F->make_link(CFG_COM_ACCOUNT) );
 		<td><?php echo $F->output_string_html($P->data['description']); ?></td>
 	</tr>
 </table>
-
+<div class="basket_container container_subheader"><?php echo Lang::_('basket versions'); ?><div class="icon"></div></div>
 </div>
 </div>
 <?php

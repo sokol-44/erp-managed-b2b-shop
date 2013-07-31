@@ -14,6 +14,8 @@ if( $F->check_get('mode') ) {
             $Order = new Order($F->GET['id_order']);
             if( $Order->check_rights() ) {
                $total = $Order->calculate_total();
+               $version_list = $Order->source_basket->get_all_version();
+               $history_list = $Order->source_basket->get_all_history();
                require 'order_list' . DS . 'view_details.php';
             } else {
                $F->redirect($F->make_link(CFG_COM_ORDER_LIST));

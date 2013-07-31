@@ -307,7 +307,7 @@ class OrderStatusData extends BasicSOAPDataMethods {
    public $list_type = array('id_order_status' => 'INT+', 'id_order' => 'INT+',
           'timestamp' => 'DATE', 'description' => 'TEXT');
    public $list_new = array('id_order_status', 'id_order');
-   public $list_update = array('id_order_status', 'id_order');
+   public $list_update = array('id_order_status', 'id_order', 'description');
 }
 
 class Product2CategoryData extends BasicSOAPDataMethods {

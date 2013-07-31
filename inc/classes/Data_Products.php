@@ -605,20 +605,38 @@ class Data_Products extends Data_Basket {
 
 
       $where = array();
-
+		
+      /* 
+       * Widoki dla duzej liczby sie krzacza  
       if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-         if( defined('SHOP_CLIENT_PRICE_MODE') &&
+         
+      	if( defined('SHOP_CLIENT_PRICE_MODE') &&
                constant('SHOP_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
             $where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
          } else {
             $where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
          }
          $product_from = self::$Data_Products_params['client_view'];
+         $where_client = ' and ' . db_unroll_conditions($where);
       } else {
          $where_client = '';
          $product_from = TBL_SHOP_PRODUCT;
       }
-
+       */
+      
+      $product_from = TBL_SHOP_PRODUCT;
+      
+      if( defined('SHOP_CLIENT_PRICE_MODE') &&  constant('SHOP_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+      	$query_pm = 'SELECT p2c.id_category, p2c.id_product
+				   FROM `shop_product_to_category` `p2c` JOIN 
+				   `shop_product`  `p` ON (`p2c`.`id_product` = `p`.`id_product` AND p.status = "ACTIVE") JOIN
+				   `shop_product_client_price` `pcp` on (`p`.`id_product` = `pcp`.`id_product` AND pcp.id_client="' . (int)self::$Data_Products_params['id_client'] . '")';
+      } else {
+      	$query_pm = 'SELECT p2c.id_category, p2c.id_product
+		      	FROM `shop_product_to_category` `p2c` JOIN
+		      	`shop_product`  `p` ON (`p2c`.`id_product` = `p`.`id_product` AND p.status = "ACTIVE")';
+      }
+      
       $where_root_number = '';
       if( self::$root_number ) {
          $where_root_number = ' where c.root_number = ' . db_int(self::$root_number);
@@ -629,13 +647,11 @@ class Data_Products extends Data_Basket {
 
       $query = 'SELECT c.id_category, c.name, c.description, c.id_category_parent,
       COUNT(distinct p2c.id_product) AS products_in_category, c.sort_order
-   	  FROM ' . TBL_SHOP_CATEGORY . ' c LEFT OUTER JOIN (
-   	  SELECT p2c.id_category, p2c.id_product FROM ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c, ' . $product_from . ' p
-   	  WHERE p2c.id_product = p.id_product AND p.status = \'ACTIVE\' ' . $where_client . ') p2c
+   	  FROM ' . TBL_SHOP_CATEGORY . ' c LEFT OUTER JOIN (' . $query_pm . ') p2c
    	  ON (c.id_category = p2c.id_category) ' . $where_root_number . '
    	  GROUP BY c.id_category, c.name, c.description, c.id_category_parent, c.sort_order
      	ORDER BY c.sort_order, c.name';
-       
+
       $res = db_query( $query );
       return db_result_array($res);
    }

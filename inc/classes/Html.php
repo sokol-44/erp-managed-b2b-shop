@@ -72,7 +72,13 @@ class HTML {
       $image = '<img' . $attributes . $parameters . '>';
       return $image;
    }
-
+   
+   
+   function static_image_src($src) {
+   		list(, $www_src) = self::__create_image_paths($src, true);
+   		return $www_src;
+   }
+   
    // The HTML image wrapper function
    //FIXME - load from DB
    /**
@@ -178,7 +184,7 @@ class HTML {
 
       if ($this->not_null($alt)) $image_submit .= ' title=" ' . $this->output_string($alt) . ' "';
 
-      if ($this->not_null($parameters)) $image_submit .= ' ' . $parameters;
+      if ($this->not_null($parameters)) $image_submit .= ' ' . self::__unroll_params( self::__prepare_params($parameters) );;
 
       $image_submit .= '>';
 

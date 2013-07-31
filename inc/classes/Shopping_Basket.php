@@ -41,7 +41,20 @@ class Shopping_Basket {
       $this->id_shopping_basket = $this->params['id_shopping_basket'];
    }
 
-
+	
+   static function get_order_data($id_shopping_basket) {
+   	  $P = Person::g_global();
+   	
+   	  if( $P->logged_in ) {
+   	  	$params = array('id_shopping_basket' => (int)$id_shopping_basket, 'id_client' => $P->data['id_client']);	
+   		$params = Data::get_basket_data($params);
+   		if( $P->data['id_client'] == $params['id_client'] && $params['state'] == 'ORDER' ) {
+   			return new Shopping_Basket($params);
+   		}
+   	  }
+   	  return false;
+   }
+   
    static function g_global() {
       if(self::$class == false) {
          self::$class = new Shopping_Basket();

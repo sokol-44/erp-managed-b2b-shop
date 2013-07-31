@@ -218,6 +218,8 @@ function db_query($query, $link = 'db_link') {
 
    $result = mysql_query($query, $$link) or
    db_error($query, mysql_errno(), mysql_error(), debug_backtrace(), $$link);
+   
+   if( !$result ) db_error($query, mysql_errno(), mysql_error(), debug_backtrace(), $$link);
 
    if (defined('DEBUG_DB_QUERIES') && (DEBUG_DB_QUERIES == 'true')) {
       $dbg = debug_backtrace();

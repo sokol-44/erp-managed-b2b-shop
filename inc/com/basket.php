@@ -169,7 +169,7 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
          require 'basket' . DS . 'list_all.php';
          break;
       case 'version_details':
-         require 'basket' . DS . 'details.php';
+         require 'basket' . DS . 'b_version_details.php';
          break;
       case 'history_details':
          require 'basket' . DS . 'details.php';

@@ -52,7 +52,8 @@ $BC->add_crumb(Lang::_('Orders details'), $F->self_link() );
 </div></td>
 	</tr>
 </table>
-<?php echo Lang::_('Order products'); ?>
+
+<div class="basket_container container_subheader"><?php echo Lang::_('Order products'); ?><div class="icon"></div></div>
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('PICTURE') ?></th>
@@ -93,6 +94,68 @@ $BC->add_crumb(Lang::_('Orders details'), $F->self_link() );
 		<td valign="top"><?php echo $cell_product_info; ?></td>
 		<td width="10%"><?php echo Price::val( $product['price'] ) . '<br>(' . Price::tax( $product['vat'] ) . ')'; ?></td>
 		<td width="10%"><?php echo $product['quantity']; ?></td>
+	</tr>
+	<?php
+	}
+	?>
+</table>
+<hr>
+<div class="order_container order_title container_header"><?php echo Lang::_('Source basket'); ?><div class="icon"></div></div>
+<div class="order_container container_subheader"><?php echo Lang::_('basket history'); ?><div class="icon"></div></div>
+<table class="tableBox" style="border: 0">
+	<tr class="tableBoxHeading">
+		<th><?php echo Lang::_('ID') ?></th>
+		<th><?php echo Lang::_('user_client') ?></th>
+		<th><?php echo Lang::_('date') ?></th>
+		<th><?php echo Lang::_('mode') ?></th>
+		<th><?php echo Lang::_('description') ?></th>
+	</tr>
+	<?php
+	foreach( $history_list as $history_key => $history ) {
+	      
+	?>
+	<tr>
+		<td style="cursor: pointer;" width="5%"><?php echo $history['id_shopping_basket_history'] ; ?></td>
+		<td width="10%"><?php echo $history['login'] . ' (' . $history['id_client_user'] . ')'; ?></td>
+		<td width="10%"><?php echo $history['date']; ?></td>
+		<td width="10%"><?php echo $history['mode']; ?></td>
+		<td width="10%"><?php echo $history['description']; ?></td>
+	</tr>
+	<?php
+	}
+	?>
+</table>
+<div class="order_container container_subheader"><?php echo Lang::_('basket versions'); ?><div class="icon"></div></div>
+<table class="tableBox" style="border: 0">
+	<tr class="tableBoxHeading">
+		<th><?php echo Lang::_('ID') ?></th>
+		<th><?php echo Lang::_('client_user') ?></th>
+		<th><?php echo Lang::_('product_types') ?></th>
+		<th><?php echo Lang::_('product_count') ?></th>
+		<th><?php echo Lang::_('date_created') ?></th>
+		<th><?php echo Lang::_('date_modified') ?></th>
+	</tr>
+	<?php
+	foreach( $version_list as $version_key => $version ) {
+	   $GET_version = $F->add_local_get('id_shopping_basket', $version['id_shopping_basket'], $GET_tmp);
+	   $GET_version = $F->add_local_get('id_shopping_basket_version', $version_key, $GET_version);
+
+	   $link_version_info = $F->make_link(CFG_COM_BASKET, $F->add_local_get('show', 'version_details', $GET_version));
+	   $cell_version_info = $F->draw_link($link_version_info, '', $version['id_shopping_basket_version']);
+	   if ( $id_shopping_basket_version == $version_key ) {
+	      $row_class = 'class="tableRow-active"';
+	   } else {
+	      $row_class = '';
+	   }
+	   $client_user_cell = $version['client_user_name'] . ' (' . $version['id_client_user'] . ')';
+	   ?>
+	<tr <?php echo $row_class; ?>>
+		<td style="cursor: pointer;" width="5%"><?php echo $cell_version_info ; ?></td>
+		<td valign="top"><?php echo $client_user_cell; ?></td>
+		<td width="10%"><?php echo $version['count_product_types']; ?></td>
+		<td width="10%"><?php echo $version['product_count']; ?></td>
+		<td width="10%"><?php echo $version['date_created']; ?></td>
+		<td width="10%"><?php echo $version['date_created']; ?></td>
 	</tr>
 	<?php
 	}

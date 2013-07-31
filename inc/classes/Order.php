@@ -17,12 +17,12 @@ class Order {
    public $data = array();
    public $product_list = array();
    public $status_history = array();
+   public $source_basket = array();
 
    function __construct( $id_order = 0) {
       $this->data = array();
       $this->product_list = array();
       $this->status_history = array();
-
 
       if( $id_order > 0 ) {
          return self::_load_data( (int)$id_order );
@@ -68,6 +68,7 @@ class Order {
       if( $F->not_null($this->data) ) {
          $this->product_list = Data::get_order_product_list( $id_order );
          $this->status_history = Data::get_order_status_history_list( $id_order );
+         $this->source_basket = Shopping_Basket::get_order_data( (int)$this->data['id_shopping_basket'] );
          return sizeof($this->product_list);
       } else {
          return false;
