@@ -19,17 +19,29 @@ class Order_Chain {
    public $total = array('product_total' => 0, 'product_types' => 0,
    		'sum_gross' => 0, 'sum_gross_split' => array(), 'sum_netto' => 0);
 
-   function __construct( $id_client = false) {
+   function __construct( $id_client = false, $param = array()) {
       $P = Person::g_global();
 
       if( !$id_client && $P->logged_in )  {
-     	$this->id_client = $P->data['id_client'];
+     		$this->id_client = $P->data['id_client'];
+      } else {
+      	$this->id_client = (int)$id_client;
       }
-      echo $this->id_client ;
+      $this->load_param($param);
       
-      $this->order_list = self::_load_data( );
+      $this->order_list = $this->load_data();
    }
 
+   function load_param( $param = array() ) {
+   	  /*
+   	   * List:
+   	   * date_create, date_modified, id_order_status
+   	   * 
+   	   * obiekt ze statusami ?
+   	   */
+   	  
+   }
+   	
    function check_rights( $id_client = 0 ) {
 
    }
@@ -51,10 +63,10 @@ class Order_Chain {
       return $this->total;
    }
 
-   function _load_data( ) {
+   function load_data( ) {
       $F = Framework::g_global();
       
-      $order_list = Data::get_order_list((int)$this->id_client);
+      $order_list = Data::get_order_list((int)$this->id_client, $param);
 
       if( $F->not_null($order_list) ) {
       	foreach($order_list as $id_order => $order ) {

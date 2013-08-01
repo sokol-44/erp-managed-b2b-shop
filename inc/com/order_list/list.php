@@ -78,7 +78,7 @@ $GET_tmp = $F->add_local_get('mode', 'show_details', $GET_tmp);
 <?php echo Lang::_('order date') . ':<br>' . $F->output_string_html( $order->data['date_create'] ); ?><br><br>
 <?php if($F->not_null($order->data['date_modified'])) echo  Lang::_('order update') . ':<br>' . $F->output_string_html( $order->data['date_modified'] ); ?>
 		</td>
-		<td width="10%"><?php echo $order->data['name']; ?></td>
+		<td width="10%"><?php echo Lang::_($order->data['name']); ?></td>
 		<td width="10%"><?php echo $cell_order_info; ?></td>
 	</tr>
 	<?php

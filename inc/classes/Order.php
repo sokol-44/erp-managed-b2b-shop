@@ -49,6 +49,7 @@ class Order {
       if( Framework::not_null($this->data) ) {
          $P = Person::g_global();
          if( $id_client == 0 ) $id_client = $P->data['id_client'];
+         //echo $this->data['id_client'] .'=='. $id_client;die();
          return ( $this->data['id_client'] == $id_client );
       } else {
          return false;
@@ -115,7 +116,8 @@ class Order {
          $Shopping_Basket->state_archive_order();
          $count_product   = Data::put_order_product_list($id_order, $product_list);
          $count_product_2 = Data::change_product_quantity_list($product_list);
-         Data::put_order_status($id_order, '1', $order_description);
+         $id_soh = (int)Order_History::text2id('START');
+         Data::put_order_status($id_order, $id_soh, $order_description);
          return array($id_order, $count_product);
       } else {
          return false;

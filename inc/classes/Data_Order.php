@@ -102,7 +102,19 @@ class Data_Order extends Data_Picture {
       				'status' => $status );
    }
    
-   static function get_order_list( $id_client = 0 ) {
+   static function get_order_history_list() {
+
+   	$query = 'select os.id_order_status, concat("OSH_", os.name) as name from ' . TBL_SHOP_ORDER_HISTORY;
+   	$res = db_result_array( db_query( $query ) );
+   	$ret_array = array();
+   	foreach( $res as $osh ) {
+   		$ret_array[$osh['id_order_status']] = $osh['name'];
+   	}
+   	
+   	return $ret_array;
+   }
+   
+   static function get_order_list( $id_client = 0, $where = '' ) {
       $SP = SplitPage::g_global();
       
       if( $id_client > 0 ) {
@@ -110,7 +122,7 @@ class Data_Order extends Data_Picture {
       }
 
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
-      o.description, o.description_basket, o.id_shopping_basket, os.name,
+      o.description, o.description_basket, o.id_shopping_basket, concat("OSH_", os.name) as name,
      	UNIX_TIMESTAMP(o.date_create) as ts_create, UNIX_TIMESTAMP(o.date_modified) as ts_modified
       from ' . TBL_SHOP_ORDER . ' o left join ' . TBL_SHOP_ORDER_STATUS . ' os
       on (o.id_order_status = os.id_order_status)' . $where;
@@ -129,7 +141,7 @@ class Data_Order extends Data_Picture {
 
    static function get_order_data( $id_order ) {
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
-      o.description, o.description_basket, o.id_shopping_basket, os.name,
+      o.description, o.description_basket, o.id_shopping_basket, concat("OSH_", os.name) as name,
      	UNIX_TIMESTAMP(o.date_create) as ts_create, UNIX_TIMESTAMP(o.date_modified) as ts_modified
       from ' . TBL_SHOP_ORDER . ' o left join ' . TBL_SHOP_ORDER_STATUS . ' os
       on (o.id_order_status = os.id_order_status)
@@ -152,7 +164,7 @@ class Data_Order extends Data_Picture {
    }
 
    static function get_order_status_history_list( $id_order ) {
-      $query = 'select osh.id_order_status, osh.timestamp, osh.description, os.name
+      $query = 'select osh.id_order_status, osh.timestamp, osh.description, concat("OSH_", os.name) as name
       from ' . TBL_SHOP_ORDER_STATUS_HISTORY . ' osh left join ' . TBL_SHOP_ORDER_STATUS . ' os
       on (osh.id_order_status = os.id_order_status)
       where id_order = ' . db_int($id_order);

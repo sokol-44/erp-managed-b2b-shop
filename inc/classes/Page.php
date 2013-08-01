@@ -71,11 +71,22 @@ class Page {
    public function add_css($css) {
       $this->css_array[] = '<link rel="stylesheet" type="text/css" href="' . $this->path_css . $css . '">';
    }
+   
+   public function put_head_title() {
+   	  return $this->head_title;
+   }
+
+   public function put_head_keywords() {
+   	  return $this->head_keywords;
+   }   
+   public function put_head_description() {
+   	  return $this->head_description;
+   }
 
    public function put_css() {
       echo implode("\r", $this->css_array) . "\n";
    }
-    
+
    public function put_js() {
       global $config;
 

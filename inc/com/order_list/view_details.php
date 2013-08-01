@@ -40,7 +40,7 @@ $BC->add_crumb(Lang::_('Orders details'), $F->self_link() );
 	<?php } ?>
 	<tr>
 		<td><?php echo Lang::_('order STATE') ?></td>
-		<td><?php echo $F->output_string_html($Order->data['name']); ?></td>
+		<td><?php echo $F->output_string_html(Lang::_($Order->data['name'])); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo Lang::_('order statistic') ?></td>

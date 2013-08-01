@@ -34,6 +34,8 @@ if( $F->check_get('mode') ) {
    }
 } else {
    //display basket
+	$order_chain = new Order_Chain((int)$P->data['id_client']);
+	$order_chain->calculate_total();
    require 'order_list' . DS . 'list.php';
 }
 ?>
