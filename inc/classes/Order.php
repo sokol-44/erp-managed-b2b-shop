@@ -18,16 +18,31 @@ class Order {
    public $product_list = array();
    public $status_history = array();
    public $source_basket = array();
+   public $mode = false;
+   public $id_order = 0;
 
-   function __construct( $id_order = 0) {
+   function __construct( $id_order = 0, $mode = 'FULL',  $data = false) {
       $this->data = array();
       $this->product_list = array();
       $this->status_history = array();
+      $this->set_mode( $mode );
 
       if( $id_order > 0 ) {
-         return self::_load_data( (int)$id_order );
+         return $this->load_data( (int)$id_order, $data );
       }
 
+   }
+   
+   function set_mode( $mode_in ) {
+   	 if( $this->mode ) {
+   	 	if( $this->mode == 'SIMPLE' && $mode_in == 'FULL' ) {
+   	 	  $this->load_data_full();
+   	 	  $this->mode = 'FULL';
+   	 	}
+   	 } else {
+   	 	if( $mode_in == 'FULL' && $mode_in == 'SIMPLE' )  $this->mode = $mode_in;
+   	 	else $this->mode = 'FULL';
+   	 }
    }
 
    function check_rights( $id_client = 0 ) {
@@ -41,10 +56,11 @@ class Order {
    }
     
    function calculate_total() {
-      $this->total = array('product_total' => 0, 'product_types' => 0,
-      'sum_gross' => 0, 'sum_gross_split' => array(), 'sum_netto' => 0);
-
-      if ( Framework::not_null($this->product_list) && $this->total['product_total'] == 0 ) {
+      
+      if ( Framework::not_null($this->product_list) && !isset($this->total['product_total']) ) {
+      	 $this->total = array('product_total' => 0, 'product_types' => 0,
+      			'sum_gross' => 0, 'sum_gross_split' => array(), 'sum_netto' => 0);
+      	 
          foreach($this->product_list as $id_product => $product ) {
             $this->total['product_total'] += $product['quantity'];
             $this->total['product_types'] ++;
@@ -59,22 +75,27 @@ class Order {
       return $this->total;
    }
 
-   function _load_data( $id_order ) {
+   function load_data( $id_order, $data = false ) {
       $F = Framework::g_global();
 
       $this->id_order = $id_order;
 
-      $this->data = Data::get_order_data( $id_order );
+      if( $data ) $this->data = $data;
+      else  $this->data = Data::get_order_data( $id_order );
+      
       if( $F->not_null($this->data) ) {
          $this->product_list = Data::get_order_product_list( $id_order );
-         $this->status_history = Data::get_order_status_history_list( $id_order );
-         $this->source_basket = Shopping_Basket::get_order_data( (int)$this->data['id_shopping_basket'] );
+         if( $this->mode == 'FULL' ) $this->load_data_full();
          return sizeof($this->product_list);
       } else {
          return false;
       }
    }
-
+   
+   function load_data_full() {
+   	 $this->status_history = Data::get_order_status_history_list( (int)$this->id_order );
+   	 $this->source_basket = Shopping_Basket::get_order_data( (int)$this->data['id_shopping_basket'] );	
+   }
 
    static function make_new_order($Shopping_Basket, $order_description) {
       $F = Framework::g_global();

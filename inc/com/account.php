@@ -18,7 +18,7 @@ $BC->add_crumb(Lang::_('Account'), $F->make_link(CFG_COM_ACCOUNT) );
 <li><?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_PARAMETERS, array('mode' => 'show_details')),'', Lang::_('show details') ); ?></li>
 <!-- <li><?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_PARAMETERS, array('mode' => 'change_details')),'', Lang::_('change details') ); ?></li>-->
 </ul><br>
-<div id="account_data_list">
+<div id="account_data_list"><!-- 
 <div class="account_container container_subheader">Rachunki<div class="icon"></div></div>
 <table class="tableBox" style="border: 0; width: 400px;" >
 	<tr class="tableBoxHeading">
@@ -37,7 +37,7 @@ $BC->add_crumb(Lang::_('Account'), $F->make_link(CFG_COM_ACCOUNT) );
 		<td><?php echo 'Suma zakupów'; ?></td>
 		<td><?php echo '876.00 zł' ?></td>
 	</tr>
-</table>
+</table> -->
 
 <div class="basket_container container_subheader"><?php echo Lang::_('basket history'); ?><div class="icon"></div></div>
 <table class="tableBox" style="border: 0; width: 400px;" >
