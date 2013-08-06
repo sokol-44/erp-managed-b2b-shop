@@ -24,6 +24,7 @@ if( !defined('_I_INIT') ) die();
 <script src="http://yui.yahooapis.com/3.10.1/build/yui/yui-min.js"></script>
 <link href="inc/template/zebra_o/css/my_layout.css?ver=<?php echo time(); ?>" rel="stylesheet" type="text/css" >
 <link href="inc/template/zebra_o/css/nav_shinybuttons.css?ver=<?php echo time(); ?>" rel="stylesheet" type="text/css" >
+<link href="inc/template/zebra_o/css/colorbox.css?ver=<?php echo time(); ?>" rel="stylesheet" type="text/css" >
 <?php $Page->put_css(); ?>
 <?php $Page->put_js(); ?>
 <?php $Page->put_head_js(); ?>

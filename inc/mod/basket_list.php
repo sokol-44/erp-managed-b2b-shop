@@ -10,12 +10,15 @@ $total = $Shopping_Basket->calculate_total();
 
 $GET_tmp = $F->make_get('mode,action,show');
 
-$all_basket = $F->draw_link( $F->make_link(CFG_COM_BASKET, array('show' => 'all')), 'title="' . Lang::_('show all BASKETS') . '"',
-      $F->static_image('icon/folder_16.png', Lang::_('show all BASKETS')) . ' ' . Lang::_('show all BASKETS') . ' ' . $F->static_image('icon/folder_16.png', Lang::_('show all BASKETS')));
+//$all_basket = $F->draw_link( $F->make_link(CFG_COM_BASKET, array('show' => 'all')), 'title="' . Lang::_('show all BASKETS') . '"',
+//      $F->static_image('icon/folder_16.pnb2b Lang::_('show all BASKETS')) . ' ' . Lang::_('show all BASKETS') . ' ' . $F->static_image('icon/folder_16.png', Lang::_('show all BASKETS')));
 
+$all_basket = $F->draw_link( 
+		$F->make_link(CFG_COM_BASKET, array('show' => 'all')), 'title="' . Lang::_('show all BASKETS') . '"',
+		$F->dynamic_image(Lang::_('show all')) );
 ?>
 <div class="basket_container">
-<div class="basket menu_header">Koszyki<div class="icon"></div></div>
+<div class="basket menu_header"><?php echo Lang::_('BASKETS') ?><div class="icon"></div></div>
 <div class="basket basket_show_all"><?php echo $all_basket; ?></div>
 <?php
 echo '<script>json_data.basket_list_default="'.$F->json_string($Shopping_Basket->params).'";</script>';
@@ -107,8 +110,11 @@ $total = $Shopping_Basket->calculate_total();
 }
 
 if( $P->logged_in && $Shopping_Basket_Chain->get_can_add_basket() ) {
-   $add_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('add_basket', 'add_basket', $GET_tmp));
-   $add_basket = $F->draw_link($add_basket_link, 'title="' . Lang::_('add BASKET') . '"', $F->static_image('icon/plus_16.png', Lang::_('add BASKET')) . ' ' . Lang::_('add BASKET') . ' ' . $F->static_image('icon/plus_16.png', Lang::_('add BASKET')));
+   //$add_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('add_basket', 'add_basket', $GET_tmp));
+   //$add_basket = $F->draw_link($add_basket_link, 'title="' . Lang::_('add BASKET') . '"', $F->static_image('icon/plus_16.png', Lang::_('add BASKET')) . ' ' . Lang::_('add BASKET') . ' ' . $F->static_image('icon/plus_16.png', Lang::_('add BASKET')));
+   $add_basket = $F->draw_link(
+   		$F->make_link(CFG_COM_BASKET, $F->add_local_get('add_basket', 'add_basket', $GET_tmp)), 'title="' . Lang::_('add BASKET') . '"',
+   		$F->dynamic_image(Lang::_('add BASKET')) );
 ?>
 <div class="basket_add">
 <div class="basket_add_icon"><?php echo $add_basket; ?></div>

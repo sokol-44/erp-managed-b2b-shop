@@ -16,7 +16,7 @@ if( $F->check_get('mode') ) {
                $total = $Order->calculate_total();
                $version_list = $Order->source_basket->get_all_version();
                $history_list = $Order->source_basket->get_all_history();
-               require 'order_list' . DS . 'view_details.php';
+               require 'order_list' . DS . 'ol_view_details.php';
             } else {
                $F->redirect($F->make_link(CFG_COM_ORDER_LIST));
             }
@@ -24,18 +24,31 @@ if( $F->check_get('mode') ) {
             $F->redirect($F->make_link(CFG_COM_ORDER_LIST));
          }
          break;
+      case 'make_basket':
+      	if( $F->check_get('id_order') && $F->GET['id_order'] > 0  ) {
+      		$Order = new Order($F->GET['id_order']);
+      		if( $Order->check_rights() ) {
+      			$Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
+      			$res = $Shopping_Basket_Chain->basket_from_order( $Order );
+      			if( $res) $F->redirect($F->make_link(CFG_COM_BASKET));
+      		}
+      		$F->redirect($F->make_link(CFG_COM_ORDER_LIST));
+      	} else {
+      		$F->redirect($F->make_link(CFG_COM_ORDER_LIST));
+      	}
+      	break;
       case 'all':
       default:
          //display orders
       	 $order_chain = new Order_Chain((int)$P->data['id_client']);
       	 $order_chain->calculate_total();
-         require 'order_list' . DS . 'list.php';
+         require 'order_list' . DS . 'ol_list.php';
          break;
    }
 } else {
    //display basket
 	$order_chain = new Order_Chain((int)$P->data['id_client']);
 	$order_chain->calculate_total();
-   require 'order_list' . DS . 'list.php';
+   require 'order_list' . DS . 'ol_list.php';
 }
 ?>

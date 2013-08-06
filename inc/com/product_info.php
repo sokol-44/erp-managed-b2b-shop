@@ -38,7 +38,7 @@ $add_basket_html = $add_basket_form .
 
 $product_quantity = (int)(($product_info['quantity']>0)?$product_info['quantity']:0);
 $product_producent = $F->output_string_html( $product_info['producent'] );
-$product_index = $F->output_string_html( $product_info['catalog_index'] );
+$product_index = $F->output_string_html( strtolower($product_info['catalog_index']) );
 $Page->head_title = $F->output_string_html( $product_info['name'] );
 if ( $F->not_null($product_producent) )
   $Page->head_title .= $Page->head_title . ', ' . $product_producent;

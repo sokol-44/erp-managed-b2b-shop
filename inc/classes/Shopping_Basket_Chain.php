@@ -138,19 +138,20 @@ class Shopping_Basket_Chain {
       return $count;
    }
 
-   public function init_basket( $number = 1, $create = true ) {
+   public function init_basket( $number = 1, $create = true, $contants = false ) {
       $P = Person::g_global();
       $params = array(
             'id_client' => $this->id_client, 'id_shopping_basket' => 0, 'id_shopping_basket_version' => 0,
             'id_nr_shopping_basket' => $number, 'description' => '',
             'date_create' => date('Y-m-d H:i:s'), 'date_modified' => '', 'ts_create' => time(), 'ts_modified' => '',
             'using_id_client_user' => $this->id_client, 'using_session_id' => $P->session_id, 'using_date' => 0);
-      $new_basket = new Shopping_Basket( $params, $create );
+      $new_basket = new Shopping_Basket( $params, $create, $contants );
       $this->Basket_List[$new_basket->id_shopping_basket] = $new_basket;
-//echo 'INIT'.$number.($create?'Ct':'Cf') . print_r($params);
+
       if( $create ) {
-         $this->id_basket_set = false;
-         $this->id_basket_current = $number;
+      	if( $contants ) $this->id_basket_set = 1;
+         else $this->id_basket_set = false;
+         $this->id_basket_current = $new_basket->id_shopping_basket;
       }
    }
 
@@ -206,6 +207,21 @@ class Shopping_Basket_Chain {
       } else {
          return false;
       }
+   }
+   
+   public function basket_from_order( $Order ) {
+
+   	if( is_object($Order) && is_array($Order->product_list) &&
+   	 Framework::not_null($Order->source_basket->contents) && $this->get_can_add_basket() ) {
+         for( $id_sb = 1; $id_sb <= self::$max_basket ; $id_sb++ ) {
+            if( !$this->_check_valid_basket($id_sb) ) {
+               $this->init_basket( $id_sb, true, $Order->source_basket->contents );
+               return true;
+            }
+         }
+         return false;
+      }
+      return false;
    }
 
    public function set_default_basket( $id_shopping_basket = 0 ) {

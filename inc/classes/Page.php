@@ -104,9 +104,10 @@ class Page {
          implode(NL, $this->js_jq_body) . NL .
          '})' . NL .
          '</script>' . NL;
-      }
+      }      
       if( $this->jq_files && count($this->jq_files) > 0 ) {
-         foreach($this->jq_files as $js_file) {
+      	$jq_files = array_unique($this->jq_files);
+         foreach($jq_files as $js_file) {
             echo '<script type="text/javascript" src="' . $js_file . '"></script>' . NL;
          }
       }
@@ -128,7 +129,7 @@ class Page {
 
    public function add_js_file($script, $add_path = true) {
       if($add_path) $this->jq_files[] = $this->path_js . $script;
-      else $script;
+      else $this->jq_files[] = $script;
    }
 
    //   function set_menus_paths() {

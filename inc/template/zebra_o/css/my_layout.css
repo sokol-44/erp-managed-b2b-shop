@@ -18,14 +18,14 @@ textarea { width: 99%; }
 	margin-left: 10px;
 	float: right;
 	position: relative;
-	top: 25px;
+	top: 0px;
 	right: 0px;
 }
 
 #header_bottom_cont .person_data_main {
 	float: right;
 	position: relative;
-	top: 25px;
+	top: 5px;
 	right: 0px;
 	text-align:right;
 	color: #222;
@@ -35,11 +35,11 @@ textarea { width: 99%; }
 	border-radius: 5px;
 }
 
-.person_data_main .person_data_info {
-	clear: both;
-	float: right;
-}
 
+.module_container_nr1, .module_container_nr2 {
+   float: right;
+   clear: right;
+}
 
 .icon {
 	margin: 2px;
@@ -91,7 +91,7 @@ textarea { width: 99%; }
 #lmain > .content {
 	padding: 0 5px 0 5px;
 }
-
+/*
 .vertical_menu01 {
 	background-image: url("../images/segregator.png");
 }
@@ -110,7 +110,7 @@ textarea { width: 99%; }
 .vertical_menu03:hover {
 	background-image: url("../images/zywieniowe_s.png");
 }
-
+*/
 .vertical_menu_item {
 	float: left;
 	margin: 10px 10px;
@@ -165,7 +165,6 @@ body {
 	min-width: 768px;
 	margin: auto; /* center in viewport */
 }
-
 
 /*
 Container
@@ -291,7 +290,7 @@ Product Info
 
 .product_info {
 	position: relative;
-	min-height: 150px;
+	min-height: 200px;
 }
 
 .product_name {
@@ -309,9 +308,10 @@ Product Info
 	float: right;
 	border: 2px solid grey;
 	border-radius: 1px;
-	position: absolute;
+	position: relative;
 	top:0;
 	right:0;
+   float: right;
 	cursor: pointer;
 	margin: 10px;
 	vertical-align: top;
@@ -339,8 +339,8 @@ product_add_basket
 	text-align: right;
 	padding: 3px;
 	position: absolute;
-	bottom: 5px;
-	right: 0;
+	bottom: 3px;
+	right: 10px;
 	background-color: #ddd;
 	border: 3px solid #ccc;
 	border-bottom-left-radius: 12px;
@@ -482,6 +482,7 @@ Basket list
 	margin-left: 1px;
 	background-color: white;
 	border: 0;
+	text-align: center;
 }
 
 .order_total {
@@ -505,6 +506,7 @@ usedbasket
 	padding: 5px 5px 5px 20px;
 	margin-right: 2px;
 	border-radius: 1px;
+   text-align: center;
 }
 
 

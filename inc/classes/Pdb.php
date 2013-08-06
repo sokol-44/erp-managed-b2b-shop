@@ -32,10 +32,10 @@ class Pdb {
    static private function __split_path($path) {
 
       $array_res = array();
-      list(,$p1) = split('://', $path);
-      $part = split(',', $p1);
+      list(,$p1) = explode('://', $path);
+      $part = explode(',', $p1);
       foreach($part as $key_val) {
-         $key_val_arr = split('=', $key_val);
+         $key_val_arr = explode('=', $key_val);
          if( isset($key_val_arr[1]) && $key_val_arr[1] != '' ) {
             $array_res[$key_val_arr[0]] = $key_val_arr[1];
          } else {
@@ -55,7 +55,7 @@ class Pdb {
          $parameters_out['id'] = (int)$array_parameters['id'];
          if( Framework::is_null($array_parameters['type']) ) { // TYPE
             if( Framework::not_null($array_parameters['size']) ) { // SIZE
-               $size_split = split('X', $array_parameters['size']);
+               $size_split = explode('X', $array_parameters['size']);
                if( ctype_digit($size_split[0]) && ctype_digit($size_split[1]) && ctype_digit($size_split[2]) ) {
                   $parameters_out['size'] = $size_split;
                   $parameters_out['type'] = 'ORIGINAL';

@@ -21,9 +21,9 @@ class Shopping_Basket {
          'id_client' => 0, 'id_shopping_basket' => 0, 'id_shopping_basket_version' => 0,
          'id_nr_shopping_basket' => 0, 'description' => '', 'state' => '',
          'date_create' => null, 'date_modified' => null, 'ts_create' => 0, 'ts_modified' => 0,
-         'using_id_client_user' => 0, 'using_session_id' => 0, 'using_date' => 0,  'ts_using' => 0);
+         'using_id_client_user' => 0, 'using_session_id' => 0, 'using_name' => '', 'using_date' => 0,  'ts_using' => 0);
 
-   function __construct($params = false, $create = false) {
+   function __construct($params = false, $create = false, $contents = false) {
       $this->reset();
       self::$class = $this;
       if( $params ) {
@@ -32,6 +32,9 @@ class Shopping_Basket {
             $new_params = $this->db_create_basket();
             $this->params['id_shopping_basket'] = $new_params['id_shopping_basket'];
             $this->params['id_shopping_basket_version'] = $new_params['id_shopping_basket_version'];
+            if( $contents ) { 
+            	$this->check_contents( $contents );
+            }
             $this->db_save_contents();
          } else {
             $this->db_restore_contents();
@@ -40,7 +43,21 @@ class Shopping_Basket {
       }
       $this->id_shopping_basket = $this->params['id_shopping_basket'];
    }
-
+	
+   public function check_contents( $contents ) {
+   	
+   	foreach( $contents as $product ) {
+   		$key = Data_Products::get_key_from_product_params( $product );
+   		if( (int)$product['id_product'] > 0 && (int)$product['quantity'] > 0 ) {
+   			$this->contents[$key] = array(
+   				'quantity' => (int)$product['quantity'],
+   				'id_product' => (int)$product['id_product'],
+   				'id_product_subtype' => (int)$product['id_product_subtype'],
+   				'id_shopping_basket_version' => (int)$this->params['id_shopping_basket_version']
+   			);
+   		}
+   	}
+   }
 	
    static function get_order_data($id_shopping_basket) {
    	  $P = Person::g_global();
@@ -283,7 +300,12 @@ class Shopping_Basket {
 
       if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
          $this->params = Data::get_basket_data($this->params);
-          
+         
+         if( (int)$this->params['using_id_client_user'] > 0 ) {
+         	$client_user_data = Person::get_client_user_data( (int)$this->params['using_id_client_user'], 'CLIENT');
+         	$this->params['using_name'] = $client_user_data['name'];
+         }
+         
          //VERSIONS
          $version_list = Data::get_basket_version_list($this->params);
          //          var_dump($version_list);

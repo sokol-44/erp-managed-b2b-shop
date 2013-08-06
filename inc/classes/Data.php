@@ -212,6 +212,11 @@ class Data extends Data_Person {
       if( db_rows($res)>0 ) {
          while( $row = db_fetch_array($res) ) $ret_array[$row['name']] = $row['name'];
       }
+      
+      //FIXME - bandaid
+      if( Framework::is_null($ret_array) ) {
+      	$ret_array = array('LEVEL_0' => 'LEVEL_0', 'USER' => 'USER');
+      }
 
       return $ret_array;
    }

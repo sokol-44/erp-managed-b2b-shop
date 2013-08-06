@@ -60,6 +60,10 @@ foreach( $config['DEFAULT'] as $cnf => $value) {
 	define('DEFAULT_' . $cnf, $value);
 }
 
+foreach( $config['SHOP'] as $cnf => $value) {
+	define('SHOP_' . $cnf, $value);
+}
+
 $dir_www_inc = $dir_www['HTTP_SERVER'] . $dir_www['HTTP_ROOT_CATALOG'] . $dir_www['HTTP_INC_CATALOG'];
 
 define('URL_HTTP_SERVER', $dir_www['HTTP_SERVER']);

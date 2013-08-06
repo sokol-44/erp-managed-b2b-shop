@@ -52,7 +52,13 @@ $BC->add_crumb(Lang::_('Orders details'), $F->self_link() );
 </div></td>
 	</tr>
 </table>
-
+<?php
+$GET_tmp = $F->make_get('mode,action,show');
+$add_basket = $F->draw_link(
+   		$F->make_link(CFG_COM_ORDER_LIST, $F->add_local_get('mode', 'make_basket', $GET_tmp)), 'title="' . Lang::_('Create BASKET') . '"',
+   		$F->dynamic_image(Lang::_('Create BASKET')) );
+echo $add_basket;
+?>
 <div class="basket_container container_subheader"><?php echo Lang::_('Order products'); ?><div class="icon"></div></div>
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">

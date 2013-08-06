@@ -45,6 +45,9 @@ if( $Shopping_Basket->check_move('DOWN') )
 $update_basket = $F->static_image_submit($F->static_image_src('icon/tick_32.png'), Lang::_('UPDATE_BASKET'),' name="UPDATE_BASKET"');
 
 echo $F->draw_form('basket_edit', $form_link);
+/* print_debug( array( 'id_basket_current' => $Shopping_Basket_Chain->id_basket_current,
+		'id_basket_set' => $Shopping_Basket_Chain->id_basket_set,
+		'id_nr_shopping_basket' => $Shopping_Basket_Chain->id_nr_shopping_basket) ); */
 ?>
 <div class="basket_container">
   <div class="basket_container basket_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>

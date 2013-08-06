@@ -104,6 +104,7 @@ echo Lang::_('Basket help for icons');
 
 	$available_actions = $addup_basket . $remove_basket . $clean_basket . $lock_unlock;
 	$state_html = '0 ' . $Shopping_Basket->basket_level_text();
+	$basket_using_name = (($Shopping_Basket->params['using_name']!=''?$Shopping_Basket->params['using_name']:''));
 	?>
 	<tr>
 		<td class="mainbasket"><?php echo $show_basket; ?>
@@ -113,7 +114,7 @@ echo Lang::_('Basket help for icons');
 		<td><?php echo $total['product_types']; ?></td>
 		<td><?php echo Price::val($total['sum_gross']); ?></td>
 		<td><?php echo Price::val($total['sum_netto']); ?></td>
-		<td><?php echo $Shopping_Basket->params['using_id_client_user'] ?></td>
+		<td><?php echo $basket_using_name ?></td>
 		<td><div class="basket_menu">
 				<?php echo $available_actions; ?>
 			</div></td>
@@ -173,6 +174,7 @@ echo Lang::_('Basket help for icons');
 	   }
 	   $state_html = $Shopping_Basket->basket_level_nr() .'(' . $basket_lvl_diff . ')<br>' .
 	     	   $Shopping_Basket->basket_level_text();
+	   $basket_using_name = (($Shopping_Basket->params['using_name']!=''?$Shopping_Basket->params['using_name']:''));
 	   ?>
 	<tr>
 		<td <?php echo $class_add; ?>><?php echo $show_basket; ?>
@@ -182,7 +184,7 @@ echo Lang::_('Basket help for icons');
 		<td><?php echo $total['product_types']; ?></td>
 		<td><?php echo Price::val($total['sum_gross']); ?></td>
 		<td><?php echo Price::val($total['sum_netto']); ?></td>
-		<td><?php echo $Shopping_Basket->params['using_id_client_user'] ?></td>
+		<td><?php echo $basket_using_name ?></td>
 		<td><div class="basket_menu">
 				<?php echo $available_actions; ?>
 			</div></td>
