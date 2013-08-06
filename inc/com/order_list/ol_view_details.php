@@ -71,7 +71,7 @@ echo $add_basket;
 	foreach( $Order->product_list as $product ) {
 	   $GET_tmp = $F->add_local_get('id_product', $product['id_product'], $GET_tmp);
 
-	   if( $F->not_null($product['p_name']) && $product['name'] != $product['p_name'] ) {
+	   if( $F->is_null($product['p_name']) ) {
 	      $product_name = $F->output_string_html( $product['p_name'] ) . ' <STRIKE>' . $F->output_string_html( $product['name'] ) . '</STRIKE>';
 	   } else {
 	      $product_name = $F->output_string_html( $product['name'] );
@@ -88,9 +88,16 @@ echo $add_basket;
 	      $small_image_html = Lang::_('PRODUCT INACTIVE/REMOVED');;
 	   } else {
 	      $cell_product_info = $F->draw_link($link_product_info, '', $name_desc_cell);
-	      $small_image_path = Data::get_product_image_path( $product['picture_small_url'] );
-	      $si_oc = "$.colorbox({href:'" . Data::get_product_image_path( $product['picture_big_url'] ) . "', photo:true});";
-	      $small_image_html = $F->static_image($small_image_path, Lang::_('show_big_image'), " onclick=\"$si_oc\"");;
+			$image_type = Data::get_product_image_type($product);
+			$small_image_html='';
+	      if( $F->not_null($image_type) ) {
+				$Page->add_js_file('jquery.colorbox.js');
+				$small_image_html = '<img src="' . $image_type['small_image_path'] .'">';
+				$small_image_html = '<div class="product_image_' . (int)$product['id_product'] . '">' . $small_image_html . "</div>\n";
+				$Page->add_jq_init('$(".product_image_' . (int)$product['id_product'] . '").colorbox({
+			   	href:"' . $F->js_escape($image_type['big_image_path']) . '",
+			   	photo:true});');
+			}
 	   }
 
 	   ?>

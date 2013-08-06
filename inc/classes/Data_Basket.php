@@ -289,81 +289,61 @@ class Data_Basket extends Data_Order {
       return $basket_new_version;
    }
    
-   //OLD
-   /*
-   static function put_basket_data($basket_params) {
-      $F = Framework::g_global();
-      $P = Person::g_global();
+   
+   //basket favorite
+   
+   static function make_new_basket_version_data($params, $product_list, $description) {
 
-      //MySQL
-      $query = 'insert into ' . TBL_SHOP_SHOPPING_BASKET . '
-      	set id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']) . ',
-      	id_client = ' . db_int($basket_params['id_client']) . ',
-      	description = "' . db_escape($basket_params['description']) . '",
-      	date_create = now(), date_modified = NULL,
-      	using_id_client_user = ' . db_int($P->id) . ',
-      	using_session_id = "' . db_escape($P->session_id) . '",
-      	using_date = now()
-      	ON DUPLICATE KEY update
-			description = "' . db_escape($basket_params['description']) . '",
-      	date_modified = now(),
-      	using_id_client_user = ' . db_int($P->id) . ',
-      	using_session_id = "' . db_escape($P->session_id) . '",
-      	using_date = now()';
-      $res = db_query( $query );
+   	if( $description == '' ) $description = $params['description'];
+   	$serialize = serialize($product_list);
+   	
+   	$insert_query = 'insert into ' . TBL_SHOP_SHOPPING_BASKET_FAVORITE . '
+      	set id_client = ' . db_int($params['id_client']) . ',
+     	 	id_client_user = ' . db_int($params['using_id_client_user']) . ',
+      	description = "' . db_escape($description) . '",
+      	serialize = "' . db_escape($serialize) . '",
+      	rights_edit = "CLIENT",
+      	rights_use = "CLIENT"';
+   	$res = db_query( $insert_query );
+
+   	$id_shopping_basket_favorite = (int)db_insert_id();
+   
+   	return $id_shopping_basket_favorite;
    }
 
+   static function get_basket_favorite_data($id_shopping_basket_favorite) {
 
-   static function put_basket_product_list($basket_contents, $basket_params) {
-
-      db_transaction_start();
-
-      $clear_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
-      id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']) . ' and
-      id_client = ' . db_int($basket_params['id_client']);;
-      db_query( $clear_query );
-
-      foreach( $basket_contents as $id_product => $details ) {
-         $insert_query = 'insert into ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . '
-      	set id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']) . ',
-      	id_client = ' . db_int($basket_params['id_client']) . ',
-      	id_product = ' . db_int($id_product) . ',
-      	quantity = ' . db_int($details['quantity']) . ', date_added = now()';
-         db_query( $insert_query );
-      }
-      //      print_debug($basket_params);
-      //      print_debug($basket_contents);
-      db_transaction_end();
+   
+   	$query = 'select id_shopping_basket_favorite, id_client, id_client_user,
+   				description, serialize, date_created, date_modified,
+   			   UNIX_TIMESTAMP(date_created) as ts_created, UNIX_TIMESTAMP(date_modified) as ts_modified,
+   				rights_edit, rights_use
+					from ' . TBL_SHOP_SHOPPING_BASKET_FAVORITE . ' where
+					id_shopping_basket_favorite = ' . db_int($id_shopping_basket_favorite);
+   
+//    	($result)
+   	return db_fetch_array( db_query( $query ) );
    }
    
-   static function get_basket_product_list($basket_params) {
-      $query = ' select id_product, quantity, date_added
-      from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
-      id_client = ' . db_int($basket_params['id_client']) . ' and
-      id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']);
-      $product_array = db_result_array( db_query( $query ) );
-      $contents = array();
-      foreach( $product_array as $product ) {
-         $contents[$product['id_product']] = array('quantity' => (int)$product['quantity']);
-      }
-      return $contents;
+   static function get_basket_favorite_list($id_client, $id_client_user = 0) {
+
+   	if( $id_client_user > 0 ) {
+   		$where = ' ( id_client = ' . db_int($id_client) . ' AND rights_use = "CLIENT" ) OR
+   				id_client_user = ' . db_int($$id_client_user);
+   	} else {
+   		$where = ' id_client = ' . db_int($id_client);
+   	}
+   	
+   	$query = 'select id_shopping_basket_favorite, id_client, id_client_user, 
+   				description, serialize, date_created, date_modified, 
+   			   UNIX_TIMESTAMP(date_created) as ts_created, UNIX_TIMESTAMP(date_modified) as ts_modified,
+   				rights_edit, rights_use
+					from ' . TBL_SHOP_SHOPPING_BASKET_FAVORITE . ' where
+					' . $where;
+   			
+   	return db_result_array_full( db_query( $query ) );
    }
-   
-   static function remove_basket_product( $id_product, $basket_params) {
-    $clear_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
-   id_client = ' . db_int($basket_params['id_client']) . ' and
-   id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']) . ' and
-   id_product = ' . db_int($id_product);
-   
-   db_transaction_start();
-   db_query( $clear_query );
-   $res = db_affected_rows();
-   db_transaction_end();
-   
-   return $res;
-   } */
-   
-   
+
 }
 
 ?>

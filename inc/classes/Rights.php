@@ -99,6 +99,76 @@ class Rights {
       
    }
    
+   public function basket_favorite_rights( $basket_params, $action, $show_info = true ) {
+   	$P = Person::g_global();
+   	$this->show_info = $show_info;
+   
+   	$rights_edit = $basket_params['rights_edit'];
+   	$rights_use = $basket_params['rights_use'];
+
+   	$res_debug = 'RCR:<i>' . $action . '</i>:';
+   	$res_debug .= 'cu:' . $basket_params['id_client_user'] .'c: ' . $basket_params['id_client'] . '<br>';
+   	$res_debug .= 're:' . $basket_params['rights_edit'] .'ru: ' . $basket_params['rights_use'] . '<br>';
+   
+   	switch( $action ) {
+   		// ---------------------------------------------------------------------------------------------------- //
+   		case 'USE':  //$action
+   			switch( $rights_use ) { 
+   				case 'USER': 
+                  if( $P->id == $basket_params['id_client_user'] ) {
+                  	$res_debug .= 'u1a';
+                  	return array(true, $res_debug);
+                  } elseif ( $P->data['id_client']  == $basket_params['id_client'] && 
+                  	$P->check_roles('LEVEL_99', 'ADMIN', 'OPERATOR') ) {
+                  	$res_debug .= 'u1b';
+                  	return array(true, $res_debug);
+                  }
+                 return array(false, $res_debug);
+                 break;
+   				case 'CLIENT':
+   					if ( $P->data['id_client'] == $basket_params['id_client'] ) {
+                  	$res_debug .= 'c1a';
+   						return array(true, $res_debug);
+   					}
+   					return array(false, $res_debug);
+   					break;
+   				default:
+   					return array(false, $res_debug);
+   					break;
+   			}
+   			break;
+   		case 'EDIT':  //$action   			switch( $rights_use ) { 
+   			switch( $rights_edit ) { 
+   				case 'USER': 
+                  if( $P->id == $basket_params['id_client_user'] ) {
+                  	$res_debug .= 'u1a';
+                  	return array(true, $res_debug);
+                  } elseif ( $P->data['id_client']  == $basket_params['id_client'] && 
+                  	$P->check_roles('LEVEL_99', 'ADMIN', 'OPERATOR') ) {
+                  	$res_debug .= 'u1b';
+                  	return array(true, $res_debug);
+                  }
+                 return array(false, $res_debug);
+                 break;
+   				case 'CLIENT':
+   					if ( $P->data['id_client'] == $basket_params['id_client'] ) {
+                  	$res_debug .= 'c1a';
+   						return array(true, $res_debug);
+   					}
+   					return array(false, $res_debug);
+   					break;
+   				default:
+   					return array(false, $res_debug);
+   					break;
+   			}
+   			break;
+   	default:
+   		return array(false, $res_debug);
+   		break;
+   		 
+   	}
+	}
+   	   
    public function basket_rights( $basket_params, $action, $show_info = true ) {
       $P = Person::g_global();
       $this->show_info = $show_info;

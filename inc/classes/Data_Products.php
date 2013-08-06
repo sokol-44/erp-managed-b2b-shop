@@ -545,7 +545,8 @@ class Data_Products extends Data_Basket {
       from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
       ( p.id_product = p2c.id_product )
       where p.id_product = ' . (int)$id_product . $where . ' group by p.id_product';
-      $result = db_query( $query );
+      $result = db_query( $query );     
+      if( db_rows($result) == 0 ) return false;
       $product_info = db_fetch_array( $result );
       $product_info['subtype'] = array();
       

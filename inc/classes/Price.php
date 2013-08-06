@@ -16,7 +16,7 @@ if( !defined('_I_INIT') ) die();
 class Price {
    static $class = false;
    static $currency_code = 'pl';
-   static $currency_str = ' Zł';
+   static $currency_str = ' zł';
    static $currency_decimal = ',';
    
    function __construct() {

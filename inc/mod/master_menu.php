@@ -11,6 +11,7 @@ if( $P->logged_in ) {
 }
 $array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_CATALOG),'', Lang::_('Catalog') );
 $array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_BASKET),'', Lang::_('Basket') );
+$array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_BASKET_FAVORITE),'', Lang::_('Favorite Basket') );
 // $array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_CONTACT),'', Lang::_('Contact') );
 
 $a4 = $F->make_link(CFG_COM_ARTICLE, $F->add_local_get('key', '4', $GET_tmp));

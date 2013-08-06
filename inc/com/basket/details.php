@@ -44,6 +44,13 @@ if( $Shopping_Basket->check_move('DOWN') )
 //$update_basket = $F->dynamic_image_submit(Lang::_('UPDATE_BASKET'),'UPDATE_BASKET');
 $update_basket = $F->static_image_submit($F->static_image_src('icon/tick_32.png'), Lang::_('UPDATE_BASKET'),' name="UPDATE_BASKET"');
 
+
+$arg = array('mode' => 'make_favorite_basket', 'id_shopping_basket' => $Shopping_Basket->id_shopping_basket);
+$add_basket = $F->draw_link(
+		$F->make_link(CFG_COM_BASKET_FAVORITE, $arg), 'title="' . Lang::_('MAKE FAVORITE BASKET') . '"',
+		$F->static_image('icon/heart_32.png') );
+
+
 echo $F->draw_form('basket_edit', $form_link);
 /* print_debug( array( 'id_basket_current' => $Shopping_Basket_Chain->id_basket_current,
 		'id_basket_set' => $Shopping_Basket_Chain->id_basket_set,
@@ -71,7 +78,7 @@ if( $F->not_null($product_list) ) {
 	<tr>
 		<td align="left"><?php echo $basket_up . '&nbsp;' . $basket_down; ?></td>
 		<td colspan="3">&nbsp;</td>
-		<td align="right"><?php echo $basket_order . '&nbsp;' .  $update_basket ?></td>
+		<td align="right"><?php echo $add_basket . '&nbsp;' . $basket_order . '&nbsp;' . $update_basket ?></td>
 	</tr>
 </table>
 <div class="basket_container container_subheader"><?php echo Lang::_('basket products'); ?><div class="icon"></div></div>
