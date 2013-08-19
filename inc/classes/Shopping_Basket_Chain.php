@@ -121,10 +121,12 @@ class Shopping_Basket_Chain {
    }
 
    public function get_can_add_basket() {
+   	echo self::$max_basket ;
       if( $this->get_basket_list_count() < self::$max_basket ) {
          return true;
       }
-      else { return false;
+      else {
+      	return false;
       }
    }
 
@@ -223,7 +225,22 @@ class Shopping_Basket_Chain {
       }
       return false;
    }
+   
+   public function basket_from_favorite_basket( $Shopping_Basket_Favorite ) {
 
+   	if( is_object($Shopping_Basket_Favorite) && 
+   		is_array($Shopping_Basket_Favorite->product_list) && $this->get_can_add_basket() ) {
+         for( $id_sb = 1; $id_sb <= self::$max_basket ; $id_sb++ ) {
+            if( !$this->_check_valid_basket($id_sb) ) {
+               $this->init_basket( $id_sb, true, $Shopping_Basket_Favorite->product_list );
+               return true;
+            }
+         }
+         return false;
+      }
+      return false;
+   }
+   
    public function set_default_basket( $id_shopping_basket = 0 ) {
        
       if( $this->_check_valid_basket($id_shopping_basket) &&

@@ -21,6 +21,21 @@ if( $F->check_get('mode') ) {
             $F->redirect($F->make_link(CFG_COM_BASKET_FAVORITE));
          }
          break;
+      case 'make_basket':
+         if( $F->check_get('id_shopping_basket_favorite') && (int)$F->GET['id_shopping_basket_favorite'] > 0  ) {
+            $Shopping_Basket_Favorite = new Shopping_Basket_Favorite( (int)$F->GET['id_shopping_basket_favorite'] );
+            //if( $Shopping_Basket_Favorite->check_rights() ) {
+            	$Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
+            	$res = $Shopping_Basket_Chain->basket_from_favorite_basket( $Shopping_Basket_Favorite );
+            	if( $res) $F->redirect($F->make_link(CFG_COM_BASKET));
+            	print_debug($res, true);
+            //} else {
+            //   $F->redirect($F->make_link(CFG_COM_ORDER_LIST));
+            //}
+         } else {
+            $F->redirect($F->make_link(CFG_COM_BASKET_FAVORITE));
+         }
+         break;
       case 'make_favorite_basket':
       	if( $F->check_get('id_order') && (int)$F->GET['id_order'] > 0  ) {
       		$Order = new Order($F->GET['id_order']);
