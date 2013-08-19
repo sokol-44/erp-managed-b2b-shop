@@ -24,7 +24,7 @@ $Page->head_title = Lang::_('favorite BASKET list');
 
 	foreach( $basket_favorite_list as $key => $Shopping_Basket_Favorite ) {
 	   //$total = $Shopping_Basket->calculate_total();
-	   print_debug($Shopping_Basket_Favorite);
+	   //print_debug($Shopping_Basket_Favorite);
 	   $total = $Shopping_Basket_Favorite->calculate_total();
 	   $description = $F->output_string_html( $Shopping_Basket_Favorite->params['description'] );
 	   

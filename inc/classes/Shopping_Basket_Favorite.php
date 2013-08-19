@@ -55,6 +55,18 @@ class Shopping_Basket_Favorite {
    	unset($params['serialize']);
    	$this->id_shopping_basket_favorite = (int)$params['id_shopping_basket_favorite'];
    	$this->params = $params;
+
+   	$product_tmp = Data::get_product_info_list( array_keys($product_list) );
+   	foreach($product_list as $prod_key => $product) {
+   		if( isset($product_tmp[$prod_key]) ) {
+   			$product_list[$prod_key]['price'] = $product_tmp[$prod_key]['price'];
+   			$product_list[$prod_key]['vat'] = $product_tmp[$prod_key]['vat'];
+   		} else {
+   			$product_list[$prod_key]['price'] = 0;
+   			$product_list[$prod_key]['vat'] = 0;
+   			$product_list[$prod_key]['quantity'] = 0;
+   		}
+   	}
    	return $product_list;
    }
 
