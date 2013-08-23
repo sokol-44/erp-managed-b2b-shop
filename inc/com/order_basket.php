@@ -9,16 +9,20 @@ $Page->head_title = Lang::_('Ordering basket');
 //$get = $F->add_local_get( array('mode' => 'show_order', 'id_order' => (int)$id_order ));
 //echo $F->output_string_html(( $F->make_link(CFG_COM_ORDER_BASKET, $get) ));
 
-if( $F->check_get('id_nr_shopping_basket') ) {
-   $Shopping_Basket = $Shopping_Basket_Chain->return_basket( (int)$F->GET['id_nr_shopping_basket'] );
+if( $F->check_get('id_shopping_basket') ) {
+   $Shopping_Basket = $Shopping_Basket_Chain->return_basket( (int)$F->GET['id_shopping_basket'] );
 } else {
    $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
 }
 
+
 //FIXME magic mode for order LEVEL_99 -> move to CLASS::Rights
-if( !$P->check_roles('LEVEL_99') || !$Shopping_Basket->contents || sizeof($Shopping_Basket->contents) == 0 ) {
+if( !$P->check_roles('LEVEL_99') ) {
    Info::sadd(Lang::_('NOT_ENOUGH_RIGHTS'));
    $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode') ) );
+} elseif( !$Shopping_Basket->contents || sizeof($Shopping_Basket->contents) == 0 ) {
+	Info::sadd(Lang::_('BASKET_EMPTY'));
+	$F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode') ) );
 }
 // die();
 //STR: end
@@ -32,7 +36,8 @@ if( $F->check_get('mode') ) {
          require 'order_basket' . DS . 'prepare_order_basket.php';
          break;
       case 'order_basket':
-         list($id_order, $count_product) = Order::make_new_order($Shopping_Basket, $F->POST['order_description']);
+      	$param_in = array('order_description' => $F->POST['order_description'], 'id_address' => (int)$F->POST['order_address']);
+         list($id_order, $count_product) = Order::make_new_order($Shopping_Basket, $param_in);
          //FIXME - mail
          if(!$id_order) {
             Info::sadd(Lang::_('NOT_ENOUGH_RIGHTS'));

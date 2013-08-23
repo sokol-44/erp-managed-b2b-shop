@@ -32,6 +32,24 @@ $BC->add_crumb(Lang::_('Orders details'), $F->self_link() );
 		<td><?php echo Lang::_('order date') ?></td>
 		<td><?php echo $F->output_string_html($Order->data['date_create']); ?></td>
 	</tr>
+	<tr>
+		<td><?php echo Lang::_('order address') ?></td>
+		<td>
+		<?php 
+		$Address = $Order->get_address();
+		$addr_id = (int)$Address['id_address'];
+		$addr_desc = $F->output_string($Address['description']);
+		$addr_addr = $F->output_string($Address['name']) . '<br>' .
+				$F->output_string($Address['street']) . '<br>' .
+				$F->output_string($Address['zip_code'] . ' ' . $Address['city']) . '<br>' .
+				$F->output_string($Address['country']);
+		?>
+		<div class="address order_address" style="width: 160px">
+		<div class=""><?php echo Lang::_('ID'); ?>: <span id="nr"><?php echo $addr_id; ?></span></div>
+		<div class=""><?php echo Lang::_('description') . ': ' . $addr_desc ?></div>
+		<div class=""><?php echo Lang::_('address') . ":<br>\n" . $addr_addr ?></div>
+		</div></td>
+	</tr>
 	<?php if($F->not_null($Order->data['date_modified'])) {?>
 	<tr>
 		<td><?php echo Lang::_('order update') ?></td>

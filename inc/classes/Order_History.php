@@ -3,7 +3,7 @@
  * Order.php
  * Copyright MichaÅ‚ SokoÅ‚owski 2013
  *
- * @author Micha³ Soko³owski <msokolowski@example.com>
+ * @author Michaï¿½ Sokoï¿½owski <msokolowski@example.com>
  */
 
 if( !defined('_I_INIT') ) die();
@@ -52,7 +52,7 @@ class Order_History {
    static function load_data( ) {
       $F = Framework::g_global();
       
-      if( Framework::is_null(self::order_history_list) ) {
+      if( Framework::is_null(self::$order_history_list) ) {
       	self::$order_history_list = Data::get_order_history_list();
       }
    }

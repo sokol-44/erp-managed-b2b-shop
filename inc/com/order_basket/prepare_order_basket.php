@@ -44,6 +44,31 @@ function remove_from_basked() { return true; }
       </td>
 	</tr>
 	<tr>
+		<td colspan="5">
+      <?php echo Lang::_('choose address'); ?><br>
+      <?php 
+      $Address_list = $P->get_client_address_list();
+		$history_last = $Shopping_Basket->get_last_history();
+		$default = $history_last['id_address'];
+      if( $F->not_null( $Address_list ) ) {
+			$values = array();
+			foreach($Address_list as $id_address => $Address) {
+				$addr[$id_address]['id'] = (int)$Address['id_address'];
+				$addr[$id_address]['text'] =  $F->output_string_html($Address['description'], 16) . '; ' .
+														$F->output_string($Address['name']) . '; ' .
+														$F->output_string($Address['street']) . '; ' .
+														$F->output_string($Address['zip_code'] . ' ' . $Address['city']) . '; ' .
+														$F->output_string($Address['country']);
+			}
+
+			echo $F->draw_pull_down_menu('order_address', $addr, $default);
+		} else {
+			echo Lang::_('default address');
+		}
+      ?>
+      </td>
+	</tr>
+	<tr>
 		<td width="100%" colspan="4"></td>
 		<td align="right"><?php echo $F->draw_submit(Lang::_('ORDER_BASKET')); ?></td>
 	</tr>

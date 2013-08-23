@@ -17,7 +17,7 @@ class Person {
    var $all;
    static $person_rights_cache = array();
    public $login, $logged_in, $roles, $id, $session_id;
-   public $data;
+   public $data, $client_data, $address_list;
 
    function __construct() {
       $this->login = false;
@@ -25,6 +25,8 @@ class Person {
       $this->id = 0;
       $this->roles = array();
       $this->data = array();
+      $this->client_data = array();
+      $this->address_list = array();
       self::$class = $this;
       $this->session_id = session_id();
    }
@@ -48,8 +50,11 @@ class Person {
       $this->session_id = session_id();
       $this->roles = array();
       $this->data = array();
+      $this->client_data = array();
+      $this->address_list = array();
       $BackTrail = BackTrail::g_global();
       $BackTrail->reset();
+      session_regenerate_id();
    }
 
    public function get_public_data() {
@@ -172,14 +177,41 @@ class Person {
 
    public function get_client_email_address( $id_client = false ) {
       if( $id_client === false ) $id_client = (int)$this->data['id_client'];
+      
       $client_data = Data::get_client_data( (int)$id_client );
       return $client_data['email'];
    }
 
    public function get_client_data( $id_client = false ) {
       if( $id_client === false ) $id_client = (int)$this->data['id_client'];
-      $client_data = Data::get_client_data( (int)$id_client );
-      return $client_data;
+      else return Data::get_client_data( (int)$id_client );
+      
+      if( Framework::is_null($this->client_data) ) $this->client_data = Data::get_client_data( (int)$id_client );
+      return $this->client_data;
+   }
+   
+   
+   public function get_client_address_list( $id_client = false ) {
+   	if( $id_client === false ) $id_client = (int)$this->data['id_client'];
+   	return $this->get_address_list($id_client);
+   }
+   
+   public function get_address_list( $id_client = false, $id_client_user = false ) {
+      
+   	if( $id_client === false ) {
+      	$id_client = (int)$this->data['id_client'];
+      	$id_client_user = (int)$this->id;
+      } else {
+      	return Data::get_address_list( (int)$id_client );
+      }
+      
+      //if( Framework::is_null($this->address_list) ) 
+      $this->address_list = Data::get_address_list( (int)$id_client, (int)$id_client_user );
+      return $this->address_list;
+   }
+   
+   static public function get_address( $id_address ) {
+   	return Data::get_address( (int)$id_address );
    }
 
    static public function get_client_user_data( $id, $table = 'CLIENT') {

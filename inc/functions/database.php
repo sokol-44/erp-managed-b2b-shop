@@ -224,7 +224,8 @@ function db_query($query, $link = 'db_link') {
    if (defined('DEBUG_DB_QUERIES') && (DEBUG_DB_QUERIES == 'true')) {
       $dbg = debug_backtrace();
       
-      $query_log[] = array ('q' => $query, 'f' => $dbg[0]['file'], 'l' => $dbg[0]['line'], 't' => microtime(TRUE));
+      //$query_log[] = array ('q' => $query, 'f' => $dbg[0]['file'], 'l' => $dbg[0]['line'],  't' => microtime(TRUE));
+      $query_log[] = array ('q' => $query, 'f0' => $dbg[0]['file'], 'l0' => $dbg[0]['line'], 'f1' => $dbg[1]['file'], 'l1' => $dbg[1]['line'],  't' => microtime(TRUE));
 //       $query_log[] = array ('q' => $query, 'f' => $dbg[0]['file'], 'l' => $dbg[0]['line'], 't' => microtime(TRUE), 'b' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
    }
 
@@ -287,6 +288,20 @@ function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link 
    die('DB fatal error (SUCCESS)');
 }
 
+
+function db_result_array_full_id($result, $id = false, $link = 'db_link') {
+	global $$link;
+
+	$result_data = array();
+	if( db_rows($result)>0 ) {
+		while( $row = db_fetch_array($result, '', $link) ) {
+			if( !$id || !isset($row[$id]) ) $id = key($row);
+			$result_data[$row[$id]] = $row;
+		}
+	}
+
+	return $result_data;
+}
 
 function db_result_array_full($result, $link = 'db_link') {
    global $$link;

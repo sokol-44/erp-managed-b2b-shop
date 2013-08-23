@@ -72,9 +72,11 @@ function remove_from_basked() { return true; }
       <?php echo $F->draw_textarea_field('description', 'auto', '', 6, $Shopping_Basket->params['description']); ?>
       </td>
 	</tr>
+</table>
 <?php
 if( $F->not_null($product_list) ) {
 ?>
+<table style="border: 0; width: 100%;">
 	<tr>
 		<td align="left"><?php echo $basket_up . '&nbsp;' . $basket_down; ?></td>
 		<td colspan="3">&nbsp;</td>
@@ -131,7 +133,6 @@ if( $F->not_null($product_list) ) {
 <?php 
 } else {
 ?>
-</table>
 <div class="basket_container container_subheader"><?php echo Lang::_('basket products'); ?><div class="icon"></div></div>
 <?php
 }

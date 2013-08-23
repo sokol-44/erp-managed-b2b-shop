@@ -350,13 +350,42 @@ class Data_Person extends Data_Rights {
       else return false;
    }
    
-   static function get_client_data($id) {
+   static function get_client_data( $id_client ) {
       $res = db_query('select distinct h.id_client, h.name, h.description, h.email, h.phone, h.created, h.state, count(hu.id_client_user) as count_users
          	from ' . TBL_GLOBAL_CLIENT . ' h ,
          	' . TBL_GLOBAL_CLIENT_USER . ' hu
-         	where h.id_client = hu.id_client and h.id_client = ' . (int)$id);
+         	where h.id_client = hu.id_client and h.id_client = ' . db_int($id_client) );
 
       return db_fetch_array($res);
+   }
+
+   static function get_address( $id_address ) {
+   
+   	$query = 'select id_address, id_client, id_client_user,
+   				description, name, street, city, zip_code,country, date_created, date_modified,
+   			   UNIX_TIMESTAMP(date_created) as ts_created, UNIX_TIMESTAMP(date_modified) as ts_modified,
+   				rights_edit, rights_use
+					from ' . TBL_GLOBAL_CLIENT_USER_ADDRESS . ' where id_address = ' . db_int($id_address);
+   
+   	return db_fetch_array( db_query( $query ) );
+   }
+      
+   static function get_address_list( $id_client, $id_client_user = 0 ) { 
+   	if( $id_client_user > 0 ) {
+   		$where = ' ( id_client = ' . db_int($id_client) . ' AND rights_use = "CLIENT" ) OR
+   				id_client_user = ' . db_int($id_client_user);
+   	} else {
+   		$where = ' id_client = ' . db_int($id_client);
+   	}
+   	
+   	$query = 'select id_address, id_client, id_client_user,
+   				description, name, street, city, zip_code,country, date_created, date_modified,
+   			   UNIX_TIMESTAMP(date_created) as ts_created, UNIX_TIMESTAMP(date_modified) as ts_modified,
+   				rights_edit, rights_use
+					from ' . TBL_GLOBAL_CLIENT_USER_ADDRESS . ' where
+					' . $where;
+   	
+   	return db_result_array_full_id( db_query( $query ) );
    }
 
    static function get_client_list() {

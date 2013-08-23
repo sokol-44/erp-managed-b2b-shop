@@ -593,11 +593,11 @@ class HTML {
 
       $param_out['multiple'] = 'multiple';
       $param_out['size'] = (int)$size;
+      $parameters = array_merge($parameters, $param_out);
 
       if( !strstr($name, '[]') ) $name .= '[]';
 
-      return $this->draw_pull_down_menu($name, $values, $default, $parameters = $param_out);
-
+      return $this->draw_pull_down_menu($name, $values, $default, $parameters);
    }
 
    /**
@@ -621,13 +621,13 @@ class HTML {
          }
       }
 
-      for ($i=0, $n=sizeof($values); $i<$n; $i++) {
-         $field .= '<option value="' . $this->output_string($values[$i]['id']) . '"';
-         if ( in_array($values[$i]['id'], $default) ) {
+      foreach( $values as $value ) {
+         $field .= '<option value="' . $this->output_string($value['id']) . '"';
+         if ( in_array($value['id'], $default) ) {
             $field .= ' selected="selected"';
          }
 
-         $field .= '>' . $this->output_string($values[$i]['text']) . '</option>' . NL;
+         $field .= '>' . $this->output_string($value['text']) . '</option>' . NL;
       }
       $field .= '</select>' . NL;
 

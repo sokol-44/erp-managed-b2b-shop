@@ -24,11 +24,11 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
    }
    
    if( $Shopping_Basket == FALSE ) {
-      print_debug($Shopping_Basket, true);
-      die();
-      //$F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode')));
+      //print_debug($Shopping_Basket, true);
+      //die();
+      $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode')));
    }
-   
+
    //single basket mode
    if( $F->check_get('mode') ){
       $product_params = array(
@@ -40,8 +40,6 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
          $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode')));
       }
       switch($F->GET['mode']) {
-         //   case 'add_basket':
-         //   case 'remove_basket':
          case 'add_to_basket':
             if( $F->check_get('quantity') && (int)$F->GET['quantity'] > 1 ) $quantity = (int)$F->GET['quantity'];
             else $quantity = 1;
@@ -53,7 +51,7 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
          case 'update_basket':
             //FIXME
             $Shopping_Basket->update_basket_quantity_list($F->POST['product_quantity'], $F->POST['description']);
-            //print_debug($F); die();
+            
             if( $F->check_post('PREPARE_ORDER_BASKET') ) {
                $GET_tmp = $F->make_get('mode');
                $GET_tmp = $F->add_local_get('mode', 'prepare_order_basket', $GET_tmp);
@@ -152,10 +150,12 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
                ;
             break;
          case 'change_level_up':
-            $new_id = $Shopping_Basket->basket_level_change('UP', $F->POST['history_description']);
+         	$param_in = array('history_description' => $F->POST['history_description'], 'id_address' => (int)$F->POST['order_address']);
+            $new_id = $Shopping_Basket->basket_level_change('UP', $param_in);
             break;
          case 'change_level_down':
-            $new_id = $Shopping_Basket->basket_level_change('DOWN', $F->POST['history_description']);
+         	$param_in = array('history_description' => $F->POST['history_description'], 'id_address' => (int)$F->POST['order_address']);
+            $new_id = $Shopping_Basket->basket_level_change('DOWN', $param_in);
             break;
          default:
             break;

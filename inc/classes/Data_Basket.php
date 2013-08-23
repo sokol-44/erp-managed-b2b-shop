@@ -50,19 +50,20 @@ class Data_Basket extends Data_Order {
       return db_fetch_array( db_query( $query ) );
    }
 
-   static function put_basket_history($basket_params, $level_in, $history_description) {
-      $mode = $level_in['now'] . '_' . $level_in['new'];
+   static function put_basket_history($basket_params, $params_in) {
+      $mode = $params_in['now'] . '_' . $params_in['new'];
       $update_query = 'insert ' . TBL_SHOP_SHOPPING_BASKET_HISTORY . ' set
          id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']) . ',
          id_client_user = ' . db_int($basket_params['using_id_client_user']) . ',
+         id_address = ' .  db_int($params_in['id_address']) . ', 
          mode = "' . db_escape($mode) . '", date = now(),
-         description = "' . db_escape($history_description) . '"';
+         description = "' . db_escape($params_in['history_description']) . '"';
       db_query( $update_query );
       return db_insert_id();
    }
    
    static function get_basket_history_last($basket_params) {
-      $query = 'select bh.id_shopping_basket_history, bh.id_shopping_basket, bh.id_client_user,
+      $query = 'select bh.id_shopping_basket_history, bh.id_shopping_basket, bh.id_client_user,` bh.id_address,
       cu.id_client, cu.login, bh.date, bh.mode, bh.description, UNIX_TIMESTAMP(bh.date) as ts_date
       from ' . TBL_SHOP_SHOPPING_BASKET_HISTORY . ' bh
       left join ' . TBL_GLOBAL_CLIENT_USER . ' cu on
@@ -74,7 +75,7 @@ class Data_Basket extends Data_Order {
    }
 
    static function get_basket_history_list($basket_params) {
-      $query = 'select bh.id_shopping_basket_history, bh.id_shopping_basket, bh.id_client_user,
+      $query = 'select bh.id_shopping_basket_history, bh.id_shopping_basket, bh.id_client_user, bh.id_address,
       cu.id_client, cu.login, bh.date, bh.mode, bh.description, UNIX_TIMESTAMP(bh.date) as ts_date
       from ' . TBL_SHOP_SHOPPING_BASKET_HISTORY . ' bh
       left join ' . TBL_GLOBAL_CLIENT_USER . ' cu on
@@ -152,6 +153,7 @@ class Data_Basket extends Data_Order {
 
       $create_basket_history_query = 'insert into ' . TBL_SHOP_SHOPPING_BASKET_HISTORY . '
       	set id_shopping_basket = ' . db_int($id_shopping_basket) . ',
+      	id_client_user = ' . db_int($basket_params['using_id_client_user']) . ',
       	mode = "START"';
       db_query( $create_basket_history_query );
 
@@ -235,11 +237,11 @@ class Data_Basket extends Data_Order {
 
    static function put_basket_info($basket_params, $id_shopping_basket_history) {
 
-      $update_query = 'update ' . TBL_SHOP_SHOPPING_BASKET_HISTORY . ' set
-      description = "' . db_escape($basket_params['description'])  . '"
-      where id_shopping_basket_history = ' . db_int($id_shopping_basket_history) . ' and
-      id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']);
-      db_query( $update_query );
+//       $update_query = 'update ' . TBL_SHOP_SHOPPING_BASKET_HISTORY . ' set
+//       description = "' . db_escape($basket_params['description'])  . '"
+//       where id_shopping_basket_history = ' . db_int($id_shopping_basket_history) . ' and
+//       id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']);
+//       db_query( $update_query );
        
       $update_query2 = 'update ' . TBL_SHOP_SHOPPING_BASKET . ' set
       description = "' . db_escape($basket_params['description'])  . '"
@@ -329,7 +331,7 @@ class Data_Basket extends Data_Order {
 
    	if( $id_client_user > 0 ) {
    		$where = ' ( id_client = ' . db_int($id_client) . ' AND rights_use = "CLIENT" ) OR
-   				id_client_user = ' . db_int($$id_client_user);
+   				id_client_user = ' . db_int($id_client_user);
    	} else {
    		$where = ' id_client = ' . db_int($id_client);
    	}

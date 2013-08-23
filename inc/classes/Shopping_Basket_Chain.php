@@ -175,7 +175,7 @@ class Shopping_Basket_Chain {
          if( !$this->id_basket_set && ($ts_modified == 0 || $param['ts_modified'] > $ts_modified) ) {
             $ts_modified = $param['ts_modified'];
             $this->id_basket_current = $id_shopping_basket;
-            $param['id_nr_shopping_basket'] = $id_nr_shopping_basket;
+            $this->param['id_nr_shopping_basket'] = $id_nr_shopping_basket;
          }
          $this->Basket_List[$id_shopping_basket] = new Shopping_Basket( $param );
          $this->nr2id[$id_nr_shopping_basket] = $id_shopping_basket;
@@ -183,6 +183,7 @@ class Shopping_Basket_Chain {
          //LOAD Basket
          // var_dump($param);
       }
+      $this->_switch_default_basket( $this->id_basket_current );
    }
 
    public function set_lock_basket( $id_shopping_basket = 0 ) {
@@ -258,8 +259,12 @@ class Shopping_Basket_Chain {
    private function _switch_default_basket( $id_shopping_basket ) {
       if( $this->_check_valid_basket($this->id_basket_current) ) {
          $this->Basket_List[ $this->id_basket_current ]->state_using_clear();
+      	$this->id_basket_current = $id_shopping_basket;
+      } else {
+      	self::$id_basket_current = 0;
+      	self::$id_basket_set = false;
+      	$this->add_basket( true );
       }
-      $this->id_basket_current = $id_shopping_basket;
       $this->Basket_List[ $this->id_basket_current ]->state_using_get();
    }
    

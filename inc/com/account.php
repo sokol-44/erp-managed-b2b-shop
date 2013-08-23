@@ -8,6 +8,8 @@ $GET_tmp = $F->make_get();
 //if( !$P->logged_in ) $F->redirect(  );
 
 $BC->add_crumb(Lang::_('Account'), $F->make_link(CFG_COM_ACCOUNT) );
+$data_Client = $P->get_client_data();
+$Address_list = $P->get_address_list();
 
 ?>
 <div class="account_container">
@@ -38,8 +40,40 @@ $BC->add_crumb(Lang::_('Account'), $F->make_link(CFG_COM_ACCOUNT) );
 		<td><?php echo '876.00 zł' ?></td>
 	</tr>
 </table> -->
-
-<div class="basket_container container_subheader"><?php echo Lang::_('basket history'); ?><div class="icon"></div></div>
+<div class="account_address_container container_subheader"><?php echo Lang::_('account addresses'); ?><div class="icon"></div></div>
+<?php
+if( $F->not_null($Address_list) ) {
+?>
+<table class="tableBox" style="border: 0; width: 400px;" >
+	<tr class="tableBoxHeading">
+		<th><?php echo Lang::_('ID') ?></th>
+		<th><?php echo Lang::_('Description') ?></th>
+		<th><?php echo Lang::_('Address') ?></th>
+	</tr>
+<?php 
+foreach($Address_list as $Address) {
+	$addr_id = (int)$Address['id_address'];
+	$addr_desc = $F->output_string($Address['description']);
+	$addr_addr = $F->output_string($Address['name']) . '<br>' .
+					 $F->output_string($Address['street']) . '<br>' .
+					 $F->output_string($Address['zip_code'] . ' ' . $Address['city']) . '<br>' .
+					 $F->output_string($Address['country']);
+?>
+	<tr>
+		<td><?php echo $addr_id; ?></td>
+		<td><?php echo $addr_desc; ?></td>
+		<td><?php echo $addr_addr; ?></td>
+	</tr>
+<?php 
+}
+?>
+</table>
+<?php
+} else {
+ echo Lang::_('empty');
+}
+?>
+<div class="accout_summery_container container_subheader"><?php echo Lang::_('account summary'); ?><div class="icon"></div></div>
 <table class="tableBox" style="border: 0; width: 400px;" >
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('Field') ?></th>
@@ -54,11 +88,15 @@ $BC->add_crumb(Lang::_('Account'), $F->make_link(CFG_COM_ACCOUNT) );
 		<td><?php echo $F->output_string_html($P->data['login']); ?></td>
 	</tr>
 	<tr>
-		<td><?php echo Lang::_('description') ?></td>
+		<td><?php echo Lang::_('Description') ?></td>
 		<td><?php echo $F->output_string_html($P->data['description']); ?></td>
 	</tr>
+	<tr>
+		<td><?php echo Lang::_('LOGGED_USER_CLIENT') ?></td>
+		<td><?php echo $F->output_string_html($data_Client['name']); ?></td>
+	</tr>
 </table>
-<div class="basket_container container_subheader"><?php echo Lang::_('basket versions'); ?><div class="icon"></div></div>
+ <?php echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT_PARAMETERS, array('mode' => 'show_details')),'', Lang::_('show details') ); ?>
 </div>
 </div>
 <?php
@@ -104,5 +142,5 @@ if( $P->check_roles('ADMIN') ) {
 <?php
 }
 ?>
-  <div class="account_container aaccount_bottom container_bottom"></div>
+<div class="account_container aaccount_bottom container_bottom"></div>
 </div>

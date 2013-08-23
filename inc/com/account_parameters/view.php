@@ -3,7 +3,7 @@ $Page->head_title =Lang::_('account details');
 //FIXME
 //remember backtrack
 if( !$P->logged_in ) $F->redirect(  );
-
+$data_Client = $P->get_client_data();
 ?>
 <div class="account_param_container account_param_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
 <div class="account_param_container account_param_content">
@@ -43,6 +43,10 @@ if( !$P->logged_in ) $F->redirect(  );
 	<tr>
 		<td><?php echo Lang::_('roles') ?></td>
 		<td><?php echo $F->output_string_html( implode(', ', $P->roles)); ?></td>
+	</tr>
+	<tr>
+		<td><?php echo Lang::_('LOGGED_USER_CLIENT') ?></td>
+		<td><?php echo $F->output_string_html($data_Client['name']); ?></td>
 	</tr>
 </table>
 </div>

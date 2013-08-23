@@ -16,6 +16,7 @@ if( !defined('_I_INIT') ) die();
 class Order {
    public $data = array();
    public $product_list = array();
+   public $address = array();
    public $status_history = array();
    public $source_basket = array();
    public $mode = false;
@@ -75,6 +76,11 @@ class Order {
       }
       return $this->total;
    }
+   
+   function get_address() {
+   	if( Framework::is_null($this->address) ) $this->address = Data::get_address( (int)$this->data['id_address'] );
+   	return $this->address;
+   }
 
    function load_data( $id_order, $data = false ) {
       $F = Framework::g_global();
@@ -83,6 +89,7 @@ class Order {
 
       if( $data ) $this->data = $data;
       else  $this->data = Data::get_order_data( $id_order );
+    
       
       if( $F->not_null($this->data) ) {
          $this->product_list = Data::get_order_product_list( $id_order );
@@ -98,7 +105,7 @@ class Order {
    	 $this->source_basket = Shopping_Basket::get_order_data( (int)$this->data['id_shopping_basket'] );	
    }
 
-   static function make_new_order($Shopping_Basket, $order_description) {
+   static function make_new_order($Shopping_Basket, $param_in) {
       $F = Framework::g_global();
       $P = Person::g_global();
 
@@ -109,15 +116,15 @@ class Order {
 
       $product_list = $Shopping_Basket->get_all_product();
 
-      if( !$F->not_null($order_description) ) $order_description = 'NULL';
+      if( !$F->not_null($param_in['order_description']) )  $param_in['order_description'] = 'NULL';
        
-      $id_order = Data::put_order_data($P->data['id_client'], $Shopping_Basket->params, $order_description);
+      $id_order = Data::put_order_data($P->data['id_client'], $Shopping_Basket->params, $param_in);
       if( $id_order > 0 ) {
          $Shopping_Basket->state_archive_order();
          $count_product   = Data::put_order_product_list($id_order, $product_list);
          $count_product_2 = Data::change_product_quantity_list($product_list);
-         $id_soh = (int)Order_History::text2id('START');
-         Data::put_order_status($id_order, $id_soh, $order_description);
+         $id_soh = (int)Order_History::text2id('OSH_START');
+         Data::put_order_status($id_order, $id_soh, $param_in['order_description']);
          return array($id_order, $count_product);
       } else {
          return false;

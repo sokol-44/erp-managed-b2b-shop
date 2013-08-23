@@ -4,7 +4,7 @@ if( !$P->logged_in ) $F->redirect( $F->make_link('main') );
 // if( !$P->check_roles('ADMIN,OPERATOR') ) $F->redirect( $F->make_link('account') );
 
 $BC->add_crumb(Lang::_('Account'), $F->make_link(CFG_COM_ACCOUNT) );
-$BC->add_crumb(Lang::_('Orders list'), $F->make_link(CFG_COM_ORDER_BASKET_FAVORITE) );
+$BC->add_crumb(Lang::_('favorite basket list'), $F->make_link(CFG_COM_BASKET_FAVORITE) );
 
 if( $F->check_get('mode') ) {
    //single basket mode

@@ -104,7 +104,7 @@ class Data_Order extends Data_Picture {
    
    static function get_order_history_list() {
 
-   	$query = 'select os.id_order_status, concat("OSH_", os.name) as name from ' . TBL_SHOP_ORDER_HISTORY;
+   	$query = 'select os.id_order_status, concat("OSH_", os.name) as name from ' . TBL_SHOP_ORDER_STATUS . ' os';
    	$res = db_result_array( db_query( $query ) );
    	$ret_array = array();
    	foreach( $res as $osh ) {
@@ -122,7 +122,7 @@ class Data_Order extends Data_Picture {
       }
 
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
-      o.description, o.description_basket, o.id_shopping_basket, concat("OSH_", os.name) as name,
+      o.description, o.description_basket, o.id_shopping_basket, o.id_address, concat("OSH_", os.name) as name,
      	UNIX_TIMESTAMP(o.date_create) as ts_create, UNIX_TIMESTAMP(o.date_modified) as ts_modified
       from ' . TBL_SHOP_ORDER . ' o left join ' . TBL_SHOP_ORDER_STATUS . ' os
       on (o.id_order_status = os.id_order_status)' . $where;
@@ -141,10 +141,12 @@ class Data_Order extends Data_Picture {
 
    static function get_order_data( $id_order ) {
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
-      o.description, o.description_basket, o.id_shopping_basket, concat("OSH_", os.name) as name,
+      o.description, o.description_basket, o.id_shopping_basket, o.id_address, concat("OSH_", os.name) as name,
      	UNIX_TIMESTAMP(o.date_create) as ts_create, UNIX_TIMESTAMP(o.date_modified) as ts_modified
       from ' . TBL_SHOP_ORDER . ' o left join ' . TBL_SHOP_ORDER_STATUS . ' os
       on (o.id_order_status = os.id_order_status)
+      left outer join ' . TBL_GLOBAL_CLIENT_USER_ADDRESS . ' cua 
+      on (o.id_address = cua.id_address)
       where id_order = ' . db_int($id_order);
       return db_fetch_array( db_query( $query ) );
    }
@@ -178,12 +180,13 @@ class Data_Order extends Data_Picture {
 
 
 
-   static function put_order_data($id_client, $basket_params, $order_description) {
+   static function put_order_data($id_client, $basket_params, $params_in) {
       $query = 'insert into ' . TBL_SHOP_ORDER . '
       	set id_client = ' . db_int($id_client) . ',
-      	description = "' . db_escape($order_description) . '",
+      	description = "' . db_escape($params_in['order_description']) . '",
       	description_basket = "' . db_escape($basket_params['description']) . '",
       	id_shopping_basket = "' . db_int($basket_params['id_shopping_basket']) . '",
+      	id_address = "' . db_int($params_in['id_address']) . '",
       	date_create = now(), date_modified = NULL,
       	id_order_status = 1';
 
@@ -205,7 +208,7 @@ class Data_Order extends Data_Picture {
 	      	set id_order = ' . db_int($id_order) . ',
 	   		id_order_status = ' . db_int($id_order_status) . ',
 	      	description = "' . db_escape($description) . '" 
-	      	on duplicate keys update description = "' . db_escape($description) . '"';
+	      	on duplicate key update description = "' . db_escape($description) . '"';
 	      $res = db_query( $query );
 	      $af_rows = db_affected_rows();
 	      $query = 'update ' . TBL_SHOP_ORDER . ' 

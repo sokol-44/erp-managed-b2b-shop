@@ -16,9 +16,10 @@ class Shopping_Basket {
    public $history = array();
    public $id_shopping_basket = 0;
    public $id_shopping_basket_version = 0;
+   public $id_shopping_basket_history = 0;
    public $res_debug;
    public $params = array(
-         'id_client' => 0, 'id_shopping_basket' => 0, 'id_shopping_basket_version' => 0,
+         'id_client' => 0, 'id_shopping_basket' => 0, 'id_shopping_basket_version' => 0, 'id_shopping_basket_history' => 0,
          'id_nr_shopping_basket' => 0, 'description' => '', 'state' => '',
          'date_create' => null, 'date_modified' => null, 'ts_create' => 0, 'ts_modified' => 0,
          'using_id_client_user' => 0, 'using_session_id' => 0, 'using_name' => '', 'using_date' => 0,  'ts_using' => 0);
@@ -190,19 +191,22 @@ class Shopping_Basket {
       if( $save ) self::db_save_contents();
    }
 
-   function basket_level_change($direction, $history_description ) {
+   function basket_level_change($direction, $param_in = array() ) {
+   	$P = Person::g_global();
       if( ( $direction == 'UP'   && $this->check_move('UP') ) ||
           ( $direction == 'DOWN' && $this->check_move('DOWN') ) ) {
 
-         $level_in = array();
-         $level_in['now'] = $this->basket_level_nr();
+         $param_in['now'] = $this->basket_level_nr();
          if( $direction == 'UP' ) {
-            $level_in['new'] = $level_in['now'] + 1;
+            $param_in['new'] = $param_in['now'] + 1;
          } else {
-            $level_in['new'] = $level_in['now'] - 1;
+            $param_in['new'] = $param_in['now'] - 1;
          }
-         $new_id = Data::put_basket_history($this->params, $level_in, $history_description);
-         $this->state_change_level($level_in['new']);
+         
+         $this->params['using_id_client_user'] = (int)$P->id;
+
+         $new_id = Data::put_basket_history($this->params, $param_in);
+         $this->state_change_level($param_in['new']);
          return $new_id;
       } else {
          return false;
@@ -325,12 +329,21 @@ class Shopping_Basket {
             $this->version[$basket_version['id_shopping_basket_version']] = $basket_version;
          }
          //CONTENTS OF "NEWEST" VER.
-         if( Framework::not_null($this->version) )
-            $this->contents = Data::get_basket_version_product_list( $this->version[$this->id_shopping_basket_version] );
+         if( Framework::not_null($this->id_shopping_basket_version) )
+            $this->contents = Data::get_basket_version_product_list( $this->id_shopping_basket_version );
           
          //HISTORY
          $history_list = Data::get_basket_history_list($this->params);
-         $this->history = $history_list;
+
+         $last = 0;
+         foreach( $history_list as $basket_history ) {
+         	if( $basket_history['ts_date'] > $last ) {
+         		$last = $basket_history['ts_date'];
+         		$this->id_shopping_basket_history = $basket_history['id_shopping_basket_history'];
+         		$this->params['id_shopping_basket_history'] = $this->id_shopping_basket_history;
+         	}
+         	$this->history[$basket_history['id_shopping_basket_history']] = $basket_history;
+         }
       }
    }
 
@@ -365,8 +378,8 @@ class Shopping_Basket {
        
       if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
          Data::put_basket_version_product_list($this->contents, $this->params);
-         $history_last = Data::get_basket_history_last($this->params);
-         Data::put_basket_info($this->params, (int)$history_last['id_shopping_basket_history']);
+         //$history_last = Data::get_basket_history_last($this->params);
+         Data::put_basket_info($this->params, (int)$this->id_shopping_basket_history);
       }
    }
     
@@ -578,6 +591,11 @@ class Shopping_Basket {
    function get_all_history() {
       return $this->history;
    }
+   
+   function get_last_history() {
+      return $this->history[$this->id_shopping_basket_history];
+   }
+    
     
    function get_all_product() {
       $F = Framework::g_global();
