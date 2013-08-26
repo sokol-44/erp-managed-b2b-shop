@@ -481,7 +481,88 @@ class Soap_Server_worker {
       
       return($response);
    }
+   
+/*
+ * New start
+ */
+   function doClientUserAddressAddOrUpdate( $input ) {
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = false;
+   
+   	add_to_fp('-------- doClientUserAddressAddOrUpdate');
+   	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+   		$response_tmp = array();
+   		foreach($input['values'] as $key => $val) {
+   			$SingleValueClass = new ClientUserAddressData($val, $this->input_data_type);
+   			add_to_fp(print_r($SingleValueClass, true));
+   			if( !$SingleValueClass->is_error() ) {
+   				$param_array = $SingleValueClass->return_array();
+   				add_to_fp('$param_array:'. print_r($param_array, true) );
+   				$response_tmp[] = Data::doClientUserAddressAddOrUpdate($param_array);
+   			} else {
+   				$response_tmp[] = $this->getReturnError('doClientUserAddressAddOrUpdate', $val, $SingleValueClass->return_error(), false);
+   			}
+   		}
+   		add_to_fp(print_r($response_tmp, true));
+   		$response = $this->_addArrayValues($response_tmp);
+   	} else {
+   		$response = $this->getReturnError('doClientUserAddressAddOrUpdate', '', 'EMPTY_LIST');
+   	}
+   
+   	return($response);
+   }   
+   
+   function doClientUserAddressDelete( $input ) {
+   	$this->input_data_type = 'UPDATE';
+   	$this->SingleParam_MultipleReturns = false;
+   
+   	add_to_fp('-------- doClientUserAddressDelete');
+   	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+   		$response_tmp = array();
+   		foreach($input['values'] as $key => $val) {
+   			$SingleValueClass = new ClientUserAddressData($val, $this->input_data_type);
+   			add_to_fp(print_r($SingleValueClass, true));
+   			if( !$SingleValueClass->is_error() ) {
+   				$param_array = $SingleValueClass->return_array();
+   				add_to_fp('$param_array:'. print_r($param_array, true) );
+   				$response_tmp[] = Data::doClientUserAddressDelete($param_array);
+   			} else {
+   				$response_tmp[] = $this->getReturnError('doClientUserAddressDelete', $val, $SingleValueClass->return_error(), false);
+   			}
+   		}
+   		add_to_fp(print_r($response_tmp, true));
+   		$response = $this->_addArrayValues($response_tmp);
+   	} else {
+   		$response = $this->getReturnError('doClientUserAddressDelete', '', 'EMPTY_LIST');
+   	}
+   
+   	return($response);
+   }
 
+   function getClientUserAddress( $input ) {
+   	$this->input_data_type = 'UPDATE';
+      $this->SingleParam_MultipleReturns = true;
+      
+      $ParamDoubleStartLength = $this->_getSingleValue($input, 'ParamDoubleStartLength');
+      
+   	add_to_fp('-------- getClientUserAddress');
+      if( is_object($ParamDoubleStartLength) ) {
+         if( !$ParamDoubleStartLength->is_error() ) {
+            $param_array = $ParamDoubleStartLength->return_array();
+            $res_array = Data::getClientUserAddress((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
+            $response = $this->_addArrayValues($res_array);
+         } else {
+            $response = $this->getReturnError('getClientUserAddress', $input, $ParamDoubleStartLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getClientUserAddress', $input, 'WRONG CLASS');
+      }
+   	 
+   	return($response);
+   }
+   /*
+    * New end
+   */
    function doProductAdd( $input ) {
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = false;

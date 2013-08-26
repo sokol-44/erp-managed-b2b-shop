@@ -10,18 +10,25 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury tabela company_1.shop_shopping_basket_history
-DROP TABLE IF EXISTS `shop_shopping_basket_history`;
-CREATE TABLE IF NOT EXISTS `shop_shopping_basket_history` (
-  `id_shopping_basket_history` int(11) NOT NULL AUTO_INCREMENT,
-  `id_shopping_basket` int(11) DEFAULT NULL,
+-- Zrzut struktury tabela company_1.global_client_user_address
+DROP TABLE IF EXISTS `global_client_user_address`;
+CREATE TABLE IF NOT EXISTS `global_client_user_address` (
+  `id_address` int(11) NOT NULL AUTO_INCREMENT,
+  `id_client` int(11) NOT NULL,
   `id_client_user` int(11) DEFAULT NULL,
-  `id_address` int(11) DEFAULT NULL,
-  `date` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `mode` varchar(50) DEFAULT NULL COMMENT 'ENUM(''START'', ''FREE'', ''LOCK'', ''LEVEL1ACC'', ''LEVEL2ACC'', ''BACK0ACC'', ''BACK1ACC'', ''ORDER'', ''FAVORITE'')',
   `description` text,
-  PRIMARY KEY (`id_shopping_basket_history`),
-  KEY `fk.shop_shopping_basket_history.id_shopping_basket` (`id_shopping_basket`)
+  `name` tinytext,
+  `street` tinytext,
+  `city` tinytext,
+  `zip_code` tinytext,
+  `country` tinytext,
+  `date_created` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_modified` timestamp NULL DEFAULT NULL,
+  `rights_edit` varchar(10) NOT NULL DEFAULT 'USER' COMMENT 'USER, CLIENT',
+  `rights_use` varchar(10) NOT NULL DEFAULT 'USER' COMMENT 'USER, CLIENT',
+  PRIMARY KEY (`id_address`),
+  KEY `fk.global_client_user_address.id_client_user` (`id_client_user`),
+  KEY `fk.global_client_user_address.id_client` (`id_client`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.

@@ -281,6 +281,16 @@ class ClientUserPasswordData extends BasicSOAPDataMethods {
    public $list_update = array('id_client_user', 'id_client', 'password');
 }
 
+class ClientUserAddressData extends BasicSOAPDataMethods {
+   public $list = array('id_address', 'id_client_user', 'id_client', 'description', 'name',
+         'street', 'city', 'zip_code', 'country');
+   public $list_type = array('id_address' => 'INT+', 'id_client_user' => 'INT+', 'id_client' => 'INT+',
+         'street' => 'TEXT', 'city' => 'TEXT', 'zip_code' => 'TEXT', 'country' => 'TEXT');
+   public $list_new = array('id_address', 'id_client_user', 'id_client', 'description', 'name',
+         'street', 'city', 'zip_code', 'country');
+   public $list_update = array('id_address', 'id_client_user', 'id_client', 'description', 'name',
+         'street', 'city', 'zip_code', 'country');
+}
 
 class CategoryData extends BasicSOAPDataMethods {
    public $list = array('id_category', 'id_category_parent', 'sort_order', 'root_number', 'name', 'description',

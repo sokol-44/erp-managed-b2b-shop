@@ -272,6 +272,43 @@ class Data_Person extends Data_Rights {
       return $result;
    }
    
+   static function doClientUserAddressAddOrUpdate($param_array) {
+   	 
+   	$query = 'select "' . db_int($id_client_user) . '" as id_one, "' . db_int($id_address) . '" as id_two,
+          "" as additional_data,
+          b_func_client_user_set_address("' . db_int($id_address) . '", "' . db_int($id_client_user) . '", "' . db_int($id_client) . '",
+          "' . db_escape($description) . '", "' . db_escape($name) . '",  "' . db_escape($street) . '",
+          "' . db_escape($city) . '", "' . db_escape($zip_code) . '",  "' . db_escape($country) . '") as status';
+   	
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	return db_fetch_array($result);
+   }
+   
+   static function doClientUserAddressDelete($param_array) {
+   	 
+   	$query = 'select "' . db_int($id_client_user) . '" as id_one, "' . db_int($id_address) . '" as id_two,
+          "' . db_escape('id_client:',$id_client) . '" as additional_data,
+          b_func_client_user_del_address("' . db_int($id_address) . '", "' . db_int($id_client_user) . '",
+			 "' . db_int($id_client) . '" as status';
+   
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	return db_fetch_array($result);
+   }
+   
+   static function getClientUserAddress($id_client_user, $id_address, $length) {
+   	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+   	
+   	$query = 'select id_address, id_client, id_client_user, description, name, street, city, zip_code, country
+					where id_client_user = "' . db_int($id_client_user) . '" 
+				   AND id_address "' . $comparision_dir . db_int($id_address) . '"
+				   ORDER BY id_address ' . $order_dir . ' LIMIT '. db_int($length);
+
+   	$result = db_query( $query );
+   	return db_result_array_full($result);
+   }
+   
    static function doClientAdd($param_array, $add  = false) {
       
       extract( $param_array );

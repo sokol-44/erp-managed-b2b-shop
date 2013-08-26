@@ -164,35 +164,65 @@
 	<wsdl:message name="setPictureResponse">
 		<wsdl:part name="setPictureResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
-	<wsdl:message name="setClientProductPriceListRequest">
-		<wsdl:part name="setClientProductPriceListRequest" type="xsd:string"></wsdl:part>
-	</wsdl:message>
-	<wsdl:message name="setClientProductPriceListResponse">
-		<wsdl:part name="setClientProductPriceListResponse" type="xsd:string"></wsdl:part>
-	</wsdl:message>
 	<wsdl:message name="setClientProductPriceListUpdateRequest">
 		<wsdl:part name="setClientProductPriceListUpdateRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:message name="setClientProductPriceListUpdateResponse">
 		<wsdl:part name="setClientProductPriceListUpdateResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
-	<wsdl:message name="setProductListRequest">
-		<wsdl:part name="setProductListRequest" type="xsd:string"></wsdl:part>
+	<wsdl:message name="doClientProductPriceListAddOrUpdateRequest">
+		<wsdl:part name="doClientProductPriceListAddOrUpdateRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
-	<wsdl:message name="setProductListResponse">
-		<wsdl:part name="setProductListResponse" type="xsd:string"></wsdl:part>
+	<wsdl:message name="doClientProductPriceListAddOrUpdateResponse">
+		<wsdl:part name="doClientProductPriceListAddOrUpdateResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
-	<wsdl:message name="setPictureListRequest">
-		<wsdl:part name="setPictureListRequest" type="xsd:string"></wsdl:part>
+	<wsdl:message name="doProductAddOrUpdateRequest">
+		<wsdl:part name="doProductAddOrUpdateRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
-	<wsdl:message name="setPictureListResponse">
-		<wsdl:part name="setPictureListResponse" type="xsd:string"></wsdl:part>
+	<wsdl:message name="doProductAddOrUpdateResponse">
+		<wsdl:part name="doProductAddOrUpdateResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
-	<wsdl:message name="setCategoryListRequest">
-		<wsdl:part name="setCategoryListRequest" type="xsd:string"></wsdl:part>
+	<wsdl:message name="doPictureAddOrUpdateRequest">
+		<wsdl:part name="doPictureAddOrUpdateRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
-	<wsdl:message name="setCategoryListResponse">
-		<wsdl:part name="setCategoryListResponse" type="xsd:string"></wsdl:part>
+	<wsdl:message name="doPictureAddOrUpdateResponse">
+		<wsdl:part name="doPictureAddOrUpdateResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doCategoryAddOrUpdateRequest">
+		<wsdl:part name="doCategoryAddOrUpdateRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doCategoryAddOrUpdateResponse">
+		<wsdl:part name="doCategoryAddOrUpdateResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setClientProductPriceListRequest">
+		<wsdl:part name="setClientProductPriceListRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setClientProductPriceListResponse">
+		<wsdl:part name="setClientProductPriceListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderHiddenStatusListRequest">
+		<wsdl:part name="getOrderHiddenStatusListRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderHiddenStatusListResponse">
+		<wsdl:part name="getOrderHiddenStatusListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserAddressAddOrUpdateRequest">
+		<wsdl:part name="doClientUserAddressAddOrUpdateRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserAddressAddOrUpdateResponse">
+		<wsdl:part name="doClientUserAddressAddOrUpdateResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserAddressDeleteRequest">
+		<wsdl:part name="doClientUserAddressDeleteRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserAddressDeleteResponse">
+		<wsdl:part name="doClientUserAddressDeleteResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientUserAddressRequest">
+		<wsdl:part name="getClientUserAddressRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientUserAddressResponse">
+		<wsdl:part name="getClientUserAddressResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
@@ -395,14 +425,6 @@
 								message="tns:setPictureResponse">
 							</wsdl:output>
 						</wsdl:operation>
-						<wsdl:operation name="setClientProductPriceList">
-							<wsdl:input
-								message="tns:setClientProductPriceListRequest">
-							</wsdl:input>
-							<wsdl:output
-								message="tns:setClientProductPriceListResponse">
-							</wsdl:output>
-						</wsdl:operation>
 						<wsdl:operation name="setClientProductPriceListUpdate">
 							<wsdl:input
 								message="tns:setClientProductPriceListUpdateRequest">
@@ -411,28 +433,76 @@
 								message="tns:setClientProductPriceListUpdateResponse">
 							</wsdl:output>
 						</wsdl:operation>
-						<wsdl:operation name="setProductList">
+						<wsdl:operation name="doClientProductPriceListAddOrUpdate ">
 							<wsdl:input
-								message="tns:setProductListRequest">
+								message="tns:doClientProductPriceListAddOrUpdateRequest">
 							</wsdl:input>
 							<wsdl:output
-								message="tns:setProductListResponse">
+								message="tns:doClientProductPriceListAddOrUpdateResponse">
 							</wsdl:output>
 						</wsdl:operation>
-						<wsdl:operation name="setPictureList">
+						<wsdl:operation name="doProductAddOrUpdate">
 							<wsdl:input
-								message="tns:setPictureListRequest">
+								message="tns:doProductAddOrUpdateRequest">
 							</wsdl:input>
 							<wsdl:output
-								message="tns:setPictureListResponse">
+								message="tns:doProductAddOrUpdateResponse">
 							</wsdl:output>
 						</wsdl:operation>
-						<wsdl:operation name="setCategoryList">
+						<wsdl:operation name="doPictureAddOrUpdate">
 							<wsdl:input
-								message="tns:setCategoryListRequest">
+								message="tns:doPictureAddOrUpdateRequest">
 							</wsdl:input>
 							<wsdl:output
-								message="tns:setCategoryListResponse">
+								message="tns:doPictureAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doCategoryAddOrUpdate">
+							<wsdl:input
+								message="tns:doCategoryAddOrUpdateRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doCategoryAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="setClientProductPriceList">
+							<wsdl:input
+								message="tns:setClientProductPriceListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:setClientProductPriceListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getOrderHiddenStatusList">
+							<wsdl:input
+								message="tns:getOrderHiddenStatusListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getOrderHiddenStatusListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doClientUserAddressAddOrUpdate">
+							<wsdl:input
+								message="tns:doClientUserAddressAddOrUpdateRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientUserAddressAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doClientUserAddressDelete">
+							<wsdl:input
+								message="tns:doClientUserAddressDeleteRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientUserAddressDeleteResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getClientUserAddress">
+							<wsdl:input
+								message="tns:getClientUserAddressRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getClientUserAddressResponse">
 							</wsdl:output>
 						</wsdl:operation>
 	</wsdl:portType>
@@ -725,17 +795,6 @@
 					use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
-		<wsdl:operation name="setClientProductPriceList">
-			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
-			<wsdl:input>
-				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
-					use="literal" />
-			</wsdl:input>
-			<wsdl:output>
-				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
-					use="literal" />
-			</wsdl:output>
-		</wsdl:operation>
 		<wsdl:operation name="setClientProductPriceListUpdate">
 			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
 			<wsdl:input>
@@ -747,7 +806,7 @@
 					use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
-		<wsdl:operation name="setProductList">
+		<wsdl:operation name="doClientProductPriceListAddOrUpdate ">
 			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
 			<wsdl:input>
 				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
@@ -758,7 +817,7 @@
 					use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
-		<wsdl:operation name="setCategoryList">
+		<wsdl:operation name="doProductAddOrUpdate">
 			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
 			<wsdl:input>
 				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
@@ -769,7 +828,7 @@
 					use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
-		<wsdl:operation name="setPictureList">
+		<wsdl:operation name="doCategoryAddOrUpdate">
 			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
 			<wsdl:input>
 				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
@@ -780,8 +839,73 @@
 					use="literal" />
 			</wsdl:output>
 		</wsdl:operation>
+		<wsdl:operation name="doPictureAddOrUpdate">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="setClientProductPriceList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+		<wsdl:operation name="getOrderHiddenStatusList">
+			<soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+			<wsdl:input>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:input>
+			<wsdl:output>
+				<soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+					use="literal" />
+			</wsdl:output>
+		</wsdl:operation>
+      <wsdl:operation name="doClientUserAddressAddOrUpdate">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="doClientUserAddressDelete">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getClientUserAddress">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
 	</wsdl:binding>
-
 	<wsdl:service name="shop_control">
 		<wsdl:port binding="tns:shop_control-SOAP" name="shop_control-SOAP">
 			<soap:address location="http://b2b_sklep.localhost/SOAP/scs.php" />

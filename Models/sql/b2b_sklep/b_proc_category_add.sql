@@ -18,7 +18,7 @@ BEGIN
 	INSERT INTO shop_category (`id_category`, `id_category_parent`, `sort_order`, `root_number`, `name`, `description`)
 	VALUES (id_category_in, id_category_parent_in, sort_order_in, root_number_in, name_in, description_in)
 	ON DUPLICATE KEY UPDATE
-	`id_category` = id_category_in, `id_category_parent` = id_category_in, `sort_order` = sort_order_in, `root_number` = root_number_in,
+	`id_category` = id_category_in, `id_category_parent` = id_category_parent_in, `sort_order` = sort_order_in, `root_number` = root_number_in,
 	`name` = name_in, `description` = description_in;
 	SET @status_proc = 'SUCCESS';
 END//
