@@ -539,7 +539,7 @@ class Soap_Server_worker {
    	return($response);
    }
 
-   function getClientUserAddress( $input ) {
+   function getClientUserAddressList( $input ) {
    	$this->input_data_type = 'UPDATE';
       $this->SingleParam_MultipleReturns = true;
       
@@ -549,13 +549,57 @@ class Soap_Server_worker {
       if( is_object($ParamDoubleStartLength) ) {
          if( !$ParamDoubleStartLength->is_error() ) {
             $param_array = $ParamDoubleStartLength->return_array();
-            $res_array = Data::getClientUserAddress((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
+            $res_array = Data::getClientUserAddressList((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
             $response = $this->_addArrayValues($res_array);
          } else {
             $response = $this->getReturnError('getClientUserAddress', $input, $ParamDoubleStartLength->return_error() );
          }
       } else {
          $response = $this->getReturnError('getClientUserAddress', $input, 'WRONG CLASS');
+      }
+   	 
+   	return($response);
+   }
+   
+   function getClientAddressList( $input ) {
+   	$this->input_data_type = 'UPDATE';
+      $this->SingleParam_MultipleReturns = true;
+      
+      $ParamDoubleStartLength = $this->_getSingleValue($input, 'ParamDoubleStartLength');
+      
+   	add_to_fp('-------- getClientAddress');
+      if( is_object($ParamDoubleStartLength) ) {
+         if( !$ParamDoubleStartLength->is_error() ) {
+            $param_array = $ParamDoubleStartLength->return_array();
+            $res_array = Data::getClientAddressList((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
+            $response = $this->_addArrayValues($res_array);
+         } else {
+            $response = $this->getReturnError('getClientAddress', $input, $ParamDoubleStartLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getClientAddress', $input, 'WRONG CLASS');
+      }
+   	 
+   	return($response);
+   }
+   
+   function getAddressList( $input ) {
+   	$this->input_data_type = 'UPDATE';
+      $this->SingleParam_MultipleReturns = true;
+      
+      $ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
+      
+   	add_to_fp('-------- getAddressList');
+      if( is_object($ParamStartLength) ) {
+         if( !$ParamStartLength->is_error() ) {
+            $param_array = $ParamStartLength->return_array();
+            $res_array = Data::getAddressList((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
+            $response = $this->_addArrayValues($res_array);
+         } else {
+            $response = $this->getReturnError('getAddressList', $input, $ParamDoubleStartLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getAddressList', $input, 'WRONG CLASS');
       }
    	 
    	return($response);
