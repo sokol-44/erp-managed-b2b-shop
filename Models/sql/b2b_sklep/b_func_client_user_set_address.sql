@@ -35,7 +35,7 @@ BEGIN
          SET status = 'SUCCESS,DONT_EXIST,INSERT';
       ELSE
          UPDATE global_client_user_address set 
-         description = description_in, name = name_in, street = street_in, city = city_n,
+         description = description_in, name = name_in, street = street_in, city = city_in,
          zip_code = zip_code_in, country = country_in, date_modified = now()
          WHERE id_address = id_address_in AND id_client_user = id_client_user_in
          AND id_client = id_client_in;

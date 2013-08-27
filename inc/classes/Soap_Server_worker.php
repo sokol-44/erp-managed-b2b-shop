@@ -549,6 +549,7 @@ class Soap_Server_worker {
       if( is_object($ParamDoubleStartLength) ) {
          if( !$ParamDoubleStartLength->is_error() ) {
             $param_array = $ParamDoubleStartLength->return_array();
+            add_to_fp(print_r($param_array, true));
             $res_array = Data::getClientUserAddressList((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
             $response = $this->_addArrayValues($res_array);
          } else {
@@ -593,7 +594,7 @@ class Soap_Server_worker {
       if( is_object($ParamStartLength) ) {
          if( !$ParamStartLength->is_error() ) {
             $param_array = $ParamStartLength->return_array();
-            $res_array = Data::getAddressList((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
+            $res_array = Data::getAddressList((int)$param_array['id_start'], (int)$param_array['length']);
             $response = $this->_addArrayValues($res_array);
          } else {
             $response = $this->getReturnError('getAddressList', $input, $ParamDoubleStartLength->return_error() );

@@ -274,6 +274,8 @@ class Data_Person extends Data_Rights {
    
    static function doClientUserAddressAddOrUpdate($param_array) {
    	 
+   	extract( $param_array );
+   	
    	$query = 'select "' . db_int($id_client_user) . '" as id_one, "' . db_int($id_address) . '" as id_two,
           "" as additional_data,
           b_func_client_user_set_address("' . db_int($id_address) . '", "' . db_int($id_client_user) . '", "' . db_int($id_client) . '",
@@ -287,10 +289,12 @@ class Data_Person extends Data_Rights {
    
    static function doClientUserAddressDelete($param_array) {
    	 
+   	extract( $param_array );
+   	 
    	$query = 'select "' . db_int($id_client_user) . '" as id_one, "' . db_int($id_address) . '" as id_two,
           "' . db_escape('id_client:',$id_client) . '" as additional_data,
           b_func_client_user_del_address("' . db_int($id_address) . '", "' . db_int($id_client_user) . '",
-			 "' . db_int($id_client) . '" as status';
+			 "' . db_int($id_client) . '") as status';
    
    	add_to_fp($query);
    	$result = db_query( $query );
@@ -301,10 +305,12 @@ class Data_Person extends Data_Rights {
    	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
    	
    	$query = 'select id_address, id_client, id_client_user, description, name, street, city, zip_code, country
+   				from ' . TBL_GLOBAL_CLIENT_USER_ADDRESS . '
 					where id_client_user = "' . db_int($id_client_user) . '" 
-				   AND id_address "' . $comparision_dir . db_int($id_address) . '"
+				   AND id_address ' . $comparision_dir . db_int($id_address) . '
 				   ORDER BY id_address ' . $order_dir . ' LIMIT '. db_int($length);
 
+   	add_to_fp($query);
    	$result = db_query( $query );
    	return db_result_array_full($result);
    }
@@ -313,10 +319,12 @@ class Data_Person extends Data_Rights {
    	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
    
    	$query = 'select id_address, id_client, id_client_user, description, name, street, city, zip_code, country
-					where id_client = "' . db_int($id_client_user) . '"
-				   AND id_address "' . $comparision_dir . db_int($id_address) . '"
-				   ORDER BY id_address ' . $order_dir . ' LIMIT '. db_int($length);
-   
+   				from ' . TBL_GLOBAL_CLIENT_USER_ADDRESS . '
+					where id_client = "' . db_int($id_client) . '"
+				   AND id_address ' . $comparision_dir . db_int($id_address) . '
+				   ORDER BY id_address ' . $order_dir . ' LIMIT ' . db_int($length);
+
+   	add_to_fp($query);
    	$result = db_query( $query );
    	return db_result_array_full($result);
    }
@@ -325,13 +333,17 @@ class Data_Person extends Data_Rights {
    	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
    
    	$query = 'select id_address, id_client, id_client_user, description, name, street, city, zip_code, country
-					where id_address "' . $comparision_dir . db_int($id_address) . '"
+   				from ' . TBL_GLOBAL_CLIENT_USER_ADDRESS . '
+					where id_address ' . $comparision_dir . db_int($id_address) . '
 				   ORDER BY id_address ' . $order_dir . ' LIMIT '. db_int($length);
-   
+
+   	add_to_fp($query);
    	$result = db_query( $query );
    	return db_result_array_full($result);
    }
-       
+   /*
+    * new end
+    */
    static function doClientAdd($param_array, $add  = false) {
       
       extract( $param_array );

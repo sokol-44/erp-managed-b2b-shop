@@ -204,6 +204,49 @@ function test_setOrderHiddenStatus( $client ) {
 }
 
 
+function test_getAddressList( $client ) {
+	$in_oo = new ParamStartLength(array('id_start' => '1', 'length' => '15'));
+	test_helper_single_in($in_oo, 'getAddressList', $client );
+}
+
+function test_getClientAddressList( $client ) {
+   $in_oo = new ParamDoubleStartLength(array('id_start_one' => '3', 'id_start_two' => '1', 'length' => '5'));
+   test_helper_single_in($in_oo, 'getClientAddressList', $client );
+}
+
+function test_getClientUserAddressList( $client ) {
+   $in_oo = new ParamDoubleStartLength(array('id_start_one' => '1', 'id_start_two' => '1', 'length' => '5'));
+   test_helper_single_in($in_oo, 'getClientUserAddressList', $client );
+}
+
+function test_doClientUserAddressAddOrUpdate( $client ) {
+	$list = array('id_address' => 1, 'id_client_user' => 1, 'id_client' => 3, 
+			'description' => 'description'.time(), 'name' => 'name'.time(), 'street' => 'street'.time(),
+			 'city' => 'city'.time(), 'zip_code' => 'zip_code'.time(), 'country' => 'country'.time());
+	$in_oo[] = new ClientUserAddressData($list);
+	$list = array('id_address' => time(), 'id_client_user' => 1, 'id_client' => 3, 
+			'description' => 'description'.time(), 'name' => 'name'.time(), 'street' => 'street'.time(),
+			 'city' => 'city'.time(), 'zip_code' => 'zip_code'.time(), 'country' => 'country'.time());
+	$in_oo[] = new ClientUserAddressData($list);
+	test_helper_multiple_in($in_oo, 'doClientUserAddressAddOrUpdate', $client);
+}
+
+
+function test_doClientUserAddressDelete( $client ) {
+	$nt = time();
+	$list = array('id_address' => $nt, 'id_client_user' => 1, 'id_client' => 3,
+			'description' => 'description'.$nt, 'name' => 'name'.$nt, 'street' => 'street'.$nt,
+			'city' => 'city'.$nt, 'zip_code' => 'zip_code'.$nt, 'country' => 'country'.$nt);
+	
+	$in_oo[] = new ClientUserAddressData($list);
+	test_helper_multiple_in($in_oo, 'doClientUserAddressAddOrUpdate', $client);
+	
+	$in_oo2 = new ParamDoubleStartLength(array('id_start_one' => '1', 'id_start_two' => $nt, 'length' => '5'));
+	test_helper_single_in($in_oo2, 'getClientUserAddressList', $client );
+	
+	$in_oo3[] = new ClientUserAddressData($list);
+	test_helper_multiple_in($in_oo3, 'doClientUserAddressDelete', $client);
+}
 
 
 ?>
