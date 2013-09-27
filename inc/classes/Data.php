@@ -222,7 +222,7 @@ class Data extends Data_Person {
    }
    
    static function _length_dir($length ) {
-      if( (int)$length  == 0 ) $length = 1;
+      if( (int)$length  == 0 ) $length = 2147483647;
       
       if( $length > 0 ) {
          $comparision_dir = ' >= ';

@@ -304,10 +304,11 @@ class CategoryData extends BasicSOAPDataMethods {
 
 class OrderData extends BasicSOAPDataMethods {
    public $list = array('id_order', 'id_client', 'date_create', 'date_modified', 'id_order_status',
-          'hidden_status', 'description', 'description_basket', 'id_shopping_basket');
+          'hidden_status', 'description', 'description_basket', 'id_shopping_basket', 'id_address');
    public $list_type = array('id_order' => 'INT+', 'id_client' => 'INT+', 'date_create' => 'DATE',
           'date_modified' => 'DATE', 'id_order_status' => 'INT', 'hidden_status' => 'TEXT',
-          'description' => 'TEXT', 'description_basket' => 'TEXT', 'id_shopping_basket' => 'INT+');
+          'description' => 'TEXT', 'description_basket' => 'TEXT', 'id_shopping_basket' => 'INT+',
+   		 'id_address' => 'INT');
    public $list_new = array('id_order', 'id_client');
    public $list_update = array('id_order', 'id_client');
 }

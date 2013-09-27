@@ -29,7 +29,7 @@ class Data_Order extends Data_Picture {
       list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
       
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
-      o.description, o.description_basket, o.id_shopping_basket
+      o.description, o.description_basket, o.id_shopping_basket, o.id_address
       from ' . TBL_SHOP_ORDER . ' o
       where o.id_order ' . $comparision_dir . db_int($id_order_start) . $where . '
       ORDER BY o.id_order ' . $order_dir . ' LIMIT '. db_int($length);
@@ -64,7 +64,7 @@ class Data_Order extends Data_Picture {
       list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
       
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
-      o.description, o.description_basket, o.id_shopping_basket
+      o.description, o.description_basket, o.id_shopping_basket, o.id_address
       from ' . TBL_SHOP_ORDER . ' o
       where o.id_order ' . $comparision_dir . db_int($id_order_start) . $where . '
       ORDER BY o.id_order ' . $order_dir;
@@ -123,7 +123,7 @@ class Data_Order extends Data_Picture {
 
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
       o.description, o.description_basket, o.id_shopping_basket, o.id_address, concat("OSH_", os.name) as name,
-     	UNIX_TIMESTAMP(o.date_create) as ts_create, UNIX_TIMESTAMP(o.date_modified) as ts_modified
+     	UNIX_TIMESTAMP(o.date_create) as ts_create, UNIX_TIMESTAMP(o.date_modified) as ts_modified, o.id_address
       from ' . TBL_SHOP_ORDER . ' o left join ' . TBL_SHOP_ORDER_STATUS . ' os
       on (o.id_order_status = os.id_order_status)' . $where;
       $query_fast = 'select count(o.id_order) as total from ' . TBL_SHOP_ORDER . ' o ' . $where;
@@ -142,7 +142,7 @@ class Data_Order extends Data_Picture {
    static function get_order_data( $id_order ) {
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
       o.description, o.description_basket, o.id_shopping_basket, o.id_address, concat("OSH_", os.name) as name,
-     	UNIX_TIMESTAMP(o.date_create) as ts_create, UNIX_TIMESTAMP(o.date_modified) as ts_modified
+     	UNIX_TIMESTAMP(o.date_create) as ts_create, UNIX_TIMESTAMP(o.date_modified) as ts_modified, o.id_address
       from ' . TBL_SHOP_ORDER . ' o left join ' . TBL_SHOP_ORDER_STATUS . ' os
       on (o.id_order_status = os.id_order_status)
       left outer join ' . TBL_GLOBAL_CLIENT_USER_ADDRESS . ' cua 

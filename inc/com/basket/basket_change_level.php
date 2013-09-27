@@ -61,11 +61,12 @@ function remove_from_basked() { return true; }
 			$default = $history_last['id_address'];
 			foreach($Address_list as $id_address => $Address) {
 				$addr[$id_address]['id'] = (int)$Address['id_address'];
-				$addr[$id_address]['text'] =  $F->output_string_html($Address['description'], 16) . '; ' .
-														$F->output_string($Address['name']) . '; ' .
-														$F->output_string($Address['street']) . '; ' .
-														$F->output_string($Address['zip_code'] . ' ' . $Address['city']) . '; ' .
-														$F->output_string($Address['country']);
+				$addr[$id_address]['text'] =  $F->output_string_html(
+															$F->output_string_html($Address['description'], 16) . '; ' .
+															$F->output_string($Address['name']) . '; ' .
+															$F->output_string($Address['street']) . '; ' .
+															$F->output_string($Address['zip_code'] . ' ' . $Address['city']) . '; ' .
+															$F->output_string($Address['country']), 90);
 			}
 			echo $F->draw_pull_down_menu('order_address', $addr, $default);
 		} else {
