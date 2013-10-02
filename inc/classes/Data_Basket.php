@@ -251,7 +251,6 @@ class Data_Basket extends Data_Order {
    }
      
    static function put_basket_version_product_list($basket_contents, $basket_params) {
-
       $clear_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
       id_shopping_basket_version = ' . db_int($basket_params['id_shopping_basket_version']);
       db_query( $clear_query );
@@ -264,7 +263,6 @@ class Data_Basket extends Data_Order {
          quantity = ' . db_int($details['quantity']) . ', date_added = now()';
          db_query( $insert_query );
       }
-
    }
    
    static function add_basket_new_version($basket_params, $id_client_user ) {

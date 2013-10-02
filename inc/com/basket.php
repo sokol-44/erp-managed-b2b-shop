@@ -19,10 +19,9 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
    }
    
    if( $Shopping_Basket === FALSE ) {
-      $Shopping_Basket_Chain->set_default_basket_by_date();
       $Shopping_Basket = $Shopping_Basket_Chain->return_default_basket();
    }
-   
+
    if( $Shopping_Basket == FALSE ) {
       //print_debug($Shopping_Basket, true);
       //die();

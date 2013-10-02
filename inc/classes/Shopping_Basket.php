@@ -36,8 +36,10 @@ class Shopping_Basket {
             if( $contents ) { 
             	$this->check_contents( $contents );
             }
+            $this->id_shopping_basket=$this->params['id_shopping_basket'];
             $this->db_save_contents();
          } else {
+            $this->id_shopping_basket=$this->params['id_shopping_basket'];
             $this->db_restore_contents();
             $this->calculate_total();
          }
@@ -312,7 +314,6 @@ class Shopping_Basket {
          
          //VERSIONS
          $version_list = Data::get_basket_version_list($this->params);
-         //          var_dump($version_list);
          $last = 0;
          foreach( $version_list as $key => $basket_version ) {
             if( $basket_version['ts_created'] > $last ) {
@@ -329,8 +330,8 @@ class Shopping_Basket {
             $this->version[$basket_version['id_shopping_basket_version']] = $basket_version;
          }
          //CONTENTS OF "NEWEST" VER.
-         if( Framework::not_null($this->id_shopping_basket_version) )
-            $this->contents = Data::get_basket_version_product_list( $this->id_shopping_basket_version );
+         if( Framework::not_null($this->id_shopping_basket_version) ) 
+            $this->contents = Data::get_basket_version_product_list( $this->params );
           
          //HISTORY
          $history_list = Data::get_basket_history_list($this->params);
@@ -375,7 +376,6 @@ class Shopping_Basket {
       //DB SAVE
       $F = Framework::g_global();
       $P = Person::g_global();
-       
       if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
          Data::put_basket_version_product_list($this->contents, $this->params);
          //$history_last = Data::get_basket_history_last($this->params);
@@ -461,8 +461,9 @@ class Shopping_Basket {
                'id_shopping_basket_version' => (int)$this->id_shopping_basket_version
          );
       }
-
+      
       if( $save ) self::db_save_contents();
+
       return $this->contents[$key_product]['quantity'];
    }
 

@@ -121,7 +121,6 @@ class Shopping_Basket_Chain {
    }
 
    public function get_can_add_basket() {
-   	echo self::$max_basket ;
       if( $this->get_basket_list_count() < self::$max_basket ) {
          return true;
       }
@@ -273,7 +272,7 @@ class Shopping_Basket_Chain {
       $ts_modified = 0;
       $this->id_basket_set = false;
       $this->id_basket_current = 0;
-      //echo ' a'.($recurrence?'Rt':'Rf');
+//       echo ' a'.($recurrence?'Rt':'Rf');
       foreach( $this->Basket_List as $id_shopping_basket => $Basket) {
 //          echo "<br> ^$id_shopping_basket:";
 //          echo (!$this->id_basket_set?'t':'f');
@@ -293,7 +292,7 @@ class Shopping_Basket_Chain {
          }
       }
       //dsadasdas();
-      //echo 'def:'.$this->id_basket_current;
+//       echo 'def:'.$this->id_basket_current;
       if( !$this->_check_valid_basket($this->id_basket_current) && !$recurrence ) {
          $this->add_basket( true );
          $this->set_default_basket_by_date( true );
