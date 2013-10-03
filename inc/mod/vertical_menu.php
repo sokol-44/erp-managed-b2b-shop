@@ -5,16 +5,36 @@ $Page->add_jq_init('$(\'.vertical_menu_item\').tooltip({
 $GET_tmp = $F->make_get();
 
 $c1 = $F->make_link(CFG_COM_CATALOG);
-$c2 = $F->make_link(CFG_COM_CATALOG, $F->add_local_get('catpath', '2', $GET_tmp));
-$c3 = $F->make_link(CFG_COM_CATALOG, $F->add_local_get('catpath', '3', $GET_tmp));
-$a2 = $F->make_link(CFG_COM_ARTICLE, $F->add_local_get('key', '2', $GET_tmp));
-$a3 = $F->make_link(CFG_COM_ARTICLE, $F->add_local_get('key', '3', $GET_tmp));
 
+
+
+// $a2 = $F->make_link(CFG_COM_ARTICLE, $F->add_local_get('key', '2', $GET_tmp));
+// $a3 = $F->make_link(CFG_COM_ARTICLE, $F->add_local_get('key', '3', $GET_tmp));
+
+//$array_mastermenu[] = $F->draw_link($F->make_link(CFG_COM_LOGOUT),'', Lang::_('Logout') );
+$l1 = $F->make_link(CFG_COM_ORDER_LIST, array('mode' => 'all'));
+$l2 = $F->make_link(CFG_COM_BASKET);
+$l3 = $F->make_link(CFG_COM_BASKET_FAVORITE);
+$l4 = $F->make_link(CFG_COM_ACCOUNT);
+
+$a1 = $F->make_link(CFG_COM_ARTICLE, $F->add_local_get('key', '4', $GET_tmp));
+
+if( $P->logged_in ) {
 ?>
 <div class="vertical_menu">
-  <a href="<?php echo $c1; ?>" class="vertical_menu_a" title="Hurtownia elektryczna"><div class="vertical_menu_item vertical_menu01" title="Hurtownia elektryczna"></div></a>
-  <a href="<?php echo $c2; ?>" class="vertical_menu_a" title="Zasilacze awaryjne UPS"><div class="vertical_menu_item vertical_menu02" title="Zasilacze awaryjne UPS"></div></a>
-  <a href="<?php echo $c3; ?>" class="vertical_menu_a" title="Agregaty prądotwórcze"><div class="vertical_menu_item vertical_menu03" title="Agregaty prądotwórcze"></div></a>
-  <a href="<?php echo $a2; ?>" class="vertical_menu_a" title="Projektowanie i realizacja"><div class="vertical_menu_item vertical_menu04" title="Projektowanie i realizacja"></div></a>
-  <a href="<?php echo $a3; ?>" class="vertical_menu_a" title="Serwis"><div class="vertical_menu_item vertical_menu05" title="Serwis"></div></a>
+  <a href="<?php echo $c1; ?>" class="vertical_menu_a" title="Katalog"><div class="vertical_menu_item vertical_menu01" title="Katalog"></div></a>
+  <a href="<?php echo $l1; ?>" class="vertical_menu_a" title="Zamówienia"><div class="vertical_menu_item vertical_menu02" title="Zamówienia"></div></a>
+  <a href="<?php echo $l2; ?>" class="vertical_menu_a" title="Koszyk"><div class="vertical_menu_item vertical_menu03" title="Koszyk"></div></a>
+  <a href="<?php echo $l3; ?>" class="vertical_menu_a" title="Ulubiony koszyk"><div class="vertical_menu_item vertical_menu04" title="Ulubiony koszyk"></div></a>
+  <a href="<?php echo $l4; ?>" class="vertical_menu_a" title="Konto"><div class="vertical_menu_item vertical_menu05" title="Konto"></div></a>
+  <a href="<?php echo $a1; ?>" class="vertical_menu_a" title="Kontakt"><div class="vertical_menu_item vertical_menu06" title="Kontakt"></div></a>
 </div>
+<?php 
+} else {
+?>
+<div class="vertical_menu">
+  <a href="<?php echo $a1; ?>" class="vertical_menu_a" title="Kontakt"><div class="vertical_menu_item vertical_menu06" title="Kontakt"></div></a>
+</div>
+<?php 
+}
+?>

@@ -19,7 +19,7 @@ $all_basket = $F->draw_link(
 ?>
 <div class="basket_container">
 <div class="basket menu_header"><?php echo Lang::_('BASKETS') ?><div class="icon"></div></div>
-<div class="basket basket_show_all"><?php echo $all_basket; ?></div>
+<div class="basket_show_all"><?php echo $all_basket; ?></div>
 <?php
 echo '<script>json_data.basket_list_default="'.$F->json_string($Shopping_Basket->params).'";</script>';
 $GET_id = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_tmp);
@@ -123,6 +123,7 @@ if( $P->logged_in && $Shopping_Basket_Chain->get_can_add_basket() ) {
 <div class="basket_add">
 <div class="basket_add_icon"><?php echo $add_basket; ?></div>
 </div>
+<div class="basket menu_bottom"></div>
 </div>
 <?php
 }
