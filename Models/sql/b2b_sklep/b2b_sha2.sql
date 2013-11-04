@@ -2,7 +2,7 @@
 -- Host:                         sql.company.nazwa.pl
 -- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
 -- Serwer OS:                    Linux
--- HeidiSQL Wersja:              8.0.0.4396
+-- HeidiSQL Wersja:              8.1.0.4545
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -10,10 +10,9 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury funkcja company_1.b2b_sha2
-DROP FUNCTION IF EXISTS `b2b_sha2`;
+-- Zrzut struktury funkcja company_20.b2b_sha2
 DELIMITER //
-CREATE DEFINER=`company_1`@`%` FUNCTION `b2b_sha2`(`message` MEDIUMBLOB, `bits` SMALLINT) RETURNS char(64) CHARSET utf8
+CREATE DEFINER=`company_20`@`%` FUNCTION `b2b_sha2`(`message` MEDIUMBLOB, `bits` SMALLINT) RETURNS char(64) CHARSET utf8
     DETERMINISTIC
 BEGIN
    DECLARE res CHAR(64) DEFAULT NULL;

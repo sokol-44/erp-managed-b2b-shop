@@ -10,22 +10,21 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury funkcja company_20.b_func_order_hidden_status_change
+-- Zrzut struktury funkcja company_20.b_func_client_attribute_set
 DELIMITER //
-CREATE DEFINER=`company_20`@`%` FUNCTION `b_func_order_hidden_status_change`(`id_order_in` INT, `id_client_in` INT, `new_status` TINYTEXT) RETURNS tinytext CHARSET utf8
+CREATE DEFINER=`company_20`@`%` FUNCTION `b_func_client_attribute_set`(`id_client_in` INT, `type_in` TEXT, `val_in` TEXT) RETURNS tinytext CHARSET latin2
     READS SQL DATA
 BEGIN
-	DECLARE status TINYTEXT DEFAULT NULL;
-	DECLARE status_order TINYTEXT DEFAULT NULL;
+	DECLARE `status` TINYTEXT DEFAULT NULL;
+	DECLARE status_client_attribute TINYTEXT DEFAULT NULL;
 
-	SELECT id_order INTO status_order FROM shop_order
-	WHERE `id_order` = id_order_in and `id_client` = id_client_in;
-	IF status_order IS NULL OR new_status = "" THEN
-		SET status = 'ERROR,ORDER_DONT_EXIST_OR_EMPTY_STATUS';
+	SELECT id_client INTO status_client_attribute FROM global_client_attributes WHERE `id_client` = id_client_in and `type` = type_in;
+	IF status_client_attribute IS NULL THEN
+		CALL b_proc_client_attribute_set(`id_client_in`, `type_in`, `val_in`);
+		SET `status` = CONCAT(@status_proc,',CLIENT_ATTRIBUTE_NEW');
 	ELSE
-		UPDATE shop_order SET `hidden_status` = new_status
-		WHERE `id_order` = id_order_in and `id_client` = id_client_in;
-		SET status = 'SUCCESS';
+		CALL b_proc_client_attribute_set(`id_client_in`, `type_in`, `val_in`);
+		SET `status` = CONCAT(@status_proc,',CLIENT_ATTRIBUTE_EXIST');
 	END IF;
 	return status;
 END//

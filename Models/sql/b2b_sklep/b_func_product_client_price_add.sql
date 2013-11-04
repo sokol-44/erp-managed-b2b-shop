@@ -2,7 +2,7 @@
 -- Host:                         sql.company.nazwa.pl
 -- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
 -- Serwer OS:                    Linux
--- HeidiSQL Wersja:              8.0.0.4396
+-- HeidiSQL Wersja:              8.1.0.4545
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -10,10 +10,9 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury funkcja company_1.b_func_product_client_price_add
-DROP FUNCTION IF EXISTS `b_func_product_client_price_add`;
+-- Zrzut struktury funkcja company_20.b_func_product_client_price_add
 DELIMITER //
-CREATE DEFINER=`company_1`@`%` FUNCTION `b_func_product_client_price_add`(`id_product_in` INT, `id_client_in` INT, `price_in` DECIMAL(10,0), `vat_in` INT) RETURNS tinytext CHARSET utf8
+CREATE DEFINER=`company_20`@`%` FUNCTION `b_func_product_client_price_add`(`id_product_in` INT, `id_client_in` INT, `price_in` DECIMAL(10,0), `vat_in` INT) RETURNS tinytext CHARSET utf8
     MODIFIES SQL DATA
     DETERMINISTIC
 BEGIN

@@ -2,7 +2,7 @@
 -- Host:                         sql.company.nazwa.pl
 -- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
 -- Serwer OS:                    Linux
--- HeidiSQL Wersja:              8.0.0.4396
+-- HeidiSQL Wersja:              8.1.0.4545
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -10,10 +10,9 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury funkcja company_1.b_func_client_user_set_password
-DROP FUNCTION IF EXISTS `b_func_client_user_set_password`;
+-- Zrzut struktury funkcja company_20.b_func_client_user_set_password
 DELIMITER //
-CREATE DEFINER=`company_1`@`%` FUNCTION `b_func_client_user_set_password`(`id_client_user_in` INT, `id_client_in` INT, `password_in` TINYTEXT, `password_salt_in` BLOB) RETURNS tinytext CHARSET latin2
+CREATE DEFINER=`company_20`@`%` FUNCTION `b_func_client_user_set_password`(`id_client_user_in` INT, `id_client_in` INT, `password_in` TINYTEXT, `password_salt_in` BLOB) RETURNS tinytext CHARSET latin2
     READS SQL DATA
 BEGIN
 	DECLARE status TINYTEXT DEFAULT NULL;

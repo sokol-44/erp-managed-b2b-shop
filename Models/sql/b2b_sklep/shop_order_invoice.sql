@@ -10,26 +10,23 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury funkcja company_20.b_func_order_hidden_status_change
-DELIMITER //
-CREATE DEFINER=`company_20`@`%` FUNCTION `b_func_order_hidden_status_change`(`id_order_in` INT, `id_client_in` INT, `new_status` TINYTEXT) RETURNS tinytext CHARSET utf8
-    READS SQL DATA
-BEGIN
-	DECLARE status TINYTEXT DEFAULT NULL;
-	DECLARE status_order TINYTEXT DEFAULT NULL;
+-- Zrzut struktury tabela company_20.shop_order_invoice
+CREATE TABLE IF NOT EXISTS `shop_order_invoice` (
+  `id_invoice` int(11) NOT NULL AUTO_INCREMENT,
+  `id_order` int(11) DEFAULT NULL,
+  `id_client` int(11) DEFAULT NULL,
+  `invoice_number` varchar(50) DEFAULT NULL,
+  `state` varchar(10) DEFAULT NULL,
+  `net_value` decimal(10,2) DEFAULT NULL,
+  `gross_value` decimal(10,2) DEFAULT NULL,
+  `date_issue` date DEFAULT NULL,
+  `date_pay` date DEFAULT NULL,
+  `invoice_image` longblob,
+  `description` tinytext,
+  PRIMARY KEY (`id_invoice`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2;
 
-	SELECT id_order INTO status_order FROM shop_order
-	WHERE `id_order` = id_order_in and `id_client` = id_client_in;
-	IF status_order IS NULL OR new_status = "" THEN
-		SET status = 'ERROR,ORDER_DONT_EXIST_OR_EMPTY_STATUS';
-	ELSE
-		UPDATE shop_order SET `hidden_status` = new_status
-		WHERE `id_order` = id_order_in and `id_client` = id_client_in;
-		SET status = 'SUCCESS';
-	END IF;
-	return status;
-END//
-DELIMITER ;
+-- Data exporting was unselected.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

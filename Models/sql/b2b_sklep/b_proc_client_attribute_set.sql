@@ -2,7 +2,7 @@
 -- Host:                         sql.company.nazwa.pl
 -- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
 -- Serwer OS:                    Linux
--- HeidiSQL Wersja:              8.0.0.4396
+-- HeidiSQL Wersja:              8.1.0.4545
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -10,16 +10,15 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury funkcja company_1.SHA2_LOCAL_ARRAY_GET
-DROP FUNCTION IF EXISTS `SHA2_LOCAL_ARRAY_GET`;
+-- Zrzut struktury procedura company_20.b_proc_client_attribute_set
 DELIMITER //
-CREATE DEFINER=`company_1`@`%` FUNCTION `SHA2_LOCAL_ARRAY_GET`(array BLOB, idx TINYINT UNSIGNED) RETURNS int(10) unsigned
-    NO SQL
-    DETERMINISTIC
+CREATE DEFINER=`company_20`@`%` PROCEDURE `b_proc_client_attribute_set`(IN `id_client_in` INT, IN `type_in` TEXT, IN `val_in` TEXT)
 BEGIN
-    SET idx = (idx * 4) + 1;
-    RETURN (ASCII(SUBSTRING(array FROM idx+0 FOR 1)) << 24) | (ASCII(SUBSTRING(array FROM idx+1 FOR 1)) << 16) |
-           (ASCII(SUBSTRING(array FROM idx+2 FOR 1)) <<  8) | (ASCII(SUBSTRING(array FROM idx+3 FOR 1)) <<  0);
+	INSERT INTO global_client_attributes (`id_client`, `type`, `val`)
+	VALUES (`id_client_in`, `type_in`, `val_in`)
+	ON DUPLICATE KEY UPDATE
+	`id_client` = id_client_in, `type` = type_in, `val` = val_in;
+	SET @status_proc = 'SUCCESS';
 END//
 DELIMITER ;
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

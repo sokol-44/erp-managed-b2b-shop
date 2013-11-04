@@ -2,7 +2,7 @@
 -- Host:                         sql.company.nazwa.pl
 -- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
 -- Serwer OS:                    Linux
--- HeidiSQL Wersja:              8.0.0.4396
+-- HeidiSQL Wersja:              8.1.0.4545
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -10,8 +10,7 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury tabela company_1.shop_category
-DROP TABLE IF EXISTS `shop_category`;
+-- Zrzut struktury tabela company_20.shop_category
 CREATE TABLE IF NOT EXISTS `shop_category` (
   `id_category` int(11) NOT NULL,
   `id_category_parent` int(11) DEFAULT NULL,
