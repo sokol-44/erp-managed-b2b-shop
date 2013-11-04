@@ -101,7 +101,7 @@ class Data_Products extends Data_Basket {
          // TODO
          // Show products from subcategories
       } else {
-         $where = array();
+         $where = array('status' => 'ACTIVE');
 
          if( $id_category != 0 ) $where['p2c.id_category'] = (int)$id_category;
 

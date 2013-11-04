@@ -29,9 +29,9 @@ $GET_tmp = $F->make_get();
 <div class="catalog_container catalog_content">
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
-		<th><?php echo Lang::_('PICTURE') ?></th>
 		<th><?php echo Lang::_('NAME') . ', ' . Lang::_('DESCRIPTION')?></th>
 		<th><?php echo Lang::_('CATALOG INDEX') ?></th>
+		<th><?php echo Lang::_('QUANTITY_IN_WAREHAUSE') ?></th>
 		<?php if( $P->logged_in ) { ?>
 		<th><?php echo Lang::_('PRICE') ?></th>
 		<th><?php echo Lang::_('ADD TO BASKET') ?></th>
@@ -48,30 +48,18 @@ $GET_tmp = $F->make_get();
 	   }
 
 	   $link_product_info = $F->make_link(CFG_COM_PRODUCT_INFO, $GET_tmp);
+	   $description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
 	   $cell_product_info = $F->draw_link($link_product_info, '',
 	   '<div class="catalog_product_name">' . $F->output_string_html( $product['name'] ) . '</div>
-	   <div class="catalog_product_description">' . nl2br($F->output_string_html( $product['description'], 384 )) . '</div>');
+	   <div class="catalog_product_description">' . $description_html . '</div>');
 
-
-	  	$image_type = Data::get_product_image_type($product);
-		$small_image_html='';
-		
-		if( $F->not_null($image_type) ) {
-			$Page->add_js_file('jquery.colorbox.js');
-			$small_image_html = '<img src="' . $image_type['small_image_path'] .'">';
-			$small_image_html = '<div class="product_image_' . (int)$product['id_product'] . '">' . $small_image_html . "</div>\n";
-			$Page->add_jq_init('$(".product_image_' . (int)$product['id_product'] . '").colorbox({
-		   	href:"' . $F->js_escape($image_type['big_image_path']) . '",
-		   	photo:true});');
-		}
 		$catalog_index = $F->output_string_html( strtolower( $product['catalog_index'] ) );
 	   if( $P->logged_in ) {
 	?>
 	<tr>
-		<td style="cursor: pointer;" width="5%"><?php echo $F->draw_radio_field('list', (int)$product['id_product'], false, 'style="display: none"')
-		. $small_image_html; ?></td>
-		<td valign="top"><?php echo $cell_product_info; ?></td>
+		<td valign="top" width="10%"><?php echo $cell_product_info . $F->draw_radio_field('list', (int)$product['id_product'], false, 'style="display: none"'); ?></td>
 		<td width="5%"><?php echo $catalog_index; ?></td>
+		<td width="5%"><?php echo (int)$product['quantity']; ?></td>
 		<td width="10%"><?php echo Price::val( $product['price'] ) . '<br>(' . Price::tax( $product['vat'] ) . ')'; ?></td>
 		<td width="5%"><?php echo $cell_basket; ?></td>
 	</tr>

@@ -8,6 +8,21 @@
 
 if( !defined('_I_INIT') ) die();
 
+/*
+ * order attribute
+ * 
+ * sposób płatności, czy częściowa realizacja jest dopuszczalna
+ * przy zamówieniu ma być możliwość podania życzonego terminu dostawy
+ * przy składaniu zamówienia opcja: odbiór osobisty
+ * 
+ * PAYMENT_METHOD
+ * DELIVERY_PARTIAL
+ * DELIVERY_DATE
+ * DELIVERY_PERSONAL
+ * 
+ */
+
+
 class Data_Order extends Data_Picture {
 
    function __construct() {
@@ -244,6 +259,69 @@ class Data_Order extends Data_Picture {
       return $res;
    }
 
+   static function get_order_attribute( $id_order, $attribute_type = false) {
+   	$F = Framework::g_global();
+   
+   	$where_add = '';
+   
+   	if( $F->not_null($attribute_type) ) {
+   		$where_add = ' and oa.type = "' . db_escape($attribute_type) . '"';
+   	}
+   
+   	$query = 'select type, value
+         	from ' . TBL_GLOBAL_ORDER_ATTRIBUTES . ' oa ,
+         	' . TBL_GLOBAL_ORDER . ' o
+         	where oa.id_order = o.id_order and oa.id_order = "' . db_int($id_order) . '"' . $where_add;
+   	$result = db_query( $query );
+   	$nrow = db_rows( $result );
+   	if( $nrow == 1 && $F->not_null($attribute_type) ) {
+   		return db_fetch_result('value', $result);
+   	} elseif( $nrow > 1 ) {
+   		return db_result_array_full($result);
+   	} else {
+   		return false;
+   	}   
+
+   }
+   
+   static function get_invoice_list($params) {
+   	$query = 'select `id_invoice`, `id_client`, `id_order`, `invoice_number`,
+   		`state`, `net_value`, `gross_value`, `description`,
+   		`date_issue`, `date_pay`, invoice_image,
+   		UNIX_TIMESTAMP(date_issue) as ts_issue, UNIX_TIMESTAMP(date_pay) as ts_pay
+   		from ' . TBL_SHOP_ORDER_INVOICE . '
+      	where id_client = ' . db_int($params['id_client']) . ' order by date_issue desc';
+   	$result = db_query( $query );
+   	
+   	if( db_rows($result) > 0 ) return db_result_array_full( $result );
+   	else return array();
+
+   }
+
+   static function getOrderAttributeList( $id_order = 0, $length = 1 ) {
+   
+   	$query = 'select oa.`id_order`, `type`, `val`
+         	from ' . TBL_SHOP_ORDER_ATTRIBUTES . ' oa ,
+         	' . TBL_SHOP_ORDER . ' o
+         	where oa.id_order = o.id_order and oa.id_order = "' . db_int($id_order) . '"';
+   	add_to_fp('$query ' . $query);
+   	$result = db_query( $query );
+   	return db_result_array_full($result);
+   }
+    
+   static function doOrderAttributeAddOrUpdate( $param ) {
+   
+   	$query = 'select "' . db_int($param['id_order']) . '" as id_one,
+   			"' . db_escape($param['type'].','.$param['val']) . '" as additional_data,
+          b_func_order_attribute_set("' . db_int($param['id_order']) . '", "' . db_escape($param['type']) . '",
+          "' . db_escape($param['val']) . '") as status';
+   
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	return db_fetch_array($result);
+   }
+
 }
+
 
 ?>

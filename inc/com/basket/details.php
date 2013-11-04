@@ -2,8 +2,11 @@
 $product_list = $Shopping_Basket->get_all_product();
 $id_shopping_basket_version = (int)$Shopping_Basket->id_shopping_basket_version;
 
-$version_list = $Shopping_Basket->get_all_version();
-$history_list = $Shopping_Basket->get_all_history();
+if( defined('SHOP_BASKET_SHOW_VERSIONS') && constant('SHOP_BASKET_SHOW_VERSIONS') == 'true' )
+	$version_list = $Shopping_Basket->get_all_version();
+
+if( defined('SHOP_BASKET_SHOW_HISTORY') && constant('SHOP_BASKET_SHOW_HISTORY') == 'true' )
+	$history_list = $Shopping_Basket->get_all_history();
 
 $Page->add_js_file('table.js');
 $Page->add_js_file('toolbox.js');
@@ -31,12 +34,12 @@ if( $Shopping_Basket->check_rights('MAKE_ORDER', false) )
    //$basket_order = $F->dynamic_image_submit(Lang::_('PREPARE_ORDER_BASKET'),'PREPARE_ORDER_BASKET');
    //$basket_order = $F->draw_submit('PREPARE_ORDER_BASKET', false, Lang::_('PREPARE_ORDER_BASKET'));
 
-if( $Shopping_Basket->check_move('UP') )
+if( $Shopping_Basket->check_move('UP') && defined('SHOP_BASKET_SHOW_LEVEL_UP') && constant('SHOP_BASKET_SHOW_LEVEL_UP')  != "false" )
 	$basket_up = $F->static_image_submit($F->static_image_src('icon/up_32.png'), Lang::_('CHANGE_LEVEL_UP'),' name="CHANGE_LEVEL_UP"');
   // $basket_up    = $F->dynamic_image_submit(Lang::_('CHANGE_LEVEL_UP'), 'CHANGE_LEVEL_UP');
    //$basket_up    = $F->draw_submit('CHANGE_LEVEL_UP', false, Lang::_('SEND_BASKET_HIGHER'));
 
-if( $Shopping_Basket->check_move('DOWN') )
+if( $Shopping_Basket->check_move('DOWN') && defined('SHOP_BASKET_SHOW_LEVEL_UP') && constant('SHOP_BASKET_SHOW_LEVEL_UP')  != "false" )
 	$basket_down = $F->static_image_submit($F->static_image_src('icon/down_32.png'), Lang::_('CHANGE_LEVEL_DOWN'),' name="CHANGE_LEVEL_DOWN"');
 //    $basket_down  = $F->dynamic_image_submit(Lang::_('CHANGE_LEVEL_DOWN'),'SEND_BASKET_LOWER');
    //$basket_down  = $F->draw_submit('CHANGE_LEVEL_DOWN', false, Lang::_('SEND_BASKET_LOWER'));
@@ -46,7 +49,7 @@ $update_basket = $F->static_image_submit($F->static_image_src('icon/tick_32.png'
 
 
 $arg = array('mode' => 'make_favorite_basket', 'id_shopping_basket' => $Shopping_Basket->id_shopping_basket);
-$add_basket = $F->draw_link(
+$add_basket_fav = $F->draw_link(
 		$F->make_link(CFG_COM_BASKET_FAVORITE, $arg), 'title="' . Lang::_('MAKE FAVORITE BASKET') . '"',
 		$F->static_image('icon/heart_32.png') );
 
@@ -80,15 +83,15 @@ if( $F->not_null($product_list) ) {
 	<tr>
 		<td align="left"><?php echo $basket_up . '&nbsp;' . $basket_down; ?></td>
 		<td colspan="3">&nbsp;</td>
-		<td align="right"><?php echo $add_basket . '&nbsp;' . $basket_order . '&nbsp;' . $update_basket ?></td>
+		<td align="right"><?php echo $add_basket_fav . '&nbsp;' . $basket_order . '&nbsp;' . $update_basket ?></td>
 	</tr>
 </table>
 <div class="basket_container container_subheader"><?php echo Lang::_('basket products'); ?><div class="icon"></div></div>
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
-		<th><?php echo Lang::_('PICTURE') ?></th>
 		<th><?php echo Lang::_('NAME') . ', ' . Lang::_('DESCRIPTION')?></th>
 		<th><?php echo Lang::_('PRICE') ?></th>
+		<th><?php echo Lang::_('QUANTITY_IN_WAREHAUSE') ?></th>
 		<th><?php echo Lang::_('quantity') ?></th>
 		<th><?php echo Lang::_('remove from BASKET') ?></th>
 	</tr>
@@ -101,20 +104,14 @@ if( $F->not_null($product_list) ) {
 	   $link_product_info = $F->make_link(CFG_COM_PRODUCT_INFO, $GET_product);
 	   $cell_product_info = $F->draw_link($link_product_info, '',
 	   '<div class="catalog_product_name">' . $F->output_string_html( $product['name'] ) . '</div>
-	   <div class="catalog_product_description">' . nl2br($F->output_string_html( $product['description'], 384 )) . '</div>');
-
-	   $small_image_path = Data::get_product_image_path( $product['picture_small_url'] );
-	   $si_oc = "$.colorbox({href:'" . Data::get_product_image_path( $product['picture_big_url'] ) . "', photo:true});";
-	   $small_image_html = $F->static_image($small_image_path, Lang::_('show_big_image'), " onclick=\"$si_oc\"");;
-	   
+	   <div class="catalog_product_description">' . nl2br($F->output_string_html( $product['description'], 384 )) . '</div>');	   
 	   ?>
 	<tr>
-		<td style="cursor: pointer;" width="5%"><?php echo $F->draw_radio_field('list', $product_key, false, 'style="display: none"')
-		. $small_image_html; ?></td>
-		<td valign="top"><?php echo $cell_product_info; ?></td>
-		<td width="10%"><?php echo Price::val( $product['price'] ) . '<br>(' . Price::tax( $product['vat'] ) . ')'; ?></td>
+		<td width="10%" valign="top"><?php echo $F->draw_radio_field('list', $product_key, false, 'style="display: none"') . $cell_product_info; ?></td>
+		<td width="10%"><?php echo Price::val( $product['price'] ) . '<br>(' . Price::tax( $product['vat'] ) . ')'; ?></td>		
+		<td width="5%"><?php echo (int)$product['db_quantity']; ?></td>
 		<td width="10%"><?php echo $F->draw_input_field('product_quantity[' . $product_key . ']', $product['quantity'], array('size' => '5')); ?></td>
-		<td><?php echo $cell_remove_from_basket; ?></td>
+		<td width="5%"><?php echo $cell_remove_from_basket; ?></td>
 	</tr>
 	<?php
 	}
@@ -136,6 +133,8 @@ if( $F->not_null($product_list) ) {
 <div class="basket_container container_subheader"><?php echo Lang::_('basket products'); ?><div class="icon"></div></div>
 <?php
 }
+
+if( defined('SHOP_BASKET_SHOW_VERSIONS') && constant('SHOP_BASKET_SHOW_VERSIONS') == 'true' ) {
 ?>
 <hr>
 <div class="basket_container container_subheader"><?php echo Lang::_('basket history'); ?><div class="icon"></div></div>
@@ -162,6 +161,11 @@ if( $F->not_null($product_list) ) {
 	}
 	?>
 </table>
+<?php 
+}
+
+if( defined('SHOP_BASKET_SHOW_HISTORY') && constant('SHOP_BASKET_SHOW_HISTORY') == 'true' ) {
+?>
 <div class="basket_container container_subheader"><?php echo Lang::_('basket versions'); ?><div class="icon"></div></div>
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
@@ -193,6 +197,9 @@ if( $F->not_null($product_list) ) {
 	}
 	?>
 </table>
+<?php 
+}
+?>
   </div>
   <div class="basket_container basket_bottom container_bottom"></div>
 </div>

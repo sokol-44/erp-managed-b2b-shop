@@ -608,6 +608,7 @@ class Shopping_Basket {
          $product_info_array = Data::get_product_info_list( $product_id_array );
           
          foreach ($product_info_array  as $key => $product_info) {
+         	$product_info_array[$key]['db_quantity'] =  $product_info_array[$key]['quantity'];
             $product_info_array[$key]['quantity'] = $this->contents[$key]['quantity'];
          }
           

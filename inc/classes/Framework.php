@@ -53,15 +53,18 @@ class Framework extends Framework_Data {
                 $cut_pos = $lenght;
              }
          }
-         $substring = substr($substring,0,$lenght);
-         return htmlspecialchars($substring);
+         $substring = substr($substring,0,$cut_pos).'...';
+//          return htmlspecialchars($substring);
+         return htmlentities($substring,  ENT_COMPAT, 'UTF-8', false );
       } else {
-         return htmlspecialchars($string);
+      	// return htmlspecialchars($substring);
+         return htmlentities($string,  ENT_COMPAT, 'UTF-8', false );
       }
    }
 
    static function output_string($string) {
-      return htmlspecialchars($string);
+   	return htmlentities($string,  ENT_COMPAT, 'UTF-8', false );
+     // return htmlspecialchars($string);
    }
 
    static function redirect($page) {

@@ -14,12 +14,16 @@ $BackTrail->add_trail();
 
 // prepare page attributes
 //
+$template_dir = DIR_INC_TEMPLATES . DS . $config['TEMPLATES']['shop'] . DS;
+$template_conf =  $template_dir . $config['TEMPLATES']['shop'] . '_conf.php';
+$template =  $template_dir . $config['TEMPLATES']['shop'] . '.php';
+
+if( $template_conf != '' && is_file($template_conf) ) {
+   include_once($template_conf);
+}
+
 $Page->start();
 $Page->render_places();
-
-//display it in template
-$template_dir = DIR_INC_TEMPLATES . DS . $config['TEMPLATES']['shop'] . DS;
-$template =  $template_dir . $config['TEMPLATES']['shop'] . '.php';
 
 if( $template != '' && is_file($template) ) {
    include_once($template);
@@ -32,13 +36,13 @@ if( $template != '' && is_file($template) ) {
 // echo '<!--';
 //print_debug($Shopping_Basket_Chain);
 // print_debug($_SESSION);
-// print_debug($query_log);
+print_debug(Lang::$STR);
+print_debug($query_log);
 //print_debug($BackTrail);
 //print_debug($Page);
 // print_debug($F);
 // print_debug($P);
 //print_debug($Info);
-print_debug(Lang::$STR);
 //print_debug($_GET);
 // $Info->reset();
 // echo '-->';

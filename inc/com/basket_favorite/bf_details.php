@@ -55,9 +55,10 @@ if( $F->not_null($product_list) ) {
 <div class="basket_container container_subheader"><?php echo Lang::_('basket products'); ?><div class="icon"></div></div>
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
-		<th><?php echo Lang::_('PICTURE') ?></th>
+		<!-- <th><?php echo Lang::_('PICTURE') ?></th> -->
 		<th><?php echo Lang::_('NAME') . ', ' . Lang::_('DESCRIPTION')?></th>
 		<th><?php echo Lang::_('PRICE') ?></th>
+		<th><?php echo Lang::_('QUANTITY_IN_WAREHAUSE') ?></th>
 		<th><?php echo Lang::_('quantity') ?></th>
 		<!-- <th><?php echo Lang::_('remove from BASKET') ?></th>-->
 	</tr>
@@ -97,11 +98,12 @@ if( $F->not_null($product_list) ) {
 	   
 	   ?>
 	<tr>
-		<td style="cursor: pointer;" width="5%"><?php echo $F->draw_radio_field('list', $product['id_product'], false, 'style="display: none"')
-		. $small_image_html; ?></td>
-		<td valign="top"><?php echo $cell_product_info; ?></td>
+		<!-- <td style="cursor: pointer;" width="5%"><?php echo $small_image_html; ?></td> -->
+		<td  width="5%" valign="top"><?php echo $F->draw_radio_field('list', $product['id_product'], false, 'style="display: none"')
+		. $cell_product_info; ?></td>
 		<td width="10%"><?php echo Price::val( $product['price'] ) . '<br>(' . Price::tax( $product['vat'] ) . ')'; ?></td>
-		<td width="10%"><?php echo $product['quantity']; ?></td>
+		<td width="5%"><?php echo (int)$product_info['quantity']; ?></td>
+		<td width="10%"><?php echo (int)$product['quantity']; ?></td>
 	</tr>
 	<?php
 	}

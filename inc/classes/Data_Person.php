@@ -16,18 +16,50 @@ if( !defined('_I_INIT') ) die();
  * @author ms
  *
  */
+
+/*
+ * client attributes
+ * 
+      PRODUCT_VIEW_NAME
+ * 
+      ACCOUNT_MANAGER_ADDRESS
+ * 
+   	BALANCE_CREDIT_LIMIT
+   	BALANCE_FREE_CREDIT
+   	BALANCE_PUNCTUALITY
+ */
+
 class Data_Person extends Data_Rights {
-   //
-   //		 $F->draw_input_field('login', $person_data['login']);
-   //		 $F->draw_input_field('description', $person_data['description']);
-   //		 $F->draw_input_field('email', $person_data['email']);
-   //		 $F->draw_password_field('new_password');
-   //		 $F->show_rights_list('ADMIN', $person_data['rights_ids']);
-   //		 $F->show_person_account_state('ADMIN', $person_data['state']);
 
    function __construct() {
       parent::__construct();
    }
+   
+   static function additional_addreses($type, $params) {
+
+   	$ids = array('SHOP_BASKET_ORDER_ADDRESS_ADD' => -1, 
+   	'SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION' => -2);
+   	
+   	$id_client = (int) $params['id_client'];
+   	$id_client_user = (int) $params['id_client_user'];
+   	
+   	$addreses = array(
+   			-2 => array('id_address' => -2,
+   					'id_client' => (int)$id_client, 'id_client_user' => (int)$id_client_user,
+   					'description' => Lang::_('personal collection'),
+   					'name' => Lang::_('write proposition in description field')
+   			),
+   			-1 => array('id_address' => -1,
+   					'id_client' => (int)$id_client, 'id_client_user' => (int)$id_client_user,
+   					'description' => Lang::_('address write in'),
+   					'name' => Lang::_('write in description field')
+   			)
+   	);
+
+   	if( isset($ids[$type]) ) return $addreses[$ids[$type]];
+   	elseif( array_search($type, $ids) ) return $addreses[$type];
+   	else return array();
+   } 
 
    static function remove_person($table, $id_in) {
 
@@ -263,7 +295,7 @@ class Data_Person extends Data_Rights {
           "' . db_escape($email) . '", "' . db_escape($phone) . '", "' . db_escape($phone_cell) . '", "' . db_escape($state) . '") as status';
       }
       add_to_fp($query);
-      $result = db_query( db_fetch_array($result) );
+      $result = db_query( db_fetch_array($query) );
       
       if( $password!='' && substr_count($password, ':') < 1 ) {
          $res_pass = doClientUserSetPassword($param_array);
@@ -405,21 +437,35 @@ class Data_Person extends Data_Rights {
       db_perform(TBL_GLOBAL_CLIENT, $data_main_sql, 'UPDATE', "id_client=" . (int)$data_org['id_client']);
    }
 
-   static function get_client_attribute( $id, $attribute_type) {
-
-      $query = 'select value
+   static function get_client_attribute( $id_client, $attribute_type = false) {
+      $F = Framework::g_global();
+		
+   	$where_add = '';
+   	
+   	if( $F->not_null($attribute_type) ) {
+   		$where_add = ' and ca.type = "' . db_escape($attribute_type) . '"';
+   	}
+   	
+      $query = 'select ca.`id_client`, `type`, `val`
          	from ' . TBL_GLOBAL_CLIENT_ATTRIBUTES . ' ca ,
          	' . TBL_GLOBAL_CLIENT . ' c
-         	where ca.id_client = c.id_client and ca.id_client = "' . db_escape($attribute_type) . '"';
+         	where ca.id_client = c.id_client and ca.id_client = "' . db_int($id_client) . '"' . $where_add;
       
       if ( $attribute_type == 'PRODUCT_VIEW_NAME' ) {
          if ( Data_Products::$Data_Products_params['client_view'] ) return Data_Products::$Data_Products_params['client_view'];
          elseif ( defined('SHOP_CLIENT_PRODUCT_PRICE_VIEW') ) return constant('SHOP_CLIENT_PRODUCT_PRICE_VIEW');
          else return false;
-      } elseif( db_rows( db_query($query) ) ) {
-         return db_fetch_result('val');
+      } else {
+      	$result = db_query( $query );
+      	$nrow = db_rows( $result );
+      	if( $nrow == 1 && $F->not_null($attribute_type) ) {
+      		return db_fetch_result('val', $result);
+      	} elseif( $nrow > 1 ) {
+      		return db_result_array_full($result);
+      	} else {
+      		return false;
+      	}
       }
-      else return false;
    }
    
    static function get_client_data( $id_client ) {
@@ -497,6 +543,30 @@ class Data_Person extends Data_Rights {
       $result = db_query( $query );
       return db_result_array_full($result);
    }
+   
+   static function getClientAttributeList( $id_client = 0, $length = 1 ) {
+   	
+   	$query = 'select ca.`id_client`, `type`, `val`
+         	from ' . TBL_GLOBAL_CLIENT_ATTRIBUTES . ' ca ,
+         	' . TBL_GLOBAL_CLIENT . ' c
+         	where ca.id_client = c.id_client and ca.id_client = "' . db_int($id_client) . '"';
+   	add_to_fp('$query ' . $query);
+		$result = db_query( $query );
+      return db_result_array_full($result);
+   }
+   
+   static function doClientAttributeAddOrUpdate( $param ) {
+   	
+   	$query = 'select "' . db_int($param['id_client']) . '" as id_one, 
+   			"' . db_escape($param['type'].','.$param['val']) . '" as additional_data,
+          b_func_client_attribute_set("' . db_int($param['id_client']) . '", "' . db_escape($param['type']) . '",
+          "' . db_escape($param['val']) . '") as status';
 
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	return db_fetch_array($result);
+   }
+
+   
 }
 ?>

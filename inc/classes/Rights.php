@@ -98,7 +98,26 @@ class Rights {
       }
       
    }
+   public function invoice_rights( $viewer_params, $action, $show_info = true ) {
+   	$P = Person::g_global();
+   	$this->show_info = $show_info;
+
+   	switch( $action ) {
+   		// ---------------------------------------------------------------------------------------------------- //
+   		case 'SHOW':  //$action
+   			if ( $P->check_roles('LEVEL_99', 'ADMIN', 'OPERATOR') ) {
+   						$res_debug .= 'u1b';
+   						return array(true, $res_debug);
+   			}
+   			return array(false, $res_debug);
+   			break;
+   		default:
+   			return array(false, $res_debug);
+   			break;
    
+   	}
+   }
+     
    public function basket_favorite_rights( $basket_params, $action, $show_info = true ) {
    	$P = Person::g_global();
    	$this->show_info = $show_info;

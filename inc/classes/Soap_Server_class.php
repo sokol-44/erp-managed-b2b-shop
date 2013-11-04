@@ -253,14 +253,21 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
  * - wymagane elementy dla nowy/update
  */
 
+
 class ClientData extends BasicSOAPDataMethods {
-   public $list = array('id_client', 'name', 'description', 'email', 'phone', 'state');
-   public $list_type = array('id_client' => 'INT+', 'name' => 'TEXT', 'description' => 'TEXT',
-          'email' => 'EMAIL', 'phone' => 'TEXT', 'state' => 'TEXT');
-   public $list_new = array('id_client', 'name');
-   public $list_update = array('id_client');
+	public $list = array('id_client', 'name', 'description', 'email', 'phone', 'state');
+	public $list_type = array('id_client' => 'INT+', 'name' => 'TEXT', 'description' => 'TEXT',
+			'email' => 'EMAIL', 'phone' => 'TEXT', 'state' => 'TEXT');
+	public $list_new = array('id_client', 'name');
+	public $list_update = array('id_client');
 }
 
+class ClientAttributeData extends BasicSOAPDataMethods {
+   public $list = array('id_client', 'type', 'val');
+   public $list_type = array('id_client' => 'INT+', 'type' => 'TEXT', 'val' => 'TEXT');
+   public $list_new = array('id_client', 'type', 'val');
+   public $list_update = array('id_client', 'type', 'val');
+}
 
 class ClientUserData extends BasicSOAPDataMethods {
    public $list = array('id_client_user', 'id_client', 'login', 'password', 'password_salt',
@@ -311,6 +318,13 @@ class OrderData extends BasicSOAPDataMethods {
    		 'id_address' => 'INT');
    public $list_new = array('id_order', 'id_client');
    public $list_update = array('id_order', 'id_client');
+}
+
+class OrderAttributeData extends BasicSOAPDataMethods {
+	public $list = array('id_order', 'type', 'val');
+	public $list_type = array('id_order' => 'INT+', 'type' => 'TEXT', 'val' => 'TEXT');
+	public $list_new = array('id_order', 'type', 'val');
+	public $list_update = array('id_order', 'type', 'val');
 }
 
 class OrderStatusData extends BasicSOAPDataMethods {

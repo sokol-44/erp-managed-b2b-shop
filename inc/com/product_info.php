@@ -20,7 +20,7 @@ if( $F->not_null($image_type) ) {
 }
 
 $price_html = Price::val($product_info['price']) . ' <span class="product_vat">(' . Price::tax($product_info['vat']) . ')</span>';
-$description_html = nl2br( $F->output_string_html( $product_info['description'] ) );
+$description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product_info['description'] ) );
 
 $GET_basket = array('mode' => 'add_to_basket', 'id_product' => $id_product);
 $link_basket = $F->make_link(CFG_COM_BASKET, $F->add_local_get($GET_basket, '', $GET_tmp) );
@@ -38,7 +38,9 @@ $add_basket_html = $add_basket_form .
 
 $product_quantity = (int)(($product_info['quantity']>0)?$product_info['quantity']:0);
 $product_producent = $F->output_string_html( $product_info['producent'] );
-$product_index = $F->output_string_html( strtolower($product_info['catalog_index']) );
+$product_index = $F->output_string_html( $product_info['catalog_index'] );
+
+
 $Page->head_title = $F->output_string_html( $product_info['name'] );
 if ( $F->not_null($product_producent) )
   $Page->head_title .= $Page->head_title . ', ' . $product_producent;
@@ -53,7 +55,7 @@ if( $P->logged_in ) {
    <?php if( $F->not_null($image_type) ) echo '<div class="product product_image">' . $small_image_html . "</div>\n"; ?>
    <div class="product product_price"><?php echo '<span>' . Lang::_('PRICE') . '</span>: ' . $price_html; ?></div>
    <?php
-   if ( $product_quantity > 0 )
+   //if ( $product_quantity > 0 )
       echo '<div class="product product_quantity"><span>' . Lang::_('QUANTITY_IN_WAREHAUSE') . '</span>: ' . $product_quantity . "</div>\n";
    if ( $F->not_null($product_producent) )
       echo '<div class="product product_producent"><span>' . Lang::_('PRODUCENT') . '</span>: ' . $product_producent . "</div>\n";

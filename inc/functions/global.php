@@ -127,11 +127,12 @@ function gl_check_password($password_in, $password_db) {
          $pass_hash_in = $pass_array[1];
          $pass_salt = $pass_array[2];
       }
-      $pass_hash = gl_compute_hash($password_hash, $password_in, $pass_salt);
    } else {
       return false;
    }
-    
+   
+   $pass_hash = gl_compute_hash($password_hash, $password_in, $pass_salt);
+   
    if( $pass_hash_in == $pass_hash ) return true;
    else                              return false;
 }
@@ -154,7 +155,7 @@ function gl_make_password($password_in, $salt_add = '', $pure_salt = false) {
    if( $pure_salt ) $pass_salt = $salt_add;
    else $pass_salt = hash_hmac('ripemd160', $salt_add, $random );
 
-   echo 'gl_make_password<br>:' . $password_in . '<br>s:' . $pass_salt . '<br>';
+   //echo 'gl_make_password<br>:' . $password_in . '<br>s:' . $pass_salt . '<br>';
    
    if( defined('DEFAULT_PASSWORD_HASH_TYPE') ) $password_hash = DEFAULT_PASSWORD_HASH_TYPE;
    else $password_hash = 'HM_RMD320';
@@ -165,13 +166,14 @@ function gl_make_password($password_in, $salt_add = '', $pure_salt = false) {
 }
 
 function gl_compute_hash($password_hash, $password_in, $pass_salt) {
-   
+
    switch ($password_hash) {
       case 'MD5':
          $pass_hash = md5( $password_in );
          break;
       case 'SHA1':
-         $pass_hash = sha1( $password_in );
+	     if( empty($pass_salt) ) $pass_hash = sha1( $password_in );
+		 else $pass_hash = sha1( $password_in . $pass_salt );
          break;
       case 'SHA12':
          $pass_hash = sha1( sha1( $password_in . $pass_salt ) . $pass_salt );
@@ -207,6 +209,7 @@ function gl_compute_hash($password_hash, $password_in, $pass_salt) {
          $pass_hash = hash_hmac('ripemd320', $password_in . str_rot13($password_in), $pass_salt);
          break;
    }
+   
    return $pass_hash;
 }
 

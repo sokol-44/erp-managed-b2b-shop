@@ -13,27 +13,20 @@ $BC->add_crumb(Lang::_('Orders details'), $F->self_link() );
   <div class="order_container order_content">
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
-		<th><?php echo Lang::_('Field') ?></th>
-		<th><?php echo Lang::_('Value') ?></th>
-	</tr>
-	<tr>
 		<td><?php echo Lang::_('ID') ?></td>
-		<td><?php echo $F->output_string_html($Order->data['id_order']); ?></td>
-	</tr>
-	<tr>
-		<td><?php echo Lang::_('order DESCRIPTION') ?></td>
-		<td><?php echo nl2br($F->output_string_html( $Order->data['description'] ) ) ?></td>
-	</tr>
-	<tr>
-		<td><?php echo Lang::_('basket DESCRIPTION') ?></td>
-		<td><?php echo nl2br($F->output_string_html( $Order->data['description_basket'] ) ) ?></td>
-	</tr>
-	<tr>
+		<td><?php echo Lang::_('order DESCRIPTION') . '<hr>' . Lang::_('basket DESCRIPTION') ?></td>
 		<td><?php echo Lang::_('order date') ?></td>
-		<td><?php echo $F->output_string_html($Order->data['date_create']); ?></td>
+		<td><?php echo Lang::_('order address') ?></td>
+	<?php if($F->not_null($Order->data['date_modified'])) {?>
+		<td><?php echo Lang::_('order update') ?></td>
+	<?php } ?>
+		<td><?php echo Lang::_('order STATE') ?></td>
 	</tr>
 	<tr>
-		<td><?php echo Lang::_('order address') ?></td>
+		<td><?php echo $F->output_string_html($Order->data['id_order']); ?></td>
+		<td><?php echo nl2br($F->output_string_html( $Order->data['description'] ) ) . '<hr>' .
+							nl2br($F->output_string_html( $Order->data['description_basket'] ) ) ?></td>
+		<td><?php echo $F->output_string_html($Order->data['date_create']); ?></td>
 		<td>
 		<?php 
 		$Address = $Order->get_address();
@@ -49,25 +42,10 @@ $BC->add_crumb(Lang::_('Orders details'), $F->self_link() );
 		<div class=""><?php echo Lang::_('description') . ': ' . $addr_desc ?></div>
 		<div class=""><?php echo Lang::_('address') . ":<br>\n" . $addr_addr ?></div>
 		</div></td>
-	</tr>
 	<?php if($F->not_null($Order->data['date_modified'])) {?>
-	<tr>
-		<td><?php echo Lang::_('order update') ?></td>
 		<td><?php echo $F->output_string_html($Order->data['date_modified']); ?></td>
-	</tr>
 	<?php } ?>
-	<tr>
-		<td><?php echo Lang::_('order STATE') ?></td>
 		<td><?php echo $F->output_string_html(Lang::_($Order->data['name'])); ?></td>
-	</tr>
-	<tr>
-		<td><?php echo Lang::_('order statistic') ?></td>
-		<td><div class="basket order_total" style="width: 160px">
-<div class="basket_product_total"><?php echo Lang::_('TOTAL PRODUCTS'); ?><span id="nr"><?php echo $total['product_total']; ?></span></div>
-<div class="basket_product_types"><?php echo Lang::_('PRODUCTS TYPES'); ?><span id="nr"><?php echo $total['product_types']; ?></span></div>
-<div class="basket_sum_gross"><?php echo Lang::_('sum gross'); ?><span id="nr"><?php echo Price::val($total['sum_gross']); ?></span></div>
-<div class="basket_sum_netto"><?php echo Lang::_('sum_netto'); ?><span id="nr"><?php echo Price::val($total['sum_netto']); ?></span></div>
-</div></td>
 	</tr>
 </table>
 <?php
@@ -78,9 +56,9 @@ $add_basket = $F->draw_link(
 echo $add_basket;
 ?>
 <div class="basket_container container_subheader"><?php echo Lang::_('Order products'); ?><div class="icon"></div></div>
-<table class="tableBox" style="border: 0">
+<table class="tableBox" style="border: 0; width: 100%">
 	<tr class="tableBoxHeading">
-		<th><?php echo Lang::_('PICTURE') ?></th>
+		<!-- <th><?php echo Lang::_('PICTURE') ?></th>  -->
 		<th><?php echo Lang::_('NAME') . ', ' . Lang::_('DESCRIPTION')?></th>
 		<th><?php echo Lang::_('PRICE') ?></th>
 		<th><?php echo Lang::_('quantity') ?></th>
@@ -95,8 +73,9 @@ echo $add_basket;
 	      $product_name = $F->output_string_html( $product['name'] );
 	   }
 
+	   $description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
 	   $name_desc_cell = '<div class="catalog_product_name">' . $product_name . '</div>
-	   <div class="catalog_product_description">' . nl2br($F->output_string_html( $product['description'], 384 )) . '</div>';
+	   <div class="catalog_product_description">' . $description_html . '</div>';
 
 	   $link_product_info = $F->make_link(CFG_COM_PRODUCT_INFO, $GET_tmp);
 
@@ -120,16 +99,18 @@ echo $add_basket;
 
 	   ?>
 	<tr>
-		<td style="cursor: pointer;" width="5%"><?php echo $F->draw_radio_field('list', $product['id_product'], false, 'style="display: none"')
-		. $small_image_html; ?></td>
-		<td valign="top"><?php echo $cell_product_info; ?></td>
-		<td width="10%"><?php echo Price::val( $product['price'] ) . '<br>(' . Price::tax( $product['vat'] ) . ')'; ?></td>
+		<!-- <td style="cursor: pointer;" width="5%"><?php echo $small_image_html; ?></td>  -->
+		<td width="70%" valign="top"><?php echo $F->draw_radio_field('list', $product['id_product'], false, 'style="display: none"') . $cell_product_info; ?></td>
+		<td width="30%"><?php echo Price::val( $product['price'] ) . '<br>(' . Price::tax( $product['vat'] ) . ')'; ?></td>
 		<td width="10%"><?php echo $product['quantity']; ?></td>
 	</tr>
 	<?php
 	}
 	?>
 </table>
+<?php
+if( defined('SHOP_BASKET_SHOW_VERSIONS') && constant('SHOP_BASKET_SHOW_VERSIONS') == 'true' ) {
+?>
 <hr>
 <div class="order_container order_title container_header"><?php echo Lang::_('Source basket'); ?><div class="icon"></div></div>
 <div class="order_container container_subheader"><?php echo Lang::_('basket history'); ?><div class="icon"></div></div>
@@ -156,6 +137,11 @@ echo $add_basket;
 	}
 	?>
 </table>
+<?php 
+}
+
+if( defined('SHOP_BASKET_SHOW_HISTORY') && constant('SHOP_BASKET_SHOW_HISTORY') == 'true' ) {
+?>
 <div class="order_container container_subheader"><?php echo Lang::_('basket versions'); ?><div class="icon"></div></div>
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
@@ -193,7 +179,7 @@ echo $add_basket;
 	?>
 </table>
 <?php
-
+}
 ?>
 
   </div>

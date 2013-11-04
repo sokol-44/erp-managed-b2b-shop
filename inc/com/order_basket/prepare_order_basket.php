@@ -2,8 +2,13 @@
 
 $id_shopping_basket_version = (int)$Shopping_Basket->id_shopping_basket_version;
 $product_list = $Shopping_Basket->get_all_product();
-$version_list = $Shopping_Basket->get_all_version();
-$history_list = $Shopping_Basket->get_all_history();
+
+if( defined('SHOP_BASKET_SHOW_VERSIONS') && constant('SHOP_BASKET_SHOW_VERSIONS') == 'true' )
+	$version_list = $Shopping_Basket->get_all_version();
+
+if( defined('SHOP_BASKET_SHOW_HISTORY') && constant('SHOP_BASKET_SHOW_HISTORY') == 'true' )
+	$history_list = $Shopping_Basket->get_all_history();
+
 
 $Page->add_js_file('table.js');
 $Page->add_js_file('toolbox.js');
@@ -45,9 +50,27 @@ function remove_from_basked() { return true; }
 	</tr>
 	<tr>
 		<td colspan="5">
+  <table class="tableBox" style="border: 0; width: 100%">
+	<tr class="tableBoxHeading">
+		<th><?php echo Lang::_('PAYMENT_METHOD') ?></th>
+		<th><?php echo Lang::_('DELIVERY_PARTIAL')?></th>
+		<th><?php echo Lang::_('DELIVERY_DATE') ?></th>
+		<!-- <th><?php echo Lang::_('DELIVERY_PERSONAL') ?></th> -->
+	</tr>
+	<tr>
+		<td width="5%"><?php  echo $F->draw_input_field('attr_PAYMENT_METHOD', '', ' style="width: 120px"'); ?></td>
+		<td width="10%"><?php echo $F->draw_input_field('attr_DELIVERY_PARTIAL', '', '', 'checkbox'); ?></td>
+		<td width="10%"><?php echo $F->draw_input_field('attr_DELIVERY_DATE', '', ' style="width: 120px"', 'date'); ?></td>
+		<!-- <td width="10%"><?php echo $F->draw_input_field('attr_DELIVERY_PERSONAL', '', '', 'checkbox'); ?></td>  -->
+	</tr>
+	</table>
+	   </td>
+	</tr>
+	<tr>
+		<td colspan="5">
       <?php echo Lang::_('choose address'); ?><br>
       <?php 
-      $Address_list = $P->get_client_address_list();
+      $Address_list = $P->get_order_address_list();
 		$history_last = $Shopping_Basket->get_last_history();
 		$default = $history_last['id_address'];
       if( $F->not_null( $Address_list ) ) {
@@ -82,7 +105,7 @@ function remove_from_basked() { return true; }
 </table>
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
-		<th><?php echo Lang::_('PICTURE') ?></th>
+		<!-- <th><?php echo Lang::_('PICTURE') ?></th> -->
 		<th><?php echo Lang::_('NAME') . ', ' . Lang::_('DESCRIPTION')?></th>
 		<th><?php echo Lang::_('PRICE') ?></th>
 		<th><?php echo Lang::_('quantity') ?></th>
@@ -101,9 +124,8 @@ function remove_from_basked() { return true; }
 	   $small_image_html = $F->static_image($small_image_path, Lang::_('show_big_image'), " onclick=\"$si_oc\"");;
 	   ?>
 	<tr>
-		<td style="cursor: pointer;" width="5%"><?php echo $F->draw_radio_field('list', $product_key, false, 'style="display: none"')
-		. $small_image_html; ?></td>
-		<td valign="top"><?php echo $cell_product_info; ?></td>
+		<!-- <td style="cursor: pointer;" width="5%"><?php echo $small_image_html; ?></td>  -->
+		<td width="10%" valign="top"><?php echo $F->draw_radio_field('list', $product_key, false, 'style="display: none"') . $cell_product_info; ?></td>
 		<td width="10%"><?php echo Price::val( $product['price'] ) . '<br>(' . Price::tax( $product['vat'] ) . ')'; ?></td>
 		<td width="10%"><?php echo $product['quantity']; ?></td>
 	</tr>
@@ -111,6 +133,9 @@ function remove_from_basked() { return true; }
 	}
 	?>
 </table>
+<?php 
+if( defined('SHOP_BASKET_SHOW_VERSIONS') && constant('SHOP_BASKET_SHOW_VERSIONS') == 'true' ) {
+?>
 <table style="border: 0; width: 100%;">
 	<tr>
 		<td colspan="5">
@@ -141,6 +166,10 @@ function remove_from_basked() { return true; }
 	}
 	?>
 </table>
+<?php 
+}
+if( defined('SHOP_BASKET_SHOW_HISTORY') && constant('SHOP_BASKET_SHOW_HISTORY') == 'true' ) {
+?>
 <table style="border: 0; width: 100%;">
 	<tr>
 		<td colspan="5">
@@ -184,6 +213,9 @@ function remove_from_basked() { return true; }
 	}
 	?>
 </table>
+<?php 
+}
+?>
   </div>
   <div class="prepare_order_container prepare_order_bottom container_bottom"></div>
 </div>

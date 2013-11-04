@@ -14,7 +14,7 @@ echo $F->draw_link($F->make_link(CFG_COM_ACCOUNT),'', Lang::_('Account') ) .
 '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' .
 $F->draw_link($F->make_link(CFG_COM_LOGOUT),'', Lang::_('Logout') ); ?></div>
 */
-
+echo '<script>json_data.user_curent = "'.$F->json_string( $P->get_public_data() ).'";</script>';
 ?>
 <div class="person_data person_data_main">
 	<div class="person_data_info person_text"><?php echo $F->output_string_html($person_text) .

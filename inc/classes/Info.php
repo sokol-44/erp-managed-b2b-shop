@@ -30,6 +30,7 @@ class Info {
          self::$class = new Info;
       }
       if(method_exists(self::$class, $method)) {
+      	if( !is_array($args) ) $args = array($args);
          return call_user_func_array(array(self::$class, $method), $args);
       } else {
          return false;

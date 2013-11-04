@@ -219,7 +219,10 @@ function db_query($query, $link = 'db_link') {
    $result = mysql_query($query, $$link) or
    db_error($query, mysql_errno(), mysql_error(), debug_backtrace(), $$link);
    
-   if( !$result ) db_error($query, mysql_errno(), mysql_error(), debug_backtrace(), $$link);
+   if( mysql_errno() > 0  ) {
+   	if( defined('SOAP_ENVIRONMENT') && constant('SOAP_ENVIRONMENT') ) add_to_fp("db_error:\n" . $query);
+   	die('q:' . $query . ' ' . $result);
+   }
 
    if (defined('DEBUG_DB_QUERIES') && (DEBUG_DB_QUERIES == 'true')) {
       $dbg = debug_backtrace();
@@ -252,9 +255,12 @@ function db_affected_rows() {
 function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link = 'db_link') {
    global $$link;
 
+   $error_data =  "\n". $sql_query . "\n" . $db_error_code . "\n" . print_r($debug_backtrace, true);
+   
    if( defined('TBL_CORE_DB_ERRORS') ) $table = TBL_CORE_DB_ERRORS;
    elseif( isset($GLOBALS['config']['TABLES']['CORE_DB_ERRORS']) && $GLOBALS['config']['TABLES']['CORE_DB_ERRORS'] != '')
    $table = $GLOBALS['config']['TABLES']['CORE_DB_ERRORS'];
+   elseif( defined('SOAP_ENVIRONMENT') && constant('SOAP_ENVIRONMENT') ) return 'DB fatal error (1)'. $error_data;
    else die('DB fatal error (1)');
 
    if(is_resource($$link) && substr_count($sql_query, $table)==0 ) {
@@ -274,7 +280,8 @@ function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link 
 		(\"$db_sql\", \"$db_error_code\", \"$db_backtrace\", \"$db_environment\", \"$db_dat\")";
       $db_result = db_query( $query );
    } else {
-      echo 'DB fatal error (2)';
+   	if( defined('SOAP_ENVIRONMENT') && constant('SOAP_ENVIRONMENT') ) return 'DB fatal error (2)'. $error_data;
+   	else die('DB fatal error (2)');
    }
 
    if (defined('DEBUG_DB_QUERIES') && (DEBUG_DB_QUERIES == 'true')) {
@@ -285,7 +292,9 @@ function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link 
    }
 
    //FIXME - don't die - propagate error - to other
-   die('DB fatal error (SUCCESS)');
+
+   if( defined('SOAP_ENVIRONMENT') && constant('SOAP_ENVIRONMENT') ) return 'DB fatal error (SUCCESS)'. $error_data;
+   else die('DB fatal error (SUCCESS)');
 }
 
 

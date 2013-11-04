@@ -10,7 +10,7 @@ $Page->head_title = Lang::_('favorite BASKET list');
   <div class="basket_list_container basket_list_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
   <div class="basket_list_container basket_list_content">
 <?php echo Lang::_('Basket list');?>
-<table class="tableBox">
+<table class="tableBox" width="100%">
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('BASKET NUMBER'); ?></th>
 		<th><?php echo Lang::_('TOTAL PRODUCTS'); ?></th>

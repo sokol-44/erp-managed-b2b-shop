@@ -60,14 +60,14 @@ echo Lang::_('Basket help for icons');
 <?php echo Lang::_('Basket list');?>
 <table class="tableBox">
 	<tr class="tableBoxHeading">
-		<th><?php echo Lang::_('BASKET NUMBER'); ?></th>
-		<th><?php echo Lang::_('STATE'); ?></th>
-		<th><?php echo Lang::_('TOTAL PRODUCTS'); ?></th>
-		<th><?php echo Lang::_('PRODUCTS TYPES'); ?></th>
-		<th><?php echo Lang::_('sum gross'); ?></th>
-		<th><?php echo Lang::_('sum netto'); ?></th>
-		<th><?php echo Lang::_('WHO_IS_USING'); ?></th>
-		<th><?php echo Lang::_('available actions'); ?></th>
+		<th width="5%"><?php echo Lang::_('BASKET NUMBER'); ?></th>
+		<th width="15%"><?php echo Lang::_('STATE'); ?></th>
+		<th width="5%"><?php echo Lang::_('TOTAL PRODUCTS'); ?></th>
+		<th width="5%"><?php echo Lang::_('PRODUCTS TYPES'); ?></th>
+		<th width="15%"><?php echo Lang::_('sum gross'); ?></th>
+		<th width="15%"><?php echo Lang::_('sum netto'); ?></th>
+		<th width="15%"><?php echo Lang::_('WHO_IS_USING'); ?></th>
+		<th width="15%"><?php echo Lang::_('available actions'); ?></th>
 	</tr>
 	<?php
 	$GET_tmp = $F->make_get();
@@ -103,7 +103,7 @@ echo Lang::_('Basket help for icons');
 	$rights['UNLOCK'] = $Shopping_Basket->check_rights('UNLOCK', false);
 
 	$available_actions = $addup_basket . $remove_basket . $clean_basket . $lock_unlock;
-	$state_html = '0 ' . $Shopping_Basket->basket_level_text();
+	$state_html = '0<br>' . $Shopping_Basket->basket_level_text();
 	$basket_using_name = (($Shopping_Basket->params['using_name']!=''?$Shopping_Basket->params['using_name']:''));
 	?>
 	<tr>

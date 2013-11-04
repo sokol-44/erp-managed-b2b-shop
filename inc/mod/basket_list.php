@@ -19,7 +19,7 @@ $all_basket = $F->draw_link(
 ?>
 <div class="basket_container">
 <div class="basket menu_header"><?php echo Lang::_('BASKETS') ?><div class="icon"></div></div>
-<div class="basket_show_all"><?php echo $all_basket; ?></div>
+<div class="basket basket_show_all"><?php echo $all_basket; ?></div>
 <?php
 echo '<script>json_data.basket_list_default="'.$F->json_string($Shopping_Basket->params).'";</script>';
 $GET_id = $F->add_local_get('id_shopping_basket', (int)$Shopping_Basket->id_shopping_basket, $GET_tmp);
@@ -30,15 +30,15 @@ $clean_basket = $F->draw_link($clean_basket_link, 'title="' . Lang::_('clean BAS
 $show_basket_link = $F->make_link(CFG_COM_BASKET, $GET_id);
 $show_basket = $F->draw_link($show_basket_link, 'title="' . Lang::_('show BASKET') . '"', $F->static_image('icon/folder_16.png', Lang::_('show BASKET')));
 $desc_basket = $F->draw_link($show_basket_link, 'title="' . Lang::_('show BASKET') . '"', 
-	Lang::_('BASKET') . '<span id="nr">' . (int)$Shopping_Basket->id_shopping_basket . '</span>');
+	Lang::_('BASKET') . ' <span>' . (int)$Shopping_Basket->id_shopping_basket . '</span>');
 ?>
 <div class="basket mainbasket" id="basket_prev_<?php echo (int)$Shopping_Basket->id_shopping_basket; ?>">
 <div class="basket_menu"><?php echo $show_basket . $remove_basket . $clean_basket; ?></div>
-<div class="basket_number"><?php echo $desc_basket ?></div>
-<div class="basket_product_total"><?php echo Lang::_('TOTAL PRODUCTS'); ?><span id="nr"><?php echo $total['product_total']; ?></span></div>
-<div class="basket_product_types"><?php echo Lang::_('PRODUCTS TYPES'); ?><span id="nr"><?php echo $total['product_types']; ?></span></div>
-<div class="basket_sum_gross"><?php echo Lang::_('sum gross'); ?><span id="nr"><?php echo Price::val($total['sum_gross']); ?></span></div>
-<div class="basket_sum_netto"><?php echo Lang::_('sum_netto'); ?><span id="nr"><?php echo Price::val($total['sum_netto']); ?></span></div>
+<div class="basket_single basket_number"><?php echo $desc_basket ?></div>
+<div class="basket_single basket_product_total"><?php echo Lang::_('TOTAL PRODUCTS'); ?><span id="nr"><?php echo $total['product_total']; ?></span></div>
+<div class="basket_single basket_product_types"><?php echo Lang::_('PRODUCTS TYPES'); ?><span id="nr"><?php echo $total['product_types']; ?></span></div>
+<div class="basket_single basket_sum_gross"><?php echo Lang::_('sum gross'); ?><span id="nr"><?php echo Price::val($total['sum_gross']); ?></span></div>
+<div class="basket_single basket_sum_netto"><?php echo Lang::_('sum_netto'); ?><span id="nr"><?php echo Price::val($total['sum_netto']); ?></span></div>
 </div>
 <script>json_data.basket_list = new Array();</script>
 <?php
@@ -81,7 +81,7 @@ $total = $Shopping_Basket->calculate_total();
 	      $show_basket_link = $F->make_link(CFG_COM_BASKET, $GET_id);
 	      $show_basket = $F->draw_link($show_basket_link, 'title="' . Lang::_('show BASKET') . '"', $Shopping_Basket->id_shopping_basket);
 	      $desc_basket = $F->draw_link($show_basket_link, 'title="' . Lang::_('show BASKET') . '"',
-	      		Lang::_('BASKET') . '<span id="nr">' . (int)$Shopping_Basket->id_shopping_basket . '</span>');
+	      		Lang::_('BASKET') . ' <span>' . (int)$Shopping_Basket->id_shopping_basket . '</span>');
 
 	      $rights['MODIFY_CONTENTS'] = $Shopping_Basket->check_rights('MODIFY_CONTENTS', false);
 	      if( $rights['MODIFY_CONTENTS'] ) {
@@ -103,12 +103,12 @@ $total = $Shopping_Basket->calculate_total();
 	   echo '<script>json_data.basket_list.push("'.$F->json_string(array_merge($Shopping_Basket->params, $rights)).'");</script>';
 	   ?>
 <div class="basket<?php echo $class_add; ?>" id="basket_prev_<?php echo (int)$Shopping_Basket->id_shopping_basket; ?>">
-<div class="basket_menu"><?php echo $available_actions; ?></div>
-<div class="basket_number"><?php echo $desc_basket; ?></div>
-<div class="basket_product_total"><?php echo Lang::_('TOTAL PRODUCTS'); ?><span id="nr"><?php echo $total['product_total']; ?></span></div>
-<div class="basket_product_types"><?php echo Lang::_('PRODUCTS TYPES'); ?><span id="nr"><?php echo $total['product_types']; ?></span></div>
-<div class="basket_sum_gross"><?php echo Lang::_('sum gross'); ?><span id="nr"><?php echo Price::val($total['sum_gross']); ?></span></div>
-<div class="basket_sum_netto"><?php echo Lang::_('sum_netto'); ?><span id="nr"><?php echo Price::val($total['sum_netto']); ?></span></div>
+<div class="basket_single basket_menu"><?php echo $available_actions; ?></div>
+<div class="basket_single basket_number"><?php echo $desc_basket; ?></div>
+<div class="basket_single basket_product_total"><?php echo Lang::_('TOTAL PRODUCTS'); ?><span id="nr"><?php echo $total['product_total']; ?></span></div>
+<div class="basket_single basket_product_types"><?php echo Lang::_('PRODUCTS TYPES'); ?><span id="nr"><?php echo $total['product_types']; ?></span></div>
+<div class="basket_single basket_sum_gross"><?php echo Lang::_('sum gross'); ?><span id="nr"><?php echo Price::val($total['sum_gross']); ?></span></div>
+<div class="basket_single basket_sum_netto"><?php echo Lang::_('sum_netto'); ?><span id="nr"><?php echo Price::val($total['sum_netto']); ?></span></div>
 </div>
 <?php
 }
