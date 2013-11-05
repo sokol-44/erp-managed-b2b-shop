@@ -18,6 +18,11 @@ if( !defined('_I_INIT') ) die();
  */
 class Data_Contact {
 
+	function __construct() {
+		//echo 'Data_Contact';
+		//parent::__construct();
+	}
+	
 }
 
 ?>

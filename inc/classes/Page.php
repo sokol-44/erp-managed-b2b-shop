@@ -95,8 +95,10 @@ class Page {
          '<script type="text/javascript">' . NL .
          'if ( window[\'google\'] && window[\'google\'][\'loader\']) {' . NL .
          '  google.load("jquery", "1"); ' . NL .
+         '  google.load("jqueryui", "1"); ' . NL .
          '} else {' . NL .
          '  document.write(\'<script type="text/javascript" src="' . $this->path_js . $config['TEMPLATES']['jquery'] . '"><\/script>\');' . NL .
+         '  document.write(\'<script type="text/javascript" src="' . $this->path_js . $config['TEMPLATES']['jquery-ui'] . '"><\/script>\');' . NL .
          '}' . NL .
          '</script>' . NL .
          '<script type="text/javascript">' . NL .

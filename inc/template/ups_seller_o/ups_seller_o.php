@@ -25,6 +25,7 @@ if( !defined('_I_INIT') ) die();
 <link href="inc/template/ups_seller_o/css/my_layout.css?ver=<?php echo time(); ?>" rel="stylesheet" type="text/css" >
 <link href="inc/template/ups_seller_o/css/nav_shinybuttons.css?ver=<?php echo time(); ?>" rel="stylesheet" type="text/css" >
 <link href="inc/template/ups_seller_o/css/colorbox.css?ver=<?php echo time(); ?>" rel="stylesheet" type="text/css" >
+<link href="inc_html/css/jquery-ui.min.css?ver=<?php echo time(); ?>" rel="stylesheet" type="text/css" >
 <?php $Page->put_css(); ?>
 <?php $Page->put_js(); ?>
 <?php $Page->put_head_js(); ?>

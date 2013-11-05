@@ -25,6 +25,24 @@ $GET_id  = $F->add_local_get('mode', 'order_basket', $GET_id);
 
 $form_link = $F->make_link(CFG_COM_ORDER_BASKET, $GET_id);
 
+// $values (id, text)
+foreach(Data::$Data_order_params['PAYMENT_METHOD'] as $method) {
+	$values_pm[] = array('id' => $method, 'text' => Lang::_($method) );
+}
+
+$Page->add_jq_init('
+$.datepicker.regional[ "pl" ];
+$("#attr_DELIVERY_DATE").datepicker({
+	numberOfMonths: 2,
+	showButtonPanel: true,
+	minDate: 0, 
+	maxDate: "+2M",
+	dateFormat: "yy-mm-dd",
+	regional: "en"
+});');
+
+//$Page->add_js_file('jquery-ui-i18n.min.js');
+
 echo $F->draw_form('prepare_order_basket', $form_link);
 ?>
 <script>
@@ -58,9 +76,9 @@ function remove_from_basked() { return true; }
 		<!-- <th><?php echo Lang::_('DELIVERY_PERSONAL') ?></th> -->
 	</tr>
 	<tr>
-		<td width="5%"><?php  echo $F->draw_input_field('attr_PAYMENT_METHOD', '', ' style="width: 120px"'); ?></td>
-		<td width="10%"><?php echo $F->draw_input_field('attr_DELIVERY_PARTIAL', '', '', 'checkbox'); ?></td>
-		<td width="10%"><?php echo $F->draw_input_field('attr_DELIVERY_DATE', '', ' style="width: 120px"', 'date'); ?></td>
+		<td width="5%"><?php  echo $F->draw_pull_down_menu('attr_PAYMENT_METHOD', $values_pm); ?></td>
+		<td width="10%"><?php echo $F->draw_input_field('attr_DELIVERY_PARTIAL', 'YES', '', 'checkbox'); ?></td>
+		<td width="10%"><?php echo $F->draw_input_field('attr_DELIVERY_DATE', '', ' style="width: 120px"', 'text'); ?></td>
 		<!-- <td width="10%"><?php echo $F->draw_input_field('attr_DELIVERY_PERSONAL', '', '', 'checkbox'); ?></td>  -->
 	</tr>
 	</table>

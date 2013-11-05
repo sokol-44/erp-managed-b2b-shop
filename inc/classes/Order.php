@@ -114,17 +114,30 @@ class Order {
          return false;
       }
 
+
       $product_list = $Shopping_Basket->get_all_product();
 
       if( !$F->not_null($param_in['order_description']) )  $param_in['order_description'] = 'NULL';
        
       $id_order = Data::put_order_data($P->data['id_client'], $Shopping_Basket->params, $param_in);
       if( $id_order > 0 ) {
+      	$attributes = array();
+      	
          $Shopping_Basket->state_archive_order();
          $count_product   = Data::put_order_product_list($id_order, $product_list);
          $count_product_2 = Data::change_product_quantity_list($product_list);
          $id_soh = (int)Order_History::text2id('OSH_START');
          Data::put_order_status($id_order, $id_soh, $param_in['order_description']);
+         foreach(Data::$Data_order_params as $attr_key => $attr_val) {
+         	if( isset($param_in[$attr_key]) && $F->not_null($param_in[$attr_key]) ) {
+         		$attributes[$attr_key] = $param_in[$attr_key];
+         	}
+         }
+         
+         if( $F->not_null($attributes) ) {
+         	Data::put_order_attributes_list($id_order, $attributes);
+         }
+         
          return array($id_order, $count_product);
       } else {
          return false;

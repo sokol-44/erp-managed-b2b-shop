@@ -17,7 +17,13 @@ if( !defined('_I_INIT') ) die();
  *
  */
 class Data_Article extends Data_Contact{
-   
+
+	function __construct() {
+		//echo 'Data_Article';
+		parent::__construct();
+	
+	}
+	
    static function get_article($key) {
       
       $query = 'select a.id_article, a.date_created, a.date_modified, a.title, a.content

@@ -37,6 +37,12 @@ if( $F->check_get('mode') ) {
          break;
       case 'order_basket':
       	$param_in = array('order_description' => $F->POST['order_description'], 'id_address' => (int)$F->POST['order_address']);
+      	foreach(Data::$Data_order_params as $attr_key => $attr_val) {
+      		$attr_name = 'attr_' . $attr_key;
+      		if( isset($F->POST[$attr_name]) && $F->not_null($F->POST[$attr_name]) ) {
+      			$param_in[$attr_key] = $F->POST[$attr_name];
+      		}
+      	}
          list($id_order, $count_product) = Order::make_new_order($Shopping_Basket, $param_in);
          //FIXME - mail
          if(!$id_order) {

@@ -18,7 +18,12 @@ if( !defined('_I_INIT') ) die();
  */
 class Data_Picture extends Data_Article {
    static $Data_Picture_params = array();
-
+   
+   function __construct() {
+   	//echo 'Data_Contact';
+   	parent::__construct();
+   }
+   
    static function get_picture_id_link($id_picture, $type = 'NORMAL') {
       
       if( $type != 'ORIGINAL' && $type != 'NORMAL' && $type != 'SMALL' ) {

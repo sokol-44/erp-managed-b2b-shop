@@ -24,12 +24,18 @@ if( !defined('_I_INIT') ) die();
 
 
 class Data_Order extends Data_Picture {
-
+	static $Data_order_params = array( 
+			'PAYMENT_METHOD' => array(
+					'CASH_TRANSFER', 'CASH_ON_DELIVERY', 'CASH_IN_PERSON'
+					),
+			'DELIVERY_PARTIAL' => 'BOOL',
+			'DELIVERY_DATE'	=> 'DATE'		
+			);
+	
    function __construct() {
-      //echo 'Data_Basket';
-      //parent::__construct();
+      //echo 'Data_Order';
+      parent::__construct();
 
-      //$Data_Products_params = array('id_client' => 0, 'client_view' => false);
    }
 
 
@@ -236,7 +242,25 @@ class Data_Order extends Data_Picture {
       }
       
    }
-
+   
+   static function put_order_attributes_list($id_order, $attributes) {
+   
+   	$insert_query = 'insert into ' . TBL_SHOP_ORDER_ATTRIBUTES . ' 
+   			(`id_order`, `type`, `val` ) values ';
+   	$insert_query_arr = array();
+   	$id_order = db_int($id_order);
+   	foreach( $attributes as $name => $val ) {
+   		$insert_query_arr[] = 
+   		'(' . $id_order . ', "' . db_escape($name) . '", "' . db_escape($val) . '")'; 
+   	}
+   	
+   	if( sizeof($insert_query_arr) > 0 ) {
+   		return db_query($insert_query . implode(',',$insert_query_arr ));
+   	} else {
+   		return false;
+   	}
+   }
+   
    static function put_order_product_list($id_order, $product_list) {
 
       db_transaction_start();
