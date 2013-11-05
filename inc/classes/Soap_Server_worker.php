@@ -1076,7 +1076,145 @@ class Soap_Server_worker {
       
       return($response);
    }
+// ##############################
+   function getInvoiceList( $input ) {
+   	$this->input_data_type = 'UPDATE';
+   	$this->SingleParam_MultipleReturns = true;
+   	 
+   	$ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
+   	 
+   	add_to_fp('-------- getInvoiceList');
+   	add_to_fp('$ParamStartLength: '.var_export($ParamStartLength, true));
+   	
+   	if( is_object($ParamStartLength) ) {
+   		if( !$ParamStartLength->is_error() ) {
+   			$param_array = $ParamStartLength->return_array();
+   			add_to_fp('$param_array: '.$param_array);
+   			$res_array = Data::getInvoiceList((int)$param_array['id_start'], (int)$param_array['length']);
+   			add_to_fp('$res_array: '.$res_array);
+   			$response = $this->_addArrayValues($res_array);
+   		} else {
+   			$response = $this->getReturnError('getInvoiceList', $input, $ParamStartLength->return_error() );
+   		}
+   	} else {
+   		$response = $this->getReturnError('getInvoiceList', $input, 'WRONG CLASS');
+   	}
+   	 
+   	return($response);
+   }
+    
+   function getClientInvoiceList( $input ) {
+   	$this->input_data_type = 'UPDATE';
+      $this->SingleParam_MultipleReturns = true;
 
+      $ParamDoubleStartLength = $this->_getSingleValue($input, 'ParamDoubleStartLength');
+      
+   	add_to_fp('-------- getInvoiceList');
+      if( is_object($ParamDoubleStartLength) ) {
+         if( !$ParamDoubleStartLength->is_error() ) {
+            $param_array = $ParamDoubleStartLength->return_array();
+            $res_array = Data::getClientInvoiceList((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
+            $response = $this->_addArrayValues($res_array);
+         } else {
+            $response = $this->getReturnError('getInvoiceList', $input, $ParamDoubleStartLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getInvoiceList', $input, 'WRONG CLASS');
+      }
+   	 
+   	return($response);
+   }  
+   
+
+   function getOrderInvoiceList( $input ) {
+   	$this->input_data_type = 'UPDATE';
+   	$this->SingleParam_MultipleReturns = true;
+   
+   	$ParamDoubleStartLength = $this->_getSingleValue($input, 'ParamDoubleStartLength');
+     
+   	add_to_fp('-------- getOrderInvoiceList');
+   	if( is_object($ParamDoubleStartLength) ) {
+   		if( !$ParamDoubleStartLength->is_error() ) {
+   			$param_array = $ParamDoubleStartLength->return_array();
+   			$res_array = Data::getOrderInvoiceList((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
+            $response = $this->_addArrayValues($res_array);
+   		} else {
+   			$response = $this->getReturnError('getOrderInvoiceList', $input, $ParamDoubleStartLength->return_error() );
+   		}
+   	} else {
+   		$response = $this->getReturnError('getOrderInvoiceList', $input, 'WRONG CLASS');
+   	}
+   	 
+   	return($response);
+   }
+
+   
+   function doInvoiceAddOrUpdate( $input ) {
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = false;
+   	
+   	add_to_fp('-------- doInvoiceAddOrUpdate');
+   	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+   		$response_tmp = array();
+   		foreach($input['values'] as $key => $val) {
+   			$SingleValueClass = new OrderInvoiceData($val, $this->input_data_type);
+   			if( !$SingleValueClass->is_error() ) {
+   				$param = $SingleValueClass->return_array();
+   				add_to_fp('$param_array:'. print_r($param, true) );
+   				$response_tmp[] = Data::doInvoiceAddOrUpdate($param);
+   			} else {
+   				$response_tmp[] = $this->getReturnError('doInvoiceAddOrUpdate', $val, $SingleValueClass->return_error(), false);
+   			}
+   		}
+   		add_to_fp(print_r($response_tmp, true));
+   		$response = $this->_addArrayValues($response_tmp);
+   	} else {
+   		$response = $this->getReturnError('doInvoiceAddOrUpdate', '', 'EMPTY_LIST');
+   	}
+   	
+   	return($response);
+   }
+    
+
+   function setInvoiceStatus( $input ) {
+   	$this->input_data_type = 'UPDATE';
+   	$this->SingleParam_MultipleReturns = false;
+   
+   	add_to_fp('-------- setInvoiceStatus');
+   	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+   		$response_tmp = array();
+   		foreach($input['values'] as $key => $val) {
+   			$SingleValueClass = new OrderInvoiceData($val, $this->input_data_type);
+   			add_to_fp('$$SingleValueClass:'. print_r($SingleValueClass, true) );
+   			if( !$SingleValueClass->is_error() ) {
+   				$param = $SingleValueClass->return_array();
+   				add_to_fp('$param_array:'. print_r($param, true) );
+   				$response_tmp[] = Data::setInvoiceStatus($param);
+   			} else {
+   				$response_tmp[] = $this->getReturnError('setInvoiceStatus', $val, $SingleValueClass->return_error(), false);
+   			}
+   		}
+   		add_to_fp(print_r($response_tmp, true));
+   		$response = $this->_addArrayValues($response_tmp);
+   	} else {
+   		$response = $this->getReturnError('setInvoiceStatus', '', 'EMPTY_LIST');
+   	}
+   
+   	return($response);
+   }   
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+// -------------------------   
    function getParamStartLength( $input ) {
       $in_o = array(
             'start' => 1,

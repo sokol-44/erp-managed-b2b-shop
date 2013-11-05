@@ -53,14 +53,32 @@ $client = new SoapClient($soap_address, $soap_param_array);
 // test_getClientAddressList( $client );
 // test_getClientUserAddressList( $client );
 // test_doClientUserAddressAddOrUpdate( $client );
-test_doClientUserAddressDelete( $client );
+// test_doClientUserAddressDelete( $client );
 
+// test_doClientAttributeAddOrUpdate( $client );
+// test_getClientAttributeList( $client );
+// test_doOrderAttributeAddOrUpdate( $client );
+// test_getOrderAttributeList( $client );
+
+// test_getOrderInvoiceList( $client );
+// test_getClientInvoiceList( $client );
+// test_getInvoiceList( $client );
 
 //PLACEHOLDERS
 // test_setOrderStatus( $client );
 // test_setOrderHiddenStatus( $client );
 
 
+// test_doInvoiceAddOrUpdate( $client );
+test_setInvoiceStatus( $client );
+
+
+/*
+ *
+doInvoiceAddOrUpdate
+setInvoiceStatus
+*/
+  
 
 ?>
 </pre>

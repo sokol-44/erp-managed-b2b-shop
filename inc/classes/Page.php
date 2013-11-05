@@ -267,6 +267,10 @@ class Page {
          return '';
       }
    }
+   
+   function clean_page() {
+   	ob_end_clean();
+   }
     
 
    function include_element($name, $type = 'COM') {

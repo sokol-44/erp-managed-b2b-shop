@@ -24,7 +24,8 @@ class Invoice {
    function __construct( $params = false) {
 
       if( is_numeric( $params ) && (int)$params>0 ) {
-         $params_loc = Data::get_invoice_data( (int)$params );
+      	$Rights = Rights::g_global();
+      	$this->params = Data::get_invoice_data( (int)$params );
       } elseif( is_array($params) && $this->check_valid($params) ) {
       	$this->params = $params;
       }
@@ -40,9 +41,10 @@ class Invoice {
    	return true;
    }
    
-   static function get_invoice_list($id_client = 0) {
-   	$F = Framework::g_global();
+   static function get_invoice_client_list($id_client = 0) {
    	$P = Person::g_global();
+   	$F = Framework::g_global();
+   	
    	$Rights = Rights::g_global();
    	
    	$obj_array = array();
@@ -59,9 +61,9 @@ class Invoice {
    	$params = compact('id_client');
    	
    	list($res, $res_debug) = $Rights->invoice_rights($params, 'SHOW', $show_info);
-   
+   	
    	if( $res ) {
-   		$res = Data::get_invoice_list($params);
+   		$res = Data::get_invoice_client_list($params);
    		foreach( $res as $params_in ) {
    			$obj_array[$params_in['id_invoice']] = new Invoice( $params_in );
    			if( $F->not_null($obj_array[$params_in['id_invoice']]) ) {

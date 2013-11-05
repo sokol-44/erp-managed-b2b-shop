@@ -16,12 +16,25 @@ if( function_exists('get_magic_quotes_runtime') && get_magic_quotes_runtime() ) 
 /**
  * root for php scripts constant
  */
-define('_I_ROOT_DIR', '..');
+if( isset($_SERVER['DOCUMENT_ROOT']) ) $root = $_SERVER['DOCUMENT_ROOT'];
+elseif( isset($_SERVER['SCRIPT_FILENAME']) ) $root = realpath(pathinfo($_SERVER['SCRIPT_FILENAME'], PATHINFO_DIRNAME) . '/..');
+elseif( isset($_SERVER['PATH_TRANSLATED']) ) $root = realpath(pathinfo($_SERVER['PATH_TRANSLATED'], PATHINFO_DIRNAME) . '/..');
+elseif( isset($_ENV['HOME']) ) $root = $_ENV['HOME'];
+else   $root = '.';
+
+define('_I_ROOT_DIR', $root);
+unset($root);
 
 /**
  * set init for blocking direct access
  */
 define('_I_INIT', 'YES');
+
+/**
+ * define SOAP evironment
+ */
+define('SOAP_ENVIRONMENT', true);
+
 /**
  * define short directory separatos
  */
@@ -45,6 +58,8 @@ include(DIR_INC_FUNCTIONS . DS . 'global.php');
  * Include global classes files:
  * database, session and other helpers
  */
+include(DIR_INC_CLASSES . DS . 'Data_Contact.php');
+include(DIR_INC_CLASSES . DS . 'Data_Article.php');
 include(DIR_INC_CLASSES . DS . 'Data_Picture.php');
 include(DIR_INC_CLASSES . DS . 'Data_Order.php');
 include(DIR_INC_CLASSES . DS . 'Data_Basket.php');
@@ -80,6 +95,12 @@ include(DIR_INC_CLASSES . DS . 'ArrayToXML.php');
 db_init();
 session_start();
 gl_init();
+
+
+/**
+ * encoding
+ */
+
 
 /**
  * Load data from session

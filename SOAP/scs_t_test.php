@@ -248,5 +248,103 @@ function test_doClientUserAddressDelete( $client ) {
 	test_helper_multiple_in($in_oo3, 'doClientUserAddressDelete', $client);
 }
 
+function test_getClientAttributeList( $client ) {
+	$nt = time();
+
+	$in_oo = new ParamStartLength(array('id_start' => '2', 'length' => '15'));
+	test_helper_single_in($in_oo, 'getClientAttributeList', $client );
+}
+
+function test_doClientAttributeAddOrUpdate( $client ) {
+	$nt = time();
+	$list = array('id_client' => 2, 'type' => 'name'.$nt, 'val' => 'val'.$nt);
+	$in_oo[] = new ClientAttributeData($list);
+
+	$list = array('id_client' => 2, 'type' => 'BALANCE_FREE_CREDIT', 'val' => $nt);
+	$in_oo[] = new ClientAttributeData($list);
+	
+	test_helper_multiple_in($in_oo, 'doClientAttributeAddOrUpdate', $client);
+}
+
+function test_getOrderAttributeList( $client ) {
+	$nt = time();
+
+	$in_oo = new ParamStartLength(array('id_start' => '17', 'length' => '15'));
+	test_helper_single_in($in_oo, 'getOrderAttributeList', $client );
+}
+
+function test_doorderAttributeAddOrUpdate( $client ) {
+	$nt = time();
+	$list = array('id_order' => 17, 'type' => 'name'.$nt, 'val' => 'val'.$nt);
+	$in_oo[] = new OrderAttributeData($list);
+
+	$list = array('id_order' => 17, 'type' => 'BALANCE_FREE_CREDIT', 'val' => $nt);
+	$in_oo[] = new OrderAttributeData($list);
+
+	test_helper_multiple_in($in_oo, 'doOrderAttributeAddOrUpdate', $client);
+}
+
+
+function test_getOrderInvoiceList( $client ) {
+	$nt = time();
+
+	$in_oo = new ParamDoubleStartLength(array('id_start_one' => '17', 'id_start_two' => '1', 'length' => '5'));
+	test_helper_single_in($in_oo, 'getOrderInvoiceList', $client );
+}
+
+function test_getClientInvoiceList( $client ) {
+	$nt = time();
+
+	$in_oo = new ParamDoubleStartLength(array('id_start_one' => '2', 'id_start_two' => '1', 'length' => '5'));
+	test_helper_single_in($in_oo, 'getClientInvoiceList', $client );
+}
+
+function test_getInvoiceList( $client ) {
+	$nt = time();
+
+	$in_oo = new ParamStartLength(array('id_start' => '1', 'length' => '5'));
+	test_helper_single_in($in_oo, 'getInvoiceList', $client );
+}
+
+function test_doInvoiceAddOrUpdate( $client ) {
+	$nt = time();
+	
+	$list = array('id_invoice' => '3', 'id_order' => '18', 'id_client' => '2',
+			 'invoice_number' => 'QQ', 'state' => 'ISSUE', 'net_value' => '11.22', 
+			 'gross_value' => '15.45', 'date_issue' => '2013-11-01', 'date_pay' => '2013-11-08',
+			 'description' => 'sdadasdasdas');
+	$in_oo[] = new InvoiceData($list);
+
+	$list = array('id_invoice' => $nt, 'id_order' => '18', 'id_client' => '2',
+			'invoice_number' => 'QQ'. $nt, 'state' => 'ISSUE', 'net_value' => '11.22',
+			'gross_value' => '15.45', 'date_issue' => '2013-11-01', 'date_pay' => '2013-11-08',
+			'invoice_image' => str_repeat('w', (int)rand(10,100)), 'description' => 'sdadasdasdas'.$nt);
+	$in_oo[] = new InvoiceData($list);
+	
+	test_helper_multiple_in($in_oo, 'doInvoiceAddOrUpdate', $client );
+}
+
+function test_setInvoiceStatus( $client ) {
+	$nt = time();
+
+	$list = array('id_invoice' => '3', 'id_order' => 18, 'state' => 'ISSUE');
+	$in_oo[] = new OrderInvoiceData($list, 'UPDATE');
+
+	$list = array('id_invoice' => $nt, 'id_order' => 18, 'state' => 'ISSUE');
+	$in_oo[] = new OrderInvoiceData($list, 'UPDATE');
+
+	test_helper_multiple_in($in_oo, 'setInvoiceStatus', $client );
+}
+
+
+
+
+
+
+
+
+
+
+
 
 ?>

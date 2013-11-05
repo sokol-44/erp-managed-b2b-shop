@@ -420,7 +420,7 @@ class Data_Products extends Data_Basket {
           b_func_product_set("' . db_int($id_product) . '", "' . db_escape($name). '", "' . db_escape($description). '",
           "' . db_escape($producer). '", "' . db_escape($catalog_index). '",
           "' . db_escape($picture_small_url). '", "' . db_escape($picture_big_url). '", "' . db_escape($picture_id). '",
-          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_escape($quantity_salt) . '", "' . db_escape($status) . '") as status';
+          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_int($quantity) . '", "' . db_escape($status) . '") as status';
       add_to_fp($query);
       $result = db_query( $query );
       return db_fetch_array($result);

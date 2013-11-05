@@ -6,7 +6,7 @@ $Price = Price::g_global();
 
 $Page->head_title = Lang::_('invoice list');
 
-$inv = Invoice::get_invoice_list();
+$inv = Invoice::get_invoice_client_list();
 ?>
 <div class="invoice_list_container">
   <div class="invoice_list_container invoice_list_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
@@ -52,8 +52,6 @@ $inv = Invoice::get_invoice_list();
 		<th><?php echo Lang::_('invoice image'); ?></th>
 	</tr>
 	<?php
-	//$Shopping_invoice_Chain->reset_invoice_list();
-	$invoice_list = array();
 	
 	foreach( $inv['obj_array'] as $key => $Invoice ) {
 		$iparams = $Invoice->params;
@@ -64,7 +62,7 @@ $inv = Invoice::get_invoice_list();
 		
 		if( $F->not_null($iparams['invoice_image'])) {
 			$invoice_image_link = $F->make_link(CFG_COM_INVOICE, $F->add_local_get(array('show' => 'show_invoice_image', 'id_invoice' => (int)$iparams['id_invoice']) ) );
-			$invoice_image_html = $F->draw_link($invoice_image_link, 'title="' . Lang::_('Invoice') . '"', 'PDF');
+			$invoice_image_html = $F->draw_link($invoice_image_link, 'title="' . Lang::_('Invoice') . '"', 'PDF', '_blank');
 		} else {
 			$invoice_image_html = '-';
 		}

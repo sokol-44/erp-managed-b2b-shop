@@ -284,7 +284,22 @@ class Data_Order extends Data_Picture {
 
    }
    
-   static function get_invoice_list($params) {
+   
+   static function get_invoice_data($id_invoice) {
+   	$query = 'select `id_invoice`, `id_client`, `id_order`, `invoice_number`,
+   		`state`, `net_value`, `gross_value`, `description`,
+   		`date_issue`, `date_pay`, invoice_image,
+   		UNIX_TIMESTAMP(date_issue) as ts_issue, UNIX_TIMESTAMP(date_pay) as ts_pay
+   		from ' . TBL_SHOP_ORDER_INVOICE . '
+      	where id_invoice = ' . db_int($id_invoice) . '';
+   	$result = db_query( $query );
+   
+   	if( db_rows($result) > 0 ) return  db_fetch_array($result);
+   	else return array();
+   
+   }
+   
+   static function get_invoice_client_list($params) {
    	$query = 'select `id_invoice`, `id_client`, `id_order`, `invoice_number`,
    		`state`, `net_value`, `gross_value`, `description`,
    		`date_issue`, `date_pay`, invoice_image,
@@ -295,9 +310,114 @@ class Data_Order extends Data_Picture {
    	
    	if( db_rows($result) > 0 ) return db_result_array_full( $result );
    	else return array();
-
+   }
+    
+   static function get_invoice_order_list($params) {
+   	$query = 'select `id_invoice`, `id_client`, `id_order`, `invoice_number`,
+   		`state`, `net_value`, `gross_value`, `description`,
+   		`date_issue`, `date_pay`, invoice_image,
+   		UNIX_TIMESTAMP(date_issue) as ts_issue, UNIX_TIMESTAMP(date_pay) as ts_pay
+   		from ' . TBL_SHOP_ORDER_INVOICE . '
+      	where id_client = ' . db_int($params['id_order']) . ' order by date_issue desc';
+   	$result = db_query( $query );
+   	
+   	if( db_rows($result) > 0 ) return db_result_array_full( $result );
+   	else return array();
+   }
+   
+   static function getInvoiceList($id_invoice, $length) {
+   	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+   	
+   	$query = 'select `id_invoice`, `id_client`, `id_order`, `invoice_number`,
+   		`state`, `net_value`, `gross_value`, `description`,
+   		`date_issue`, `date_pay`,
+   		UNIX_TIMESTAMP(date_issue) as ts_issue, UNIX_TIMESTAMP(date_pay) as ts_pay
+   		from ' . TBL_SHOP_ORDER_INVOICE . '
+      	where id_invoice ' . $comparision_dir . db_int($id_invoice) . '
+      	ORDER BY id_invoice ' . $order_dir . ' LIMIT '. db_int($length);
+   	$result = db_query( $query );
+   
+   	if( db_rows($result) > 0 ) return  db_result_array_full($result);
+   	else return array();
+   }
+   
+   
+   static function setInvoiceStatus($param) {
+   	
+   	$query = 'select "' . db_int($param['id_invoice']) . '" as id_one,
+   			"' . db_int($param['id_order']) . '" as id_two,
+   			"' . db_escape($param['state']) . '" as additional_data,
+          b_func_order_invoice_state_set("' . db_int($param['id_invoice']) . '", "' . db_int($param['id_order']) . '", 
+          "' . db_escape($param['state']) . '") as status';
+   	
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	return db_fetch_array($result);
+   }
+   
+   static function doInvoiceAddOrUpdate($param) {
+   	$F = Framework::g_global();
+   	
+   	$query = 'select "' . db_int($param['id_invoice']) . '" as id_one,
+   			"' . db_int($param['id_order']) . '" as id_two,
+   			"' . db_escape($param['id_order'].','.$param['invoice_number']) . '" as additional_data,
+          b_func_order_invoice_set("' . db_int($param['id_invoice']) . '", 
+          "' . db_int($param['id_order']) . '", "' . db_int($param['id_client']) . '",
+          "' . db_escape($param['invoice_number']) . '", "' . db_escape($param['state']) . '",
+          "' . db_float($param['net_value']) . '", "' . db_float($param['gross_value']) . '",
+          "' . db_escape($param['date_issue']) . '", "' . db_escape($param['date_pay']) . '",		
+          "' . db_escape($param['description']) . '") as status';
+   	
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	$res_array = db_fetch_array($result);
+   	
+   	if( $F->not_null($param['invoice_image']) && strstr($res_array['status'], 'SUCCESS,')) {
+   		add_to_fp('PDF BLOB');
+   		$query_ii = 'UPDATE shop_order_invoice set
+   		`invoice_image` = "' . db_escape($param['invoice_image']) . '"
+   		WHERE id_invoice = "' . db_int($param['id_invoice']) . '"';
+   		db_query( $query_ii );
+   		$res_array['status'] .= ',INVOICE_IMAGE';
+   	}
+   	
+   	return $res_array;
+   }
+   
+   static function getClientInvoiceList($id_client, $id_invoice, $length) {
+   	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+   	
+   	$query = 'select `id_invoice`, `id_client`, `id_order`, `invoice_number`,
+   		`state`, `net_value`, `gross_value`, `description`,
+   		`date_issue`, `date_pay`,
+   		UNIX_TIMESTAMP(date_issue) as ts_issue, UNIX_TIMESTAMP(date_pay) as ts_pay
+   		from ' . TBL_SHOP_ORDER_INVOICE . '
+      	where id_client = ' . db_int($id_client) . '  and 
+      			id_invoice ' . $comparision_dir . db_int($id_invoice) . '
+      	ORDER BY id_invoice ' . $order_dir . ' LIMIT '. db_int($length);
+   	$result = db_query( $query );
+   
+   	if( db_rows($result) > 0 ) return  db_result_array_full($result);
+   	else return array();
    }
 
+   static function getOrderInvoiceList($id_order, $id_invoice, $length) {
+   	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+   //   		`date_issue`, `date_pay`, invoice_image,
+   	$query = 'select `id_invoice`, `id_client`, `id_order`, `invoice_number`,
+   		`state`, `net_value`, `gross_value`, `description`,
+   		`date_issue`, `date_pay`,
+   		UNIX_TIMESTAMP(date_issue) as ts_issue, UNIX_TIMESTAMP(date_pay) as ts_pay
+   		from ' . TBL_SHOP_ORDER_INVOICE . '
+      	where id_order = ' . db_int($id_order) . '  and
+      			id_invoice ' . $comparision_dir . db_int($id_invoice) . '
+      	ORDER BY id_invoice ' . $order_dir . ' LIMIT '. db_int($length);
+   	$result = db_query( $query );
+   	 
+   	if( db_rows($result) > 0 ) return  db_result_array_full($result);
+   	else return array();
+   }
+   
    static function getOrderAttributeList( $id_order = 0, $length = 1 ) {
    
    	$query = 'select oa.`id_order`, `type`, `val`
@@ -311,7 +431,7 @@ class Data_Order extends Data_Picture {
     
    static function doOrderAttributeAddOrUpdate( $param ) {
    
-   	$query = 'select "' . db_int($param['id_order']) . '" as id_one,
+   	$query = 'select "' . db_int($param['id_order']) . '" as id,
    			"' . db_escape($param['type'].','.$param['val']) . '" as additional_data,
           b_func_order_attribute_set("' . db_int($param['id_order']) . '", "' . db_escape($param['type']) . '",
           "' . db_escape($param['val']) . '") as status';

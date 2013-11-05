@@ -98,7 +98,7 @@ class Rights {
       }
       
    }
-   public function invoice_rights( $viewer_params, $action, $show_info = true ) {
+   public function invoice_rights( $invoice_params, $action, $show_info = true ) {
    	$P = Person::g_global();
    	$this->show_info = $show_info;
 

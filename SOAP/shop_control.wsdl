@@ -236,6 +236,60 @@
 	<wsdl:message name="getAddressListResponse">
 		<wsdl:part name="getAddressListResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="getClientAttributeListRequest">
+		<wsdl:part name="getClientAttributeListRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientAttributeListResponse">
+		<wsdl:part name="getClientAttributeListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientAttributeAddOrUpdateRequest">
+		<wsdl:part name="doClientAttributeAddOrUpdateRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientAttributeAddOrUpdateResponse">
+		<wsdl:part name="doClientAttributeAddOrUpdateResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderAttributeListRequest">
+		<wsdl:part name="getOrderAttributeListRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderAttributeListResponse">
+		<wsdl:part name="getOrderAttributeListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doOrderAttributeAddOrUpdateRequest">
+		<wsdl:part name="doOrderAttributeAddOrUpdateRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doOrderAttributeAddOrUpdateResponse">
+		<wsdl:part name="doOrderAttributeAddOrUpdateResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderInvoiceListRequest">
+		<wsdl:part name="getOrderInvoiceListRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getOrderInvoiceListResponse">
+		<wsdl:part name="getOrderInvoiceListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientInvoiceListRequest">
+		<wsdl:part name="getClientInvoiceListRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientInvoiceListResponse">
+		<wsdl:part name="getClientInvoiceListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getInvoiceListRequest">
+		<wsdl:part name="getInvoiceListRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getInvoiceListResponse">
+		<wsdl:part name="getInvoiceListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doInvoiceAddOrUpdateRequest">
+		<wsdl:part name="doInvoiceAddOrUpdateRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doInvoiceAddOrUpdateResponse">
+		<wsdl:part name="doInvoiceAddOrUpdateResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setInvoiceStatusRequest">
+		<wsdl:part name="setInvoiceStatusRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="setInvoiceStatusResponse">
+		<wsdl:part name="setInvoiceStatusResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
 			<wsdl:output message="tns:getProductListResponse"></wsdl:output>
@@ -531,6 +585,78 @@
 							</wsdl:input>
 							<wsdl:output
 								message="tns:getAddressListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getClientAttributeList">
+							<wsdl:input
+								message="tns:getClientAttributeListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getClientAttributeListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doClientAttributeAddOrUpdate">
+							<wsdl:input
+								message="tns:doClientAttributeAddOrUpdateRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientAttributeAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getOrderAttributeList">
+							<wsdl:input
+								message="tns:getOrderAttributeListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getOrderAttributeListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doOrderAttributeAddOrUpdate">
+							<wsdl:input
+								message="tns:doOrderAttributeAddOrUpdateRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doOrderAttributeAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getOrderInvoiceList">
+							<wsdl:input
+								message="tns:getOrderInvoiceListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getOrderInvoiceListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getClientInvoiceList">
+							<wsdl:input
+								message="tns:getClientInvoiceListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getClientInvoiceListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getInvoiceList">
+							<wsdl:input
+								message="tns:getInvoiceListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getInvoiceListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doInvoiceAddOrUpdate">
+							<wsdl:input
+								message="tns:doInvoiceAddOrUpdateRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doInvoiceAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="setInvoiceStatus">
+							<wsdl:input
+								message="tns:setInvoiceStatusRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:setInvoiceStatusResponse">
 							</wsdl:output>
 						</wsdl:operation>
 	</wsdl:portType>
@@ -945,6 +1071,105 @@
          </wsdl:output>
       </wsdl:operation>
       <wsdl:operation name="getAddressList">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getClientAttributeList">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="doClientAttributeAddOrUpdate">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getOrderAttributeList">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="doOrderAttributeAddOrUpdate">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getOrderInvoiceList">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getClientInvoiceList">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getInvoiceList">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="doInvoiceAddOrUpdate">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="setInvoiceStatus">
          <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
          <wsdl:input>
             <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
