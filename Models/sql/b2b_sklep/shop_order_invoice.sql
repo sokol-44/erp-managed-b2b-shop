@@ -23,7 +23,9 @@ CREATE TABLE IF NOT EXISTS `shop_order_invoice` (
   `date_pay` date DEFAULT NULL,
   `invoice_image` longblob,
   `description` tinytext,
-  PRIMARY KEY (`id_invoice`)
+  PRIMARY KEY (`id_invoice`),
+  KEY `id_client-id_order` (`id_client`,`id_order`),
+  KEY `id_order` (`id_order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2;
 
 -- Data exporting was unselected.
