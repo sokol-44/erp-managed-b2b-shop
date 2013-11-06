@@ -20,6 +20,7 @@ class Order {
    public $status_history = array();
    public $source_basket = array();
    public $mode = false;
+   public $attributes = array();
    public $id_order = 0;
 
    function __construct( $id_order = 0, $mode = 'FULL',  $data = false) {
@@ -76,11 +77,48 @@ class Order {
       }
       return $this->total;
    }
+
+   function get_attributes($type = false) {
+   	if( Framework::is_null($this->attributes) ) $this->attributes = Data::get_order_attribute($this->id_order);
+   	
+ 		if( $type ) {
+ 			foreach( $this->attributes as $attribute ) {
+ 				if( $attribute['type'] == $type ) return $attribute;
+ 			}
+ 			return false;
+ 		} else {
+ 			return $this->attributes;
+ 		}
+   }
+   
+   function get_attribute_val($type = false) {
+   	if( Framework::is_null($this->attributes) ) $this->attributes = Data::get_order_attribute($this->id_order);
+   
+   	if( $type ) {
+   		foreach( $this->attributes as $attribute ) {
+   			if( $attribute['type'] == $type ) return $attribute['val'];
+   		}
+   		return false;
+   	} else {
+   		$res_array = array();
+   		foreach( $this->attributes as $attribute ) {
+   			$res_array[$attribute['type']] = $attribute['val'];
+   		}
+   		return $res_array;
+   	}
+   }   
+   
+   
    
    function get_address() {
    	if( Framework::is_null($this->address) ) $this->address = Data::get_address( (int)$this->data['id_address'] );
    	return $this->address;
    }
+   
+   function get_address_id() {
+   	return (int)$this->data['id_address'];
+   }
+   
 
    function load_data( $id_order, $data = false ) {
       $F = Framework::g_global();
@@ -116,8 +154,6 @@ class Order {
 
 
       $product_list = $Shopping_Basket->get_all_product();
-
-      if( !$F->not_null($param_in['order_description']) )  $param_in['order_description'] = 'NULL';
        
       $id_order = Data::put_order_data($P->data['id_client'], $Shopping_Basket->params, $param_in);
       if( $id_order > 0 ) {
@@ -126,7 +162,7 @@ class Order {
          $Shopping_Basket->state_archive_order();
          $count_product   = Data::put_order_product_list($id_order, $product_list);
          $count_product_2 = Data::change_product_quantity_list($product_list);
-         $id_soh = (int)Order_History::text2id('OSH_START');
+         $id_soh = (int)Order_History::text2id('OSH_N');
          Data::put_order_status($id_order, $id_soh, $param_in['order_description']);
          foreach(Data::$Data_order_params as $attr_key => $attr_val) {
          	if( isset($param_in[$attr_key]) && $F->not_null($param_in[$attr_key]) ) {

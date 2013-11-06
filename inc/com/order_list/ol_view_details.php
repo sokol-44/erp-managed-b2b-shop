@@ -15,46 +15,100 @@ $BC->add_crumb(Lang::_('Orders details'), $F->self_link() );
 	<tr class="tableBoxHeading">
 		<td><?php echo Lang::_('ID') ?></td>
 		<td><?php echo Lang::_('order DESCRIPTION') . '<hr>' . Lang::_('basket DESCRIPTION') ?></td>
-		<td><?php echo Lang::_('order date') ?></td>
-		<td><?php echo Lang::_('order address') ?></td>
-	<?php if($F->not_null($Order->data['date_modified'])) {?>
-		<td><?php echo Lang::_('order update') ?></td>
-	<?php } ?>
+		<td><?php echo Lang::_('order date');  
+		if($F->not_null($Order->data['date_modified'])) {?>
+		<hr><?php echo Lang::_('order update') ?>
+		<?php } ?></td>
+		<td><?php echo Lang::_('order address'); ?></td>
 		<td><?php echo Lang::_('order STATE') ?></td>
 	</tr>
 	<tr>
 		<td><?php echo $F->output_string_html($Order->data['id_order']); ?></td>
 		<td><?php echo nl2br($F->output_string_html( $Order->data['description'] ) ) . '<hr>' .
 							nl2br($F->output_string_html( $Order->data['description_basket'] ) ) ?></td>
-		<td><?php echo $F->output_string_html($Order->data['date_create']); ?></td>
+		<td><?php echo $F->output_string_html($Order->data['date_create']);
+		if($F->not_null($Order->data['date_modified'])) {
+			echo '<hr>' . $F->output_string_html($Order->data['date_modified']) . '';
+		} ?>
 		<td>
-		<?php 
-		$Address = $Order->get_address();
-		$addr_id = (int)$Address['id_address'];
-		$addr_desc = $F->output_string($Address['description']);
-		$addr_addr = $F->output_string($Address['name']) . '<br>' .
-				$F->output_string($Address['street']) . '<br>' .
-				$F->output_string($Address['zip_code'] . ' ' . $Address['city']) . '<br>' .
-				$F->output_string($Address['country']);
+		<?php
+		$addr_id = (int)$Order->get_address_id();
+		if( $addr_id == 0 ) {
+			$addr_desc = Lang::_('EMPTY_OR_INCORECT_ADDRESS');
+			$addr_id = false;
+		} elseif( $addr_id < 0 ) {
+			$Address = Data::additional_addreses($addr_id, $P->data);
+			if( $F->is_null($Address) ) {
+				$addr_desc = Lang::_('EMPTY_OR_INCORECT_ADDRESS');
+				$addr_id = false;
+			}
+		} else {
+			$Address = $Order->get_address();
+		}
+		
+		if( $addr_id ) {
+			$addr_desc = $F->output_string($Address['description']);
+			$addr_addr = $F->output_string($Address['name']) . '<br>' .
+					$F->output_string($Address['street']) . '<br>' .
+					$F->output_string($Address['zip_code'] . ' ' . $Address['city']) . '<br>' .
+					$F->output_string($Address['country']);
+		}
 		?>
 		<div class="address order_address" style="width: 160px">
-		<div class=""><?php echo Lang::_('ID'); ?>: <span id="nr"><?php echo $addr_id; ?></span></div>
 		<div class=""><?php echo Lang::_('description') . ': ' . $addr_desc ?></div>
+		<?php if( $addr_id ) { ?>
 		<div class=""><?php echo Lang::_('address') . ":<br>\n" . $addr_addr ?></div>
+		<?php } ?>
 		</div></td>
-	<?php if($F->not_null($Order->data['date_modified'])) {?>
-		<td><?php echo $F->output_string_html($Order->data['date_modified']); ?></td>
-	<?php } ?>
 		<td><?php echo $F->output_string_html(Lang::_($Order->data['name'])); ?></td>
 	</tr>
 </table>
-<?php
+<?php 
+$attributes = $Order->get_attributes();
+if( $F->not_null($attributes) ){ 
+	$attr_pm = $Order->get_attribute_val('PAYMENT_METHOD');
+	$attr_dp = $Order->get_attribute_val('DELIVERY_PARTIAL');
+	$attr_dd = $Order->get_attribute_val('DELIVERY_DATE');
+
+	if( $F->not_null($attr_pm) ) {
+		$attr_pm_txt = Lang::_($attr_pm);
+	} else {
+		$attr_pm_txt = '-';
+	}
+	if( $F->not_null($attr_dp) ) {
+		$attr_dp_txt = Lang::_($attr_dp);
+	} else {
+		$attr_dp_txt = '-';
+	}
+	if( $F->not_null($attr_dd) ) {
+		$attr_dd_txt = $attr_dd;
+	} else {
+		$attr_dd_txt = '-';
+	}
+
+
 $GET_tmp = $F->make_get('mode,action,show');
 $add_basket = $F->draw_link(
-   		$F->make_link(CFG_COM_ORDER_LIST, $F->add_local_get('mode', 'make_basket', $GET_tmp)), 'title="' . Lang::_('Create BASKET') . '"',
-   		$F->dynamic_image(Lang::_('Create BASKET')) );
-echo $add_basket;
+		$F->make_link(CFG_COM_ORDER_LIST, $F->add_local_get('mode', 'make_basket', $GET_tmp)), 'title="' . Lang::_('Create BASKET') . '"',
+		$F->dynamic_image(Lang::_('Create BASKET')) );
+echo $add_basket;	
 ?>
+<div class="basket_container container_subheader"><?php echo Lang::_('Order attributes'); ?><div class="icon"></div></div>
+<table class="tableBox" style="border: 0; width: 100%">
+<tr class="tableBoxHeading">
+	<th><?php echo Lang::_('PAYMENT_METHOD') ?></th>
+	<th><?php echo Lang::_('DELIVERY_PARTIAL')?></th>
+	<th><?php echo Lang::_('DELIVERY_DATE') ?></th>
+	<!-- <th><?php echo Lang::_('DELIVERY_PERSONAL') ?></th> -->
+</tr>
+<tr>
+	<td width="5%"><?php  echo $attr_pm_txt; ?></td>
+	<td width="10%"><?php echo $attr_dp_txt; ?></td>
+	<td width="10%"><?php echo $attr_dd_txt ?></td>
+	<!-- <td width="10%"><?php echo ''; ?></td>  -->
+</tr>
+</table>
+<?php } ?>
 <div class="basket_container container_subheader"><?php echo Lang::_('Order products'); ?><div class="icon"></div></div>
 <table class="tableBox" style="border: 0; width: 100%">
 	<tr class="tableBoxHeading">

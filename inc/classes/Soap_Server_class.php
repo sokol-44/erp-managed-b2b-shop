@@ -315,7 +315,7 @@ class OrderData extends BasicSOAPDataMethods {
    public $list_type = array('id_order' => 'INT+', 'id_client' => 'INT+', 'date_create' => 'DATE',
           'date_modified' => 'DATE', 'id_order_status' => 'INT', 'hidden_status' => 'TEXT',
           'description' => 'TEXT', 'description_basket' => 'TEXT', 'id_shopping_basket' => 'INT+',
-   		 'id_address' => 'INT');
+   		 'id_address' => 'INT', 'OrderAttributeData' => 'OBJ');
    public $list_new = array('id_order', 'id_client');
    public $list_update = array('id_order', 'id_client');
 }

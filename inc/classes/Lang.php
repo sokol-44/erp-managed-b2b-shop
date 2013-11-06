@@ -47,6 +47,8 @@ class Lang {
 
       if ( defined( $key ) ) {
          $string = constant($key);
+      } elseif( trim( $string_in ) == '' )  {
+      	$string = '';
       } else {
          $string = '#' . $string_in . '#';
          if( !in_array($key, Lang::$STR) ) Lang::$STR[] = $key;

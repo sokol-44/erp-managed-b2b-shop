@@ -50,8 +50,9 @@ class Data_Order extends Data_Picture {
       list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
       
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
-      o.description, o.description_basket, o.id_shopping_basket, o.id_address
-      from ' . TBL_SHOP_ORDER . ' o
+      o.description, o.description_basket, o.id_shopping_basket, o.id_address, os.name as status_name
+      from ' . TBL_SHOP_ORDER . ' o left join ' . TBL_SHOP_ORDER_STATUS . ' os
+      on (o.id_order_status = os.id_order_status)
       where o.id_order ' . $comparision_dir . db_int($id_order_start) . $where . '
       ORDER BY o.id_order ' . $order_dir . ' LIMIT '. db_int($length);
       
@@ -61,9 +62,21 @@ class Data_Order extends Data_Picture {
       $ret_array = array();
       foreach($ret_tmp as $order ) {
          $order['ProductOrder'] = self::getProductOrder((int)$order['id_order']);
+         $order['OrderAttributeData'] = self::getOrderAttributeData((int)$order['id_order']);
          $ret_array[] = $order;
       }
       return $ret_array;
+   }
+   
+   static function getOrderAttributeData( $id_order ) {
+   	$ret_tmp =  self::getOrderAttributeList((int)$id_order);
+   	
+   	$ret_array = array();
+   	$idx=0;
+   	foreach($ret_tmp as $order ) {
+   		$ret_array['value_'.$idx++] = $order;
+   	}
+   	return $ret_array;
    }
    
    static function getProductOrder( $id_order ) {
@@ -292,14 +305,14 @@ class Data_Order extends Data_Picture {
    		$where_add = ' and oa.type = "' . db_escape($attribute_type) . '"';
    	}
    
-   	$query = 'select type, value
-         	from ' . TBL_GLOBAL_ORDER_ATTRIBUTES . ' oa ,
-         	' . TBL_GLOBAL_ORDER . ' o
+   	$query = 'select type, val
+         	from ' . TBL_SHOP_ORDER_ATTRIBUTES . ' oa ,
+         	' . TBL_SHOP_ORDER . ' o
          	where oa.id_order = o.id_order and oa.id_order = "' . db_int($id_order) . '"' . $where_add;
    	$result = db_query( $query );
    	$nrow = db_rows( $result );
    	if( $nrow == 1 && $F->not_null($attribute_type) ) {
-   		return db_fetch_result('value', $result);
+   		return db_fetch_result('val', $result);
    	} elseif( $nrow > 1 ) {
    		return db_result_array_full($result);
    	} else {
