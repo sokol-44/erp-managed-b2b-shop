@@ -38,21 +38,27 @@ class Data_Person extends Data_Rights {
    static function additional_addreses($type, $params) {
 
    	$ids = array('SHOP_BASKET_ORDER_ADDRESS_ADD' => -1, 
-   	'SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION' => -2);
+   	'SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION' => -2,
+   	'SHOP_BASKET_ORDER_ADDRESS_DEFAULT' => -3);
    	
    	$id_client = (int) $params['id_client'];
    	$id_client_user = (int) $params['id_client_user'];
    	
    	$addreses = array(
+   			-1 => array('id_address' => -1,
+   					'id_client' => (int)$id_client, 'id_client_user' => (int)$id_client_user,
+   					'description' => Lang::_('address write in'),
+   					'name' => Lang::_('write in description field')
+   			),
    			-2 => array('id_address' => -2,
    					'id_client' => (int)$id_client, 'id_client_user' => (int)$id_client_user,
    					'description' => Lang::_('personal collection'),
    					'name' => Lang::_('write proposition in description field')
    			),
-   			-1 => array('id_address' => -1,
+   			-3 => array('id_address' => 0,
    					'id_client' => (int)$id_client, 'id_client_user' => (int)$id_client_user,
-   					'description' => Lang::_('address write in'),
-   					'name' => Lang::_('write in description field')
+   					'description' => Lang::_('default address'),
+   					'name' => ''
    			)
    	);
 

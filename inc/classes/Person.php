@@ -252,6 +252,11 @@ class Person {
    		$adr = Data::additional_addreses('SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION', $params);
    		$addres_list_tmp[$adr['id_address']] = $adr;
    	}
+   	if( defined('SHOP_BASKET_ORDER_ADDRESS_DEFAULT') && 
+   		constant('SHOP_BASKET_ORDER_ADDRESS_DEFAULT') == 'true' ) {
+   		$adr = Data::additional_addreses('SHOP_BASKET_ORDER_ADDRESS_DEFAULT', $params);
+   		$addres_list_tmp[$adr['id_address']] = $adr;
+   	}
    	return array_merge($addres_list_tmp, Data::get_address_list( (int)$id_client ));
    }
    
