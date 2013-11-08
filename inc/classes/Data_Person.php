@@ -34,16 +34,16 @@ class Data_Person extends Data_Rights {
    function __construct() {
       parent::__construct();
    }
-   
-   static function additional_addreses($type, $params) {
 
-   	$ids = array('SHOP_BASKET_ORDER_ADDRESS_ADD' => -1, 
-   	'SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION' => -2,
-   	'SHOP_BASKET_ORDER_ADDRESS_DEFAULT' => -3);
-   	
+   static function additional_addreses($type, $params) {
+   
+   	$ids = array('SHOP_BASKET_ORDER_ADDRESS_ADD' => -1,
+   			'SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION' => -2,
+   			'SHOP_BASKET_ORDER_ADDRESS_DEFAULT' => -3);
+   
    	$id_client = (int) $params['id_client'];
    	$id_client_user = (int) $params['id_client_user'];
-   	
+   
    	$addreses = array(
    			-1 => array('id_address' => -1,
    					'id_client' => (int)$id_client, 'id_client_user' => (int)$id_client_user,
@@ -55,17 +55,38 @@ class Data_Person extends Data_Rights {
    					'description' => Lang::_('personal collection'),
    					'name' => Lang::_('write proposition in description field')
    			),
-   			-3 => array('id_address' => 0,
+   			-3 => array('id_address' => -3,
    					'id_client' => (int)$id_client, 'id_client_user' => (int)$id_client_user,
    					'description' => Lang::_('default address'),
    					'name' => ''
    			)
    	);
-
+   
    	if( isset($ids[$type]) ) return $addreses[$ids[$type]];
    	elseif( array_search($type, $ids) ) return $addreses[$type];
    	else return array();
-   } 
+   }   
+   
+   static function additional_account_manager($type, $params) {
+   
+   	$ids = array(
+   			'SHOP_ACCOUNT_MANAGER_DEFAULT' => -3);
+   
+   	$id_client = (int) $params['id_client'];
+   	$id_client_user = (int) $params['id_client_user'];
+   
+   	$account_managers = array(
+   			-3 => array('id_account_manager' => -3,
+   					'id_client' => (int)$id_client, 'id_client_user' => (int)$id_client_user,
+   					'account_manager_name' => '000',
+   					'fullname' => Lang::_('default_account_manager')
+   			)
+   	);
+   
+   	if( isset($ids[$type]) ) return $account_managers[$ids[$type]];
+   	elseif( array_search($type, $ids) ) return $account_managers[$type];
+   	else return array();
+   }
 
    static function remove_person($table, $id_in) {
 
@@ -511,7 +532,25 @@ class Data_Person extends Data_Rights {
    	
    	return db_result_array_full_id( db_query( $query ) );
    }
-
+      
+   static function get_account_manage_list( $id_client, $id_client_user = 0 ) { 
+   	if( $id_client_user > 0 ) {
+   		$where = ' ( id_client = ' . db_int($id_client) . ' AND rights_use = "CLIENT" ) OR
+   				id_client_user = ' . db_int($id_client_user);
+   	} else {
+   		$where = ' id_client = ' . db_int($id_client);
+   	}
+   	
+   	$query = 'select id_account_manager, id_client, id_client_user, account_manager_name,
+   				fullname, phone1, phone2, email, date_created, date_modified,
+   			   UNIX_TIMESTAMP(date_created) as ts_created, UNIX_TIMESTAMP(date_modified) as ts_modified,
+   				rights_edit, rights_use
+					from ' . TBL_GLOBAL_CLIENT_USER_ACCOUNT_MANAGER . ' where
+					' . $where;
+   	
+   	return db_result_array_full_id( db_query( $query ) );
+   }  
+   
    static function get_client_list() {
       $SP = SplitPage::g_global();
 

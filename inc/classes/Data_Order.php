@@ -50,9 +50,12 @@ class Data_Order extends Data_Picture {
       list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
       
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
-      o.description, o.description_basket, o.id_shopping_basket, o.id_address, os.name as status_name
+      o.description, o.description_basket, o.id_shopping_basket, o.id_address, os.name as status_name,
+      o.id_account_manager, cuam.account_manager_name
       from ' . TBL_SHOP_ORDER . ' o left join ' . TBL_SHOP_ORDER_STATUS . ' os
       on (o.id_order_status = os.id_order_status)
+      left outer join ' . TBL_GLOBAL_CLIENT_USER_ACCOUNT_MANAGER . ' cuam 
+      on (o.id_account_manager = cuam.id_account_manager)
       where o.id_order ' . $comparision_dir . db_int($id_order_start) . $where . '
       ORDER BY o.id_order ' . $order_dir . ' LIMIT '. db_int($length);
       
@@ -157,8 +160,11 @@ class Data_Order extends Data_Picture {
 
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
       o.description, o.description_basket, o.id_shopping_basket, o.id_address, concat("OSH_", os.name) as name,
-     	UNIX_TIMESTAMP(o.date_create) as ts_create, UNIX_TIMESTAMP(o.date_modified) as ts_modified, o.id_address
+     	UNIX_TIMESTAMP(o.date_create) as ts_create, UNIX_TIMESTAMP(o.date_modified) as ts_modified,
+      o.id_account_manager, cuam.account_manager_name
       from ' . TBL_SHOP_ORDER . ' o left join ' . TBL_SHOP_ORDER_STATUS . ' os
+      left outer join ' . TBL_GLOBAL_CLIENT_USER_ACCOUNT_MANAGER . ' cuam 
+      on (o.id_account_manager = cuam.id_account_manager)
       on (o.id_order_status = os.id_order_status)' . $where;
       $query_fast = 'select count(o.id_order) as total from ' . TBL_SHOP_ORDER . ' o ' . $where;
       $sp_query = $SP->prepare_sql( $query, $query_fast);
@@ -176,11 +182,14 @@ class Data_Order extends Data_Picture {
    static function get_order_data( $id_order ) {
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
       o.description, o.description_basket, o.id_shopping_basket, o.id_address, concat("OSH_", os.name) as name,
-     	UNIX_TIMESTAMP(o.date_create) as ts_create, UNIX_TIMESTAMP(o.date_modified) as ts_modified, o.id_address
+     	UNIX_TIMESTAMP(o.date_create) as ts_create, UNIX_TIMESTAMP(o.date_modified) as ts_modified, o.id_address,
+      o.id_account_manager, cuam.account_manager_name
       from ' . TBL_SHOP_ORDER . ' o left join ' . TBL_SHOP_ORDER_STATUS . ' os
       on (o.id_order_status = os.id_order_status)
       left outer join ' . TBL_GLOBAL_CLIENT_USER_ADDRESS . ' cua 
       on (o.id_address = cua.id_address)
+      left outer join ' . TBL_GLOBAL_CLIENT_USER_ACCOUNT_MANAGER . ' cuam 
+      on (o.id_account_manager = cuam.id_account_manager)
       where id_order = ' . db_int($id_order);
       return db_fetch_array( db_query( $query ) );
    }
@@ -221,6 +230,7 @@ class Data_Order extends Data_Picture {
       	description_basket = "' . db_escape($basket_params['description']) . '",
       	id_shopping_basket = "' . db_int($basket_params['id_shopping_basket']) . '",
       	id_address = "' . db_int($params_in['id_address']) . '",
+      	id_account_manager = "' . db_int($params_in['id_account_manager']) . '",
       	date_create = now(), date_modified = NULL,
       	id_order_status = 1';
 
@@ -360,6 +370,36 @@ class Data_Order extends Data_Picture {
    	
    	if( db_rows($result) > 0 ) return db_result_array_full( $result );
    	else return array();
+   }
+   
+   
+   static function doClientAccountManagerAddOrUpdate($param) {
+   	$F = Framework::g_global();
+   
+   	/*$query = 'select "' . db_int($param['id_invoice']) . '" as id_one,
+   			"' . db_int($param['id_order']) . '" as id_two,
+   			"' . db_escape($param['id_order'].','.$param['invoice_number']) . '" as additional_data,
+          b_func_order_invoice_set("' . db_int($param['id_invoice']) . '",
+          "' . db_int($param['id_order']) . '", "' . db_int($param['id_client']) . '",
+          "' . db_escape($param['invoice_number']) . '", "' . db_escape($param['state']) . '",
+          "' . db_float($param['net_value']) . '", "' . db_float($param['gross_value']) . '",
+          "' . db_escape($param['date_issue']) . '", "' . db_escape($param['date_pay']) . '",
+          "' . db_escape($param['description']) . '") as status';
+   
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	$res_array = db_fetch_array($result);
+   
+   	if( $F->not_null($param['invoice_image']) && strstr($res_array['status'], 'SUCCESS,')) {
+   		add_to_fp('PDF BLOB');
+   		$query_ii = 'UPDATE shop_order_invoice set
+   		`invoice_image` = "' . db_escape($param['invoice_image']) . '"
+   		WHERE id_invoice = "' . db_int($param['id_invoice']) . '"';
+   		db_query( $query_ii );
+   		$res_array['status'] .= ',INVOICE_IMAGE';
+   	}
+   
+   	return $res_array;*/
    }
    
    static function getInvoiceList($id_invoice, $length) {

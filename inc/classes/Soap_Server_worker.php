@@ -1202,12 +1202,56 @@ class Soap_Server_worker {
    
    	return($response);
    }   
-
+//--------------
    
    
+   function doClientAccountManagerAddOrUpdate( $input ) {
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = false;
    
+   	add_to_fp('-------- doClientAccountManagerAddOrUpdate');
+   	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+   		$response_tmp = array();
+   		foreach($input['values'] as $key => $val) {
+   			$SingleValueClass = new AccountManagerData($val, $this->input_data_type);
+   			if( !$SingleValueClass->is_error() ) {
+   				$param = $SingleValueClass->return_array();
+   				add_to_fp('$param_array:'. print_r($param, true) );
+   				$response_tmp[] = Data::doClientAccountManagerAddOrUpdate($param);
+   			} else {
+   				$response_tmp[] = $this->getReturnError('doClientAccountManagerAddOrUpdate', $val, $SingleValueClass->return_error(), false);
+   			}
+   		}
+   		add_to_fp(print_r($response_tmp, true));
+   		$response = $this->_addArrayValues($response_tmp);
+   	} else {
+   		$response = $this->getReturnError('doClientAccountManagerAddOrUpdate', '', 'EMPTY_LIST');
+   	}
    
+   	return($response);
+   }  
    
+   function getClientAccountManagerList( $input ) {
+   	$this->input_data_type = 'UPDATE';
+   	$this->SingleParam_MultipleReturns = true;
+   	 
+   	$ParamDoubleStartLength = $this->_getSingleValue($input, 'ParamDoubleStartLength');
+   	 
+   	add_to_fp('-------- getClientAccountManagerList');
+   	if( is_object($ParamDoubleStartLength) ) {
+   		if( !$ParamDoubleStartLength->is_error() ) {
+   			$param_array = $ParamDoubleStartLength->return_array();
+   			$res_array = Data::getClientAccountManagerList((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
+   			$response = $this->_addArrayValues($res_array);
+   		} else {
+   			$response = $this->getReturnError('getClientAccountManagerList', $input, $ParamDoubleStartLength->return_error() );
+   		}
+   	} else {
+   		$response = $this->getReturnError('getClientAccountManagerList', $input, 'WRONG CLASS');
+   	}
+   	 
+   	return($response);
+   }   
    
    
    

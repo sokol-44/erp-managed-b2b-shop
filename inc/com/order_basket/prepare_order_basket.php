@@ -85,14 +85,14 @@ function remove_from_basked() { return true; }
 	   </td>
 	</tr>
 	<tr>
-		<td colspan="5">
+		<td colspan="3">
       <?php echo Lang::_('choose address'); ?><br>
       <?php 
       $Address_list = $P->get_order_address_list();
 		$history_last = $Shopping_Basket->get_last_history();
 		$default = $history_last['id_address'];
       if( $F->not_null( $Address_list ) ) {
-			$values = array();
+			$addr = array();
 			foreach($Address_list as $id_address => $Address) {
 				$addr[$id_address]['id'] = (int)$Address['id_address'];
 				$addr[$id_address]['text'] =  $F->output_string_html(
@@ -107,6 +107,25 @@ function remove_from_basked() { return true; }
 		} else {
 			echo Lang::_('default address');
 		}
+      ?>
+      </td>
+		<td colspan="2">
+      <?php echo Lang::_('choose account menager'); ?><br>
+      <?php
+      $AccountMenager_list = $P->get_account_manager_list();
+      //$history_last = $Shopping_Basket->get_last_history();
+      //$default = $history_last['id_account_manager'];
+      if( $F->not_null( $AccountMenager_list ) ) {
+      	$aqmg = array();
+      	foreach($AccountMenager_list as $id_account_manager => $AccountMenager) {
+      		$aqmg[$id_account_manager]['id'] = (int)$AccountMenager['id_account_manager'];
+      		$aqmg[$id_account_manager]['text'] =  $F->output_string_html($AccountMenager['fullname']);
+      	}
+         //FIXME
+      	echo $F->draw_pull_down_menu('account_manager', $aqmg, '-3');
+      } else {
+      	echo Lang::_('default address');
+      }
       ?>
       </td>
 	</tr>
@@ -131,11 +150,12 @@ function remove_from_basked() { return true; }
 	<?php
 	foreach( $product_list as $product_key => $product ) {
 	   $GET_product = $F->add_local_get('product_key', $product_key, $GET_tmp);
-
+	   
+	   $description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
 	   $link_product_info = $F->make_link(CFG_COM_PRODUCT_INFO, $GET_product);
 	   $cell_product_info = $F->draw_link($link_product_info, '',
 	   '<div class="catalog_product_name">' . $F->output_string_html( $product['name'] ) . '</div>
-	   <div class="catalog_product_description">' . nl2br($F->output_string_html( $product['description'], 384 )) . '</div>');
+	   <div class="catalog_product_description">' . $description_html . '</div>');
 
 	   $small_image_path = Data::get_product_image_path( $product['picture_small_url'] );
 	   $si_oc = "$.colorbox({href:'" . Data::get_product_image_path( $product['picture_big_url'] ) . "', photo:true});";

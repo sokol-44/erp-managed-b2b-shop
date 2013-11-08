@@ -289,14 +289,24 @@ class ClientUserPasswordData extends BasicSOAPDataMethods {
 }
 
 class ClientUserAddressData extends BasicSOAPDataMethods {
-   public $list = array('id_address', 'id_client_user', 'id_client', 'description', 'name',
-         'street', 'city', 'zip_code', 'country');
-   public $list_type = array('id_address' => 'INT+', 'id_client_user' => 'INT+', 'id_client' => 'INT+',
-         'street' => 'TEXT', 'city' => 'TEXT', 'zip_code' => 'TEXT', 'country' => 'TEXT');
-   public $list_new = array('id_address', 'id_client_user', 'id_client', 'description', 'name',
-         'street', 'city', 'zip_code', 'country');
-   public $list_update = array('id_address', 'id_client_user', 'id_client', 'description', 'name',
-         'street', 'city', 'zip_code', 'country');
+	public $list = array('id_address', 'id_client_user', 'id_client', 'description', 'name',
+			'street', 'city', 'zip_code', 'country');
+	public $list_type = array('id_address' => 'INT+', 'id_client_user' => 'INT+', 'id_client' => 'INT+',
+			'street' => 'TEXT', 'city' => 'TEXT', 'zip_code' => 'TEXT', 'country' => 'TEXT');
+	public $list_new = array('id_address', 'id_client_user', 'id_client', 'description', 'name',
+			'street', 'city', 'zip_code', 'country');
+	public $list_update = array('id_address', 'id_client_user', 'id_client', 'description', 'name',
+			'street', 'city', 'zip_code', 'country');
+}
+
+class AccountManagerData extends BasicSOAPDataMethods {
+   public $list = array('id_account_manager', 'id_client_user', 'id_client', 'account_manager_name',
+   		'fullname', 'phone1', 'phone2', 'email');
+   public $list_type = array('id_account_manager' => 'INT+', 'id_client_user' => 'INT+', 'id_client' => 'INT+',
+         'account_manager_name' => 'TEXT', 'fullname' => 'TEXT', 'phone1' => 'TEXT', 'phone2' => 'TEXT', 'email' => 'TEXT');
+   public $list_new = array('id_account_manager', 'id_client_user', 'id_client', 'account_manager_name', 'name',
+   		'fullname', 'phone1', 'phone2', 'email');
+   public $list_update = array('id_account_manager', 'id_client_user', 'id_client', 'account_manager_name');
 }
 
 class CategoryData extends BasicSOAPDataMethods {
@@ -315,7 +325,7 @@ class OrderData extends BasicSOAPDataMethods {
    public $list_type = array('id_order' => 'INT+', 'id_client' => 'INT+', 'date_create' => 'DATE',
           'date_modified' => 'DATE', 'id_order_status' => 'INT', 'hidden_status' => 'TEXT',
           'description' => 'TEXT', 'description_basket' => 'TEXT', 'id_shopping_basket' => 'INT+',
-   		 'id_address' => 'INT', 'OrderAttributeData' => 'OBJ');
+   		 'id_address' => 'INT', 'id_account_manager' => 'INT', 'OrderAttributeData' => 'OBJ');
    public $list_new = array('id_order', 'id_client');
    public $list_update = array('id_order', 'id_client');
 }

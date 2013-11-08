@@ -290,6 +290,18 @@
 	<wsdl:message name="setInvoiceStatusResponse">
 		<wsdl:part name="setInvoiceStatusResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="getClientAccountManagerListRequest">
+		<wsdl:part name="getClientAccountManagerListRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientAccountManagerListResponse">
+		<wsdl:part name="getClientAccountManagerListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientAccountManagerAddOrUpdateRequest">
+		<wsdl:part name="doClientAccountManagerAddOrUpdateRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientAccountManagerAddOrUpdateResponse">
+		<wsdl:part name="doClientAccountManagerAddOrUpdateResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
 			<wsdl:output message="tns:getProductListResponse"></wsdl:output>
@@ -657,6 +669,22 @@
 							</wsdl:input>
 							<wsdl:output
 								message="tns:setInvoiceStatusResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getClientAccountManagerList">
+							<wsdl:input
+								message="tns:getClientAccountManagerListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getClientAccountManagerListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doClientAccountManagerAddOrUpdate">
+							<wsdl:input
+								message="tns:doClientAccountManagerAddOrUpdateRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientAccountManagerAddOrUpdateResponse">
 							</wsdl:output>
 						</wsdl:operation>
 	</wsdl:portType>
@@ -1170,6 +1198,28 @@
          </wsdl:output>
       </wsdl:operation>
       <wsdl:operation name="setInvoiceStatus">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getClientAccountManagerList">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="doClientAccountManagerAddOrUpdate">
          <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
          <wsdl:input>
             <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"

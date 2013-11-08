@@ -178,11 +178,6 @@ class Person {
    function get_client_balance( $id_client = false ) {
    	$F = Framework::g_global();
    	$balance = array('credit_limit' => 0, 'free_credit' => 0, 'punctuality' => '');
-/*
- *    	BALANCE_CREDIT_LIMIT
-   	BALANCE_FREE_CREDIT
-   	BALANCE_PUNCTUALITY
- */
    	
    	if( $F->is_null($id_client) ) {
    		if( $this->logged_in ) {
@@ -235,29 +230,44 @@ class Person {
       $this->address_list = Data::get_address_list( (int)$id_client, (int)$id_client_user );
       return $this->address_list;
    }
-   
+
    public function get_order_address_list() {
    	$id_client = (int)$this->data['id_client'];
-      $id_client_user = (int)$this->id;
- 	
-      $params = array('id_client' => $id_client, 'id_client_user' => $id_client_user);
-      
+   	$id_client_user = (int)$this->id;
+   
+   	$params = array('id_client' => $id_client, 'id_client_user' => $id_client_user);
+   
    	$addres_list_tmp = array();
    	if( defined('SHOP_BASKET_ORDER_ADDRESS_ADD') && constant('SHOP_BASKET_ORDER_ADDRESS_ADD') == 'true' ) {
    		$adr = Data::additional_addreses('SHOP_BASKET_ORDER_ADDRESS_ADD', $params);
    		$addres_list_tmp[$adr['id_address']] = $adr;
    	}
-   	if( defined('SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION') && 
-   		constant('SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION') == 'true' ) {
+   	if( defined('SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION') &&
+   	constant('SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION') == 'true' ) {
    		$adr = Data::additional_addreses('SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION', $params);
    		$addres_list_tmp[$adr['id_address']] = $adr;
    	}
-   	if( defined('SHOP_BASKET_ORDER_ADDRESS_DEFAULT') && 
-   		constant('SHOP_BASKET_ORDER_ADDRESS_DEFAULT') == 'true' ) {
+   	if( defined('SHOP_BASKET_ORDER_ADDRESS_DEFAULT') &&
+   	constant('SHOP_BASKET_ORDER_ADDRESS_DEFAULT') == 'true' ) {
    		$adr = Data::additional_addreses('SHOP_BASKET_ORDER_ADDRESS_DEFAULT', $params);
    		$addres_list_tmp[$adr['id_address']] = $adr;
    	}
-   	return array_merge($addres_list_tmp, Data::get_address_list( (int)$id_client ));
+   	return array_merge($addres_list_tmp, Data::get_address_list( (int)$id_client, (int)$id_client_user ));
+   }
+      
+   public function get_account_manager_list() {
+   	$id_client = (int)$this->data['id_client'];
+      $id_client_user = (int)$this->id;
+ 	
+      $params = array('id_client' => $id_client, 'id_client_user' => $id_client_user);
+      
+   	$account_manager_list_tmp = array();
+   	if( defined('SHOP_ACCOUNT_MANAGER_DEFAULT') && 
+   		constant('SHOP_ACCOUNT_MANAGER_DEFAULT') == 'true' ) {
+   		$aqmg = Data::additional_account_manager('SHOP_ACCOUNT_MANAGER_DEFAULT', $params);
+   		$account_manager_list_tmp[$aqmg['id_account_manager']] = $aqmg;
+   	}
+   	return array_merge($account_manager_list_tmp, Data::get_account_manage_list( (int)$id_client, (int)$id_client_user ));
    }
    
    static public function get_address( $id_address ) {

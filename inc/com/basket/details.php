@@ -100,11 +100,12 @@ if( $F->not_null($product_list) ) {
 	   $GET_product = $F->add_local_get('product_key', $product_key, $GET_tmp);
 	   $link_remove_from_basket = $F->make_link(CFG_COM_BASKET, $F->add_local_get('mode', 'remove_from_basket', $GET_product));
 	   $cell_remove_from_basket = $F->draw_link($link_remove_from_basket, 'onclick="remove_from_basked()" title="' . Lang::_('remove from BASKET') . '"', $F->static_image('icon/delete_16.png', Lang::_('remove from BASKET')));
-	   
+
+	   $description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
 	   $link_product_info = $F->make_link(CFG_COM_PRODUCT_INFO, $GET_product);
 	   $cell_product_info = $F->draw_link($link_product_info, '',
 	   '<div class="catalog_product_name">' . $F->output_string_html( $product['name'] ) . '</div>
-	   <div class="catalog_product_description">' . nl2br($F->output_string_html( $product['description'], 384 )) . '</div>');	   
+	   <div class="catalog_product_description">' . $description_html . '</div>');	   
 	   ?>
 	<tr>
 		<td width="10%" valign="top"><?php echo $F->draw_radio_field('list', $product_key, false, 'style="display: none"') . $cell_product_info; ?></td>

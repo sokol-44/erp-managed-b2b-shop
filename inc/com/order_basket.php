@@ -36,7 +36,8 @@ if( $F->check_get('mode') ) {
          require 'order_basket' . DS . 'prepare_order_basket.php';
          break;
       case 'order_basket':
-      	$param_in = array('order_description' => $F->POST['order_description'], 'id_address' => (int)$F->POST['order_address']);
+      	$param_in = array('order_description' => $F->POST['order_description'],
+      	'id_address' => (int)$F->POST['order_address'], 'id_account_manager' => (int)$F->POST['account_manager']);
       	foreach(Data::$Data_order_params as $attr_key => $attr_val) {
       		$attr_name = 'attr_' . $attr_key;
       		if( isset($F->POST[$attr_name]) && $F->not_null($F->POST[$attr_name]) ) {
