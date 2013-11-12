@@ -140,7 +140,7 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
       $local_list = $this->get_local_list();
       //add_to_fp( print_r() )
       foreach( $local_list as $new_key ) {
-         if( isset($this->values[$new_key]) && $this->values[$new_key]!='' ) {
+         if( isset($this->values[$new_key]) && (string)$this->values[$new_key]!='' ) {
             //
          } else {
             $this->error[] = array(0 => 'check_list_'.(($this->new)?'new':'update'), 1 => $new_key, 2=>$this->values[$new_key]);
@@ -150,16 +150,16 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
    
    private function check_list( $input ) {
       foreach ($input as $key => $val ) {
-       if( in_array($key, $this->list) && $val!='' ) {
+        if( in_array($key, $this->list) && (string)$val!='' ) {
           list($val_check, $status) = $this->check_val($key, $val);
           if( $val_check !== FALSE ) {
              $this->values[$key] = $val_check;
           } else {
              $this->warning[] = array('check_val', $status.': '.$key.'=>'.$val);
           }
-         } else {
+        } else {
             $this->warning[] = array('check_list', $key.'=>'.$val);
-         }
+        }
       }
    }
    
@@ -302,9 +302,9 @@ class ClientUserAddressData extends BasicSOAPDataMethods {
 class AccountManagerData extends BasicSOAPDataMethods {
    public $list = array('id_account_manager', 'id_client_user', 'id_client', 'account_manager_name',
    		'fullname', 'phone1', 'phone2', 'email');
-   public $list_type = array('id_account_manager' => 'INT+', 'id_client_user' => 'INT+', 'id_client' => 'INT+',
+   public $list_type = array('id_account_manager' => 'INT', 'id_client_user' => 'INT+', 'id_client' => 'INT+',
          'account_manager_name' => 'TEXT', 'fullname' => 'TEXT', 'phone1' => 'TEXT', 'phone2' => 'TEXT', 'email' => 'TEXT');
-   public $list_new = array('id_account_manager', 'id_client_user', 'id_client', 'account_manager_name', 'name',
+   public $list_new = array('id_account_manager', 'id_client_user', 'id_client', 'account_manager_name',
    		'fullname', 'phone1', 'phone2', 'email');
    public $list_update = array('id_account_manager', 'id_client_user', 'id_client', 'account_manager_name');
 }
@@ -317,7 +317,6 @@ class CategoryData extends BasicSOAPDataMethods {
    public $list_new = array('id_category', 'id_category_parent', 'name');
    public $list_update = array('id_category');
 }
-
 
 class OrderData extends BasicSOAPDataMethods {
    public $list = array('id_order', 'id_client', 'date_create', 'date_modified', 'id_order_status',

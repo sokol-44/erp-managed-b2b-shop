@@ -372,34 +372,37 @@ class Data_Order extends Data_Picture {
    	else return array();
    }
    
+
+   static function getClientAccountManagerList($id_client, $length) {
+   	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
    
+   	$query = 'select `id_account_manager`, `id_client`, `id_client_user`, `account_manager_name`,
+   			`fullname`, `phone1`, `phone2`, `email`, `date_created`, `date_modified`
+   			from ' . TBL_GLOBAL_CLIENT_USER_ACCOUNT_MANAGER . '
+   			where id_client ' . $comparision_dir . db_int($id_client) . '
+      	ORDER BY id_client ' . $order_dir . ' LIMIT '. db_int($length);
+   	$result = db_query( $query );
+   
+   	if( db_rows($result) > 0 ) return  db_result_array_full($result);
+   	else return array();
+   }
+      
    static function doClientAccountManagerAddOrUpdate($param) {
    	$F = Framework::g_global();
-   
-   	/*$query = 'select "' . db_int($param['id_invoice']) . '" as id_one,
-   			"' . db_int($param['id_order']) . '" as id_two,
-   			"' . db_escape($param['id_order'].','.$param['invoice_number']) . '" as additional_data,
-          b_func_order_invoice_set("' . db_int($param['id_invoice']) . '",
-          "' . db_int($param['id_order']) . '", "' . db_int($param['id_client']) . '",
-          "' . db_escape($param['invoice_number']) . '", "' . db_escape($param['state']) . '",
-          "' . db_float($param['net_value']) . '", "' . db_float($param['gross_value']) . '",
-          "' . db_escape($param['date_issue']) . '", "' . db_escape($param['date_pay']) . '",
-          "' . db_escape($param['description']) . '") as status';
+
+  
+   	 $query = 'select "' . db_int($param['id_account_manager']) . '" as id_start,
+   			"' . db_escape($param['account_manager_name'].','.$param['id_client']
+   			.','.$param['id_client_user']) . '" as additional_data,
+          b_func_account_manager_set("' . db_int($param['id_account_manager']) . '",
+          "' . db_int($param['id_client']) . '", "' . db_int($param['id_client_user']) . '",
+          "' . db_escape($param['account_manager_name']) . '", "' . db_escape($param['fullname']) . '",
+          "' . db_escape($param['phone1']) . '", "' . db_escape($param['phone2']) . '",
+          "' . db_escape($param['email']) . '") as status';
    
    	add_to_fp($query);
    	$result = db_query( $query );
-   	$res_array = db_fetch_array($result);
-   
-   	if( $F->not_null($param['invoice_image']) && strstr($res_array['status'], 'SUCCESS,')) {
-   		add_to_fp('PDF BLOB');
-   		$query_ii = 'UPDATE shop_order_invoice set
-   		`invoice_image` = "' . db_escape($param['invoice_image']) . '"
-   		WHERE id_invoice = "' . db_int($param['id_invoice']) . '"';
-   		db_query( $query_ii );
-   		$res_array['status'] .= ',INVOICE_IMAGE';
-   	}
-   
-   	return $res_array;*/
+   	return db_fetch_array($result);
    }
    
    static function getInvoiceList($id_invoice, $length) {

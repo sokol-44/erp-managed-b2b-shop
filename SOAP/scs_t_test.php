@@ -336,8 +336,34 @@ function test_setInvoiceStatus( $client ) {
 	test_helper_multiple_in($in_oo, 'setInvoiceStatus', $client );
 }
 
+function test_getClientAccountManagerList( $client ) {
+	$nt = time();
 
+	$in_oo = new ParamStartLength(array('id_start' => '1', 'length' => '5'));
+	test_helper_single_in($in_oo, 'getClientAccountManagerList', $client );
+}
 
+function test_doClientAccountManagerAddOrUpdate( $client ) {
+	$nt = time();
+
+// 	$list = array('id_account_manager' => '1', 'id_client' => '2', 'id_client_user' => '4',
+//          'account_manager_name' => 'MSO', 'fullname' => 'Michał Sokołowski', 'phone1' => '225552233',
+// 			'phone2' => $nt, 'email' => 'michal.sokolowski@2m.net.pl');
+// 	$in_oo[] = new AccountManagerData($list);
+
+// 	$list = array('id_account_manager' => $nt, 'id_client' => '2', 'id_client_user' => '4',
+// 			'account_manager_name' => $nt, 'fullname' => 'Michał Sokołowski', 'phone1' => '225552233',
+// 			'phone2' => $nt, 'email' => 'michal.sokolowski@2m.net.pl');
+// 	$in_oo[] = new AccountManagerData($list);
+
+	$list = array('id_account_manager' => 0, 'id_client' => '2', 'id_client_user' => '4',
+			'account_manager_name' => strrev($nt), 'fullname' => 'Michał Sokołowski', 'phone1' => '225552233',
+			'phone2' => $nt, 'email' => 'michal.sokolowski@2m.net.pl');
+	
+	$in_oo[] = new AccountManagerData($list);
+	
+	test_helper_multiple_in($in_oo, 'doClientAccountManagerAddOrUpdate', $client );
+}
 
 
 

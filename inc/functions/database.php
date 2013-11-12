@@ -298,6 +298,15 @@ function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link 
 }
 
 
+
+/**
+ * Return all rows of data numbered by id
+ * (if id is not set, it choses first column of result)
+ * @param db result $result
+ * @param string $id
+ * @param db handler $link
+ * @return array()
+ */
 function db_result_array_full_id($result, $id = false, $link = 'db_link') {
 	global $$link;
 
@@ -312,6 +321,12 @@ function db_result_array_full_id($result, $id = false, $link = 'db_link') {
 	return $result_data;
 }
 
+/**
+ * Return all rows of data
+ * @param db result $result
+ * @param db handler $link
+ * @return array()
+ */
 function db_result_array_full($result, $link = 'db_link') {
    global $$link;
 
@@ -323,12 +338,27 @@ function db_result_array_full($result, $link = 'db_link') {
    return $result_data;
 }
 
+/**
+ * Alias for db_result_array_full()
+ * Return all rows of data
+ * @param db result $result
+ * @param db handler $link
+ * @return array()
+ */
 function db_result_array($result, $link = 'db_link') {
    global $$link;
 
    return db_result_array_full($result, $link);
 }
 
+
+/**
+ * Return single row of data
+ * @param db result $result
+ * @param number $idx
+ * @param db handler $link
+ * @return array();
+ */
 function db_fetch_array($result, $idx = '', $link = 'db_link') {
    global $$link;
 
@@ -343,6 +373,13 @@ function db_fetch_array($result, $idx = '', $link = 'db_link') {
    return $result_data;
 }
 
+/**
+ * return single column of single row
+ * @param column name $name
+ * @param db result $result
+ * @param number $idx
+ * @return string
+ */
 function db_fetch_result($name, $result, $idx = 0) {
    global $$link;
    return mysql_result($result, (int)$idx, $name);

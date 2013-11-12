@@ -1214,6 +1214,7 @@ class Soap_Server_worker {
    		$response_tmp = array();
    		foreach($input['values'] as $key => $val) {
    			$SingleValueClass = new AccountManagerData($val, $this->input_data_type);
+   				add_to_fp('$$SingleValueClass:'. print_r($SingleValueClass, true) );
    			if( !$SingleValueClass->is_error() ) {
    				$param = $SingleValueClass->return_array();
    				add_to_fp('$param_array:'. print_r($param, true) );
@@ -1235,13 +1236,13 @@ class Soap_Server_worker {
    	$this->input_data_type = 'UPDATE';
    	$this->SingleParam_MultipleReturns = true;
    	 
-   	$ParamDoubleStartLength = $this->_getSingleValue($input, 'ParamDoubleStartLength');
+   	$ParamDoubleStartLength = $this->_getSingleValue($input, 'ParamStartLength');
    	 
    	add_to_fp('-------- getClientAccountManagerList');
    	if( is_object($ParamDoubleStartLength) ) {
    		if( !$ParamDoubleStartLength->is_error() ) {
    			$param_array = $ParamDoubleStartLength->return_array();
-   			$res_array = Data::getClientAccountManagerList((int)$param_array['id_start_one'], (int)$param_array['id_start_two'], (int)$param_array['length']);
+   			$res_array = Data::getClientAccountManagerList((int)$param_array['id_start'], (int)$param_array['length']);
    			$response = $this->_addArrayValues($res_array);
    		} else {
    			$response = $this->getReturnError('getClientAccountManagerList', $input, $ParamDoubleStartLength->return_error() );
@@ -1253,10 +1254,7 @@ class Soap_Server_worker {
    	return($response);
    }   
    
-   
-   
-   
-   
+
    
 // -------------------------   
    function getParamStartLength( $input ) {
