@@ -97,7 +97,7 @@ if( $F->not_null($product_list) ) {
 	</tr>
 	<?php
 	foreach( $product_list as $product_key => $product ) {
-	   $GET_product = $F->add_local_get('product_key', $product_key, $GET_tmp);
+	   $GET_product = $F->add_local_get('id_product', $product_key, $GET_tmp);
 	   $link_remove_from_basket = $F->make_link(CFG_COM_BASKET, $F->add_local_get('mode', 'remove_from_basket', $GET_product));
 	   $cell_remove_from_basket = $F->draw_link($link_remove_from_basket, 'onclick="remove_from_basked()" title="' . Lang::_('remove from BASKET') . '"', $F->static_image('icon/delete_16.png', Lang::_('remove from BASKET')));
 

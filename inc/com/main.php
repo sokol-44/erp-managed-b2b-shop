@@ -1,8 +1,14 @@
 <?php
+
+
+if( $P->logged_in ) $F->redirect( $F->make_link(CFG_COM_ACCOUNT) );
+$F->redirect( $F->make_link(CFG_COM_LOGIN));
+die();
+
 $Article = new Article('1');
 
 if( !$Article ) {
-   $F->redirect( $F->make_link(CNF_DEFAULT_PAGE));
+   $F->redirect( $F->make_link(CNF_DEFAULT_COM));
 }
 
 $BC->add_crumb( array( 'name' => Lang::_('MAIN_PAGE'), 'path' => $F->make_link(CFG_COM_ARTICLE) ) );

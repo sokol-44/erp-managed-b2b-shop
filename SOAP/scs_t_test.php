@@ -273,7 +273,7 @@ function test_getOrderAttributeList( $client ) {
 	test_helper_single_in($in_oo, 'getOrderAttributeList', $client );
 }
 
-function test_doorderAttributeAddOrUpdate( $client ) {
+function test_doOrderAttributeAddOrUpdate( $client ) {
 	$nt = time();
 	$list = array('id_order' => 17, 'type' => 'name'.$nt, 'val' => 'val'.$nt);
 	$in_oo[] = new OrderAttributeData($list);
@@ -365,9 +365,25 @@ function test_doClientAccountManagerAddOrUpdate( $client ) {
 	test_helper_multiple_in($in_oo, 'doClientAccountManagerAddOrUpdate', $client );
 }
 
+function test_doClientUserAttributeAddOrUpdate( $client ) {
+	$nt = time();
+	
+	$list = array('id_client' => 2, 'id_client_user' => 4, 'type' => 'name'.$nt, 'val' => 'val'.$nt);
+	$in_oo[] = new ClientUserAttributeData($list);
+
+	$list = array('id_client' => 2, 'id_client_user' => 4, 'type' => 'BALANCE_FREE_CREDIT', 'val' => $nt);
+	$in_oo[] = new ClientUserAttributeData($list);
+
+	test_helper_multiple_in($in_oo, 'doClientUserAttributeAddOrUpdate', $client);
+}
 
 
+function test_getClientUserAttributeList( $client ) {
+	$nt = time();
 
+	$in_oo = new ParamStartLength(array('id_start' => '4', 'length' => '15'));
+	test_helper_single_in($in_oo, 'getClientUserAttributeList', $client );
+}
 
 
 

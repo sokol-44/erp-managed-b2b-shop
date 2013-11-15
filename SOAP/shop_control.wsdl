@@ -302,6 +302,18 @@
 	<wsdl:message name="doClientAccountManagerAddOrUpdateResponse">
 		<wsdl:part name="doClientAccountManagerAddOrUpdateResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="getClientUserAttributeListRequest">
+		<wsdl:part name="getClientUserAttributeListRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientUserAttributeListResponse">
+		<wsdl:part name="getClientUserAttributeListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserAttributeAddOrUpdateRequest">
+		<wsdl:part name="doClientUserAttributeAddOrUpdateRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserAttributeAddOrUpdateResponse">
+		<wsdl:part name="doClientUserAttributeAddOrUpdateResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
 			<wsdl:output message="tns:getProductListResponse"></wsdl:output>
@@ -685,6 +697,22 @@
 							</wsdl:input>
 							<wsdl:output
 								message="tns:doClientAccountManagerAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getClientUserAttributeList">
+							<wsdl:input
+								message="tns:getClientUserAttributeListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getClientUserAttributeListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doClientUserAttributeAddOrUpdate">
+							<wsdl:input
+								message="tns:doClientUserAttributeAddOrUpdateRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientUserAttributeAddOrUpdateResponse">
 							</wsdl:output>
 						</wsdl:operation>
 	</wsdl:portType>
@@ -1209,6 +1237,28 @@
          </wsdl:output>
       </wsdl:operation>
       <wsdl:operation name="getClientAccountManagerList">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getClientUserAttributeList">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="doClientUserAttributeAddOrUpdate">
          <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
          <wsdl:input>
             <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"

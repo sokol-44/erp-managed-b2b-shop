@@ -612,6 +612,29 @@ class Data_Person extends Data_Rights {
    	return db_fetch_array($result);
    }
 
+   static function doClientUserAttributeAddOrUpdate( $param ) {
    
+   	$query = 'select "' . db_int($param['id_client']) . '" as id_one,
+   			"' . db_int($param['id_client_user']) . '" as id_two,
+   			"' . db_escape($param['type'].','.$param['val']) . '" as additional_data,
+          b_func_client_user_attribute_set("' . db_int($param['id_client']) . '", "' . db_int($param['id_client_user']) . '",
+          "' . db_escape($param['type']) . '", "' . db_escape($param['val']) . '") as status';
+   
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	return db_fetch_array($result);
+   }
+   
+   static function getClientUserAttributeList( $id_client_user = 0, $length = 1 ) {
+   
+   	$query = 'select cua.`id_client`, cua.`id_client_user`, cua.`type`, cua.`val`
+         	from ' . TBL_GLOBAL_CLIENT_USER_ATTRIBUTES . ' cua left join 
+         	' . TBL_GLOBAL_CLIENT_USER . ' cu on 
+         	(cua.id_client_user = cu.id_client_user and cua.id_client = cu.id_client)
+         	where cua.id_client_user = "' . db_int($id_client_user) . '"';
+   	add_to_fp('$query ' . $query);
+   	$result = db_query( $query );
+   	return db_result_array_full($result);
+   }    
 }
 ?>

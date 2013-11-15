@@ -280,6 +280,13 @@ class ClientUserData extends BasicSOAPDataMethods {
    public $list_update = array('id_client_user', 'id_client');
 }
 
+class ClientUserAttributeData extends BasicSOAPDataMethods {
+	public $list = array('id_client', 'id_client_user', 'type', 'val');
+	public $list_type = array('id_client' => 'INT+', 'id_client_user' => 'INT+', 'type' => 'TEXT', 'val' => 'TEXT');
+	public $list_new = array('id_client', 'id_client_user', 'type', 'val');
+	public $list_update = array('id_client', 'id_client_user', 'type', 'val');
+}
+
 class ClientUserPasswordData extends BasicSOAPDataMethods {
    public $list = array('id_client_user', 'id_client', 'password', 'password_salt');
    public $list_type = array('id_client_user' => 'INT+', 'id_client' => 'INT+',

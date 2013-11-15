@@ -163,9 +163,9 @@ class Data_Order extends Data_Picture {
      	UNIX_TIMESTAMP(o.date_create) as ts_create, UNIX_TIMESTAMP(o.date_modified) as ts_modified,
       o.id_account_manager, cuam.account_manager_name
       from ' . TBL_SHOP_ORDER . ' o left join ' . TBL_SHOP_ORDER_STATUS . ' os
+      on (o.id_order_status = os.id_order_status)
       left outer join ' . TBL_GLOBAL_CLIENT_USER_ACCOUNT_MANAGER . ' cuam 
-      on (o.id_account_manager = cuam.id_account_manager)
-      on (o.id_order_status = os.id_order_status)' . $where;
+      on (o.id_account_manager = cuam.id_account_manager)' . $where;
       $query_fast = 'select count(o.id_order) as total from ' . TBL_SHOP_ORDER . ' o ' . $where;
       $sp_query = $SP->prepare_sql( $query, $query_fast);
       $res = db_query( $sp_query );
@@ -212,7 +212,7 @@ class Data_Order extends Data_Picture {
       $query = 'select osh.id_order_status, osh.timestamp, osh.description, concat("OSH_", os.name) as name
       from ' . TBL_SHOP_ORDER_STATUS_HISTORY . ' osh left join ' . TBL_SHOP_ORDER_STATUS . ' os
       on (osh.id_order_status = os.id_order_status)
-      where id_order = ' . db_int($id_order);
+      where id_order = ' . db_int($id_order) . ' order by osh.timestamp asc';
       $ret_tmp = db_result_array( db_query( $query ) );
       $ret_array = array();
       foreach($ret_tmp as $status ) {
@@ -251,8 +251,7 @@ class Data_Order extends Data_Picture {
 	   	$query = 'insert into ' . TBL_SHOP_ORDER_STATUS_HISTORY . '
 	      	set id_order = ' . db_int($id_order) . ',
 	   		id_order_status = ' . db_int($id_order_status) . ',
-	      	description = "' . db_escape($description) . '" 
-	      	on duplicate key update description = "' . db_escape($description) . '"';
+	      	description = "' . db_escape($description) . '"';
 	      $res = db_query( $query );
 	      $af_rows = db_affected_rows();
 	      $query = 'update ' . TBL_SHOP_ORDER . ' 

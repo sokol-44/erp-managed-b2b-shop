@@ -273,7 +273,7 @@ class Data_Products extends Data_Basket {
                   'picture_id' => $product_info['picture_id'],
                   'price' => $product_info['price'],
                   'vat' => $product_info['vat'],
-                  'quantity' => $product_param['quantity']
+                  'quantity' => $product_info['quantity']
             );
          }
       }

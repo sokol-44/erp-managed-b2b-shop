@@ -161,6 +161,28 @@ class Soap_Server_worker {
    }
    
 
+   function getClientUserAttributeList( $input ) {//ParamStartLength, ClientData
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = true;
+   
+   	$ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
+   
+   	if( is_object($ParamStartLength) ) {
+   		if( !$ParamStartLength->is_error() ) {
+   			$param_array = $ParamStartLength->return_array();
+   			//add_to_fp('$param_array:'. print_r($param_array, true) );
+   			$res_array = Data::getClientUserAttributeList((int)$param_array['id_start'], (int)$param_array['length']);
+   			$response = $this->_addArrayValues($res_array);
+   		} else {
+   			$response = $this->getReturnError('getClientUserAttributeList', $input, $ParamStartLength->return_error() );
+   		}
+   	} else {
+   		$response = $this->getReturnError('getClientUserAttributeList', $input, 'WRONG CLASS');
+   	}
+   
+   	return($response);
+   }
+   
    function getClientPriceProductList( $input ) { //ParamDoubleStartLength, ProductData
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = true;
@@ -449,7 +471,35 @@ class Soap_Server_worker {
       
       return($response);
    }
+
+   function doClientUserAttributeAddOrUpdate( $input ) {//ParamStartLength, ClientData
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = false;
+   	 
+   	add_to_fp('-------- doClientUserAttributeAddOrUpdate');
    
+   	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+   		$response_tmp = array();
+   		foreach($input['values'] as $key => $val) {
+   			$SingleValueClass = new ClientUserAttributeData($val, $this->input_data_type);
+   			if( !$SingleValueClass->is_error() ) {
+   				$param_array = $SingleValueClass->return_array();
+   				add_to_fp('$param_array:'. print_r($param_array, true) );
+   				$response_tmp[] = Data::doClientUserAttributeAddOrUpdate($param_array);
+   			} else {
+   				$response_tmp[] = $this->getReturnError('doClientUserAttributeAddOrUpdate', $val, $SingleValueClass->return_error(), false);
+   			}
+   		}
+   		add_to_fp(print_r($response_tmp, true));
+   		$response = $this->_addArrayValues($response_tmp);
+   	} else {
+   		$response = $this->getReturnError('doClientUserAttributeAddOrUpdate', '', 'EMPTY_LIST');
+   	}
+   
+   	return($response);
+   }
+    
+      
    
    
    function doClientUserAdd ( $input ) {
@@ -1037,7 +1087,7 @@ class Soap_Server_worker {
             if( !$SingleValueClass->is_error() ) {
                $pa = $SingleValueClass->return_array();
                add_to_fp('$param_array:'. print_r($pa, true) );
-               $response_tmp[] = Data::setOrderStatus($pa['id_order'], $pa['description']);
+               $response_tmp[] = Data::setOrderStatus($pa['id_order'], $pa['id_order_status'], $pa['description']);
             } else {
                $response_tmp[] = $this->getReturnError('setOrderStatus', $val, $SingleValueClass->return_error(), false);
             }

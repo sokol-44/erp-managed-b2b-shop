@@ -259,7 +259,7 @@ function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link 
    
    if( defined('TBL_CORE_DB_ERRORS') ) $table = TBL_CORE_DB_ERRORS;
    elseif( isset($GLOBALS['config']['TABLES']['CORE_DB_ERRORS']) && $GLOBALS['config']['TABLES']['CORE_DB_ERRORS'] != '')
-   $table = $GLOBALS['config']['TABLES']['CORE_DB_ERRORS'];
+   	$table = $GLOBALS['config']['TABLES']['CORE_DB_ERRORS'];
    elseif( defined('SOAP_ENVIRONMENT') && constant('SOAP_ENVIRONMENT') ) return 'DB fatal error (1)'. $error_data;
    else die('DB fatal error (1)');
 
