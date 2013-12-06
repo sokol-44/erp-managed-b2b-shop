@@ -464,9 +464,41 @@ class Data_Person extends Data_Rights {
       db_perform(TBL_GLOBAL_CLIENT, $data_main_sql, 'UPDATE', "id_client=" . (int)$data_org['id_client']);
    }
 
+   static function get_client_user_attribute( $id_client, $id_client_user, $attribute_type = false) {
+   	$F = Framework::g_global();
+   
+   	$where_add = '';
+   
+   	if( $F->not_null($attribute_type) ) {
+   		$where_add = ' and cua.type = "' . db_escape($attribute_type) . '"';
+   	}
+   
+   	$query = 'select cua.`id_client`, cua.`id_client_user`, `type`, `val`
+         	from ' . TBL_GLOBAL_CLIENT_USER_ATTRIBUTES . ' cua ,
+         	' . TBL_GLOBAL_CLIENT_USER . ' cu
+         	where cua.id_client = cu.id_client and 
+         	cua.id_client = "' . db_int($id_client) . '" and
+         	cua.id_client_user = "' . db_int($id_client_user) . '" ' . $where_add;
+
+   	$result = db_query( $query );
+   	$nrow = db_rows( $result );
+   	if( $nrow == 1 && $F->not_null($attribute_type) ) {
+   		return db_fetch_result('val', $result);
+   	} elseif( $nrow > 1 ) {
+   		$res_arr = db_result_array_full($result);
+   		$ret_arr = array();
+   		foreach($res_arr as $res_one) {
+   			$ret_arr[$res_one['type']] = $res_one['val'];
+   		}
+   		return $ret_arr;
+   	} else {
+   		return false;
+   	}
+   }
+   
    static function get_client_attribute( $id_client, $attribute_type = false) {
       $F = Framework::g_global();
-		
+
    	$where_add = '';
    	
    	if( $F->not_null($attribute_type) ) {
@@ -488,7 +520,12 @@ class Data_Person extends Data_Rights {
       	if( $nrow == 1 && $F->not_null($attribute_type) ) {
       		return db_fetch_result('val', $result);
       	} elseif( $nrow > 1 ) {
-      		return db_result_array_full($result);
+      		$res_arr = db_result_array_full($result);
+      		$ret_arr = array();
+      		foreach($res_arr as $res_one) {
+      			$ret_arr[$res_one['type']] = $res_one['val']; 
+      		}
+      		return $ret_arr;
       	} else {
       		return false;
       	}

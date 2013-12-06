@@ -88,9 +88,9 @@ function remove_from_basked() { return true; }
 		<td colspan="3">
       <?php echo Lang::_('choose address'); ?><br>
       <?php 
-      $Address_list = $P->get_order_account_manager_list();
+      $Address_list = $P->get_address_list();
 		$history_last = $Shopping_Basket->get_last_history();
-		$default = $history_last['id_address'];
+		$default = $P->get_default_address_id();
       if( $F->not_null( $Address_list ) ) {
 			$addr = array();
 			foreach($Address_list as $id_address => $Address) {
@@ -114,7 +114,7 @@ function remove_from_basked() { return true; }
       <?php
       $AccountMenager_list = $P->get_account_manager_list();
       //$history_last = $Shopping_Basket->get_last_history();
-      //$default = $history_last['id_account_manager'];
+		$default = $P->get_default_manager_id();
       if( $F->not_null( $AccountMenager_list ) ) {
       	$aqmg = array();
       	foreach($AccountMenager_list as $id_account_manager => $AccountMenager) {
@@ -122,7 +122,7 @@ function remove_from_basked() { return true; }
       		$aqmg[$id_account_manager]['text'] =  $F->output_string_html($AccountMenager['fullname']);
       	}
          //FIXME
-      	echo $F->draw_pull_down_menu('account_manager', $aqmg, '-3');
+      	echo $F->draw_pull_down_menu('account_manager', $aqmg, $default);
       } else {
       	echo Lang::_('default address');
       }

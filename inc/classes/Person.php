@@ -18,6 +18,7 @@ class Person {
    static $person_rights_cache = array();
    public $login, $logged_in, $roles, $id, $session_id;
    public $data, $client_data, $address_list;
+   public $attributes;
 
    function __construct() {
       $this->login = false;
@@ -27,6 +28,7 @@ class Person {
       $this->data = array();
       $this->client_data = array();
       $this->address_list = array();
+      $this->attributes = array();
       self::$class = $this;
       $this->session_id = session_id();
    }
@@ -52,6 +54,7 @@ class Person {
       $this->data = array();
       $this->client_data = array();
       $this->address_list = array();
+      $this->attributes = array();
       $BackTrail = BackTrail::g_global();
       $BackTrail->reset();
       session_regenerate_id();
@@ -67,6 +70,7 @@ class Person {
            'id' => $this->id,
            'login' => $this->login,
            'roles' => $this->roles,
+           'attributes' => $this->attributes,
            'data' => array_intersect_key($this->data, $ar_flt)
             );
       
@@ -150,6 +154,42 @@ class Person {
          return false;
       }
    }
+
+   static function get_client_attribute( $id_client, $name ) {
+      $P = Person::g_global();
+   	$F = Framework::g_global();
+   	
+   	if( $P->logged_in && $P->client_data['id_client'] == $id_client ) {
+   		if( $F->is_null($P->attributes) || $F->is_null($P->attributes[$name]) ) {
+   			$P->attributes = Data_Person::get_client_attribute((int)$id_client);
+   		}
+   		$attributes = $P->attributes;
+   	} else {
+   		return Data_Person::get_client_attribute((int)$id_client, $name);
+   	}
+   	
+   	if( isset( $attributes[$name] ) ) return $attributes[$name];
+   	
+   	return false; 
+   }
+   
+   static function get_client_user_attribute( $id_client, $id_client_user, $name ) {
+   	$P = Person::g_global();
+   	$F = Framework::g_global();
+   	
+   	if( $P->logged_in && $P->client_data['id_client'] == $id_client && $P->id == $id_client_user ) {
+   		if( $F->is_null($P->client_data['attributes']) || $F->is_null($P->client_data['attributes'][$name]) ) {
+   			$P->client_data['attributes'] = Data_Person::get_client_user_attribute((int)$id_client, (int)$id_client_user);
+   		}
+   		$attributes = $P->client_data['attributes'];
+   	} else {
+   		return Data_Person::get_client_user_attribute((int)$id_client, (int)$id_client_user, $name);
+   	}
+   	
+   	if( isset( $attributes[$name] ) ) return  $attributes[$name];
+   	
+   	return false; 
+   }
     
    public function get_account_manager_address( $id_client = false ) {
 
@@ -159,9 +199,9 @@ class Person {
 
       if( $id_client === true ) {
          if( is_numeric($id_client) ) {
-            $email_addres = Data_Person::get_client_attribute((int)$id_client, 'ACCOUNT_MANAGER_ADDRESS');
+            $email_addres = self::get_client_attribute((int)$id_client, 'ACCOUNT_MANAGER_ADDRESS');
          } elseif ( is_bool($id_client) ) {
-            $email_addres = Data_Person::get_client_attribute((int)$P->data['id_client'], 'ACCOUNT_MANAGER_ADDRESS');
+            $email_addres = self::get_client_attribute((int)$P->data['id_client'], 'ACCOUNT_MANAGER_ADDRESS');
          }
          if( $email_address ) return array('email' => $email_address,'name' =>  '');
       }
@@ -190,9 +230,9 @@ class Person {
    	}
    	
    	$balance = array(
-   			'credit_limit' => (float)Data::get_client_attribute($id_client, 'BALANCE_CREDIT_LIMIT'), 
-   			'free_credit'  => (float)Data::get_client_attribute($id_client, 'BALANCE_FREE_CREDIT'), 
-   			'punctuality' => (string)Data::get_client_attribute($id_client, 'BALANCE_PUNCTUALITY') );
+   			'credit_limit' => (float)self::get_client_attribute($id_client, 'BALANCE_CREDIT_LIMIT'), 
+   			'free_credit'  => (float)self::get_client_attribute($id_client, 'BALANCE_FREE_CREDIT'), 
+   			'punctuality' => (string)self::get_client_attribute($id_client, 'BALANCE_PUNCTUALITY') );
 
    	return $balance;
    }
@@ -255,6 +295,27 @@ class Person {
    	return array_merge($addres_list_tmp, Data::get_address_list( (int)$id_client, (int)$id_client_user ));
    }
 
+   
+   public function get_default_address_id( $id_client = false, $id_client_user = false ) {
+   	$F = Framework::g_global();
+   
+   	if( $id_client === false) {
+   		$id_client = (int)$this->data['id_client'];
+   		$id_client_user = (int)$this->id;
+   	}
+
+   	$id_res = self::get_client_attribute($id_client, 'ADDRESS_DEFAULT_ID');
+   	
+   	if( $F->not_null( $id_res ) ) return $id_res;
+   	
+   	$id_res = self::get_client_user_attribute($id_client, $id_client_user, 'ADDRESS_DEFAULT_ID');
+   	
+   	if( $F->not_null( $id_res ) ) return $id_res;
+   	
+   	return -3;
+   }
+    
+   
    public function get_account_manager_list() {
    	$id_client = (int)$this->data['id_client'];
    	$id_client_user = (int)$this->id;
@@ -279,6 +340,25 @@ class Person {
    	}
    	return array_merge($account_manager_list_tmp, Data::get_account_manage_list( (int)$id_client, (int)$id_client_user ));
    }
+
+   public function get_default_manager_id( $id_client = false, $id_client_user = false ) {
+   	$F = Framework::g_global();
+   	 
+   	if( $id_client === false) {
+   		$id_client = (int)$this->data['id_client'];
+   		$id_client_user = (int)$this->id;
+   	}
+   
+   	$id_res = self::get_client_attribute($id_client, 'ACCOUNT_MANAGER_DEFAULT_ID');
+   
+   	if( $F->not_null( $id_res ) ) return $id_res;
+   
+   	$id_res = self::get_client_user_attribute($id_client, $id_client_user, 'ACCOUNT_MANAGER_DEFAULT_ID');
+   
+   	if( $F->not_null( $id_res ) ) return $id_res;
+   	
+   	return -3;
+   }   
    
    static public function get_address( $id_address ) {
    	return Data::get_address( (int)$id_address );
