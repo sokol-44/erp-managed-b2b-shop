@@ -10,6 +10,7 @@ $GET_tmp = $F->make_get();
 $BC->add_crumb(Lang::_('Account'), $F->make_link(CFG_COM_ACCOUNT) );
 $data_Client = $P->get_client_data();
 $Address_list = $P->get_address_list();
+$Account_Manager_list = $P->get_account_manager_list();
 
 ?>
 <div class="account_container">
@@ -44,7 +45,7 @@ $Address_list = $P->get_address_list();
 <?php
 if( $F->not_null($Address_list) ) {
 ?>
-<table class="tableBox" style="border: 0; width: 400px;" >
+<table class="tableBox" style="border: 0; width: 100%;" >
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('ID') ?></th>
 		<th><?php echo Lang::_('Description') ?></th>
@@ -63,6 +64,40 @@ foreach($Address_list as $Address) {
 		<td><?php echo $addr_id; ?></td>
 		<td><?php echo $addr_desc; ?></td>
 		<td><?php echo $addr_addr; ?></td>
+	</tr>
+<?php 
+}
+?>
+</table>
+<?php
+} else {
+ echo Lang::_('empty');
+}
+?>
+<div class="account_manager_container container_subheader"><?php echo Lang::_('account managers'); ?><div class="icon"></div></div>
+<?php
+if( $F->not_null($Account_Manager_list) ) {
+?>
+<table class="tableBox" style="border: 0; width: 100%" >
+	<tr class="tableBoxHeading">
+		<th><?php echo Lang::_('ID') ?></th>
+		<th><?php echo Lang::_('Name') ?></th>
+		<th><?php echo Lang::_('Email') ?></th>
+		<th><?php echo Lang::_('Telephones') ?></th>
+	</tr>
+<?php 
+foreach($Account_Manager_list as $Account_Manager) {
+	$am_id = (int)$Account_Manager['id_account_manager'];
+	$am_name = $F->output_string($Account_Manager['fullname']);
+	$am_email = $F->draw_email_link($Account_Manager['email']);
+	$am_phone = $Account_Manager['phone1']."<br>";
+	$am_phone .= $Account_Manager['phone2'];
+?>
+	<tr>
+		<td><?php echo $am_id; ?></td>
+		<td><?php echo $am_name; ?></td>
+		<td><?php echo $am_email; ?></td>
+		<td><?php echo $am_phone; ?></td>
 	</tr>
 <?php 
 }

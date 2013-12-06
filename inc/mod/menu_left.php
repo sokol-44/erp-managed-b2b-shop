@@ -16,6 +16,8 @@ $bsk = $F->draw_link($F->make_link(CFG_COM_BASKET),'', Lang::_('Basket') );
 $bsk_all = $F->draw_link($F->make_link(CFG_COM_BASKET, $F->add_local_get('show', 'all', $GET_tmp)),'', Lang::_('Baskets') );
 $fbsk= $F->draw_link($F->make_link(CFG_COM_BASKET_FAVORITE),'', Lang::_('Favorite Basket') );
 
+
+$tool_battery_l = $F->draw_link($F->make_link(CFG_COM_TOOL,array('battery' => 'unload')),'', 'Dobór UPS');
 ?>
 <div class="article_menu_left">
   <div class="article_menu_left menu_header">Menu<div class="icon"></div></div>
@@ -36,5 +38,8 @@ $fbsk= $F->draw_link($F->make_link(CFG_COM_BASKET_FAVORITE),'', Lang::_('Favorit
   <div class="article article08"><?php echo $bsk_all ?></div>  
   <div class="article article_tab article09"><?php echo $bsk ?></div>
   <div class="article article_tab article10"><?php echo $fbsk ?></div>
+  <div class="article article_hr"></div>
+  <div class="article article11"><?php echo $tool_battery_l; ?></div>
+  <div class="article article_hr"></div>
   <div class="article menu_bottom"></div>
 </div>

@@ -314,6 +314,17 @@ Container
 }
 
 /*
+Account
+*/
+.account_container {
+	
+}
+
+.account_container .container_subheader {
+	border-bottom: 1px solid brown;
+}
+
+/*
 Article
 */
 .article {

@@ -212,7 +212,8 @@ class Framework extends Framework_Data {
    }
 
    static function check_valid_email( $str ) {
-      if(eregi("^[a-zA-Z0-9]+[_a-zA-Z0-9-]*(\.[_a-z0-9-]+)*@[a-z??????0-9]+(-[a-z??????0-9]+)*(\.[a-z??????0-9-]+)*(\.[a-z]{2,4})$", $str)) {
+      //if(eregi("^[a-zA-Z0-9]+[_a-zA-Z0-9-]*(\.[_a-z0-9-]+)*@[a-z??????0-9]+(-[a-z??????0-9]+)*(\.[a-z??????0-9-]+)*(\.[a-z]{2,4})$", $str)) {
+   	if(filter_var($str, FILTER_VALIDATE_EMAIL)) {
          return TRUE;
       }
       return FALSE;

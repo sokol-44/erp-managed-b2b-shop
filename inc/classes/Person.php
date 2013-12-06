@@ -254,8 +254,18 @@ class Person {
    	}
    	return array_merge($addres_list_tmp, Data::get_address_list( (int)$id_client, (int)$id_client_user ));
    }
-      
+
    public function get_account_manager_list() {
+   	$id_client = (int)$this->data['id_client'];
+   	$id_client_user = (int)$this->id;
+   
+   	$params = array('id_client' => $id_client, 'id_client_user' => $id_client_user);
+		
+   	$this->account_maneger_list = Data::get_account_manage_list( (int)$id_client, (int)$id_client_user );
+   	return $this->account_maneger_list;
+   }
+        
+   public function get_order_account_manager_list() {
    	$id_client = (int)$this->data['id_client'];
       $id_client_user = (int)$this->id;
  	

@@ -88,7 +88,7 @@ function remove_from_basked() { return true; }
 		<td colspan="3">
       <?php echo Lang::_('choose address'); ?><br>
       <?php 
-      $Address_list = $P->get_order_address_list();
+      $Address_list = $P->get_order_account_manager_list();
 		$history_last = $Shopping_Basket->get_last_history();
 		$default = $history_last['id_address'];
       if( $F->not_null( $Address_list ) ) {

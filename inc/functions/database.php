@@ -32,7 +32,8 @@ function db_init($config_db = false, $link = 'db_link') {
       if (PHP_VERSION >= '5.2.3') mysql_set_charset('UTF8');
       else 						mysql_query('SET names "UTF8"', $$link);
    } else {
-   	  echo mysql_errno() . " " . mysql_error();
+   	  echo 'DB fatal error (0) ' . mysql_errno() . ' ' . microtime(true);
+   	  die();
       return false;
    }
    return $$link;

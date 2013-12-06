@@ -391,6 +391,22 @@ class HTML {
    }
 
    /**
+    * Output a email link (a href mailto:)
+    * @param string $address
+    * @param string/array $parameters = ''
+    * @param string $contents = ''
+    * @param string $target = ''
+    * @return string
+    */
+   function draw_email_link($address, $parameters = '', $contents = '', $target = '') {
+      if( !Framework::check_valid_email($address) ) return false;
+		
+      if( $this->is_null($contents) ) $contents = $address;
+      
+      return $this->draw_link('mailto:'.$address, $parameters, $contents, $target);
+   }
+
+   /**
     * Output a link (a href)
     * @param string $address
     * @param string/array $parameters = ''
