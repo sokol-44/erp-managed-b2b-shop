@@ -26,7 +26,7 @@ echo '<script>json_data.user_curent = "'.$F->json_string( $P->get_public_data() 
 ?>
 <div class="person_data person_data_main">
 	<div class="person_data_info person_text"><?php echo $F->draw_link($F->make_link(CFG_COM_LOGIN),'', Lang::_('Login') ); ?></div>
-	<div class="person_data_info person_text"><?php echo $F->draw_link($F->make_link(CFG_COM_ARTICLE, $F->add_local_get('key', '4', $GET_tmp)),'', Lang::_('Register') ); ?></div>
+	<div class="person_data_info person_text"><?php echo $F->draw_link($F->make_link(CFG_COM_REGISTER), '', Lang::_('Register') ); ?></div>
 </div>
 <?php
 }

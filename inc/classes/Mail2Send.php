@@ -63,9 +63,9 @@ class Mail2Send {
          $mail->Body = self::email_body_replace($email_body, $array_rep);
          $mail->SendAddSubject();
       }
-   }
-
-   public static function to_account_manager_contact( $post_data ) {
+   } 
+   
+   public static function to_global_contact( $post_data ) {
       $P = Person::g_global();
       $F = Framework::g_global();
       $Lang = Lang::g_global();
@@ -98,6 +98,72 @@ class Mail2Send {
          $mail->Body = self::email_body_replace($email_body, $array_rep);
          $mail->SendAddSubject();
       }
+   }
+   
+   
+   public static function to_account_manager_register( $post_data, $client_data ) {
+   	$P = Person::g_global();
+   	$F = Framework::g_global();
+   	$Lang = Lang::g_global();
+   	$account_manager_data = $P->get_account_manager_address();
+   
+   	if( $F->not_null($account_manager_data['email']) ) {
+   		
+   		$email_body = $Lang->get_translation_load('LONG_EMAIL_REGISTER');
+   		$mail->Subject = $Lang->get_translation_load('LONG_EMAIL_REGISTER_SUBJECT');
+   
+   		$array_rep = array('data' => $F->get_current_datetime(),
+   				'rf_name' => $post_data['rf_name'], 'rf_email' => $post_data['cf_email'],
+   				'rf_telephone' => $post_data['rf_telephone'],
+   				'rf_contents' => $post_data['rf_contents'],
+   				'rf_uname' => $post_data['rf_uname'],
+   				'rf_ulname' => $post_data['rf_ulname'],
+   				'rf_uemail' => $post_data['rf_uemail'],
+   				'rf_utelephone' => $post_data['rf_utelephone'],
+   				'ip_address' => $_SERVER['REMOTE_ADDR'], 'browser' => $_SERVER['HTTP_USER_AGENT'] );
+   
+   		$mail = new Mail();
+   		$mail->AddAddress($account_manager_data['email'], $account_manager_data['name']);
+   		$mail->Body = self::email_body_replace($email_body, $array_rep);
+   		return $mail->SendAddSubject();
+   	}
+   	return false;
+   }
+   
+   public static function to_account_manager_contact( $post_data ) {
+      $P = Person::g_global();
+      $F = Framework::g_global();
+      $Lang = Lang::g_global();
+      $account_manager_data = $P->get_account_manager_address();
+
+      if( $F->not_null($account_manager_data['email']) ) {
+
+         if ( $P->logged_in ) {
+            $email_body = $Lang->get_translation_load('LONG_EMAIL_CONTACT_LOGIN');
+            $mail->Subject = $Lang->get_translation_load('LONG_EMAIL_CONTACT_LOGIN_SUBJECT');
+            $client_data = $P->get_client_data();
+            $array_ad = array('client_name' => $client_data['name'],
+                  'id_client' => $P->data['id_client'],
+                  'id_user_client' => $P->id, 'login' => $P->login);
+         } else {
+            $array_ad = array();
+            $email_body = $Lang->get_translation_load('LONG_EMAIL_CONTACT_LOGOUT');
+            $mail->Subject = $Lang->get_translation_load('LONG_EMAIL_CONTACT_LOGOUT_SUBJECT');
+         }
+          
+         $array_rep = array('data' => $F->get_current_datetime(),
+               'cf_name' => $post_data['cf_name'], 'cf_email' => $post_data['cf_email'],
+               'cf_telephone' => $post_data['cf_telephone'],
+               'cf_second_telephone' => $post_data['cf_second_telephone'], 'cf_contents' => $post_data['cf_contents'],
+               'ip_address' => $_SERVER['REMOTE_ADDR'], 'browser' => $_SERVER['HTTP_USER_AGENT'] );
+         $array_rep = array_merge($array_rep, $array_ad);
+
+         $mail = new Mail();
+         $mail->AddAddress($account_manager_data['email'], $account_manager_data['name']);
+         $mail->Body = self::email_body_replace($email_body, $array_rep);
+   		return $mail->SendAddSubject();
+   	}
+   	return false;
    }
 
    public static function to_account_manager_order( $id_client, $id_order) {

@@ -157,17 +157,17 @@ function gl_make_password($password_in, $salt_add = '', $pure_salt = false) {
 
    //echo 'gl_make_password<br>:' . $password_in . '<br>s:' . $pass_salt . '<br>';
    
-   if( defined('DEFAULT_PASSWORD_HASH_TYPE') ) $password_hash = DEFAULT_PASSWORD_HASH_TYPE;
-   else $password_hash = 'HM_RMD320';
+   if( defined('DEFAULT_PASSWORD_HASH_TYPE') ) $password_hash_type = DEFAULT_PASSWORD_HASH_TYPE;
+   else $password_hash_type = 'HM_RMD320';
    
-   $pass_hash = gl_compute_hash($password_hash, $password_in, $pass_salt);
+   $pass_hash = gl_compute_hash($password_hash_type, $password_in, $pass_salt);
 
-   return $password_hash . ':' . $pass_hash . ':' . $pass_salt;
+   return $password_hash_type . ':' . $pass_hash . ':' . $pass_salt;
 }
 
-function gl_compute_hash($password_hash, $password_in, $pass_salt) {
+function gl_compute_hash($password_hash_type, $password_in, $pass_salt) {
 
-   switch ($password_hash) {
+   switch ($password_hash_type) {
       case 'MD5':
          $pass_hash = md5( $password_in );
          break;

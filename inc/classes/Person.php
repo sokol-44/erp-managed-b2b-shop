@@ -190,6 +190,30 @@ class Person {
    	
    	return false; 
    }
+   
+   
+   static function add_new_client_and_user($post_data) {
+   	
+   	$data['name'] =  $post_data['rf_name'];
+   	$data['description'] =  $post_data['rf_contents'];
+   	$data['email'] =  $post_data['rf_email'];
+   	$data['phone'] =  $post_data['rf_telephone'];
+   	$data['state'] =  'NEW';
+    	$id_client = Data::insert_client_data($data);
+
+   	$data_u['id_client'] = (int)$id_client;
+   	$data_u['name'] =  $post_data['rf_uname'];
+   	$data_u['login'] =  $post_data['rf_ulname'];
+   	$data_u['email'] =  $post_data['rf_uemail'];
+   	$data_u['phone'] =  $post_data['rf_utelephone'];
+   	$data_u['new_password'] = $post_data['rf_upassword'];
+   	$data_u['state'] =  'NEW';
+   	$data_u['rights_ids'] = array(4,5,6,7,8,9);
+   	
+   	$id_client_user = Data::insert_person_data('CLIENT', $data_u);
+   	
+   	return array($id_client, $id_client_user);
+   }
     
    public function get_account_manager_address( $id_client = false ) {
 

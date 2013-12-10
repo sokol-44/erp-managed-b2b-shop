@@ -73,6 +73,15 @@ textarea { width: 99%; }
 	font-size: large;
 }
 
+
+.dscr_el {
+   color: blue;
+   clear: none;
+   font-weight: normal;
+   font-size: smaller;
+}
+
+
 .search_mini input {
 	float: left;
 }

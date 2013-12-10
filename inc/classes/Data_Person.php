@@ -144,6 +144,7 @@ class Data_Person extends Data_Rights {
       $data_main_sql['login'] =  $data['login'];
       $data_main_sql['description'] =  $data['description'];
       $data_main_sql['email'] =  $data['email'];
+      $data_main_sql['phone'] =  $data['phone'];
       $data_main_sql['state'] =  $data['state'];
       $data_main_sql['created'] =  'now()';
 
@@ -155,9 +156,9 @@ class Data_Person extends Data_Rights {
       if( $table == 'ADMIN' ) {
          db_transaction_start();
          db_perform(TBL_GLOBAL_ADMIN, $data_main_sql, 'INSERT');
-         $id_admin = db_insert_id();
+         $id_insert_id = db_insert_id();
          foreach($data['rights_ids'] as $id_rights) {
-            db_query("insert into " . TBL_GLOBAL_RIGHTS2ADMIN . ' (id_admin, id_rights) values (' . (int)$id_admin . ', ' . (int)$id_rights . ')');
+            db_query("insert into " . TBL_GLOBAL_RIGHTS2ADMIN . ' (id_admin, id_rights) values (' . (int)$id_insert_id . ', ' . (int)$id_rights . ')');
          }
          db_transaction_end();
       } else if( $table == 'CLIENT' ) {
@@ -165,12 +166,13 @@ class Data_Person extends Data_Rights {
          $data_main_sql['id_client'] =  $data['id_client'];
          db_transaction_start();
          db_perform(TBL_GLOBAL_CLIENT_USER, $data_main_sql, 'INSERT');
-         $id_client_user = db_insert_id();
+         $id_insert_id = db_insert_id();
          foreach($data['rights_ids'] as $id_rights) {
-            db_query("insert into " . TBL_GLOBAL_RIGHTS2CLIENT . ' (id_client_user, id_rights) values (' . (int)$id_client_user . ', ' . (int)$id_rights . ')');
+            db_query("insert into " . TBL_GLOBAL_RIGHTS2CLIENT . ' (id_client_user, id_rights) values (' . (int)$id_insert_id . ', ' . (int)$id_rights . ')');
          }
          db_transaction_end();
       }
+      return $id_insert_id;
    }
 
    static function update_person_data($table, $id, $data, $data_org) {
@@ -322,10 +324,10 @@ class Data_Person extends Data_Rights {
           "' . db_escape($email) . '", "' . db_escape($phone) . '", "' . db_escape($phone_cell) . '", "' . db_escape($state) . '") as status';
       }
       add_to_fp($query);
-      $result = db_query( db_fetch_array($query) );
+      $result = db_fetch_array( db_query($query) );
       
-      if( $password!='' && substr_count($password, ':') < 1 ) {
-         $res_pass = doClientUserSetPassword($param_array);
+      if( $password!='' && substr_count($password, ':') > 1 ) {
+         $res_pass = self::doClientUserSetPassword($param_array);
          $result['additional_data'] = 'ClientUserSetPassword:' . $res_pass['status'];
       }
       return $result;
@@ -443,11 +445,10 @@ class Data_Person extends Data_Rights {
       $data_main_sql['email'] =  $data['email'];
       $data_main_sql['phone'] =  $data['phone'];
       $data_main_sql['state'] =  $data['state'];
+      $data_main_sql['created'] =  'now()';
       
-      db_transaction_start();
       db_perform(TBL_GLOBAL_CLIENT, $data_main_sql, 'INSERT');
       $id_client = db_insert_id();
-      db_transaction_end();
 
       return $id_client;
    }

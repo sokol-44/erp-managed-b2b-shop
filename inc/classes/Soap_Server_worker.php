@@ -841,11 +841,11 @@ class Soap_Server_worker {
    }
 
    function setClientProductPriceListUpdate( $input ) {
-      return doClientProductPriceListAddOrUpdate( $input, true);
+      return $this->doClientProductPriceListAddOrUpdate( $input, true);
    }
   
    function setClientProductPriceList( $input ) {
-      return doClientProductPriceListAddOrUpdate( $input, false);
+      return $this->doClientProductPriceListAddOrUpdate( $input, false);
    }
    
    function doClientProductPriceListAddOrUpdate( $input, $update = false) {
@@ -863,6 +863,7 @@ class Soap_Server_worker {
                add_to_fp('$param_array:'. print_r($pa, true) );
                if( !$update ) $del_count = Data::doProductClientPriceClean($pa['id_client']);
                $ins_count = Data::setClientProductPriceList($pa['id_client'],  $pa['ProductPriceData']);
+               add_to_fp('$ins_count:'. print_r($ins_count, true) );
                if( $ins_count > 0 ) $status_res = 'SUCCESS';
                else $status_res = 'ERROR';
                $additional_data = "DEL: $del_count, INS: $ins_count";

@@ -40,8 +40,32 @@ class Data extends Data_Person {
       	where com = "' . db_escape($com_str) . '" and definition = "' . db_escape($name) . '"';
       return db_fetch_array( db_query($query) );
    }
+   
+   static function login_in_system( $login ) {
+   	$query = 'select "a" as w, login from ' . TBL_GLOBAL_ADMIN . ' where login = "' . db_escape($login) . '"
+   			UNION ALL
+   			select "cu" as w, login from ' . TBL_GLOBAL_CLIENT_USER . ' where login = "' . db_escape($login) . '"';
+   	
+   	$result = db_query($query);
 
+   	if( db_rows($result) == 0 ) return false;
+   	return db_rows($result);
+   }
+   
+   static function email_in_system( $email ) {
+   	$query = 'select "a" as w, email from ' . TBL_GLOBAL_ADMIN . ' where email = "' . db_escape($email) . '"
+   			UNION ALL
+   			select "c" as w, email from ' . TBL_GLOBAL_CLIENT . ' where email = "' . db_escape($email) . '"
+   			UNION ALL
+   			select "cu" as w, email from ' . TBL_GLOBAL_CLIENT_USER . ' where email = "' . db_escape($email) . '"';
 
+   	$result = db_query($query);
+   	
+   	if( db_rows($result) == 0 ) return false;
+   	return db_rows($result);   
+   }
+    
+    
    /**
     * autoload magic object & method
     */

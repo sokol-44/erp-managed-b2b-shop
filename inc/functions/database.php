@@ -32,8 +32,7 @@ function db_init($config_db = false, $link = 'db_link') {
       if (PHP_VERSION >= '5.2.3') mysql_set_charset('UTF8');
       else 						mysql_query('SET names "UTF8"', $$link);
    } else {
-   	  echo 'DB fatal error (0) ' . mysql_errno() . ' ' . microtime(true);
-   	  die();
+   	  echo mysql_errno() . " " . mysql_error();
       return false;
    }
    return $$link;
@@ -76,7 +75,6 @@ function db_perform($table, $data_array, $action = 'insert', $where = '', $link 
          //FIXME
       } else {
          $query = 'insert into ' . $table . ' set ' . implode(', ',  $query_array);
-         $res = db_query($query, $link);
       }
    } elseif ($action == 'UPDATE') {
       if( is_array($where) ) $where = db_unroll_conditions($where);
@@ -121,6 +119,8 @@ function db_unroll_conditions($conditions_array, $type = 'and', $field_name = fa
             if( Framework::not_null($field_name) ) $attr = $field_name;
             if( strtoupper(trim($val)) == 'NULL' || strtoupper(trim($val)) == 'NOT NULL') {
                $return_array[] = db_escape($attr) . ' IS ' . trim($val);
+            } elseif( strpos($val, 'IN') == 0 && strpos($val, 'IN') !== FALSE ) {
+            	$return_array[] = db_escape($attr) . ' ' . $val . ' ';
             } elseif( (strpos($val, '%') == 0 || strpos(strrev($val), '%') == 0 ) && strpos($val, '%') !== FALSE ) {
                $return_array[] = db_escape($attr) . ' LIKE \'' . db_escape($val) . '\'';
             } else {
@@ -261,8 +261,10 @@ function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link 
    if( defined('TBL_CORE_DB_ERRORS') ) $table = TBL_CORE_DB_ERRORS;
    elseif( isset($GLOBALS['config']['TABLES']['CORE_DB_ERRORS']) && $GLOBALS['config']['TABLES']['CORE_DB_ERRORS'] != '')
    	$table = $GLOBALS['config']['TABLES']['CORE_DB_ERRORS'];
-   elseif( defined('SOAP_ENVIRONMENT') && constant('SOAP_ENVIRONMENT') ) return 'DB fatal error (1)'. $error_data;
-   else die('DB fatal error (1)');
+   elseif( defined('SOAP_ENVIRONMENT') && constant('SOAP_ENVIRONMENT') ) {
+     if( function_exists('add_to_fp') ) add_to_fp("DB fatal error (1)\n". $error_data);
+	 return 'DB fatal error (1)'. $error_data;
+   } else die('DB fatal error (1)');
 
    if(is_resource($$link) && substr_count($sql_query, $table)==0 ) {
       $db_date = date('Y-m-d H:m:s');
@@ -281,8 +283,10 @@ function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link 
 		(\"$db_sql\", \"$db_error_code\", \"$db_backtrace\", \"$db_environment\", \"$db_dat\")";
       $db_result = db_query( $query );
    } else {
-   	if( defined('SOAP_ENVIRONMENT') && constant('SOAP_ENVIRONMENT') ) return 'DB fatal error (2)'. $error_data;
-   	else die('DB fatal error (2)');
+     if( defined('SOAP_ENVIRONMENT') && constant('SOAP_ENVIRONMENT') )  {
+      if( function_exists('add_to_fp') ) add_to_fp("DB fatal error (2)\n". $error_data);
+	   return 'DB fatal error (2)'. $error_data;
+     } else die('DB fatal error (2)');
    }
 
    if (defined('DEBUG_DB_QUERIES') && (DEBUG_DB_QUERIES == 'true')) {
@@ -294,8 +298,10 @@ function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link 
 
    //FIXME - don't die - propagate error - to other
 
-   if( defined('SOAP_ENVIRONMENT') && constant('SOAP_ENVIRONMENT') ) return 'DB fatal error (SUCCESS)'. $error_data;
-   else die('DB fatal error (SUCCESS)');
+   if( defined('SOAP_ENVIRONMENT') && constant('SOAP_ENVIRONMENT') )  {
+     if( function_exists('add_to_fp') ) add_to_fp("DB fatal error (SUCCESS)\n". $error_data);
+	 return 'DB fatal error (SUCCESS)'. $error_data;
+   } else die('DB fatal error (SUCCESS)');
 }
 
 

@@ -24,8 +24,12 @@ class Data_Products extends Data_Basket {
       if( $P->logged_in && !defined('SHOP_CLIENT_PRICE_MODE_SET') ) {
          self::$Data_Products_params['id_client'] = (int)$P->data['id_client'];
          $view_name = Data_Person::get_client_attribute((int)$P->data['id_client'], 'PRODUCT_VIEW_NAME');
-         if( $view_name ) {
+         if( Framework::not_null($view_name) ) {
             self::$Data_Products_params['client_view'] = $view_name;
+         } else {
+         	if( defined('SHOP_CLIENT_PRICE_MODE') && constant('SHOP_CLIENT_PRICE_MODE') != 'show_all' ) {
+         		self::$Data_Products_params['client_view'] = constant('SHOP_CLIENT_PRICE_MODE');
+         	}
          }
          define('SHOP_CLIENT_PRICE_MODE_SET', true);
       }
@@ -91,41 +95,69 @@ class Data_Products extends Data_Basket {
 
       //return $array_res;
    }
+   
+   static function get_children_of_category($id_category, $category_tree = array() ) {
+   	
+   	if( Framework::is_null($category_tree) ) {
+   		$category_tree = self::get_categorie_tree();
+   	}
+
+   	foreach( $category_tree as $id_category_new => $category_tree_new ) { 
+   		if( $id_category_new == $id_category ) {
+   			return $category_tree_new['all_children'];
+   		} elseif( in_array($id_category, $category_tree_new['all_children']) !== FALSE ) {
+   			return self::get_children_of_category($id_category, $category_tree_new['children']);
+   		}
+   	}
+   	return array();
+   }
 
    static function get_categories_product_list($id_category, array $filters = array(), array $sort = array()) {
       global $category_tree;
       $F = Framework::g_global();
       $SP = SplitPage::g_global();
+      
+      $where = array('status' => 'ACTIVE');
 
-      if( false && SHOW_PRODUCTS_FROM_SUBCATEGORIES == 'true' ) {
-         // TODO
-         // Show products from subcategories
+      if( defined('SHOP_SHOW_PRODUCTS_FROM_SUBCATEGORIES') && constant('SHOP_SHOW_PRODUCTS_FROM_SUBCATEGORIES') == 'true' 
+      		&& $id_category!=0) {
+      	
+      	$children = array_merge(array($id_category), self::get_children_of_category((int)$id_category) );
+      	
+      	if( $F->is_null($children) ) $where['p2c.id_category'] = (int)$id_category;
+			else $where['p2c.id_category'] = array('IN ('.implode(',',$children).')');
+      	
       } else {
-         $where = array('status' => 'ACTIVE');
-
          if( $id_category != 0 ) $where['p2c.id_category'] = (int)$id_category;
-
-         if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-            if( defined('SHOP_CLIENT_PRICE_MODE') &&
-                  constant('SHOP_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
-               $where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
-            } else {
-               $where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
-            }
-            $product_from = self::$Data_Products_params['client_view'];
-         } else {
-            $product_from = TBL_SHOP_PRODUCT;
-         }
-
-         if( $F->not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
-
-         $query = 'select p.id_product, p.name, p.description, p.producer, p.catalog_index,
+      }
+ 
+      
+      if( $F->not_null(self::$Data_Products_params['client_view']) ) {
+      	switch (constant('SHOP_CLIENT_PRICE_MODE')) {
+      		case 'product_with_client_price_only':
+      			$where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
+      			$product_from = self::$Data_Products_params['client_view'];
+      			break;
+      		case 'product_with_client_price':
+      			$where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
+      			$product_from = self::$Data_Products_params['client_view'];
+      			break;
+      		default:
+      			$product_from = TBL_SHOP_PRODUCT;
+      	}
+      } else {
+      	$product_from = TBL_SHOP_PRODUCT;
+      }
+      
+      if( $F->not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
+      
+      $query = 'select p.id_product, p.name, p.description, p.producer, p.catalog_index,
          p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
          from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
          ( p.id_product = p2c.id_product ) ' . $where_str;
-         $sp_query = $SP->prepare_sql( $query );
-      }
-      //echo $sp_query;
+
+      $sp_query = $SP->prepare_sql( $query );
+      
       $res = db_query( $sp_query );
       return db_result_array($res);
    }
@@ -429,7 +461,7 @@ class Data_Products extends Data_Basket {
    static function doProductClientPriceClean( $id_client ) {
 //       $query = 'select "' . db_int($id_client) . '" as id_one, "" as additional_data,
 //        b_func_product_client_price_all_del("' . db_int($id_client) . '") as status';
-      $query = 'delete from ' . SHOP_PRODUCT_CLIENT_PRICE . ' where id_client = "' . db_int($id_client) . '"';
+      $query = 'delete from ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' where id_client = "' . db_int($id_client) . '"';
       add_to_fp($query);
       $result = db_query( $query );
       return db_affected_rows();
@@ -440,7 +472,9 @@ class Data_Products extends Data_Basket {
 //        "" as additional_data,
 //        b_func_product_client_price_add("' . db_int($id_product) . '", "' . db_int($id_client) . '", "' . db_float($price) . '", "' . db_float($vat) . '") as status';
       
-      $query_start='insert ignore into  ' . SHOP_PRODUCT_CLIENT_PRICE . ' (`id_product`, `id_client`, `price`) values ';
+      $query_start='insert ignore into  ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' (`id_product`, `id_client`, `price`) values ';
+
+      add_to_fp('setClientProductPriceList');
       
       $val_array = array();
       $count=1;
@@ -523,15 +557,21 @@ class Data_Products extends Data_Basket {
    
    static function get_product_info( $id_product = 0 ) {
       $F = Framework::g_global();
-       
+      
       if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-         if( defined('SHOP_CLIENT_PRICE_MODE') &&
-               constant('SHOP_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
-            $where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
-         } else {
-            $where = ' and (p.id_client = ' . (int)self::$Data_Products_params['id_client'] . ' or p.id_client IS NULL)';
+         switch (constant('SHOP_CLIENT_PRICE_MODE')) {
+         	case 'product_with_client_price_only':
+         		$where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
+         		$product_from = self::$Data_Products_params['client_view'];
+         		break;
+         	case 'product_with_client_price':
+         		$where = ' and (p.id_client = ' . (int)self::$Data_Products_params['id_client'] . ' or p.id_client IS NULL)';
+         		$product_from = self::$Data_Products_params['client_view'];
+         		break;
+         	default:
+        			$where = '';
+         		$product_from = TBL_SHOP_PRODUCT;
          }
-         $product_from = self::$Data_Products_params['client_view'];
       } else {
          $where = '';
          $product_from = TBL_SHOP_PRODUCT;
@@ -545,6 +585,7 @@ class Data_Products extends Data_Basket {
       from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
       ( p.id_product = p2c.id_product )
       where p.id_product = ' . (int)$id_product . $where . ' group by p.id_product';
+
       $result = db_query( $query );     
       if( db_rows($result) == 0 ) return false;
       $product_info = db_fetch_array( $result );
@@ -575,19 +616,25 @@ class Data_Products extends Data_Basket {
          // Show products from subcategories
       } else {
          $where = $filters;
-
+         
          if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-            if( defined('SHOP_CLIENT_PRICE_MODE') &&
-                  constant('SHOP_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
-               $where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
-            } else {
-               $where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
-            }
-            $product_from = self::$Data_Products_params['client_view'];
+         	switch (constant('SHOP_CLIENT_PRICE_MODE')) {
+         		case 'product_with_client_price_only':
+         			$where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
+         			$product_from = self::$Data_Products_params['client_view'];
+         			break;
+         		case 'product_with_client_price':
+         			$where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
+         			$product_from = self::$Data_Products_params['client_view'];
+         			break;
+         		default:
+         			$product_from = TBL_SHOP_PRODUCT;
+         	}
          } else {
-            $product_from = TBL_SHOP_PRODUCT;
+         	$where = '';
+         	$product_from = TBL_SHOP_PRODUCT;
          }
-
+                  
          if( $F->not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
 
          $query = 'select distinct p.id_product, p.name, p.description,  p.producer, p.catalog_index,
@@ -606,24 +653,6 @@ class Data_Products extends Data_Basket {
 
 
       $where = array();
-		
-      /* 
-       * Widoki dla duzej liczby sie krzacza  
-      if( $F->not_null(self::$Data_Products_params['client_view']) ) {
-         
-      	if( defined('SHOP_CLIENT_PRICE_MODE') &&
-               constant('SHOP_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
-            $where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
-         } else {
-            $where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
-         }
-         $product_from = self::$Data_Products_params['client_view'];
-         $where_client = ' and ' . db_unroll_conditions($where);
-      } else {
-         $where_client = '';
-         $product_from = TBL_SHOP_PRODUCT;
-      }
-       */
       
       $product_from = TBL_SHOP_PRODUCT;
       

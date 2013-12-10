@@ -18,7 +18,7 @@ class Shopping_Basket_Chain {
    static $Basket_List = array();
    static $nr_basket = 0;
 //    private static $max_basket = 24;
-   private static $max_basket = 4;
+   private static $max_basket = 12;
 
    public function __construct() {
       self::$class = $this;

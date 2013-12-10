@@ -53,7 +53,7 @@ $GET_tmp = $F->make_get();
 	   '<div class="catalog_product_name">' . $F->output_string_html( $product['name'] ) . '</div>
 	   <div class="catalog_product_description">' . $description_html . '</div>');
 
-		$catalog_index = $F->output_string_html( strtolower( $product['catalog_index'] ) );
+		$catalog_index = $F->output_string_html( trim($product['catalog_index']) );
 	   if( $P->logged_in ) {
 	?>
 	<tr>
