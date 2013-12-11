@@ -72,6 +72,7 @@ if( $F->check_get('search') ) {
    		}
    	}
    	
+   	$min_time = 2400;
    	foreach($nr_ups as $tt => $tc) {
    		if( $tc>4 ) { $min_time = $tt; break; }
    	}  	

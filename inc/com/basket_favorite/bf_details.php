@@ -74,8 +74,11 @@ if( $F->not_null($product_list) ) {
 			$product_name = $F->output_string_html( $product['name'] );
 		}
 		
+		if( defined('SHOP_SHOW_PRODUCTS_DESCRIPTION_IN_LIST') && constant('SHOP_SHOW_PRODUCTS_DESCRIPTION_IN_LIST') == 'true')
+			$description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
+		else $description_html = '';
 		$name_desc_cell = '<div class="catalog_product_name">' . $product_name . '</div>
-			   <div class="catalog_product_description">' . nl2br($F->output_string_html( $product['description'], 384 )) . '</div>';
+			   <div class="catalog_product_description">' . $description_html . '</div>';
 		
 		$link_product_info = $F->make_link(CFG_COM_PRODUCT_INFO, $GET_tmp);
 		

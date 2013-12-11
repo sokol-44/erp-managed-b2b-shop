@@ -31,7 +31,7 @@ $GET_tmp = $F->make_get();
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('NAME') . ', ' . Lang::_('DESCRIPTION')?></th>
 		<th><?php echo Lang::_('CATALOG INDEX') ?></th>
-		<th><?php echo Lang::_('QUANTITY_IN_WAREHAUSE') ?></th>
+		<th><?php echo Lang::_('QUANTITY_IN_warehouse') ?></th>
 		<?php if( $P->logged_in ) { ?>
 		<th><?php echo Lang::_('PRICE') ?></th>
 		<th><?php echo Lang::_('ADD TO BASKET') ?></th>
@@ -48,7 +48,9 @@ $GET_tmp = $F->make_get();
 	   }
 
 	   $link_product_info = $F->make_link(CFG_COM_PRODUCT_INFO, $GET_tmp);
-	   $description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
+	   if( defined('SHOP_SHOW_PRODUCTS_DESCRIPTION_IN_LIST') && constant('SHOP_SHOW_PRODUCTS_DESCRIPTION_IN_LIST') == 'true')
+	   	$description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
+	   else $description_html = '';
 	   $cell_product_info = $F->draw_link($link_product_info, '',
 	   '<div class="catalog_product_name">' . $F->output_string_html( $product['name'] ) . '</div>
 	   <div class="catalog_product_description">' . $description_html . '</div>');

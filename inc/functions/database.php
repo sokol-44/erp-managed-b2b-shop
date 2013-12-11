@@ -123,6 +123,19 @@ function db_unroll_conditions($conditions_array, $type = 'and', $field_name = fa
             	$return_array[] = db_escape($attr) . ' ' . $val . ' ';
             } elseif( (strpos($val, '%') == 0 || strpos(strrev($val), '%') == 0 ) && strpos($val, '%') !== FALSE ) {
                $return_array[] = db_escape($attr) . ' LIKE \'' . db_escape($val) . '\'';
+            } elseif( strpos(trim($val), '>=') == 0 && strpos(trim($val), '>=') !== FALSE ) {
+               $return_array[] = db_escape($attr) . ' >= \'' . db_escape(trim(substr(trim($val), 2))) . '\'';
+            } elseif( strpos(trim($val), '<=') == 0 && strpos(trim($val), '<=') !== FALSE ) {
+               $return_array[] = db_escape($attr) . ' <= \'' . db_escape(trim(substr(trim($val), 2))) . '\'';
+            } elseif( ( strpos(trim($val), '!=') == 0 && strpos(trim($val), '!=') !== FALSE ) ||
+            			 ( strpos(trim($val), '<>') == 0 && strpos(trim($val), '<>') !== FALSE ) ) {
+               $return_array[] = db_escape($attr) . ' != \'' . db_escape(trim(substr(trim($val), 2))) . '\'';
+            } elseif( strpos(trim($val), '=') == 0 && strpos(trim($val), '=') !== FALSE ) {
+               $return_array[] = db_escape($attr) . ' = \'' . db_escape(trim(substr(trim($val), 1))) . '\'';
+            } elseif( strpos(trim($val), '>') == 0 && strpos(trim($val), '>') !== FALSE ) {
+               $return_array[] = db_escape($attr) . ' > \'' . db_escape(trim(substr(trim($val), 1))) . '\'';
+            } elseif( strpos(trim($val), '<') == 0 && strpos(trim($val), '<') !== FALSE ) {
+               $return_array[] = db_escape($attr) . ' < \'' . db_escape(trim(substr(trim($val), 1))) . '\'';
             } else {
                $return_array[] = db_escape($attr) . '=\'' . db_escape($val) . '\'';
             }
@@ -217,6 +230,8 @@ function db_query($query, $link = 'db_link') {
    global $$link;
    global $query_log;
 
+   $tstart = microtime(true);
+   
    $result = mysql_query($query, $$link) or
    db_error($query, mysql_errno(), mysql_error(), debug_backtrace(), $$link);
    
@@ -229,7 +244,7 @@ function db_query($query, $link = 'db_link') {
       $dbg = debug_backtrace();
       
       //$query_log[] = array ('q' => $query, 'f' => $dbg[0]['file'], 'l' => $dbg[0]['line'],  't' => microtime(TRUE));
-      $query_log[] = array ('q' => $query, 'f0' => $dbg[0]['file'], 'l0' => $dbg[0]['line'], 'f1' => $dbg[1]['file'], 'l1' => $dbg[1]['line'],  't' => microtime(TRUE));
+      $query_log[] = array ('q' => $query, 'f0' => $dbg[0]['file'], 'l0' => $dbg[0]['line'], 'f1' => $dbg[1]['file'], 'l1' => $dbg[1]['line'], 'ts' => $tstart, 't' => microtime(TRUE));
 //       $query_log[] = array ('q' => $query, 'f' => $dbg[0]['file'], 'l' => $dbg[0]['line'], 't' => microtime(TRUE), 'b' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
    }
 

@@ -61,9 +61,12 @@ echo $F->draw_form('basket_order', $form_link);
 	   $cell_remove_from_basket = $F->draw_link($link_remove_from_basket, 'onclick="remove_from_basked()" title="' . Lang::_('remove from BASKET') . '"', $F->static_image('icon/delete_16.png', Lang::_('remove from BASKET')));
 	   
 	   $link_product_info = $F->make_link(CFG_COM_PRODUCT_INFO, $GET_tmp);
+	   if( defined('SHOP_SHOW_PRODUCTS_DESCRIPTION_IN_LIST') && constant('SHOP_SHOW_PRODUCTS_DESCRIPTION_IN_LIST') == 'true')
+	   	$description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
+	   else $description_html = '';
 	   $cell_product_info = $F->draw_link($link_product_info, '',
 	   '<div class="catalog_product_name">' . $F->output_string_html( $product['name'] ) . '</div>
-	   <div class="catalog_product_description">' . nl2br($F->output_string_html( $product['description'], 384 )) . '</div>');
+	   <div class="catalog_product_description">' . $description_html . '</div>');
 
 	   $small_image_path = Data::get_product_image_path( $product['picture_small_url'] );
 	   $si_oc = "$.colorbox({href:'" . Data::get_product_image_path( $product['picture_big_url'] ) . "', photo:true});";

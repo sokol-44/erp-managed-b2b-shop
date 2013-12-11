@@ -5,14 +5,17 @@ if( $F->check_get('search') ) {
    $Page->head_title = $F->output_string_html( Lang::_('search result') );
    $filters = array();
    //FIXME - move to Data_Products, Products class ?
-   if( $F->check_get('product_text_all') && $F->check_get('product_text') ) {
-      $filters['OR'] = array( 'p.name' => '%'.$F->GET['product_text'].'%',
+   if( $F->check_get('product_text') ) {
+   	if( $F->check_get('product_text_all') ) {
+      	$filters['OR'] = array( 'p.name' => '%'.$F->GET['product_text'].'%',
                        'p.description' => '%'.$F->GET['product_text'].'%');
-   } else {
-      if( $F->check_get('product_name') ) $filters['p.name'] = '%'.$F->GET['product_text'].'%';
+   	} else {
+      	if( $F->check_get('product_text') ) $filters['p.name'] = '%'.$F->GET['product_text'].'%';
+   	}
    }
    if( $F->check_get('product_catalog_index') ) $filters['p.catalog_index'] = '%'.$F->GET['product_catalog_index'].'%';
-
+   if( $F->check_get('product_in_warehouse') )  $filters['p.quantity'] = '>0';
+   
    $product_list = Data::get_search_product_list($filters);
 } else {
    $product_list = array();
@@ -50,6 +53,10 @@ $GET_tmp = $F->make_get();
 		<td><?php echo $F->draw_input_field('product_price_min', '', ' style="width: 120px"'); ?></td>
 	</tr>
 	<tr>
+		<td><strong><?php echo Lang::_('PRODUCT_IN_warehouse'); ?></strong></td>
+		<td colspan="2"><?php echo $F->draw_checkbox_field('product_in_warehouse'); ?></td>
+	</tr>
+	<tr>
 		<td colspan="2"><?php echo $F->dynamic_image_submit(Lang::_('SEARCH'),''); ?></td>
 	</tr>
 </table>
@@ -62,10 +69,10 @@ if( $F->not_null($product_list) && sizeof($product_list) > 0 ) {
 <div class="search_container search_result">
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
-		<th><?php echo Lang::_('PICTURE') ?></th>
 		<th><?php echo Lang::_('NAME') . ', ' . Lang::_('DESCRIPTION')?></th>
+		<th><?php echo Lang::_('CATALOG INDEX') ?></th>
 		<?php if( $P->logged_in ) { ?>
-		<th><?php echo Lang::_('QUANTITY') ?></th>
+		<th><?php echo Lang::_('QUANTITY_IN_warehouse') ?></th>
 		<th><?php echo Lang::_('PRICE') ?></th>
 		<th><?php echo Lang::_('ADD TO BASKET') ?></th>
 		<?php } ?>
@@ -81,9 +88,12 @@ if( $F->not_null($product_list) && sizeof($product_list) > 0 ) {
 	   }
 
 	   $link_product_info = $F->make_link(CFG_COM_PRODUCT_INFO, $GET_tmp);
+	   if( defined('SHOP_SHOW_PRODUCTS_DESCRIPTION_IN_LIST') && constant('SHOP_SHOW_PRODUCTS_DESCRIPTION_IN_LIST') == 'true')
+	   	$description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
+	   else $description_html = '';
 	   $cell_product_info = $F->draw_link($link_product_info, '',
 	   '<div class="catalog_product_name">' . $F->output_string_html( $product['name'] ) . '</div>
-	   <div class="catalog_product_description">' . nl2br($F->output_string_html( $product['description'], 384 )) . '</div>');
+	   <div class="catalog_product_description">' . $description_html . '</div>');
 
 
 	   $small_image_path = Data::get_product_image_path( $product['picture_small_url'] );
@@ -91,14 +101,15 @@ if( $F->not_null($product_list) && sizeof($product_list) > 0 ) {
 	   $si_oc = "$.colorbox({href:'/" . Data::get_product_image_path( $product['picture_big_url'] ) . "', photo:true});";
 	   $small_image_html = $F->static_image($small_image_path, Lang::_('show_big_image'), " onclick=\"$si_oc\"");
 
+	   $catalog_index = $F->output_string_html( trim($product['catalog_index']) );
+	   
 	   if( $P->logged_in ) {
 	?>
 	<tr>
-		<td style="cursor: pointer;" width="5%"><?php echo $F->draw_radio_field('list', $product['id_product'], false, 'style="display: none"')
-		. $small_image_html; ?></td>
-		<td valign="top"><?php echo $cell_product_info; ?></td>
+		<td valign="top" width="50%"><?php echo  $F->draw_radio_field('list', $product['id_product'], false, 'style="display: none"') . $cell_product_info; ?></td>
+		<td width="5%"><?php echo $catalog_index; ?></td>
 		<td width="5%"><?php echo $product_quantity; ?></td>
-		<td width="10%"><?php echo Price::val( $product['price'] ) . '<br>(' . Price::tax( $product['vat'] ) . ')'; ?></td>
+		<td width="20%"><?php echo Price::val( $product['price'] ) . '<br>(' . Price::tax( $product['vat'] ) . ')'; ?></td>
 		<td width="5%"><?php echo $cell_basket; ?></td>
 	</tr>
 	<?php

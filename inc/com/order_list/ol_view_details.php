@@ -126,8 +126,10 @@ echo $add_basket;
 	   } else {
 	      $product_name = $F->output_string_html( $product['name'] );
 	   }
-
-	   $description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
+	   
+	   if( defined('SHOP_SHOW_PRODUCTS_DESCRIPTION_IN_LIST') && constant('SHOP_SHOW_PRODUCTS_DESCRIPTION_IN_LIST') == 'true')
+	   	$description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
+	   else $description_html = '';
 	   $name_desc_cell = '<div class="catalog_product_name">' . $product_name . '</div>
 	   <div class="catalog_product_description">' . $description_html . '</div>';
 

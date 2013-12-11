@@ -616,33 +616,40 @@ class Data_Products extends Data_Basket {
          // Show products from subcategories
       } else {
          $where = $filters;
-         
+         $where['p.status'] = 'ACTIVE';
+
+         if( $F->not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
+
          if( $F->not_null(self::$Data_Products_params['client_view']) ) {
          	switch (constant('SHOP_CLIENT_PRICE_MODE')) {
          		case 'product_with_client_price_only':
-         			$where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
-         			$product_from = self::$Data_Products_params['client_view'];
+         			$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
+         				p.picture_small_url, p.picture_big_url, p.picture_id, pcp.price, p.vat, p.quantity, p.status
+				   		from `shop_product`  `p` join `shop_product_client_price` `pcp` 
+         				on (`p`.`id_product` = `pcp`.`id_product` AND pcp.id_client="' . (int)self::$Data_Products_params['id_client'] . '")';
          			break;
          		case 'product_with_client_price':
-         			$where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
-         			$product_from = self::$Data_Products_params['client_view'];
+         			$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
+         				p.picture_small_url, p.picture_big_url, p.picture_id, IFNULL( pcp.price, p.price) as price, p.vat, p.quantity, p.status
+				   		from `shop_product`  `p` left outer join `shop_product_client_price` `pcp` 
+         				on (`p`.`id_product` = `pcp`.`id_product` AND pcp.id_client="' . (int)self::$Data_Products_params['id_client'] . '")';
          			break;
          		default:
-         			$product_from = TBL_SHOP_PRODUCT;
+         			$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
+        					p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+		      			FROM `shop_product` `p`';
+         			break;
          	}
          } else {
-         	$where = '';
-         	$product_from = TBL_SHOP_PRODUCT;
-         }
-                  
-         if( $F->not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
-
-         $query = 'select distinct p.id_product, p.name, p.description,  p.producer, p.catalog_index,
-         p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
-         from ' . $product_from . ' p ' . $where_str;
+         	$query_pm = 'select distinct p.id_product, p.name, p.description,  p.producer, p.catalog_index,
+        			p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+		      	FROM `shop_product` `p`';
+         }       
+         
+         $query = $query_pm . $where_str;   
+         
          $sp_query = $SP->prepare_sql( $query );
       }
-      
       $res = db_query( $sp_query );
       return db_result_array($res);
    }
@@ -654,7 +661,7 @@ class Data_Products extends Data_Basket {
 
       $where = array();
       
-      $product_from = TBL_SHOP_PRODUCT;
+      $product_from = TBL_SHOP_PRODUCT;      
       
       if( defined('SHOP_CLIENT_PRICE_MODE') &&  constant('SHOP_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
       	$query_pm = 'SELECT p2c.id_category, p2c.id_product

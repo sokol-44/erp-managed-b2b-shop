@@ -151,7 +151,9 @@ function remove_from_basked() { return true; }
 	foreach( $product_list as $product_key => $product ) {
 	   $GET_product = $F->add_local_get('product_key', $product_key, $GET_tmp);
 	   
-	   $description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
+	   if( defined('SHOP_SHOW_PRODUCTS_DESCRIPTION_IN_LIST') && constant('SHOP_SHOW_PRODUCTS_DESCRIPTION_IN_LIST') == 'true')
+	   	$description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
+	   else $description_html = '';
 	   $link_product_info = $F->make_link(CFG_COM_PRODUCT_INFO, $GET_product);
 	   $cell_product_info = $F->draw_link($link_product_info, '',
 	   '<div class="catalog_product_name">' . $F->output_string_html( $product['name'] ) . '</div>

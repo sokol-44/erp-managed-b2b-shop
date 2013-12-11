@@ -3,7 +3,7 @@
  * Order.php
  * Copyright MichaÅ‚ SokoÅ‚owski 2013
  *
- * @author Micha³ Soko³owski <msokolowski@example.com>
+ * @author Michaï¿½ Sokoï¿½owski <msokolowski@example.com>
  */
 
 if( !defined('_I_INIT') ) die();
@@ -16,6 +16,7 @@ if( !defined('_I_INIT') ) die();
 class Order_Chain {
    private $id_client = false;
    public $order_list = array();
+   public $order_count = 0;
    public $total = array('product_total' => 0, 'product_types' => 0,
    		'sum_gross' => 0, 'sum_gross_split' => array(), 'sum_netto' => 0);
 
@@ -29,7 +30,7 @@ class Order_Chain {
       }
       $this->load_param($param);
       
-      $this->order_list = $this->load_data();
+      $this->order_count = $this->load_data();
    }
 
    function load_param( $param = array() ) {
@@ -72,9 +73,9 @@ class Order_Chain {
       	foreach($order_list as $id_order => $order ) {
       		$this->order_list[$id_order] = new Order($id_order, 'SIMPLE', $order);
       	}
-      	return $this->order_list;
+      	return sizeof($this->order_list);
       } else {
-         return false;
+         return 0;
       }
    }
 
