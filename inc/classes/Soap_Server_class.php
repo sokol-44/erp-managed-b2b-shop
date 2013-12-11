@@ -454,7 +454,6 @@ class PictureData extends BasicSOAPDataMethods {
    public $list_update = array('id_picture', 'data');
 }
 
-
 class OrderInvoiceData extends BasicSOAPDataMethods {
 	public $list = array('id_invoice', 'id_order', 'id_client', 'invoice_number', 'state',
 			'net_value', 'gross_value', 'date_issue', 'date_pay', 'invoice_image', 'description');
@@ -466,4 +465,10 @@ class OrderInvoiceData extends BasicSOAPDataMethods {
 	public $list_update = array('id_invoice', 'id_order');
 }
 
+class ShopAttributeData extends BasicSOAPDataMethods {
+	public $list = array('type', 'val');
+	public $list_type = array('type' => 'TEXT', 'val' => 'TEXT');
+	public $list_new = array('type', 'val');
+	public $list_update =array('type', 'val');
+}
 ?>

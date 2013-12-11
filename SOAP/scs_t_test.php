@@ -387,6 +387,26 @@ function test_getClientUserAttributeList( $client ) {
 
 
 
+function test_getShopAttributeList( $client ) {
+	$nt = time();
+
+	$in_oo = new ParamStartLength(array('id_start' => '4', 'length' => '15'));
+	test_helper_single_in($in_oo, 'getShopAttributeList', $client );
+}
+
+
+function test_doShopAttributeAddOrUpdate( $client ) {
+	$nt = time();
+
+	$list = array('type' => 'name'.$nt, 'val' => 'val'.$nt);
+	$in_oo[] = new ShopAttributeData($list);
+	
+	$list = array('type' => 'BALANCE_FREE_CREDIT', 'val' => $nt);
+	$in_oo[] = new ShopAttributeData($list);
+	
+	test_helper_multiple_in($in_oo, 'doShopAttributeAddOrUpdate', $client);
+}
+
 
 
 ?>

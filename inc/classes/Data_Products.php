@@ -521,6 +521,29 @@ class Data_Products extends Data_Basket {
       return db_fetch_array($result);
    }
    
+   static function getShopAttributeList( $id_type = 0, $length = 1 ) {	 
+   	$query = 'select `type`, `val`
+         	from ' . TBL_SHOP_ATTRIBUTES . ' oa order by `type`';
+   	add_to_fp('$query ' . $query);
+   	$result = db_query( $query );
+   	return db_result_array_full($result);
+   }
+   
+   static function doShopAttributeAddOrUpdate( $param ) {
+
+   	$query = 'INSERT INTO ' . TBL_SHOP_ATTRIBUTES . ' (`type`, `val`) 
+   			VALUES ("' . db_escape($param['type']) . '", "' . db_escape($param['type']) . '") 
+   					ON DUPLICATE KEY UPDATE `type` = "' . db_escape($param['type']) . '", 
+   					`val` = "' . db_escape($param['type']) . '"';
+
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	$ar = db_affected_rows( $result );
+   	
+   	if( $ar ) return array_merge($param, array('status' => 'SUCCESS,NEW'));
+   	else return array_merge($param, array('status' => 'SUCCESS,EXIST'));
+   }  
+   
 
    static function get_product_search( $length = 1, $where = '' ) {
       ///list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);

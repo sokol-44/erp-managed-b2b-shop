@@ -1305,8 +1305,57 @@ class Soap_Server_worker {
    	return($response);
    }   
    
-
    
+   
+   
+   function getShopAttributeList( $input ) {//ParamStartLength, ClientData
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = true;
+   
+   	$ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
+   
+   	if( is_object($ParamStartLength) ) {
+   		if( !$ParamStartLength->is_error() ) {
+   			$param_array = $ParamStartLength->return_array();
+   			//add_to_fp('$param_array:'. print_r($param_array, true) );
+   			$res_array = Data::getShopAttributeList((int)$param_array['id_start'], (int)$param_array['length']);
+   			$response = $this->_addArrayValues($res_array);
+   		} else {
+   			$response = $this->getReturnError('getShopAttributeList', $input, $ParamStartLength->return_error() );
+   		}
+   	} else {
+   		$response = $this->getReturnError('getShopAttributeList', $input, 'WRONG CLASS');
+   	}
+   
+   	return($response);
+   }
+   
+   function doShopAttributeAddOrUpdate( $input ) {//ParamStartLength, ClientData
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = false;
+   	 
+   	add_to_fp('-------- doShopAttributeAddOrUpdate');
+   	 
+   	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+   		$response_tmp = array();
+   		foreach($input['values'] as $key => $val) {
+   			$SingleValueClass = new ShopAttributeData($val, $this->input_data_type);
+   			if( !$SingleValueClass->is_error() ) {
+   				$param_array = $SingleValueClass->return_array();
+   				add_to_fp('$param_array:'. print_r($param_array, true) );
+   				$response_tmp[] = Data::doShopAttributeAddOrUpdate($param_array);
+   			} else {
+   				$response_tmp[] = $this->getReturnError('doShopAttributeAddOrUpdate', $val, $SingleValueClass->return_error(), false);
+   			}
+   		}
+   		add_to_fp(print_r($response_tmp, true));
+   		$response = $this->_addArrayValues($response_tmp);
+   	} else {
+   		$response = $this->getReturnError('doShopAttributeAddOrUpdate', '', 'EMPTY_LIST');
+   	}
+   	 
+   	return($response);
+   }  
 // -------------------------   
    function getParamStartLength( $input ) {
       $in_o = array(

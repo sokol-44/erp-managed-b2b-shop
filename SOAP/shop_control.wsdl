@@ -314,6 +314,18 @@
 	<wsdl:message name="doClientUserAttributeAddOrUpdateResponse">
 		<wsdl:part name="doClientUserAttributeAddOrUpdateResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="getShopAttributeListRequest">
+		<wsdl:part name="getShopAttributeListRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getShopAttributeListResponse">
+		<wsdl:part name="getShopAttributeListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doShopAttributeAddOrUpdateRequest">
+		<wsdl:part name="doShopAttributeAddOrUpdateRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doShopAttributeAddOrUpdateResponse">
+		<wsdl:part name="doShopAttributeAddOrUpdateResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
 			<wsdl:output message="tns:getProductListResponse"></wsdl:output>
@@ -713,6 +725,22 @@
 							</wsdl:input>
 							<wsdl:output
 								message="tns:doClientUserAttributeAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getShopAttributeList">
+							<wsdl:input
+								message="tns:getShopAttributeListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getShopAttributeListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doShopAttributeAddOrUpdate">
+							<wsdl:input
+								message="tns:doShopAttributeAddOrUpdateRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doShopAttributeAddOrUpdateResponse">
 							</wsdl:output>
 						</wsdl:operation>
 	</wsdl:portType>
@@ -1270,6 +1298,28 @@
          </wsdl:output>
       </wsdl:operation>
       <wsdl:operation name="doClientAccountManagerAddOrUpdate">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getShopAttributeList">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="doShopAttributeAddOrUpdate">
          <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
          <wsdl:input>
             <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
