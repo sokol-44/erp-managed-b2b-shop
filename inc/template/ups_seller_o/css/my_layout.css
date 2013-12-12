@@ -322,6 +322,42 @@ Container
 	clean: both;
 }
 
+
+/*
+Currency exchange
+*/
+.currency_exchange_container {
+	margin: 5px 0px 0px 2px;
+	border-top: 1px solid black;
+}
+
+.currency_exchange_date {
+   margin: 5px 0px;	
+}
+
+.currency_exchange_date > span {
+   padding: 0px 5px;
+   float: right;
+}
+
+
+.currency_exchange_currency > .span2 {
+   font-size: smaller;
+   font-style: italic;
+}
+
+
+.currency_exchange_currency > span {
+	padding: 0px 5px;
+	float: right;
+}
+
+.currency_exchange.menu_header {
+position: relative;
+text-shadow: 0.12em 0.12em #999;
+margin-bottom: 5px;
+}
+
 /*
 Account
 */

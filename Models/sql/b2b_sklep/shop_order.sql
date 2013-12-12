@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS `shop_order` (
   `description_basket` text,
   `id_shopping_basket` int(11) DEFAULT NULL,
   `id_address` int(11) DEFAULT NULL,
+  `id_account_manager` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_order`,`id_order_status`),
   KEY `fk.order.id_client` (`id_client`),
   KEY `fk.order.id_order_status` (`id_order_status`),

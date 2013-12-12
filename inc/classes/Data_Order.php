@@ -23,7 +23,7 @@ if( !defined('_I_INIT') ) die();
  */
 
 
-class Data_Order extends Data_Picture {
+class Data_Order extends Data_Shop {
 	static $Data_order_params = array( 
 			'PAYMENT_METHOD' => array(
 					'CASH_TRANSFER', 'CASH_ON_DELIVERY', 'CASH_IN_PERSON'
@@ -322,7 +322,7 @@ class Data_Order extends Data_Picture {
    	$nrow = db_rows( $result );
    	if( $nrow == 1 && $F->not_null($attribute_type) ) {
    		return db_fetch_result('val', $result);
-   	} elseif( $nrow > 1 ) {
+   	} elseif( $nrow > 0 && $F->is_null($attribute_type)) {
    		return db_result_array_full($result);
    	} else {
    		return false;

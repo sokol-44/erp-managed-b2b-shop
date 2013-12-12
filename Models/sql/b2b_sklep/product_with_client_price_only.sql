@@ -10,24 +10,10 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury tabela company_20.product_with_client_price_only
-CREATE TABLE IF NOT EXISTS `product_with_client_price_only` (
-  `id_product` int(11) DEFAULT NULL,
-  `name` text,
-  `description` text,
-  `producer` tinytext,
-  `catalog_index` tinytext,
-  `picture_small_url` tinytext,
-  `picture_big_url` tinytext,
-  `picture_id` int(10) unsigned DEFAULT NULL,
-  `price` decimal(20,4) unsigned DEFAULT NULL,
-  `vat` tinyint(3) unsigned DEFAULT NULL,
-  `quantity` int(10) unsigned DEFAULT NULL,
-  `status` enum('ACTIVE','NA') DEFAULT NULL,
-  `id_client` int(11) DEFAULT NULL
-) ENGINE=MyISAM DEFAULT CHARSET=latin2;
-
--- Data exporting was unselected.
+-- Zrzut struktury widok company_20.product_with_client_price_only
+-- Usuwanie tabeli tymczasowej i tworzenie ostatecznej struktury WIDOKU
+DROP TABLE IF EXISTS `product_with_client_price_only`;
+CREATE ALGORITHM=TEMPTABLE DEFINER=`company_20`@`%` SQL SECURITY DEFINER VIEW `product_with_client_price_only` AS select `p`.`id_product` AS `id_product`,`p`.`name` AS `name`,`p`.`description` AS `description`,`p`.`producer` AS `producer`,`p`.`catalog_index` AS `catalog_index`,`p`.`picture_small_url` AS `picture_small_url`,`p`.`picture_big_url` AS `picture_big_url`,`p`.`picture_id` AS `picture_id`,if(`pcp`.`price`,`pcp`.`price`,`p`.`price`) AS `price`,`pcp`.`vat` AS `vat`,`p`.`quantity` AS `quantity`,`p`.`status` AS `status`,`pcp`.`id_client` AS `id_client` from (`shop_product` `p` join `shop_product_client_price` `pcp` on((`p`.`id_product` = `pcp`.`id_product`)));
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

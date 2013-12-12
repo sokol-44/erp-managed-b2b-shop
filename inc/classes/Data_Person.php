@@ -485,7 +485,7 @@ class Data_Person extends Data_Rights {
    	$nrow = db_rows( $result );
    	if( $nrow == 1 && $F->not_null($attribute_type) ) {
    		return db_fetch_result('val', $result);
-   	} elseif( $nrow > 1 ) {
+   	} elseif( $nrow > 0 && $F->is_null($attribute_type)) {
    		$res_arr = db_result_array_full($result);
    		$ret_arr = array();
    		foreach($res_arr as $res_one) {
@@ -520,7 +520,7 @@ class Data_Person extends Data_Rights {
       	$nrow = db_rows( $result );
       	if( $nrow == 1 && $F->not_null($attribute_type) ) {
       		return db_fetch_result('val', $result);
-      	} elseif( $nrow > 1 ) {
+   	} elseif( $nrow > 0 && $F->is_null($attribute_type)) {
       		$res_arr = db_result_array_full($result);
       		$ret_arr = array();
       		foreach($res_arr as $res_one) {

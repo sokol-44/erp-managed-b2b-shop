@@ -10,17 +10,21 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury tabela company_20.shop_order_status_history
-CREATE TABLE IF NOT EXISTS `shop_order_status_history` (
-  `id_order_status_history` int(11) unsigned zerofill NOT NULL AUTO_INCREMENT,
-  `id_order_status` int(11) NOT NULL,
-  `id_order` int(11) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `description` text,
-  PRIMARY KEY (`id_order_status_history`),
-  KEY `fk.order_status_history.id_order_status` (`id_order_status`),
-  KEY `fk.order_status_history.id_order` (`id_order`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- Zrzut struktury tabela company_20.tool_battery_ups
+CREATE TABLE IF NOT EXISTS `tool_battery_ups` (
+  `id_ups` int(11) NOT NULL AUTO_INCREMENT,
+  `model` varchar(50) DEFAULT NULL,
+  `output_power` int(11) DEFAULT NULL,
+  `output_power_w` int(11) DEFAULT NULL,
+  `cabinet` varchar(50) DEFAULT NULL,
+  `internal_count` int(11) DEFAULT NULL,
+  `internal_capacity` int(11) DEFAULT NULL,
+  `external_count` int(11) DEFAULT NULL,
+  `external_capacity` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_ups`),
+  KEY `internal_capacity` (`internal_capacity`),
+  KEY `external_capacity` (`external_capacity`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin2;
 
 -- Data exporting was unselected.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

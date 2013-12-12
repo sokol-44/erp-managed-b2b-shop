@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `global_client_user` (
   `last_login` datetime DEFAULT NULL,
   `last_login_ip` tinyint(4) DEFAULT NULL,
   `old_blob` text,
-  `state` enum('ACTIVE','BLOCKED','SUSPENDED','ER`ASED') DEFAULT NULL,
+  `state` enum('ACTIVE','BLOCKED','SUSPENDED','ERASED','NEW') DEFAULT NULL,
   PRIMARY KEY (`id_client_user`),
   KEY `fk.global_client_user.id_client` (`id_client`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

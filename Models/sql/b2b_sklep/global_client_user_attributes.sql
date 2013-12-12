@@ -10,16 +10,14 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury tabela company_20.shop_order_status_history
-CREATE TABLE IF NOT EXISTS `shop_order_status_history` (
-  `id_order_status_history` int(11) unsigned zerofill NOT NULL AUTO_INCREMENT,
-  `id_order_status` int(11) NOT NULL,
-  `id_order` int(11) NOT NULL,
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `description` text,
-  PRIMARY KEY (`id_order_status_history`),
-  KEY `fk.order_status_history.id_order_status` (`id_order_status`),
-  KEY `fk.order_status_history.id_order` (`id_order`)
+-- Zrzut struktury tabela company_20.global_client_user_attributes
+CREATE TABLE IF NOT EXISTS `global_client_user_attributes` (
+  `id_client` int(11) NOT NULL,
+  `id_client_user` int(11) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `val` tinytext,
+  PRIMARY KEY (`id_client_user`,`type`),
+  KEY `fk.global_client_attributes.id_client` (`id_client`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.
