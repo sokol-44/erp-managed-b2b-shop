@@ -244,7 +244,7 @@ function db_query($query, $link = 'db_link') {
       $dbg = debug_backtrace();
       
       //$query_log[] = array ('q' => $query, 'f' => $dbg[0]['file'], 'l' => $dbg[0]['line'],  't' => microtime(TRUE));
-      $query_log[] = array ('q' => $query, 'f0' => $dbg[0]['file'], 'l0' => $dbg[0]['line'], 'f1' => $dbg[1]['file'], 'l1' => $dbg[1]['line'], 'ts' => $tstart, 't' => microtime(TRUE));
+      $query_log[] = array ('q' => $query, 'f0' => $dbg[0]['file'], 'l0' => $dbg[0]['line'], 'f1' => $dbg[1]['file'], 'l1' => $dbg[1]['line'], 'ts' => (microtime(TRUE)-$tstart), 'ta' => microtime(TRUE));
 //       $query_log[] = array ('q' => $query, 'f' => $dbg[0]['file'], 'l' => $dbg[0]['line'], 't' => microtime(TRUE), 'b' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
    }
 

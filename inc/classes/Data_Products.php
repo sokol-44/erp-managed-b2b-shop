@@ -119,6 +119,7 @@ class Data_Products extends Data_Basket {
       
       $where = array('status' => 'ACTIVE');
 
+      
       if( defined('SHOP_SHOW_PRODUCTS_FROM_SUBCATEGORIES') && constant('SHOP_SHOW_PRODUCTS_FROM_SUBCATEGORIES') == 'true' 
       		&& $id_category!=0) {
       	
@@ -130,31 +131,38 @@ class Data_Products extends Data_Basket {
       } else {
          if( $id_category != 0 ) $where['p2c.id_category'] = (int)$id_category;
       }
- 
+
       
       if( $F->not_null(self::$Data_Products_params['client_view']) ) {
       	switch (constant('SHOP_CLIENT_PRICE_MODE')) {
       		case 'product_with_client_price_only':
-      			$where['p.id_client'] = (int)self::$Data_Products_params['id_client'];
-      			$product_from = self::$Data_Products_params['client_view'];
+      			$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
+     				p.picture_small_url, p.picture_big_url, p.picture_id, IFNULL( pcp.price, p.price) as price, p.vat, p.quantity, p.status
+     				from ' . TBL_SHOP_PRODUCT . ' p join ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' pcp on 
+     				( p.id_product = pcp.id_product and pcp.id_client="' . (int)self::$Data_Products_params['id_client'] . '")
+     				left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+    				 ( p.id_product = p2c.id_product )';
       			break;
       		case 'product_with_client_price':
-      			$where['p.id_client'] = array(db_escape((int)self::$Data_Products_params['id_client']), 'NULL');
-      			$product_from = self::$Data_Products_params['client_view'];
-      			break;
       		default:
-      			$product_from = TBL_SHOP_PRODUCT;
+				$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
+     				p.picture_small_url, p.picture_big_url, p.picture_id, IFNULL( pcp.price, p.price) as price, p.vat, p.quantity, p.status
+     				from ' . TBL_SHOP_PRODUCT . ' p left outer join ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' pcp on 
+     				( p.id_product = pcp.id_product and pcp.id_client="' . (int)self::$Data_Products_params['id_client'] . '")
+     				left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+    				 ( p.id_product = p2c.id_product )';
+      			break;
       	}
       } else {
-      	$product_from = TBL_SHOP_PRODUCT;
+      	$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
+			p.picture_small_url, p.picture_big_url, p.picture_id, p.price as price, p.vat, p.quantity, p.status
+			from ' . TBL_SHOP_PRODUCT . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+			 ( p.id_product = p2c.id_product )';
       }
       
       if( $F->not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
       
-      $query = 'select p.id_product, p.name, p.description, p.producer, p.catalog_index,
-         p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
-         from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
-         ( p.id_product = p2c.id_product ) ' . $where_str;
+      $query = $query_pm . $where_str;
 
       $sp_query = $SP->prepare_sql( $query );
       
@@ -655,7 +663,8 @@ class Data_Products extends Data_Basket {
          			$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
          				p.picture_small_url, p.picture_big_url, p.picture_id, IFNULL( pcp.price, p.price) as price, p.vat, p.quantity, p.status
 				   		from `shop_product`  `p` left outer join `shop_product_client_price` `pcp` 
-         				on (`p`.`id_product` = `pcp`.`id_product` AND pcp.id_client="' . (int)self::$Data_Products_params['id_client'] . '")';
+         				on (`p`.`id_product` = `pcp`.`id_product` AND ( 
+         					pcp.id_client="' . (int)self::$Data_Products_params['id_client'] . '" OR pcp.id_client IS NULL ))';
          			break;
          		default:
          			$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
