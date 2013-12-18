@@ -43,9 +43,9 @@ class Data_Shop extends Data_Picture {
    static function doShopAttributeAddOrUpdate( $param ) {
    
    	$query = 'INSERT INTO ' . TBL_SHOP_ATTRIBUTES . ' (`type`, `val`)
-   			VALUES ("' . db_escape($param['type']) . '", "' . db_escape($param['type']) . '")
+   			VALUES ("' . db_escape($param['type']) . '", "' . db_escape($param['val']) . '")
    					ON DUPLICATE KEY UPDATE `type` = "' . db_escape($param['type']) . '",
-   					`val` = "' . db_escape($param['type']) . '"';
+   					`val` = "' . db_escape($param['val']) . '"';
    
    	add_to_fp($query);
    	$result = db_query( $query );

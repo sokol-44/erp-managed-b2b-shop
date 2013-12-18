@@ -61,6 +61,7 @@ include(DIR_INC_FUNCTIONS . DS . 'global.php');
 include(DIR_INC_CLASSES . DS . 'Data_Contact.php');
 include(DIR_INC_CLASSES . DS . 'Data_Article.php');
 include(DIR_INC_CLASSES . DS . 'Data_Picture.php');
+include(DIR_INC_CLASSES . DS . 'Data_Shop.php');
 include(DIR_INC_CLASSES . DS . 'Data_Order.php');
 include(DIR_INC_CLASSES . DS . 'Data_Basket.php');
 include(DIR_INC_CLASSES . DS . 'Data_Products.php');
