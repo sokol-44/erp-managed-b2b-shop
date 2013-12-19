@@ -16,6 +16,7 @@ function test_helper_multiple_in($data_in, $method, $client ) {
    foreach($data_in as $key => $val) {
       $in_o['value_' . $key] =  $val->return_array();
    }
+   print("IN:" . print_r($in_o, true) . '<br>');
    $in_o_x = ArrayToXML::toXml($in_o, 'DocumentElement');
    print("IN:" . xml_b( $in_o_x ). '<br>');
    
@@ -406,6 +407,24 @@ function test_doShopAttributeAddOrUpdate( $client ) {
 	
 	test_helper_multiple_in($in_oo, 'doShopAttributeAddOrUpdate', $client);
 }
+
+
+function test_getClientNewList( $client ) {
+	$nt = time();
+
+	$in_oo = new ParamStartLength(array('id_start' => '1', 'length' => '15'));
+	test_helper_single_in($in_oo, 'getClientNewList', $client );
+}
+
+
+function test_doClientNewIdUpdateList( $client ) {
+	$nt = time();
+
+	$in_oo[] = new ClientData(array('id_client' => '7396', 'description' => 'new_id:111117396'), 'UPDATE');
+	$in_oo[] = new ClientData(array('id_client' => '111117396', 'description' => 'new_id:7396'), 'UPDATE');
+	test_helper_multiple_in($in_oo, 'doClientNewIdUpdateList', $client );
+}
+
 
 
 

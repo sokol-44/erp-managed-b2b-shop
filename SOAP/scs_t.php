@@ -72,13 +72,16 @@ $client = new SoapClient($soap_address, $soap_param_array);
 // test_doClientUserAttributeAddOrUpdate( $client );
 // test_getClientUserAttributeList( $client );
 
+// test_doShopAttributeAddOrUpdate( $client );
+// test_getShopAttributeList( $client );
+
 //PLACEHOLDERS
 // test_setOrderStatus( $client );
 // test_setOrderHiddenStatus( $client );
 
 
-test_doShopAttributeAddOrUpdate( $client );
-test_getShopAttributeList( $client );
+// test_getClientNewList( $client );
+test_doClientNewIdUpdateList( $client );
 ?>
 </pre>
 </body>

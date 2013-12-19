@@ -424,6 +424,17 @@ class Data_Person extends Data_Rights {
       $result = db_query( $query );
       return db_fetch_array($result);
    }
+   
+   static function doClientNewIdUpdateList($id_client, $id_client_new) {
+
+      $query = 'select "' . db_int($id_client) . '" as id_one,
+          "NEW ID:' . db_int($id_client_new) . '" as additional_data,
+          b_func_client_id_change("' . db_int($id_client) . '", "' . db_int($id_client_new) . '") as status';
+
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
 
    static function insert_client_data_id($data) {
       
@@ -617,11 +628,14 @@ class Data_Person extends Data_Rights {
    
    static function getClientList( $id_client_start = 0, $length = 1, $where = '' ) {
       list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
-
+      
+      if( Framework::not_null($where) ) $where = ' and ' . db_unroll_conditions($where);
+      
       $query = 'select h.id_client, h.name, h.description, h.email, h.phone, h.created, h.state
        from ' . TBL_GLOBAL_CLIENT . ' h
       where h.id_client ' . $comparision_dir . db_int($id_client_start) . $where . '
       ORDER BY h.id_client ' . $order_dir . ' LIMIT '. db_int($length);
+      add_to_fp('$query ' . $query);
 
       $result = db_query( $query );
       return db_result_array_full($result);

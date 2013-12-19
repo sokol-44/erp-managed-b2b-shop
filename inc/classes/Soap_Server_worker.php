@@ -93,8 +93,30 @@ class Soap_Server_worker {
       return $res;
    }
 
+   function getClientNewList( $input ) {//ParamStartLength, ClientData
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = true;
+      
+      $ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
 
+   	$where['h.state'] ='NEW';
+   	
+      if( is_object($ParamStartLength) ) {
+         if( !$ParamStartLength->is_error() ) {
+            $param_array = $ParamStartLength->return_array();
+            add_to_fp('$param_array:'. print_r($param_array, true) );
+            $res_array = Data::getClientList((int)$param_array['id_start'], (int)$param_array['length'], $where);
+            $response = $this->_addArrayValues($res_array);
+         } else {
+            $response = $this->getReturnError('getClientNewList', $input, $ParamStartLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getClientNewList', $input, 'WRONG CLASS');
+      }
 
+      return($response);
+   }
+   
    function getClientList( $input ) {//ParamStartLength, ClientData
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = true;
@@ -104,7 +126,7 @@ class Soap_Server_worker {
       if( is_object($ParamStartLength) ) {
          if( !$ParamStartLength->is_error() ) {
             $param_array = $ParamStartLength->return_array();
-            //add_to_fp('$param_array:'. print_r($param_array, true) );
+            add_to_fp('$param_array:'. print_r($param_array, true) );
             $res_array = Data::getClientList((int)$param_array['id_start'], (int)$param_array['length']);
             $response = $this->_addArrayValues($res_array);
          } else {
@@ -395,7 +417,7 @@ class Soap_Server_worker {
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = false;
       
-      add_to_fp('-------- doClientAdd');
+      add_to_fp('-------- doClientChange');
       if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
          $response_tmp = array();
          foreach($input['values'] as $key => $val) {
@@ -417,6 +439,39 @@ class Soap_Server_worker {
       return($response);
    }
 
+
+   function doClientNewIdUpdateList ( $input ) {
+      $this->input_data_type = 'UPDATE';
+      $this->SingleParam_MultipleReturns = false;
+      
+      add_to_fp('-------- doClientNewIdUpdateList');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new ClientData($val, $this->input_data_type);
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               list($mstr, $id_client_new) = explode(':', $param_array['description']);
+               if( $mstr == 'new_id' && (int)$id_client_new > 0 ) {
+               	$response_tmp[] = Data::doClientNewIdUpdateList((int)$param_array['id_client'], (int)$id_client_new);
+               } else {
+               	$response = $this->getReturnError('doClientNewIdUpdateList', $val, 'WRONG_NEW_ID');
+               }
+            } else {
+               $response_tmp[] = $this->getReturnError('doClientNewIdUpdateList', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('doClientNewIdUpdateList', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
+   }
+   
+   
    function doClientAdd ( $input ) {
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = false;

@@ -326,6 +326,18 @@
 	<wsdl:message name="doShopAttributeAddOrUpdateResponse">
 		<wsdl:part name="doShopAttributeAddOrUpdateResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="getClientNewListRequest">
+		<wsdl:part name="getClientNewListRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getClientNewListResponse">
+		<wsdl:part name="getClientNewListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientNewIdUpdateListRequest">
+		<wsdl:part name="doClientNewIdUpdateListRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientNewIdUpdateListResponse">
+		<wsdl:part name="doClientNewIdUpdateListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
 			<wsdl:output message="tns:getProductListResponse"></wsdl:output>
@@ -741,6 +753,22 @@
 							</wsdl:input>
 							<wsdl:output
 								message="tns:doShopAttributeAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getClientNewList">
+							<wsdl:input
+								message="tns:getClientNewListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getClientNewListResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doClientNewIdUpdateList">
+							<wsdl:input
+								message="tns:doClientNewIdUpdateListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientNewIdUpdateListResponse">
 							</wsdl:output>
 						</wsdl:operation>
 	</wsdl:portType>
@@ -1320,6 +1348,28 @@
          </wsdl:output>
       </wsdl:operation>
       <wsdl:operation name="doShopAttributeAddOrUpdate">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getClientNewList">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="doClientNewIdUpdateList">
          <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
          <wsdl:input>
             <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
