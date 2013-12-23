@@ -72,6 +72,7 @@ if( $F->check_get('mode') ){
    if( $send ) {
    	$data = $F->array_recursive_strip_tags($F->POST);
    	$res_person = Person::add_new_client_and_user($data);
+   	//$res_person = array('id_client' => 'id_client', 'id_client_user' => 'id_client_user');
    	if( $F->not_null($res_person) ) {
       	$res = Mail2Send::to_account_manager_register($data, $res_person);
       	if( $res ) {
@@ -83,7 +84,6 @@ if( $F->check_get('mode') ){
    		Info::sadd(Lang::_('cannot add client'));
    	}
    }
-
    $Page->redirect( $F->make_link(CFG_COM_REGISTER) );
 } else {
    //display basket

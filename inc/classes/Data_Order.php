@@ -376,7 +376,7 @@ class Data_Order extends Data_Shop {
    	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
    
    	$query = 'select `id_account_manager`, `id_client`, `id_client_user`, `account_manager_name`,
-   			`fullname`, `phone1`, `phone2`, `email`, `date_created`, `date_modified`
+   			`fullname`, `phone1`, `phone2`, `email`, `date_created`, `date_modified`, `state`
    			from ' . TBL_GLOBAL_CLIENT_USER_ACCOUNT_MANAGER . '
    			where id_client ' . $comparision_dir . db_int($id_client) . '
       	ORDER BY id_client ' . $order_dir . ' LIMIT '. db_int($length);
@@ -397,7 +397,7 @@ class Data_Order extends Data_Shop {
           "' . db_int($param['id_client']) . '", "' . db_int($param['id_client_user']) . '",
           "' . db_escape($param['account_manager_name']) . '", "' . db_escape($param['fullname']) . '",
           "' . db_escape($param['phone1']) . '", "' . db_escape($param['phone2']) . '",
-          "' . db_escape($param['email']) . '") as status';
+          "' . db_escape($param['email']) . '"", "' . db_escape($param['state']) . '") as status';
    
    	add_to_fp($query);
    	$result = db_query( $query );

@@ -258,7 +258,7 @@ class Page {
                echo '</div>';
             break;
             case 'MOD':
-               echo '<div class="module_container module_container_nr' . $idx_place . '">';
+               echo '<div class="iStoreBox module_container module_container_nr' . $idx_place . '">';
                include(DIR_INC_MODULES . DS . $place['script'] . '.php');
                echo '</div>';
             break;
@@ -269,6 +269,27 @@ class Page {
          return '';
       }
    }
+
+
+   public function render_module_inplace($script_name, $environment) {
+   	$F = Framework::g_global();
+   	$P = Person::g_global();
+   	$Page = Page::g_global();
+   	$BC = Breadcrumbs::g_global();
+   	//echo $place['type'].': '.$place['script'].' ; '.$place['logged']."<br>\n";
+  
+   
+   	if( true ) { //check rights
+   		ob_start();
+   		//$this->include_element($place['script'], $place['type']);
+   		echo '<div class="module_inplacer' . $idx_place . '">';
+   		include(DIR_INC_MODULES . DS . $place['script'] . '.php');
+   		echo '</div>';
+   		return ob_get_clean();
+   	} else {
+   		return '';
+   	}
+   }   
    
    function clean_page() {
    	ob_end_clean();
@@ -306,7 +327,7 @@ class Page {
       if( strstr($name, 'put_') ) {
          $var_name = str_replace('put_', '', $name);
          if( Framework::not_null($this->PLACE[${var_name}]) ) return $this->PLACE[${var_name}];
-         else return 'PLACE ' . $var_name;
+         else return '<!-- PLACE ' . $var_name . '-->';
       } else {
          echo "$name not defined!";
       }

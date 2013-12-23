@@ -25,6 +25,18 @@ define('_I_ROOT_DIR', $root);
 unset($root);
 
 /**
+ * root for www constant
+ */
+    if( isset($_SERVER['SCRIPT_URL']) ) $root_www = pathinfo($_SERVER['SCRIPT_URL'], PATHINFO_DIRNAME);
+elseif( isset($_SERVER['SCRIPT_NAME']) ) $root_www = pathinfo($_SERVER['SCRIPT_NAME'], PATHINFO_DIRNAME);
+elseif( isset($_SERVER['PHP_SELF']) ) $root_www = $_SERVER['PHP_SELF'];
+elseif( isset($_SERVER['REQUEST_URI']) ) $root_www = pathinfo($_SERVER['REQUEST_URI'], PATHINFO_DIRNAME);
+else   $root_www = '/';
+define('_I_ROOT_WWW_DIR', $root_www);
+unset($root_www);
+
+
+/**
  * set init for blocking direct access
  */
 define('_I_INIT', 'YES');

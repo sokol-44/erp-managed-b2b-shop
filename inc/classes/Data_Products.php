@@ -780,7 +780,11 @@ class Data_Products extends Data_Basket {
             $children = self::__categories_make_tree($category_list, ($level+1), $category['id_category'], $path);
             $all_children = array_keys($children);
             foreach($all_children as $children_keys) {
-               $all_children = array_merge($all_children, array_keys($children[$children_keys]['children']) );
+            	foreach( $children[$children_keys]['all_children'] as $key_chl ) {
+            		$all_children[] = $key_chl;
+            	}
+            	//$all_children = array_unique($all_children);
+               //$all_children = array_unique(array_merge($all_children, $children[$children_keys]['children'] ));
                $products_in_subcategories += $children[$children_keys]['products_in_category'] + $children[$children_keys]['products_in_subcategories'];
             }
              

@@ -55,7 +55,7 @@ foreach( $config['IMAGE'] as $cnf => $value) {
 }
 
 
-//image structure
+//
 foreach( $config['DEFAULT'] as $cnf => $value) {
 	define('DEFAULT_' . $cnf, $value);
 }

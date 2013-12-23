@@ -153,6 +153,81 @@ class SplitPage {
       return $display_links_string;
    }
 
+   function display_links_m($parameters = '', $link_param = '') {
+   	//      print_debug($this);
+   	if( $this->number_of_pages > 1 ) {
+   		return $this->make_links($parameters, $link_param);
+   	}
+   }
+   
+   function make_links_m($elements = '', $link_param = '') {
+   
+   	$F = Framework::g_global();
+   	global $PHP_SELF, $request_type;
+   
+   	$display_links_string = '<ul>';
+   
+   	if ( $F->not_null($parameters) && (substr($parameters, -1) != '&')) $parameters .= '&';
+   	$local_GET = $F->make_get();
+   	//      print_r($local_GET);
+   	//prev button - not on first page
+   	if ($this->page_number > 1) {
+   		$display_links_string .= '<li class="istFirstItem">';
+   		$get = $F->add_local_get($this->page_holder, $this->page_number - 1);
+   		$display_links = $F->make_link($F->com, $get);
+   		$display_links_string .= $F->draw_link($display_links, $link_param, Lang::_('SPLITPAGE_BUTTON_PREV')) . '</li>';
+   	}
+   
+   	//if number_of_pages > $max_page_links
+   	$cur_window_num = intval($this->page_number / $this->rows_per_page);
+   	if ($this->page_number % $this->rows_per_page) $cur_window_num++;
+   
+   	$max_window_num = intval($this->number_of_pages / $this->rows_per_page);
+   	if ($this->number_of_pages % $this->rows_per_page) $max_window_num++;
+   
+   	//prev bunch
+   	if ($cur_window_num > 1) {
+   		$display_links_string .= '<li class="istFirstItem">';
+   		$get = $F->add_local_get($this->page_holder, (($cur_window_num - 1) * $this->rows_per_page) - 1);
+   		$display_links = $F->make_link($F->com, $get);
+   		$display_links_string .= $F->draw_link($display_links, $link_param, '...') . '</li>';
+   	}
+   
+   	//pages list
+   	$list_start = 1 + (($cur_window_num - 1) * $this->rows_per_page);
+   	$list_count_end1 = $cur_window_num * $this->rows_per_page;
+   	$list_count_end2 = $this->number_of_pages;
+   	for ($jump_to_page = $list_start; ($jump_to_page <=  $list_count_end1 && $jump_to_page <= $list_count_end2); $jump_to_page++) {
+   		if ($jump_to_page == $this->page_number) {
+   			$display_links_string .= '<li>' . $jump_to_page . '</li>';
+   		} else {
+   			$display_links_string .= '<li>';
+   			$get = $F->add_local_get($this->page_holder, $jump_to_page);
+   			$display_links = $F->make_link($F->com, $get);
+   			$display_links_string .= $F->draw_link($display_links, '', $jump_to_page) . '</li>';
+   		}
+   	}
+   	//$address = '', $parameters = '', $contents = '', $target = '')
+   	//next bunch
+   	if ($cur_window_num < $max_window_num) {
+   		$display_links_string .= '<li>';
+   		$get = $F->add_local_get($this->page_holder, (($cur_window_num) * $this->rows_per_page + 2));
+   		$display_links = $F->make_link($F->com, $get);
+   		$display_links_string .= $F->draw_link($display_links, $link_param, '...') . '</li>';
+   	}
+   
+   	//next
+   	if (($this->page_number < $this->number_of_pages) && ($this->number_of_pages != 1)) {
+   		$display_links_string .= '<li>';
+   		$get = $F->add_local_get($this->page_holder, ($this->page_number + 1));
+   		$display_links = $F->make_link($F->com, $get);
+   		$display_links_string .= $F->draw_link($display_links, $link_param, Lang::_('SPLITPAGE_BUTTON_NEXT')) . '</li>';
+   	}
+   	$display_links_string .= '</ul>';
+   
+   	return $display_links_string;
+   }
+    
    // display number of total products found
    function display_count($text_output) {
       $to_num = ($this->rows_per_page * $this->page_number);

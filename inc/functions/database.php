@@ -149,6 +149,26 @@ function db_unroll_conditions($conditions_array, $type = 'and', $field_name = fa
    return $return_str;
 }
 
+function db_max($table, $row_name = false, $where = '', $link = 'db_link') {
+   global $$link;
+	
+   $where_str = '';
+   if( Framework::not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
+   
+   $query_array = array();
+   
+   if( Framework::is_null($row_name) ) {
+   	$res_ai = db_query('SHOW TABLE STATUS LIKE "global_client_user"');
+   	$max = db_fetch_result('Auto_increment', $res_ai)-1;
+   } else {
+   	$query = 'SELECT max(`' . db_escape($row_name) . '`) as max from `' . db_escape($table) . '`' . $where_str;
+   	$res_ai = db_query($query);
+   	$max = db_fetch_result('max', $res_ai);
+   }
+   
+   return $max;
+}
+
 function db_insert_id($link = 'db_link') {
    global $$link;
    return mysql_insert_id(${$link});

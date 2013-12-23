@@ -42,10 +42,10 @@ $product_index = $F->output_string_html( trim($product_info['catalog_index']) );
 
 
 $Page->head_title = $F->output_string_html( $product_info['name'] );
-if ( $F->not_null($product_producent) )
-  $Page->head_title .= $Page->head_title . ', ' . $product_producent;
-if ( $F->not_null($product_index) )
-  $Page->head_title .= $Page->head_title . ', ' . $product_index;
+// if ( $F->not_null($product_producent) )
+//   $Page->head_title .= $Page->head_title . ', ' . $product_producent;
+// if ( $F->not_null($product_index) )
+//   $Page->head_title .= $Page->head_title . ', ' . $product_index;
 ?>
 <div class="product product_info">
 <?php

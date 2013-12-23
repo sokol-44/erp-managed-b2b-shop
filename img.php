@@ -3,20 +3,18 @@
  * index.php Administrator Panel
  * Copyright MichaÅ‚ SokoÅ‚owski 2010
  *
- * @author Micha³ Soko³owski <msokolowski@example.com>
+ * @author Michaï¿½ Sokoï¿½owski <msokolowski@example.com>
  */
 /**
  * Include global init file
  */
 include('init.php');
 
-
-include(DIR_INC_CLASSES . DS . 'Pdb.php');
-
-stream_wrapper_register('Pdb', 'Pdb');
-
 if( $F->check_get('id') && (int)$F->GET['id']>0 ) {
-
+   include(DIR_INC_CLASSES . DS . 'Pdb.php');
+   
+   $res = stream_wrapper_register('Pdb', 'Pdb');
+   
    $array_in[] = 'id=' . (int)$F->GET['id'];
    if( $F->check_get('type') &&
    ($F->GET['type'] == 'ORIGINAL' || $F->GET['type'] == 'NORMAL' || $F->GET['type'] == 'SMALL') ) {
@@ -29,5 +27,6 @@ if( $F->check_get('id') && (int)$F->GET['id']>0 ) {
 //   print_r($gis);
    header("Content-type: {gis['mime']}");
    readfile($pdb_filename);
+   die();
 }
 ?>

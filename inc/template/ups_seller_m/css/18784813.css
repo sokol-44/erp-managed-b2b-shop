@@ -1,0 +1,4887 @@
+/* ============================ core ======================================= */
+
+/* css-reset meyerweb.com v1.0 | 20080212 */
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp,small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend,table, caption, tbody, tfoot, thead, tr, th, td
+{ margin: 0;	padding: 0;	border: 0;	outline: 0;	font-size: 100%;	vertical-align: baseline;	background: transparent;}
+body { line-height: 1;}
+ol, ul {	list-style: none;}
+blockquote, q {	quotes: none;}
+blockquote:before, blockquote:after, q:before, q:after { content: '';	content: none;}
+/* remember to define focus styles! */
+:focus { outline: 0;}
+/* remember to highlight inserts somehow! */
+ins { text-decoration: none;}
+del {	text-decoration: line-through; }
+/* tables still need 'cellspacing="0"' in the markup */
+table { border-collapse: collapse;	border-spacing: 0;}
+/* END reset */
+
+/*** BASIC TYPOGRAPHY ***/
+html { font-size: 11px; font-family: tahoma, Helvetica, Arial, sans-serif; }
+
+html { overflow:auto; overflow-x:hidden; }
+@media all and (max-width: 1024px) { 
+  html { overflow:auto; overflow-x:auto; }
+}
+
+
+strong, th, thead td, h1, h2, h3, h4, h5, h6 { font-weight: normal; }
+cite, em, dfn { font-style: italic; }
+code, kbd, samp, pre, tt, var, input[type='text'], input[type='password'], textarea { font-size: 11px; font-family: tahoma, monaco, "Lucida Console", courier, monospace; }
+del { text-decoration: line-through; color: #666; }
+small, sup, sub { font-size: 85%; }
+
+/*** FORMS ***/
+fieldset { padding:0; margin: 0 0 1.5em 0; border:0; }
+legend { font-weight: bold; font-size:1.2em; }
+label { font-weight:normal; color: #535353}
+textarea, input[type='text'], input[type='password'], select { border: 1px solid #8c8c8c;
+background: url('http://static.istore.pl/istore/22649/files/18780842.png') no-repeat;
+}
+textarea:hover, input[type='text']:hover, input[type='password']:hover, select:hover { border-color: #aaa; }
+textarea:focus, input[type='text']:focus, input[type='password']:focus, select:focus { }
+input, select { cursor: pointer; }
+input[type='text'],input[type='password'] { cursor: text; }
+
+/*** BASE SIZES ***/
+.container { font-size: 1.2em; line-height: 1.6em; }
+h1 { font-size: 15px;	font-weight: normal;}
+h2 { font-size: 16px; font-weight: bold; font-family:arial,sans-serif;}
+h3 { font-size: 1.5em; }
+h4 { font-size: 1.3em; }
+h5 { font-size: 1.2em; }
+h6 { font-size: 1em; }
+
+/*** LISTS ***/
+ul li { }
+ul { list-style-type: disc; }
+ul ul { list-style-type: square; }
+ul ul ul { list-style-type: circle; }
+ol { list-style-position: outside; list-style-type: decimal; }
+dt { font-weight: bold; }
+
+/*** TABLES ***/
+
+
+/*** MARGINS & PADDINGS ***/
+hr, p, ul, ol, dl, pre, blockquote, address, table, form { margin-bottom: 1.6em; }
+/*** NOTE: Calulate header margins: TOP: 1.6em/size, BOTTOM: 1.6em/size/2 ***/
+
+fieldset { padding: 0 ; margin: 1.6em 0; } /*** padding-top is margin-top for fieldsets in Opera ***/
+legend { padding-left: .8em; padding-right: .8em; }
+legend+* { margin-top: 1em; } /*** compensates for the opera margin bug ***/
+textarea, input { padding: .3em .4em .15em .4em; }
+select { padding: .1em .2em 0 .2em; }
+option { padding: 0 .4em; }
+a { position: relative; padding: 0.3em 0 .1em 0; } /*** for larger click-area ***/
+dt { margin-top: .8em; margin-bottom: .4em; }
+ul { margin-left: 1.5em; }
+ol { margin-left: 2.35em; }
+ol ol, ul ol { margin-left: 2.5em; }
+form div { margin-bottom: .8em; }
+
+/*** COLORS ***/
+a:link { text-decoration: none; color: #3a3a3a; }
+a:visited { text-decoration: none; color: #3a3a3a; }
+a:hover { text-decoration: underline; color: #3a3a3a; }
+a:active, a:focus { text-decoration: underline; color: #e6a902; }
+
+body {background: #fff url('http://static.istore.pl/istore/22649/photos/original/18782566.jpg') no-repeat 50% 0;}
+
+
+hr {background:#ddd;color:#ddd;clear:both;float:none;width:100%;height:.1em;margin:0 0 1.45em;border:none;}
+* html .clearfix, * html .container {height:1%;}
+
+/*** TEXT CLASSES ***/
+.small {font-size:.8em;margin-bottom:1.875em;line-height:1.875em;}
+.large {font-size:1.2em;line-height:2.5em;margin-bottom:1.25em;}
+.hide {display:none;}
+.quiet {color:#666;}
+.loud {color:#000;}
+.highlight {background:#ff0;}
+.top {margin-top:0;padding-top:0;}
+.bottom {margin-bottom:0;padding-bottom:0;}
+.thin {font-weight: lighter;}
+.error, .notice, .success {padding:.8em;margin-bottom:1.6em;border:2px solid #ddd;}
+.error {background:#FBE3E4;:#8a1f11;border-color:#FBC2C4;}
+p.error {border:0; margin-bottom:0; display:inline; margin-left:20px; padding:0;}
+.error label {color:#000;}
+.notice {background:#FFF6BF;color:#514721;border-color:#FFD324;}
+.success {background:#E6EFC2;color:#264409;border-color:#C6D880;}
+.error a {color:#8a1f11; background:none; padding:0; margin:0; }
+.notice a {color:#514721; background:none; padding:0; margin:0; }
+.success a {color:#264409; background:none; padding:0; margin:0; }
+.center {text-align: center;}
+
+/*** STYLES FOR BUTTONS ***/
+button {
+	font-weight: bold;
+	font-family: inherit;
+	font-size: inherit;
+	background: #999;
+	color: #fff;
+	padding: 2px 5px;
+	margin: 0;
+	vertical-align: middle;
+	border: 2px solid #909090;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	box-shadow: 0 0 5px rgba( 0, 0, 0, .15 ) ;
+	-webkit-box-shadow: 0 0 5px rgba( 0, 0, 0, .15 ) ;
+	cursor: pointer;
+}
+
+button:hover {
+	background: #888;
+}
+
+input[type="submit"] {
+	font-weight: bold;
+	color: #f4f4f4;
+	padding: 2px 5px;
+	margin: 0;
+	vertical-align: middle;
+}
+
+button.submit {
+	font-weight: bold;
+	color: #f4f4f4;
+	padding: 2px 5px;
+	margin: 0;
+	vertical-align: middle;
+}
+
+button.submit:hover {
+	color: #fff;
+}
+
+
+/*-------------------- GLOBALS ----------------*/
+.iStoreBoxHeader h1 {
+	width: 870px;
+  overflow:hidden;
+  color: #000;
+  text-transform: uppercase;
+ clear: both;
+ padding: 10px;
+ background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x;
+ font-size: 15pt;
+ color: #fff;
+ text-transform: uppercase;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+}
+
+
+
+fieldset h3,
+#iStoreContent h3/* !GLOBAL! */
+{font-size:12px; font-weight:bold; padding:12px 10px 8px 10px; text-transform:uppercase; clear:left; overflow:hidden}
+
+#iStoreContent .iStoreBoxContent {line-height:130%}
+
+#iStoreContent .iStoreBoxContent {
+/* tutaj margines wewnatrz tresci */
+
+}
+
+#iStoreContent .iStoreBoxContent h3 {
+ padding: 10px;
+ 
+ font-size: 12pt;
+ color: #fff;
+ text-transform: uppercase;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+ margin-bottom: 20px;
+ font-weight: normal;
+
+}
+
+#iStoreContent .iStoreBoxContent h2 {
+ padding: 10px;
+ background: url('http://static.istore.pl/istore/22649/files/18782916.png') repeat-x;
+ font-size: 15pt;
+ color: #fff;
+ text-transform: uppercase;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+ margin-bottom: 20px;
+}
+
+#iStoreContent .iStoreBoxContent h4
+{
+ padding: 10px;
+ background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x;
+ font-size: 15pt;
+ color: #fff;
+ text-transform: uppercase;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+ margin-bottom: 20px;
+}
+
+
+
+
+
+
+div#iStoreContent div.iStoreBox div.iStoreBoxWrapper p {margin-right:10px; margin-left:10px; text-align: justify;}
+ul {margin-right:50px;}
+ul li {list-style-image: url(bluesky/img/list_point.gif);}
+
+p {line-height:130%;}
+
+img.left {float:left; padding:0px 10px 10px 0;}
+img.right {float:right; padding: 0px 10px 10px 10px;}
+
+/* static*/
+#istStatic {
+  padding:0 10px;
+  border-bottom-right-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+#istStatic .istBoxWrap h1 {display:none;}
+#istStatic table {background:#fff; border:0;}
+#istStatic table td {border:0;}
+#istStatic h4 {font-size:12px; font-weight:bold; padding:12px 5px 8px 5px; text-transform:uppercase; clear:left;}
+img.secure_
+ {float:left; padding:0 10px 10px 0px}
+.logo_alle_small {float:none; padding:0; display:inline-block; margin-bottom:-5px; position:relative;}
+.secure_paragraph {line-height:130%; margin:0 50px 17px 10px;}
+.secure_paragraph table {margin-bottom:0;}
+/* ============================= layout =================================== */
+
+#iStoreStatusBarWrapper {width:10px; height: 20px; left:0; margin:0 auto;  position:relative;  display:block; z-index:95}
+#iStoreStatusMenuCurrency span {
+color: #000;
+}
+#iStoreStatusMenu { width:15px; height: 20px; margin:0 15px 0 0;display:block; zoom:1;}
+#iStoreHeader {width:1185px; padding-top:0px; height:68px; }
+#iStoreWrapper {
+	width :1180px;
+	margin: 0 auto;
+	position: relative;
+	top: -20px;
+	
+	background: url('http://static.istore.pl/istore/22649/photos/original/18781892.jpg') no-repeat;
+
+}
+#iStoreTop {height:155px; overflow:hidden;}
+#iStoreBreadCrumbs {display: none; background:transparent; position:absolute; left:0px; top:140px; width:960px; height:30px;}
+#iStoreToolbar {  }
+#iStoreToolbarMenu {height:59px; width:580px;float:left; position: relative; top: -80px; left: 380px;}
+#iStoreTop #iStoreBasket {position:absolute; right: 0px; top:22px; height:36px; width:247px; color:#fff;}
+#iStoreSearch  {width:240px; float:right; height:33px; position: absolute;  right: 20px; top: 105px;}
+#iStoreContent {float:right; padding-left: 10px;width:880px; background: none;padding-top: 2px;
+font-size: 11pt;
+
+}
+#iStoreStatusMenu li {float:left;}
+#iStoreSidebar {
+background: none;
+width:282px;
+
+}
+
+#iStoreToolbar #iStoreBasket p {
+color: #fff;
+font-size: 0pt;
+margin-left: 15px;
+position: relative;
+top: 10px;
+}
+
+#iStoreToolbar #iStoreBasket p strong{
+color: #fff;
+font-size: 13pt;
+font-weight: bold;
+margin-left: 10px;
+position: relative;
+top: 10px;
+left: 30px;
+}
+
+
+.iStoreBoxToolbar {
+margin-bottom: 20px;
+}
+
+.iStoreHome #iStoreTop {height:80px; overflow:hidden;}
+
+.iStoreHome #iStoreProductsList {float:right; width:880px; padding: 0px;}
+.iStoreHome #iStoreSidebar {float:left; 
+margin-top: 520px;
+
+}
+
+.iStoreHome #iStoreContent div.iStoreBoxWrapper .iStoreCMSContent p {margin:0;}
+.iStoreHome #iStoreContent .iStoreCMSContent p img{display:block;}
+.iStoreHome #iStoreContent {margin-top: 10px;}
+
+/* =============================================================================
+================== #iStoreShopBanner na 100% szerokości ========================
+==============================================================================*/
+
+
+.iStoreHome #iStoreShopBanner .iStoreCMSContent {height:490px!important; width:1180px!important; overflow:hidden; margin-left:-345px!important; background: none!important;
+z-index:-85;
+
+}
+/*.iStoreHome #iStoreSidebar {margin-top:280px!important;} */
+
+
+/*==============================================================================
+================================================================================
+==============================================================================*/
+#tresc {
+background: #0e0e0e;
+padding: 10px;
+border-radius: 5px;
+
+}
+
+
+
+
+/* mapa strony*/
+#iStoreContent ul.iStoreSiteMap { border-left:0; list-style:none; list-style-image:none; margin:0 0 0 15px; padding:0; }
+#iStoreContent ul.iStoreSiteMap li{ list-style:none; list-style-image:none; margin:0; padding:0; height:16px; }
+#iStoreContent ul.iStoreSiteMap li a {text-decoration:none; line-height:16px;}
+#iStoreContent ul.iStoreSiteMap li a img {display:none;}
+#iStoreContent ul.iStoreSiteMap li span {text-decoration:line-through; margin-right:0px; border-left:1px solid #676767; line-height:16px; display:inline-block; width:16px; font-size:18px; color:#676767;}
+
+/*404*/
+
+.site404 #iStoreWrapper {background:none;}
+.site404 #iStoreContent {width:956px; position:relative; background:#fff; padding-bottom:80px;  border-bottom:1px solid #666;}
+.site404 #iStoreContent .iStoreBoxContent {padding: 14px 0 0 0;}
+.site404 #iStoreContent #iStore404 { margin-bottom: -43px; padding:0px 50px 0px 50px; position: relative; z-index:8;}
+.site404 #iStoreContent #iStore404 h2 {padding-left:0;}
+.site404 #iStoreContent #iStore404 p {margin-right:155px !important;}
+.site404 #iStoreContent #iStore404 ul {background: url(img/alert.png) top right no-repeat; height:180px; position:relative; margin: -15px 0 0 35px; padding-top:40px ; }
+.site404 #iStoreContent #iStoreSearch {position:absolute; bottom:0px; left:0px; margin-top:0; height:60px; border:0; width:500px;  z-index:10}
+.site404 #iStoreContent #iStoreSearch .iStoreBoxContent {padding-top:0;}
+.site404 #iStoreContent .iStoreBoxContent ul.iStoreProducts  {margin-left:150px !important;}
+
+/* ============================ iStoreForms ===============================  */
+
+.buttonsArea {overflow:hidden;
+}
+.buttonsArea div {margin-bottom:0;
+margin-right: 30px;
+
+}
+.buttonsArea .submit {float:right;}
+.buttonsArea div.button {float:left; padding-bottom:5px;}
+.buttonsArea button {margin-bottom:0;}
+
+/* koszyk  */
+#iStoreContent #iStoreBasket .button button.button {background:#999; 
+border: 2px solid #909090;
+}
+
+#iStoreAccountForm .button button {background:#BFBFBF;}
+
+#stepsForm {position:relative;
+ border-bottom-left-radius: 5px;
+ border-bottom-right-radius: 5px;
+ -moz-border-radius-bottomright: 5px;
+ -moz-border-radius-bottomleft: 5px;
+  padding-left: 10px;
+
+}
+#stepsForm fieldset div.radio {padding:5px 14px 5px 10px; background:#efeeee; margin:0px;}
+#stepsForm fieldset {margin-bottom:12px;}
+#allegroFormSecureLogin {float:right; padding:10px 15px 10px 15px;}
+
+#iStoreContent #allegroFormAccoutLinks {margin-left:160px}
+#iStoreContent #allegroFormAccoutLinks li{list-style:none; list-style-image:none; margin:0;}
+#iStoreContent #allegroFormAccoutLinks li a {font-size:11px; text-transform:lowercase;}
+
+#allegroFormTerms {clear:right;}
+#allegroFormTerms div {clear:left; overflow:hidden; padding:5px 0;}
+#allegroFormTerms div label {float:left; width:628px;}
+#allegroFormTerms div.checkbox .checkbox{float:left; margin-right:10px;}
+#allegroForm {padding:35px 0 0 24px; background:#ededed; height:100px;}
+
+div.text {margin:0 0 10px 0; padding:3px 10px; overflow:hidden; color: #000}
+.text span {
+color: #ffcba3;
+}
+
+div.password {margin-bottom:10px; padding:3px 10px; overflow:hidden;}
+div.select {margin-bottom:10px; padding:3px 9px; overflow:hidden;}
+
+div.password input, div.text input {width:110px;}
+div.text label {width:150px; text-align:left; float:left; display:inline-block;}
+div.password label {width:150px; text-align:left; float:left; display:inline-block;}
+div.select label   {width:150px; text-align:left; float:left; display:inline-block;}
+div.select select {width:120px;}
+div.submit label{font-weight:bold; float:left; padding:5px 10px; }
+div.textarea label{float:left; padding-right:10px; }
+div.textarea textarea {width:552px; max-width: 552px; max-height: 400px;}
+
+#allegroInfo2 {position:absolute; border:1px solid #EFEEEE; background:#232323; -moz-box-shadow: 2px 2px 20px 5px #cacaca; top:300px; left:0;  padding:15px; z-index:99; text-align:right; }
+#allegroInfo2 ul,#allegroInfo2 h3 {text-align:left;}
+a.ukryj {text-decoration:none; font-weight:bold; font-size:18px;}
+
+strong.required{color: #C10117; font-size: 10px; padding-left: 1px; vertical-align: top;}
+
+
+
+/*moje konto */
+
+
+
+
+#iStoreEditAccountBox p {line-height:65px;}
+
+#iStoreEditAccount fieldset h3 {margin-top:0;}
+#iStoreContent #iStoreEditAccountBox h2, #iStoreContent #iStoreProductsList h2 {margin-top:0;}
+#iStoreContent #iStoreEditAccount fieldset:first-child h3 {font-size: 19px; font-weight:normal;  margin-top: 0; padding: 11px 15px 8px 17px; text-transform:none;}
+#iStoreEditAccount fieldset div {padding-left: 15px; }
+#iStoreEditAccount fieldset p {padding-left: 15px; line-height:130%; }
+
+#iStoreEditAccountBox fieldset {background:#e3e3e3; margin-top:0;}
+#iStoreAccountForm fieldset {padding:0 0 11px 0;}
+#iStoreEditAccountBox .iStoreBoxToolbar  ul {list-style:none; list-style-image:none; padding:10px 0; margin:0;}
+#iStoreEditAccountBox .iStoreBoxToolbar  ul li {list-style:none; list-style-image:none; float:left; margin:0 30px;}
+#iStoreEditAccountBox .iStoreBoxToolbar  ul li:first-child {margin:0; width:65px; text-align:right;}
+#iStoreEditAccountBox .iStoreBoxToolbar  ul li:last-child {margin:0 30px 0 70px;}
+#iStoreEditAccountBox table {border:0;}
+#iStoreEditAccountBox table th {background:#fffbf8; color:#000; border:0;}
+#iStoreEditAccountBox table tr td {border:0; text-align:center;}
+#iStoreEditAccountBox table tr:nth-child(even) td {background:#d2d2d2; border-bottom:2px solid #fff;}
+#iStoreEditAccountBox table tr:nth-child(odd) td {background:#e5e5e5; border-bottom:2px solid #fff;}
+#iStoreEditAccountBox table.table {width:100%;}
+
+/*orderSummary */
+#iStoreOrderSummary #iStoreOrderSummaryDeliveryData{border:0;}
+#iStoreOrderSummary #iStoreOrderSummaryDeliveryData ul {margin-left:15px;}
+#iStoreOrderSummary #iStoreOrderSummaryDeliveryData ul li {overflow:hidden;}
+#iStoreOrderSummaryDeliveryData ul li em {margin-right:10px; width:175px; float:left;}
+#iStoreOrderSummary #iStoreOrderSummaryPaymentData {border:0;}
+#iStoreOrderSummary #iStoreOrderSummaryPaymentData ul {margin-left:15px;}
+#iStoreOrderSummary #iStoreOrderSummaryPaymentData ul li {overflow:hidden;}
+#iStoreOrderSummaryPaymentData ul li em{margin-right:10px; width:175px; float:left;}
+
+/* kontakt  */
+
+#iStoreContact .iStoreBoxContent {
+	overflow: hidden;
+	
+}
+#iStoreShopContactData {
+	float: left;
+	width: 340px;
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18782500.png') repeat-x bottom; 
+
+border: 1px solid #e3e3e3;
+
+border-radius: 10px;
+
+}
+
+#iStoreShopContactData  h3 {
+margin: 0;
+background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x
+}
+
+
+#iStoreShopContactData address {
+	padding: 30px 20px 20px 0px;
+	font-size: 11pt;
+	font-style: normal;
+	line-height: 16px;
+	width: 222px;
+	margin-left: 20px;
+}
+#iStoreShopContactData ul.iStoreContactData {
+	width: 340px;
+  font-size:12px;
+  margin-left: 20px;
+
+  
+  }
+#iStoreShopContactData ul.iStoreContactData li{
+	list-style:none;
+  list-style-image:none;
+  color: #002861;
+  margin:5px 0;
+  min-height:30px;
+  padding-left:65px;
+  
+}
+
+
+
+#iStoreShopContactFormBox {
+	width: 425px;
+	float: right;
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18782500.png') repeat-x bottom; 
+
+border-left: 1px solid #e3e3e3;
+border-right: 1px solid #e3e3e3;
+border-bottom: 1px solid #e3e3e3;
+border-radius: 10px;
+
+}
+#iStoreShopContactForm {
+	width: 425px;
+
+}
+
+#iStoreShopContactForm  h3 {
+width: 405px;
+margin: 0;
+background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x
+}
+
+#iStoreShopContactForm p.error {
+	font-size: 11px;
+	float: right;
+	margin-right: 0px;
+  background:none;
+}
+#iStoreShopContactForm fieldset {
+	
+	overflow: hidden;
+
+	width: 350px;
+	margin: 0px 0 20px 0
+}
+#iStoreShopContactFormBox input {
+width: 265px;
+height: 20px;
+color: #000;
+}
+#iStoreShopContactFormBox div.error {
+border:1px solid #cc0000;
+background:#FBE3E4;
+border-radius:5px;
+-moz-border-radius:5px;
+-webkit-border-radius:5px; 
+}
+#iStoreShopContactForm #iStoreShopContactFormBody {
+	overflow: hidden;
+	padding-left: 10px
+}
+#iStoreShopContactForm #iStoreShopContactFormBody p.error {
+	float: left;
+	margin-left: 0;
+}
+#iStoreShopContactForm fieldset #iStoreShopContactFormBody textarea {
+	width: 318px;
+}
+#iStoreShopContactForm fieldset label {
+	width: 212px;
+  font-size:12px;
+}
+#iStoreShopContactForm fieldset #iStoreShopContactFormCaptcha {
+	padding: 15px 10px 3px 10px;
+ overflow:hidden;
+}
+#iStoreShopContactForm fieldset #iStoreShopContactFormCaptcha input {
+	float: left;
+	clear: left;
+}
+#iStoreShopContactForm fieldset #iStoreShopContactFormCaptcha label {
+	float: left;
+	clear: left;
+	width: 300px;
+	padding: 5px 0;
+}
+#iStoreShopContactForm fieldset #iStoreShopContactFormCaptcha img {
+	float: left;
+	clear: left;
+}
+#iStoreShopContactForm fieldset #iStoreShopContactFormCaptcha p.error {
+	float: left;
+	margin-top: 0;
+}
+#iStoreShopContactForm fieldset div.submit {
+	padding-left: 10px;
+}
+
+#iStoreShopContactForm  .submit button.submit  {
+background: #f03131;
+padding:5px 10px;
+
+}
+/* ============================ iStorePayment ============================= */
+
+
+#iStoreOrder table#iStoreBasketList {border-collapse:collapse;border-spacing:1px;font-size:12px;padding:0;margin:0 0 10px 0;width:100%;text-align:center;}
+#iStoreOrder table#iStoreBasketList *{font-size:12px;line-height:19px;vertical-align:baseline}
+#iStoreOrder table#iStoreBasketList thead th{text-transform:uppercase;padding:5px 10px;text-align:center;}
+#iStoreOrder table#iStoreBasketList thead th:first-child,#iStoreOrder table#iStoreBasketList caption{text-align:left;}
+#iStoreOrder table#iStoreBasketList .iStoreProduct,#iStoreOrder table#iStoreBasketList tfoot td,#iStoreOrder table#iStoreBasketList tfoot th,#iStoreOrder table#iStoreBasketList .iStoreBasketSummary{text-align:right;}
+#iStoreOrder table#iStoreBasketList div.description{width:auto !important;}
+#iStoreOrder table#iStoreBasketList span{padding:0}
+#iStoreOrder table#iStoreBasketList caption{font-weight:bold;padding-bottom:5px;margin:0;font-size:12px;text-transform:uppercase;}
+#iStoreOrder table#iStoreBasketList thead .iStoreBasketDel,#iStoreOrder table#iStoreBasketList tbody .iStoreBasketDel{padding:0 5px;}
+#iStoreOrder table#iStoreBasketList #iStoreBasketSummary th.stylBox2{text-transform:none;border-bottom:none;border-left:none;text-align:left;}
+#iStoreOrder table#iStoreBasketList .iStoreBasketSummary + td{text-align:center;}
+#iStoreOrder table#iStoreBasketList .iStoreBasketSummary + td img{cursor:pointer;}
+#iStoreOrder table#iStoreBasketList td,#iStoreOrder table#iStoreBasketList th{vertical-align:middle;padding:5px 8px;}
+#iStoreOrder table#iStoreBasketList .istoreAllPrice th,#iStoreOrder table#iStoreBasketList .istoreAllPrice td,#iStoreOrder table#iStoreBasketList .istoreAllPrice th,#iStoreOrder table#iStoreBasketList #iStoreBasketSummary th{text-transform:uppercase;
+	background: #eeeeee;border: 1px solid #e4e4e4;
+}
+#iStoreOrder table#iStoreBasketList h3 {background: none;
+}
+
+#iStoreOrder table#iStoreBasketList h3.title {float:none;padding:0;text-transform:none;clear:none;line-height:18px;left:0;position:static;margin-bottom:0;width:auto !important}
+#iStoreOrder table#iStoreBasketList h3.title a {text-decoration:underline;color: #21529c;}
+#iStoreOrder table#iStoreBasketList .iStoreProductCosts{line-height:100%;font-family:tahoma,arial,sans-serif;}
+#iStoreOrder table#iStoreBasketList tfoot .iStoreProductCosts,#iStoreOrder table#iStoreBasketList .istoreAllPrice .iStoreProductCosts{width:95px;display:inline-block;}
+#iStoreOrder table#iStoreBasketList .couponErrorMessage{font-weight:normal;padding-top:5px;display:block;}
+#iStoreOrder table#iStoreBasketList .iStoreProductImage{margin-right:10px;float:left;clear:none;height:auto;width:auto;position:static;overflow:visible;}
+#iStoreOrder table#iStoreBasketList .iStoreProductImage a{text-align:center;padding:0;border:1px solid #ccc;display:block;overflow:visible;float:none;width:102px;height:75px;}
+#iStoreOrder table#iStoreBasketList .iStoreProductImage a img{text-align:center;vertical-align:middle; max-width:100%;overflow:visible;position:static;display:block;background:transparent;margin:auto;}
+#iStoreOrder table#iStoreBasketList .iStoreProductPrice,#iStoreOrder table#iStoreBasketList .iStoreProductCount,#iStoreOrder table#iStoreBasketList .iStoreBasketSummary,#iStoreOrder table#iStoreBasketList #iStoreBasketSummary,#iStoreOrder table#iStoreBasketList .iStorePrice{white-space:nowrap;
+}
+table#iStoreBasketList #iStoreBasketSummary td {
+background: #eee;
+}
+
+#iStoreOrder #basket input{margin:0; padding:1px 0 1px 3px;line-height:100%;vertical-align:middle;font-weight:normal;
+
+}
+
+table#iStoreBasketList {
+	clear: both;
+}
+
+table#iStoreBasketList thead th {
+	text-align: left;
+	border: 1px solid #e4e4e4;
+	background: #eeeeee;
+	font-weight: bold;
+}
+
+table#iStoreBasketList tbody td {
+	text-align: right;
+	vertical-align: top;
+	padding: 10px 5px;
+	border: 1px solid #e4e4e4;
+}
+
+table#iStoreBasketList tbody td.iStoreProduct {
+	text-align: left;
+}
+
+table#iStoreBasketList tbody td.iStoreProductCount {
+	text-align: left;
+}
+table#iStoreBasketList tfoot td{
+border: 1px solid #e4e4e4;
+}
+table#iStoreBasketList tfoot th{
+border: 1px solid #e4e4e4;
+}
+table#iStoreBasketList tfoot th {
+	text-align: right;
+	font-weight: bold;
+	background: none;
+	vertical-align: middle;
+	padding: 2px 20px;
+
+}
+
+table#iStoreBasketList tfoot td {
+	vertical-align: middle;
+	text-align: right;
+	padding: 2px 5px;
+}
+
+form table#iStoreBasketList tbody td.iStoreProduct .iStoreProductImage {
+	height: auto;
+	float: left;
+}
+
+form table#iStoreBasketList tbody td.iStoreProduct h3,
+form table#iStoreBasketList tbody td.iStoreProduct div.description {
+	margin-bottom: 0;
+	clear: none !important;
+	float: left;
+	width: 210px !important;
+}
+
+
+#iStoreShopNewsletter .text label {
+	text-align: left;
+	width: auto;
+}
+
+table#iStoreBasketList tbody tr#iStoreBasketSummary span.iStorePrice {
+	color: #941C13!important;
+}
+
+#iStoreBasketSummary .iStorePrice strong {
+  font-weight:bold;
+  color: #535353;
+  font-size: 15pt;
+}
+#iStoreContent #iStoreBasket label {
+  line-height:18px;
+  vertical-align:middle;
+  font-size:12px;
+}
+#iStoreOrder label.prezent2 {
+  background: url("https://img.istore.pl/css/client5/version1/skins/common/icon-gift.png") no-repeat 30px center !important;
+  padding: 4px 0 4px 60px;
+  overflow:hidden;
+  position:relative;  
+}
+#iStoreOrder label.prezent2 input {
+  position:absolute;
+  top:3px;
+  left:0;
+  vertical-align:middle;
+}
+
+
+
+
+form div.iStorePaymentMethods {overflow:hidden;}
+form div.iStorePaymentMethods div.radio { width: 125px;	height: 50px; margin: 0 30px 10px 0; float: left;	clear: none; display:inline /*ie6 */; }
+form div.iStorePaymentMethods div.radio label {display: block;width: 100px;	height: 50px;	margin: 0;	padding: 0;	float: right;	clear: none;	background: #ff0;}
+form div.iStorePaymentMethods div.radio input{margin-top:17px; float:left;}
+
+form div.iStorePaymentMethods div.radio label span {display: none;}
+
+form div.iStorePaymentMethods div.PaymentServiceTypeId-meritum label        {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -300px -50px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-bank_pocztowy label  {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -300px -100px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-getin_bank label     {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -300px -200px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-eurobank label       {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -200px -250px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-invest_bank label    {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -300px -150px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-bank-bph label       {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat 0 0;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-ing label            {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -200px 0;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-przelew24 label      {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -100px 0;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-inteligo label       {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat 0 -50px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-mtransfer label      {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -100px -50px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-multi-transfer label {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -200px -50px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-nordea label         {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat 0 -100px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-pekao24 label        {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -100px -100px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-place-z-pko label    {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -200px -100px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-lukas-e-przelew label{background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat 0 -150px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-bank_bgz label       {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -100px -150px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-raifeissen-bank label{background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -100px -250px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-polbank-efg label    {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat 0 -250px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-milenium label       {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -200px -200px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-kredyt-bank label    {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -100px -200px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-deutsche-bank label  {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat 0 -200px; }
+form div.iStorePaymentMethods div.PaymentServiceTypeId-citi-handlowy label  {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -200px -150px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-paypal label         {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -300px 0; }
+form div.iStorePaymentMethods div.PaymentServiceTypeId-Ex-zagiel label      {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -400px -350px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-test label           {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat 0 -300px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-alior label          {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -300px -250px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-transfer label       {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci.gif') no-repeat -100px -300px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-karta_kredytowa label{background:#fff url('img/icons/platnosci.gif') no-repeat -400px -300px;}
+
+/* Te reguly sa nadpisywane przez reguly znajdujace sie w pliku CSS z kolorami. Te reguly maja zastosowanie gdy nie jest pobierany CSS z kolorami. */
+form div.iStorePaymentMethods div.PaymentServiceTypeId-pobranie label       {background:url('img/icons/platnosci.gif') no-repeat -400px -150px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-odbior_osobisty label{background:url('img/icons/platnosci.gif') no-repeat -400px -98px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-Ex-punkty label      {background:url('img/icons/platnosci.gif') no-repeat -400px -250px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-Ex-raty label        {background:url('img/icons/platnosci.gif') no-repeat -400px 0;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-przelew_bankowy label{background:url('img/icons/platnosci.gif') no-repeat -400px -200px;}
+/**/
+
+/*disable-grey*/
+form div.iStorePaymentMethods div.PaymentServiceTypeId-meritum-disable label        {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -300px -50px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-bank_pocztowy-disable label  {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -300px -100px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-getin_bank-disable label     {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -300px 200px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-eurobank-disable label       {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -200px -250px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-invest_bank-disable label    {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -300px -150px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-bank-bph-disable label       {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat 0 0;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-ing-disable label            {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -200px 0;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-przelew24-disable label      {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -100px 0;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-inteligo-disable label       {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat 0 -50px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-mtransfer-disable label      {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -100px -50px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-multi-transfer-disable label {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -200px -50px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-nordea-disable label         {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat 0 -100px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-pekao24-disable label        {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -100px -100px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-place-z-pko-disable label    {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -200px -100px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-lukas-e-przelew-disable label{background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat 0 -150px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-bank_bgz-disable label       {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -100px -150px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-raifeissen-bank-disable label{background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -100px -250px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-polbank-efg-disable label    {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat 0 -250px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-milenium-disable label       {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -200px -200px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-kredyt-bank-disable label    {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -100px -200px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-deutsche-bank-disable label  {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat 0 -200px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-citi-handlowy-disable label  {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -200px -150px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-paypal-disable label         {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -300px 0;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-Ex-zagiel-disable label      {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -400px -350px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-test-disable label           {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat 0 -300px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-alior-disable label          {background:#fff url('https://img.istore.pl/css/client5/version1/skins/common/platnosci_grey.gif') no-repeat -300px -250px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-karta_kredytowa-disable label{background:#fff url('img/icons/platnosci_grey.gif') no-repeat -400px -300px;}
+
+form div.iStorePaymentMethods div.PaymentServiceTypeId-pobranie-disable label       {background:url('img/icons/platnosci_grey.gif') no-repeat -400px -150px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-odbior_osobisty-disable label{background:url('img/icons/platnosci_grey.gif') no-repeat -400px -100px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-Ex-punkty-disable label      {background:url('img/icons/platnosci_grey.gif') no-repeat -400px -250px;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-Ex-raty-disable label        {background:url('img/icons/platnosci_grey.gif') no-repeat -400px 0;}
+form div.iStorePaymentMethods div.PaymentServiceTypeId-przelew_bankowy-disable label{background:url('img/icons/platnosci_grey.gif') no-repeat -400px -200px;}
+/**/
+
+form div.iStorePaymentMethods div.PaymentServiceTypeId-Ex-punkty,
+form div.iStorePaymentMethods div.PaymentServiceTypeId-Ex-raty,
+form div.iStorePaymentMethods div.PaymentServiceTypeId-pobranie,
+form div.iStorePaymentMethods div.PaymentServiceTypeId-odbior_osobisty,
+form div.iStorePaymentMethods div.PaymentServiceTypeId-przelew_bankowy
+{width:165px;margin-right:0;}
+
+form div.iStorePaymentMethods div.PaymentServiceTypeId-Ex-punkty label,
+form div.iStorePaymentMethods div.PaymentServiceTypeId-Ex-raty label,
+form div.iStorePaymentMethods div.PaymentServiceTypeId-pobranie label,
+form div.iStorePaymentMethods div.PaymentServiceTypeId-odbior_osobisty label,
+form div.iStorePaymentMethods div.PaymentServiceTypeId-przelew_bankowy label
+{width:140px; margin-right:0; font-size:10px; line-height:12px; margin-left:25px;}
+
+form div.iStorePaymentMethods div.PaymentServiceTypeId-Ex-punkty label span,
+form div.iStorePaymentMethods div.PaymentServiceTypeId-Ex-raty label span,
+form div.iStorePaymentMethods div.PaymentServiceTypeId-pobranie label span,
+form div.iStorePaymentMethods div.PaymentServiceTypeId-odbior_osobisty label span,
+form div.iStorePaymentMethods div.PaymentServiceTypeId-przelew_bankowy label span
+{display:block; padding:10px 0 10px 50px; margin-top:5px;}
+
+
+form .packAsGift label.prezent2 {font-size: 12px; color:#222; margin-left:7px; padding: 2px 25px 5px 25px;}
+
+
+#iStoreContent form div.packAsGift p.info {margin-left:4px; }
+
+#orderData + div.checkbox {padding:0 0 10px 0; }
+#orderData + div.checkbox label {font-size:11px; color:#222; }
+#orderData + div.checkbox label a {font-size:11px; }
+
+
+/* =========================== iStoreStatusBar ============================ */
+#iStoreStatusBar {position:absolute;  width: 250px; z-index: 9999; left:330px; }
+#iStoreStatusBar ul#iStoreStatusMenu ul {margin:0; float:left;}
+#iStoreStatusBar ul#iStoreStatusMenu li {list-style:none; list-style-image:none; margin-left:0; }
+#iStoreStatusBar ul#iStoreStatusMenu span {float:left; padding:3px 0;}
+#iStoreStatusBar ul#iStoreStatusMenu a {float:left; }
+
+#iStoreStatusBar ul#iStoreStatusMenu #iStoreStatusMenuLogout {  
+  position: relative;
+  top: 2px;
+  left: 200px;
+  float: right;
+  width: 260px;
+  margin-right: 0px;
+  clear: none;
+
+  }
+  
+  
+#iStoreStatusBar ul#iStoreStatusMenu #iStoreStatusMenuLogout a {   float: none;
+  font-size: 100%;
+  line-height: 110%;
+  text-decoration: none;
+  text-align: center;
+  color: #555;
+  font-weight: bold;
+}
+
+#iStoreStatusBar ul#iStoreStatusMenu #iStoreStatusMenuRegister {  
+  position: relative;
+  top: -10px;
+  clear: none;
+  left: 300px;
+  float: right;
+  width: 260px;
+  margin-right: 0px;
+  }
+  
+#iStoreStatusBar ul#iStoreStatusMenu #iStoreStatusMenuRegister a {   float: none;
+  font-size: 100%;
+  line-height: 110%;
+  text-decoration: none;
+  text-align: center;
+  color: #555;
+  font-weight: bold;
+}
+
+
+#iStoreStatusBar ul#iStoreStatusMenu #iStoreStatusMenuLanguage { float:right; height:20px; text-align:right; padding-right:0px;
+font-size: 100%;
+  line-height: 110%;
+  text-decoration: none;
+  text-align: center;
+  color: #555;
+  font-weight: bold;}
+#iStoreStatusBar ul#iStoreStatusMenu #iStoreStatusMenuLanguage ul {float:left;}
+#iStoreStatusBar ul#iStoreStatusMenu #iStoreStatusMenuLanguage ul li {border-left:none; float:left; list-style:none; list-style-image:none; margin-left:0;}
+#iStoreStatusBar ul#iStoreStatusMenu #iStoreStatusMenuLanguage a {background-repeat:no-repeat; width:16px; height:11px; border:1px solid #c4c4c4; padding:1px; background-position: 50% 50%;  margin: 0 4px 0 3px; }
+#iStoreStatusBar ul#iStoreStatusMenu #iStoreStatusMenuProfile {float:left; overflow:hidden;
+margin-top: -80px;
+width: 600px;
+color: #fff;
+}
+
+#iStoreStatusBar ul#iStoreStatusMenu #iStoreStatusMenuProfile span {
+padding-right: 10px;
+
+}
+
+#iStoreStatusMenuLanguage {overflow:hidden; height:20px; position:absolute; top:2px; right:150px; }
+#iStoreStatusMenuLanguage ul{overflow:hidden; height:20px; float:left; margin-left:0;}
+#iStoreStatusMenuLanguage ul li.langPL a, li.langPL a { background-image: url('http://www.wypasionastrona.pl/powermode/istore/pl.png'); }
+#iStoreStatusMenuLanguage ul li.langEN a, li.langEN a { background-image: url('http://www.wypasionastrona.pl/powermode/istore/en.png'); }
+#iStoreStatusMenuLanguage ul li.langDE a, li.langDE a {	background-image: url(img/icons/flags/de.png); }
+#iStoreStatusMenuLanguage ul li.langRU a, li.langRU a { background-image: url(img/icons/flags/ru.png); }
+#iStoreStatusMenuLanguage ul li.langCZ a, li.langCZ a { background-image: url(img/icons/flags/cz.png); }
+#iStoreStatusMenuLanguage ul li.langSK a, li.langSK a {	background-image: url(img/icons/flags/sk.png); }
+
+#iStoreStatusMenuLanguage a span {display:none;}
+#iStoreStatusMenuLanguage span {text-transform:capitalize; color: #ccc; display: none;}
+
+#iStoreStatusBar ul#iStoreStatusMenu #iStoreStatusMenuCurrency {padding-top:0px; float:left; width:155px; clear:right; height:20px; position:absolute; top:2px; left:110px; font-size:11px; color: #fff;}
+#iStoreStatusBar ul#iStoreStatusMenu li#iStoreStatusMenuCurrency a {margin-left:5px; font-weight:bold; color: #c4c4c4}
+#iStoreStatusBar ul#iStoreStatusMenu li#iStoreStatusMenuCurrency a:hover {margin-left:5px; font-weight:bold; color: #fff;}
+
+
+
+/* =============================== iStoreBox ==============================
+
+
+ /* Komunikaty - Powiadomienia i błędy  */
+#iStoreContent .iStoreMessageBox {
+	margin: 15px -px 12px px;
+  width:860px;
+}
+#iStoreContent .iStoreMessageBox  {
+  color:#fff;
+}
+#iStoreContent .iStoreErrorBox {
+  border:1px solid #db0303;
+  /* css3 gradient */
+  background: #a11a1a; /* when css3 gradient not working */ 
+  background-image: linear-gradient(top, #a11a1a 25%, #db0303 75%);
+  background-image: -o-linear-gradient(top, #a11a1a 25%, #db0303 75%);
+  background-image: -moz-linear-gradient(top, #a11a1a 25%, #db0303 75%);
+  background-image: -webkit-linear-gradient(top, #a11a1a 25%, #db0303 75%);
+  background-image: -webkit-gradient(linear,left top, left bottom,	color-stop(0.25, #a11a1a),	color-stop(0.75, #db0303));
+  background-image:-ms-linear-gradient(top , #a11a1a 25%, #db0303 75%); /* IE10 */
+  filter: progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#a11a1a', endColorstr='#db0303') /* IE6 & IE7 */;
+  -ms-filter: "progid:DXImageTransform.Microsoft.gradient(GradientType=0,startColorstr='#a11a1a', endColorstr='#db0303')" /* IE8 */;
+}
+#iStoreContent .iStoreErrorBox .iStoreBoxContent {
+  background: url('http://www.wypasionastrona.pl/multiprofit/istore/ico_error.png') 15px center no-repeat; 
+}
+
+
+#iStoreContent .iStoreInfoBox {
+
+}
+
+#iStoreContent #iStoreOrder .iStoreMessageBox {
+  width:860px;
+
+} 
+
+#iStoreContent #dynamic2 .iStoreMessageBox {
+	padding: 5px;
+}
+#iStoreContent .iStoreMessageBox .iStoreBoxWrapper{
+ padding-top:0;
+ 
+}
+#iStoreContent .iStoreMessageBox .iStoreBoxContent {
+	border: none;
+	padding: 12px 20px 13px 20px;
+	min-height: 51px;
+  width: 700px;
+  color: #5e5e5e;
+}
+#iStoreContent .iStoreMessageBox h3 {
+	font-size: 15px;
+	line-height: 18px;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	text-transform: uppercase;
+	color: #3a3a3a;
+}
+#iStoreContent .iStoreMessageBox p {
+	font-size: 11px;
+	line-height: 14px;
+	margin: 4px 0
+}
+#iStoreContent .iStoreMessageBox ul {
+	margin: 0;
+}
+#iStoreContent .iStoreMessageBox ul li {
+	list-style: none;
+	list-style-image: none;
+	color: #fff;
+}
+
+#iStoreSidebar .iStoreBox .iStoreBoxWrapper {
+	background: #none;
+	width: 265px;
+}
+
+/* global sidebar */
+/* #iStoreSidebar h2 {font-size:17px; text-transform:uppercase; line-height:30px; padding:0 0 0 20px; margin:0;} 
+#iStoreSidebar .iStoreBoxHeader {color:#fff;} */
+
+
+
+#iStoreSidebar .jcarousel-clip .iStoreProductCosts {width:140px;}
+.jcarousel-prev, .jcarousel-next {display:block; width:30px;	height:47px; cursor:pointer; position:absolute; left:-9px;	z-index:1000;}
+.jcarousel-prev {	left:222px;	background: url("http://www.wypasionastrona.pl/powermode/istore/lewa.png") no-repeat center center;
+}
+
+.jcarousel-prev-vertical, .jcarousel-next-vertical {
+display:block; width:47px;	height:30px; cursor:pointer; position:absolute; left:-9px;	z-index:1000;
+}
+
+.jcarousel-prev b, .jcarousel-next b {display:none;}
+
+
+
+.iStoreProductImage a img {
+width: auto;
+
+}
+
+
+
+
+
+/* PromotionsBox*/
+#iStoreSidebar #iStorePromotedProducts  {
+width: 282px;
+}
+#iStoreSidebar #iStorePromotedProducts .iStoreBoxHeader  {
+ display: block;
+ width: 253px;
+ padding-left: 20px;
+ padding-top: 15px;
+ padding-right: 12px;
+ padding-bottom: 18px;
+ background: url('http://static.istore.pl/istore/22649/files/18783008.png') no-repeat;
+ font-size: 10pt;
+ color: #fff;
+ text-transform: uppercase;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+}
+#iStoreSidebar #iStorePromotedProducts ul {
+margin: 0;
+}
+#iStoreSidebar #iStorePromotedProducts li {
+list-style: none;
+width: 263px;
+margin-left: 9px;
+ /* tlo promocji */
+background: url('http://static.istore.pl/istore/22649/files/18783174.png') no-repeat;	
+height: 250px;
+
+
+}
+
+#iStoreSidebar #iStorePromotedProducts .iStoreBoxFooter li {
+background: none;
+height: 25px;
+border: none;
+width: 282px;
+}
+#iStoreSidebar #iStorePromotedProducts .iStoreBoxFooter a {
+color: #8a8a8a;
+font-weight: bold;
+}
+
+
+#iStoreSidebar #iStorePromotedProducts .iStoreProductImage {
+position: relative;
+left: 85px;
+top: -25px;
+height: 75px;
+
+}
+#iStoreSidebar #iStorePromotedProducts strong.iStoreProductIsPromoted {
+	display: none;
+}
+#iStoreSidebar #iStorePromotedProducts .iStoreProductCosts {
+  width: 220px;
+  float: right;
+  margin-bottom: 15px;
+  text-align: center;
+  
+  
+}
+.iStorePrice strong {
+
+}
+
+
+#iStoreSidebar #iStorePromotedProducts .iStoreProductContent .title {
+height: 50px;
+width: 248px;
+text-align: center;
+}
+
+#iStoreSidebar #iStorePromotedProducts li div.iStoreProduct h3 a{
+text-align: center;
+color: #2c2c2c!important;
+font-size: 12pt;
+top: 110px;
+
+}
+
+#iStoreSidebar #iStorePromotedProducts .iStoreProductCosts del {
+	font-size: 12px;
+	float: left;
+	color: #fff!important;
+		
+}
+
+#iStoreSidebar #iStorePromotedProducts .iStoreProductPurchase {
+  width: 260px;
+  margin-top: 42px;
+}
+
+#iStoreSidebar #iStorePromotedProducts .iStorePrice {
+color: #4a0b00;
+margin-left: 0px;
+font-size: 15pt;
+
+}
+
+#iStoreSidebar #iStorePromotedProducts .iStoreAddToBasket {
+clear: both;
+margin-right: 45px;
+position: relative;
+top: -3px;
+}
+
+#iStoreSidebar #iStorePromotedProducts .iStoreBoxContent {
+  width:240px;
+    margin-left: 0px;
+    margin-top: 5px;
+} 
+
+
+
+#iStoreSidebar #iStorePromotedProducts .iStoreProductCosts del strong{font-weight:bold; color: #fff;}
+
+#iStoreSidebar strong.iStoreProductIsPromoted {display:none;}
+
+
+#iStoreSidebar #iStorePromotedProducts  .jcarousel-clip .iStoreAddToBasket span .warning { 
+text-align: center;
+width: 260px;
+font-size: 12pt;
+}
+
+
+
+#iStoreSidebar #iStorePromotedProducts  .jcarousel-clip .iStoreAddToBasket { 
+position: relative;
+}
+
+#iStoreSidebar #iStorePromotedProducts .jcarousel-clip  h3 a { 
+
+
+
+}
+
+#iStoreSidebar #iStorePromotedProducts li .jcarousel-clip .iStoreProductPurchase {height:65px;
+}
+
+#iStoreSidebar #iStorePromotedProducts .jcarousel-clip {
+	overflow: hidden;
+	width: 282px!important;
+  z-index:990;
+  height: 250px!important;
+margin-bottom: 14px;
+  margin-top: 25px;
+  margin-bottom: 35px;
+	
+}
+
+
+
+
+li.jcarousel-item .jcarousel-item-vertical {
+ height: 250px!important;
+}
+
+#iStoreSidebar #iStorePromotedProducts .jcarousel-prev, #iStoreSidebar #iStorePromotedProducts .jcarousel-next {
+top:159px;
+}
+
+#iStoreSidebar #iStorePromotedProducts .jcarousel-prev {
+left:2px;	background: url("http://static.istore.pl/istore/22649/files/18781020.png") no-repeat center center;
+
+}
+
+
+ #iStoreSidebar #iStorePromotedProducts .jcarousel-next {
+left:225px;	background: url("http://static.istore.pl/istore/22649/files/18782147.png") no-repeat center center;
+}
+
+
+#iStoreSidebar #iStorePromotedProducts .jcarousel-prev-vertical, #iStoreSidebar #iStorePromotedProducts .jcarousel-next-vertical { }
+#iStoreSidebar #iStorePromotedProducts .jcarousel-prev-vertical {
+background: url("http://static.istore.pl/istore/22649/files/18780627.png") no-repeat center center;
+left: 110px;
+top: 50px;
+}
+#iStoreSidebar #iStorePromotedProducts .jcarousel-next-vertical {
+background: url("http://static.istore.pl/istore/22649/files/18780552.png ") no-repeat center center;
+left: 110px;
+top: 330px!important;
+}
+
+
+/*NewProductsBox*/
+
+#iStoreSidebar #iStoreNewProducts  {
+width: 282px;
+}
+#iStoreSidebar #iStoreNewProducts .iStoreBoxHeader  {
+ display: block;
+ width: 253px;
+ padding-left: 20px;
+ padding-top: 15px;
+ padding-right: 12px;
+ padding-bottom: 18px;
+ background: url('http://static.istore.pl/istore/22649/files/18782916.png') no-repeat;
+ font-size: 10pt;
+ color: #fff;
+ text-transform: uppercase;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+}
+#iStoreSidebar #iStoreNewProducts ul {
+margin: 0;
+}
+#iStoreSidebar #iStoreNewProducts li {
+list-style: none;
+width: 263px;
+margin-left: 9px;
+ /* tlo promocji */
+background: url('http://static.istore.pl/istore/22649/files/18783052.png') no-repeat;	
+height: 250px;
+
+}
+
+#iStoreSidebar #iStoreNewProducts .iStoreBoxFooter li {
+background: none;
+
+height: 25px;
+border: none;
+width: 282px;
+}
+#iStoreSidebar #iStoreNewProducts .iStoreBoxFooter a {
+color: #8a8a8a;
+font-weight: bold;
+}
+
+
+#iStoreSidebar #iStoreNewProducts .iStoreProductImage {
+position: relative;
+left: 85px;
+top: -25px;
+height: 75px;
+}
+#iStoreSidebar #iStoreNewProducts strong.iStoreProductIsPromoted {
+	display: none;
+}
+#iStoreSidebar #iStoreNewProducts .iStoreProductCosts {
+  width: 220px;
+  float: right;
+  margin-bottom: 15px;
+  text-align: center;
+  
+  
+}
+
+
+#iStoreSidebar #iStoreNewProducts .iStoreProductContent .title {
+height: 50px;
+width: 248px;
+text-align: center;
+}
+
+#iStoreSidebar #iStoreNewProducts li div.iStoreProduct h3 a{
+text-align: center;
+color: #2c2c2c!important;
+font-size: 12pt;
+top: 110px;
+
+}
+
+#iStoreSidebar #iStoreNewProducts .iStoreProductCosts del {
+	font-size: 12px;
+	float: left;
+	color: #fff!important;
+		
+}
+
+#iStoreSidebar #iStoreNewProducts .iStoreProductPurchase {
+  width: 260px;
+  margin-top: 42px;
+}
+
+#iStoreSidebar #iStoreNewProducts .iStorePrice {
+color: #e3e3e3;
+margin-left: 0px;
+font-size: 15pt;
+
+}
+
+#iStoreSidebar #iStoreNewProducts .iStoreAddToBasket {
+clear: both;
+margin-right: 45px;
+position: relative;
+top: -3px;
+}
+
+#iStoreSidebar #iStoreNewProducts .iStoreBoxContent {
+  width:240px;
+    margin-left: 0px;
+    margin-top: 5px;
+} 
+
+
+
+#iStoreSidebar #iStoreNewProducts .iStoreProductCosts del strong{font-weight:bold; color: #fff;}
+
+#iStoreSidebar strong.iStoreProductIsNew {display:none;}
+
+
+
+#iStoreSidebar #iStoreNewProducts  .jcarousel-clip .iStoreAddToBasket { 
+position: relative;
+}
+
+#iStoreSidebar #iStoreNewProducts .jcarousel-clip  h3 a { 
+
+
+
+}
+
+#iStoreSidebar #iStoreNewProducts li .jcarousel-clip .iStoreProductPurchase {height:65px;
+}
+
+#iStoreSidebar #iStoreNewProducts .jcarousel-clip {
+	overflow: hidden;
+	width: 282px!important;
+  z-index:990;
+  height: 250px!important;
+margin-bottom: 14px;
+  margin-top: 25px;
+  margin-bottom: 35px;
+	
+}
+
+
+
+#iStoreSidebar #iStoreNewProducts .jcarousel-prev, #iStoreSidebar #iStoreNewProducts .jcarousel-next {
+top:159px;
+}
+
+#iStoreSidebar #iStoreNewProducts .jcarousel-prev {
+left:2px;	background: url("http://static.istore.pl/istore/22649/files/18781020.png") no-repeat center center;
+
+}
+
+
+ #iStoreSidebar #iStoreNewProducts .jcarousel-next {
+left:225px;	background: url("http://static.istore.pl/istore/22649/files/18782147.png") no-repeat center center;
+}
+
+
+#iStoreSidebar #iStoreNewProducts .jcarousel-prev-vertical, #iStoreSidebar #iStoreNewProducts .jcarousel-next-vertical { }
+#iStoreSidebar #iStoreNewProducts .jcarousel-prev-vertical {
+background: url("http://static.istore.pl/istore/22649/files/18780627.png") no-repeat center center;
+left: 110px;
+top: 50px;
+}
+#iStoreSidebar #iStoreNewProducts .jcarousel-next-vertical {
+background: url("http://static.istore.pl/istore/22649/files/18780552.png ") no-repeat center center;
+left: 110px;
+top: 330px!important;
+}
+
+
+
+
+
+#iStoreSidebar .iStoreBoxFooter ul {
+	margin: 0 7px;
+  padding:8px 0;
+  height: 30px;
+}
+#iStoreSidebar .iStoreBoxFooter ul li {
+	margin: 0;
+	padding: 0;
+  text-align:center;
+}
+
+#iStoreSidebar .iStoreBoxFooter ul li a {
+color: #fff;
+font-size: 10pt;
+}
+
+
+
+
+
+/* NewsletterBox */
+#iStoreSidebar #iStoreShopNewsletter {overflow:hidden;}
+#iStoreSidebar #iStoreNewsletterBox  input#toadres {  clear:left; height:17px; border:1px solid #c9c9c9; background: #ffffff url(img/bg_input.gif) top left repeat-x; width:180px; display:block;}
+#iStoreShopNewsletterToAddress {padding-left:0; margin-bottom:0; overflow:visible}
+#iStoreShopNewsletterToAddress label {line-height:25px; clear:right;}
+#iStoreShopNewsletterToAddress button {float:right; margin:4px 0px 0 0; clear:left;}
+#iStoreShopNewsletterStatus { padding-top:8px;}
+#iStoreShopNewsletterStatus input {margin-left:0;}
+
+/* BannerBox */
+#iStoreSidebar #iStoreBannerBlock { padding:5px 0 5px 0;}
+#iStoreSidebar #iStoreBannerBlock .iStoreBoxContent{padding:5px 0; }
+#blockBanners {text-align:center;  width:280px; overflow:hidden;}
+/* ============================== iStoreTabs ============================== */
+
+
+
+
+#iStoreContent #iStoreMyAccount .iStoreTabs {
+width: 880px!important;
+}
+#iStoreContent #iStoreMyAccount .iStoreBoxContent {
+width: 880px;
+position: relative;
+top: -15px;
+}
+
+#iStoreContent  .iStoreTabs {
+	width: 880px;
+	overflow: hidden;
+	 background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x;
+	border-top-right-radius: 5px;
+	border-top-left-radius: 5px;
+}
+#iStoreContent #iStoreTabsContainer {
+  position:relative;
+  margin-bottom:-2px;  
+}
+
+#dynamic2 .iStoreBoxContent {
+color: #000!important;
+
+}
+
+
+#iStoreContent #iStoreTabsContainer .iStoreTabs {
+	margin: 2px 2px;
+}
+#iStoreContent .iStoreTabs li {
+	height: 29px;
+	float: left;
+	margin: 0 6px 0 0;
+	list-style: none;
+	list-style-image: none;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+
+}
+#iStoreContent .iStoreTabs li a {
+	height: 20px;
+	display: block;
+	color: #fff;
+	text-decoration: none;
+	text-transform: uppercase;
+	font-weight: bold;
+	padding: 9px 15px 0 15px;
+	font-size: 11px;
+	
+}
+#iStoreContent .iStoreTabs li.selected {
+	height: 30px;
+	background: #fff;
+	border: 1px solid #e3e3e3;
+	border-bottom: none;
+}
+#iStoreContent .iStoreTabs li.selected a {
+	color: #3a3a3a;
+}
+
+#iStoreProductLongDescription .iStoreBoxContent{
+  float: left;
+  color: #000!important;
+  margin-left: 2px;
+  padding: 10px!important;
+  
+}
+
+
+#dynamic2 {
+/* background: #e3e3e3 url('http://static.istore.pl/istore/22649/files/18782500.png') repeat-x bottom; */
+background: #fff;
+width: 880px;
+border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+border: 1px solid #e3e3e3;
+border-top: none;
+}
+
+#dynamic2 .iStoreBoxWrapper {
+	overflow: hidden;
+
+}
+#dynamic2 .iStoreBox {
+}
+
+#dynamic2 div div.iStoreBoxContent {
+	padding: 10px;
+	font-size: 11px;
+	line-height: 130%;
+border: 1px solid e3e3e3;
+}
+#dynamic2 div div.iStoreBoxContent p {
+	margin: 5px 0;
+}
+#dynamic2 div#iStoreProductsList div.iStoreBoxContent {
+	padding: 15px;
+}
+div#iStoreContent #dynamic2 div.displayAsTiles div.iStoreBoxContent ul.iStoreProducts {
+float: right;
+  width:880px;
+  position:relative;
+
+}
+
+
+
+  .iStoreBoxContent #iStoreAddCommentButton {padding:0; overflow:hidden;}
+  .iStoreBoxContent #iStoreAddCommentButton button {
+  background: #3a3a3a;
+  }
+ .iStoreBoxContent #iStoreAddCommentButton p {margin-left:0;}
+
+
+
+/*opinie */
+div#iStoreComments .iStoreBoxToolbar {
+background: #f1f1f1;
+color: #000;
+
+}
+div#iStoreComments div.iStoreBoxContent{padding-right:0;}
+
+
+
+#iStoreContent  #iStoreComments .iStoreBoxHeader h2{
+background: #f1f1f1!important;
+color: #000; 
+padding: 10px;
+position: relative;
+left: 20px!important;
+}
+
+div#iStoreComments .iStoreBoxToolbar {padding-top:5px;}
+div#iStoreComments .iStoreBoxToolbar ul li {list-style:none; list-style-image:none; float:left; }
+
+#iStoreContent ul#iStoreUserCommentScoreStats {margin-left:0; width:190px; float:left; overflow:hidden; list-style:none; list-style-image:none;}
+#iStoreContent ul#iStoreUserCommentScoreStats li{list-style:none; list-style-image:none;}
+#iStoreContent ul#iStoreUserCommentScoreStats li span {line-height:26px;}
+#iStoreUserCommentAverageScore {overflow: hidden; }
+
+
+#iStoreComments.iStoreBox .iStoreBoxHeader h2 {
+width: 810px;
+margin-top: 10px;
+background: none;
+}
+
+#iStoreUserCommentListBlock {padding-top:15px; clear:left; overflow: hidden;background: none;}
+#iStoreContent #iStoreUserCommentListBlock ul.iStoreUserCommentList { margin:0; }
+
+li.iStoreUserComment  {padding:10px 0; list-style:none; list-style-image:none; overflow: hidden; margin:0 10px;}
+li.iStoreUserComment div.Score {float:left;}
+div#iStoreComments .iStoreBoxContent li.iStoreUserComment h3  {border:0; float:left; margin:0; clear:none; background:transparent; padding:8px 8px 8px 0;}
+
+li.iStoreUserComment p.iStoreUserCommentContent {overflow:hidden; clear:left; font-size:11px; padding: 4px; background: #f4f4f4; border-radius: 5px}
+div#iStoreContent ul.iStoreUserCommentList li.iStoreUserComment p {margin-right:0}
+
+#iStoreContent #iStoreUserCommentListBlock .commentsProsConsToggler {margin:10px 0 10px 0}
+.commentsProsConsHide { padding-left:20px; background: url(img/ico_minus.gif) 0 0 no-repeat; font-weight:bold; text-transform:uppercase; text-decoration:underline;}
+.commentsProsConsShow { padding-left:20px; background: url(img/ico_plus.gif) 0 0 no-repeat; font-weight:bold; text-transform:uppercase; text-decoration:underline;}
+
+.iStoreBoxContent .iStoreUserCommentCons , .iStoreBoxContent .iStoreUserCommentPros{margin:0; overflow: hidden; padding:5px 0}
+.iStoreBoxContent .iStoreUserCommentCons h4, .iStoreBoxContent .iStoreUserCommentPros h4 {float:left; margin:0 15px; width:60px; font-size:11px;}
+.iStoreBoxContent .iStoreUserCommentCons span, .iStoreBoxContent .iStoreUserCommentPros span  {overflow: hidden; padding:0 15px 0 0; display:block;}
+
+/*iStoreUserCommentBest*/
+div#iStoreComments .iStoreBoxContent li#iStoreUserCommentBest {overflow:hidden; background:#e8e7e7; padding:0 0 30px 0; border:0; float:right; position:relative; width:285px; margin:15px 0 0 15px;}
+div#iStoreComments .iStoreBoxContent li#iStoreUserCommentBest .iStoreUserCommentContent {margin:5px 15px;}
+div#iStoreComments .iStoreBoxContent li#iStoreUserCommentBest .iStoreUserCommentData {margin:0px 15px; position:absolute; bottom:2px; left:0;}
+div#iStoreComments .iStoreBoxContent li#iStoreUserCommentBest h3 {border:none; width:255px; padding:8px 15px; float:none;}
+div#iStoreComments .iStoreBoxContent li#iStoreUserCommentBest h4 {font-size:14px; margin:20px 5px 10px 15px;}
+div#iStoreComments .iStoreBoxContent li#iStoreUserCommentBest div.Score {padding-left:9px; width:277px; }
+div#iStoreComments .iStoreBoxContent li#iStoreUserCommentBest div.Score strong {margin-left:5px;}
+div#iStoreComments .iStoreBoxContent li#iStoreUserCommentBest p.iStoreUserCommentData em{white-space:nowrap;}
+
+div#iStoreComments .iStoreBoxContent p.iStoreUserCommentData {
+color: #438100;
+font-weight: bold;
+}
+
+#iStoreAddComment fieldset {margin-top:0; border-bottom:1px solid #BFBFBF}
+#iStoreAddComment fieldset h3{margin-top:0; padding-top:8px; float:left;}
+#iStoreAddComment fieldset div {padding-left:10px; overflow:hidden; clear:left;}
+#iStoreAddComment fieldset div#opinie {padding-left:10px;}
+/* iStoreCartStepper */
+#iStoreCartStepper {margin:12px 0; border:0; overflow:hidden; background:#e5e5e5}
+#iStoreCartStepper .iStoreBoxContent {padding: 0;}
+#iStoreContent #iStoreCartStepper ul {margin:0; overflow:hidden; }
+
+#iStoreContent #iStoreCartStepper ul li { float: left;	width: 141px; list-style:none; list-style-image:none;	font-weight: bold;	color: #01396d;	padding: 0px 5px 0px 9px;	height: 57px; line-height: 1em;	border:0px; margin:0 5px 0 0; }
+#iStoreCartStepper ul li span { vertical-align: middle; background-repeat: no-repeat; display:block; height:27px; padding:15px 0 15px 48px; text-transform:lowercase; line-height:16px; font-size:11px; color:#01396d}
+
+
+#iStoreCartStepper ul li#step1 {border-left:0;}
+#iStoreCartStepper ul li#step2 { width:145px; }
+#iStoreCartStepper ul li#step3 { width:163px; }
+#iStoreCartStepper ul li#step4 {border-right:0; width:166px; margin-right:0; }
+
+/* selected  */
+
+#iStoreCartStepper ul li.selected span{ color: #fff; background-repeat:no-repeat; background-position: 0 0 !important;}
+/* krok 1 */ #iStoreCartStepper ul.step1 li#step1 {  color: #c10117;}
+/* krok 2 */ #iStoreCartStepper ul.step2 li#step1 span{color:#bfbfbf;}
+/* krok 3 */ #iStoreCartStepper ul.step3 li#step1, #iStoreCartStepper ul.step3 li#step2 {color:#bfbfbf; }
+/* krok 4 */ #iStoreCartStepper ul.step4 li#step1, #iStoreCartStepper ul.step4 li#step2, #iStoreCartStepper ul.step4 li#step3 {color:#bfbfbf;}
+
+
+
+
+/* Order Summary
+/* Order Summary
+
+
+/* ============================== iStoreHeader ============================  */
+.iStoreShopLogo {
+display: none;
+}
+.iStoreShopLogo a {width:270px; height:126px; display:block; padding:8px 0 0 0; margin-left:15px;}
+.iStoreShopLogo a img{width:270px; height:126px; display:block;}
+#iStoreTop #iStoreBasket a {font-weight:bold; float:right;
+  margin-right: 20px;
+    font-size:100%;  line-height:130%; text-decoration:none; 
+  background: none;
+  color: #fff;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  position: relative;
+  top: 15px;
+  right: 20px;
+   }
+#iStoreTop #iStoreBasket p {margin-bottom:12px; padding:13px 0 0 15px;}
+#iStoreToolbar #iStoreBasket #iStoreEmptyBasket {
+	font-size: 10pt;
+  padding-top: 15px;
+	font-weight: bold;
+	color: #fff;
+	margin-left: 35px;
+}
+
+
+
+
+/* ============================== iStoreFooter ============================ */
+
+#iStoreFooter {
+position: relative;
+top: 25px;
+width:3180px; color:#fff; font-size:11px;  clear:both; position:relative; bottom:0; left:-1000px; right:-1000px;
+background: url('http://static.istore.pl/istore/22649/photos/original/18782483.jpg') no-repeat;
+
+}
+
+
+@media all and (max-width: 1024px) { 
+  #iStoreFooter {width:1180px; left:0; right:0; }
+}
+#iStoreFooter .iStoreBox {width:1180px; margin:0 auto; padding:20px 0; overflow:hidden; background:none;
+}
+#iStoreFooter .iStoreFooterBox {float:left;  }
+.footerSection1, .footerSection2, .footerSection3 {padding:30px 75px 5px 38px;  margin-bottom:25px;
+background: url('http://static.istore.pl/istore/22649/files/18783207.png') no-repeat top left!important;
+
+
+}
+
+#iStoreFooter .iStoreFooterBox h3 {color:#cfcfcf; font-size: 16px; padding: 5px 0 15px 10px;;  border-top:0; margin:0; text-transform:none;
+font-weight: bold;
+}
+#iStoreFooter .iStoreFooterBox a { color:#fff; font-size:11px; line-height: 16.5px; text-decoration:none;  margin-left: 30px;}
+#iStoreFooter .footerSection6 { width:1180px; padding-top:16px;  margin-bottom:0;}
+#iStoreFooter .footerSection6 p{ line-height:17px;}
+
+#iStoreFooter .footerSection6 a.upLink,
+#iStoreFooter .footerSection6 a.upLink:hover  {
+  background: url('http://static.istore.pl/istore/22649/files/18783249.png') center right no-repeat; 
+  color:#fff; 
+  border:0px;
+  width: 100px;
+  position: absolute;
+  left:2050px;
+  height: 30px;
+  top: -10px;
+  display: block;
+}
+
+
+
+/* ============================= iStoreToolbar ============================*/
+
+#iStoreToolbar #iStoreToolbarMenu ul {
+	list-style: none;
+	float: left;
+	margin-left: 0px;
+}
+
+#iStoreToolbar #iStoreToolbarMenu ul li {
+	font-weight: bold;
+	float: left;
+}
+
+#iStoreToolbar #iStoreToolbarMenu ul li a {
+	display: block;
+	width: 100px;
+	font-family: Arial;
+	text-decoration: none;
+	text-align: center;
+	line-height: 18pt;
+	font-size: 12pt;
+	color: #002861;
+	padding-top: 20px;
+	padding-bottom: 22px;
+	padding-left: 5px;
+	padding-right: 5px;
+	margin-left: 1px;
+	margin-right: 1px;
+	
+}
+
+
+
+#iStoreToolbar #iStoreToolbarMenu ul li a:focus,
+#iStoreToolbar #iStoreToolbarMenu ul li a:hover {
+	color: #002861;
+	text-align: center;
+	background: #002861;
+border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+}
+
+#iStoreToolbarMenu ul li.selected a {
+	color: #fff!important;
+	text-align: center;
+border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+background: #002861;
+}
+
+#iStoreToolbar #iStoreToolbarMenu ul li.selected a:visited {
+	color: #fff!important;
+	text-align: center;
+	
+}
+#iStoreToolbar #iStoreToolbarMenu ul li.selected a:focus,
+#iStoreToolbar #iStoreToolbarMenu ul li.selected a:hover,
+#iStoreToolbar #iStoreToolbarMenu ul li.selected a:active {
+	color: #002861!important;
+	text-align: center;
+	border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+	/*   text-shadow: -1px 0 #7e3e05, 0 1px #7e3e05, 1px 0 #7e3e05, 0 -1px #7e3e05; */
+}
+
+
+
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuMain a {
+text-align: center;
+color: #002861;
+
+}
+
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuMain a:focus,
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuMain a:hover,
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuMain.selected a {
+color: #fff!important;
+	background: #002861;
+	border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+}
+
+
+#iStoreToolbar #iStoreToolbarMenu li a {
+text-align: center;
+padding-top: 35px;
+padding-bottom: 30px;
+background-color: rgba(0, 40, 97, 0.05);
+border: 1px solid #fff;
+border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+}
+
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuAccount a {
+text-align: center;
+padding-top: 45px;
+padding-bottom: 20px;
+}
+
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuAccount a:focus,
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuAccount a:hover,
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuAccount.selected a {
+	background: #002861;
+	border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+color: #fff!important;
+}
+
+
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuHelp a {
+text-align: center;
+padding-top: 20px;
+padding-bottom: 22px;
+}
+
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuHelp a:focus,
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuHelp a:hover,
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuHelp.selected a {
+	background: #002861;
+	border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+color: #fff!important;
+}
+
+
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuContact a {
+display: block;
+text-align: center;
+color: #002861;
+padding-top: 35px;
+padding-bottom: 30px;
+}
+
+
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuContact a:focus,
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuContact a:hover,
+#iStoreToolbar #iStoreToolbarMenu li#iStoreToolbarMenuContact.selected a {
+	background: #002861;
+	border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+color: #fff!important;
+}
+
+ul.menugora {
+position: absolute;
+top: 322px;
+left: 145px;
+}
+
+
+
+ul.menugora li {
+	float: left;
+	list-style: none;
+	
+}
+
+ul.menugora li a {
+
+	display: block;
+	height: 24px;
+	width: 160px;
+	font-family: Arial;
+	text-decoration: none;
+	text-align: center;
+	text-transform: uppercase;
+	font-size: 11pt;
+	color: #fff;
+	padding-top: 19px;
+	margin-left: 1px;
+	margin-right: 1px;
+}
+
+ul.menugora li#promocje  a {
+background: url('http://static.istore.pl/istore/22649/files/istore/promocje.png')repeat-x!important;
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+border-left: 1px silid #e3e3e4;
+border-top: 1px silid #e3e3e4;
+border-right: 1px silid #e3e3e4;
+}
+
+ul.menugora li#promocje  a:hover{
+background: url('http://static.istore.pl/istore/22649/files/istore/promocje1.png')repeat-x!important;
+
+}
+
+ul.menugora li#nowosci a {
+background: url('http://static.istore.pl/istore/22649/files/18782045.png')repeat-x!important;
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+border-left: 1px silid #e3e3e4;
+border-top: 1px silid #e3e3e4;
+border-right: 1px silid #e3e3e4;
+}
+
+ul.menugora li#nowosci  a:hover{
+background: url('http://static.istore.pl/istore/22649/files/18782065.png')repeat-x!important;
+}
+
+ul.menugora li#koszty a {
+background: url('http://static.istore.pl/istore/22649/files/18780931.png')repeat-x!important;
+border-top-left-radius: 10px;
+border-top-right-radius: 10px;
+border-left: 1px silid #e3e3e4;
+border-top: 1px silid #e3e3e4;
+border-right: 1px silid #e3e3e4;
+}
+
+ul.menugora li#koszty  a:hover{
+background: url('http://static.istore.pl/istore/22649/files/18780947.png')repeat-x!important;
+}
+
+
+
+
+ul.menudol {
+position: absolute;
+top: 375px;
+left: 83px;
+}
+
+
+ul.menudol li {
+	float: left;
+	list-style: none;
+
+}
+
+ul.menudol li a {
+	display: block;
+	height: 24px;
+	width: 200px;
+	font-family: Arial;
+	text-decoration: none;
+	text-align: left;
+	
+	font-size: 11pt!important;
+	color: #000!important;
+	padding-top: 10px!important;
+	padding-left: 30px!important;
+	font-weight: bold!important;
+	background: url('http://static.istore.pl/istore/22649/files/istore/lista.png') no-repeat;	
+}
+
+
+ul.menudol li a:hover {
+color: #757575!important;
+}
+
+
+
+
+.allegro {
+position: absolute;
+top: 322px;
+left: 792px;
+z-index: 9999;
+}
+
+ul.allegro li {
+	float: left;
+	list-style: none;
+
+}
+
+
+ul.allegro li a {
+	display: block;
+	height: 43px;
+	width: 70px;
+	font-family: Arial;
+	text-decoration: none;
+	text-align: left;
+	font-size: 0pt!important;
+	margin-left: 1px;
+	margin-right: 2px;
+	
+}
+
+
+ul.allegro li#naszeaukcje a {
+background: url('http://static.istore.pl/istore/22649/files/istore/allegro.png') no-repeat;	
+}
+
+ul.allegro li#dodajkonto a {
+background: url('http://static.istore.pl/istore/22649/files/istore/rejestracja.png') no-repeat;	
+}
+ul.allegro li#naszeaukcje a:hover {
+background: url('http://static.istore.pl/istore/22649/files/istore/allegro1.png') no-repeat;	
+}
+
+ul.allegro li#dodajkonto a:hover{
+background: url('http://static.istore.pl/istore/22649/files/istore/rejestracja1.png') no-repeat;	
+}
+
+
+
+ul.ikony {
+position: absolute;
+top: 282px;
+left: 980px;
+width: 200px;
+}
+
+
+
+ul.ikony li {
+	float: left;
+	list-style: none;
+	
+}
+
+ul.ikony li a {
+
+	display: block;
+	height: 30px;
+	width: 30px;
+	font-size: 0pt;
+	color: #fff;
+	margin-right: 4px;
+}
+
+ul.ikony li#facebook  a {
+background: url('http://static.istore.pl/istore/22649/files/18780672.png') no-repeat!important;
+}
+ul.ikony li#tweeter  a {
+background: url('http://static.istore.pl/istore/22649/files/18780815.png') no-repeat!important;
+}
+
+li.skype {
+background: url('http://static.istore.pl/istore/22649/files/18782259.png') no-repeat!important;
+
+}
+
+
+ul.ikony li#skype  a {
+background: url('http://static.istore.pl/istore/22649/files/18780792.png') no-repeat!important;
+
+}
+ul.ikony li#gg  a {
+background: url('http://static.istore.pl/istore/22649/files/18780579.png') no-repeat!important;
+}
+ul.ikony li a:hover {
+-moz-box-shadow: 0 0 5px 5px #fff;
+ -webkit-box-shadow: 0 0 5px 5px #fff;
+ box-shadow: 0 0 5px 5px #fff;
+}
+
+
+/* ============================== iStoreBanner ============================ */
+#iStoreContent .iStoreBox#iStoreShopBanner .iStoreBoxContent {
+background: none;
+}
+#iStoreContent .iStoreBox#iStoreProductLongDescription .iStoreBoxContent {
+background: none;
+}
+
+#iStoreContent .iStoreBox#iStoreProductLongDescription .iStoreBoxContent {
+
+  
+}
+
+
+#iStoreShopBanner {
+margin-bottom: 10px;
+margin-left: 30px;
+}
+
+/* ============================== iStoreSearch ============================*/
+
+#iStoreSearch form {
+	padding: 0;
+	width: 244px;
+	float: right;
+	background: url('http://static.istore.pl/istore/22649/files/18783280.png') no-repeat;
+}
+#iStoreSearch form div {
+	overflow: hidden;
+
+}
+#iStoreSearch label {
+display: none;
+}
+
+#iStoreSearch input.text {
+float: left;
+text-align: left;
+color: #6e6e6e;
+letter-spacing: 1.2pt;
+position: relative;
+bottom: 3px;
+
+}
+
+
+#iStoreSearch input#search {
+	float: right;
+	background: none;
+	display: block;
+	vertical-align: middle;
+	font: 11px tahoma, arial, sans-serif;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-bottom: 5px;
+	padding-top: 10px;
+	width: 140px;
+	border: 0;
+	margin-right: 40px;
+	margin-top: 8px;
+	
+
+  }
+#iStoreSearch button {
+  display: block;
+  background-color: none;
+  box-shadow: none;
+  background: url('http://static.istore.pl/istore/22649/files/18781414.png') no-repeat;
+	height: 22px;
+	position: relative;
+	left: 20px;
+	top: 12px;
+	float: left;
+	border: 0;
+	font-size: 0pt;
+	width: 24px;	
+}
+
+/* =============================== iStoreNews ============================= */
+
+#iStoreContent ul.iStoreNewsList {margin:0 0 10px 0; width:826px; float:right; padding:5px 0px;}
+#iStoreContent ul.iStoreNewsList li {list-style:none; list-style-image:none; border-bottom:1px solid #b5b5b5; padding:15px 0 15px 0; margin:0;}
+#iStoreContent ul.iStoreNewsList li:last-child { border-bottom:none;}
+#iStoreContent ul.iStoreNewsList li h3{font-size:13px; color: #b95609; margin:5px 0; background:none; padding:0; text-transform:none; float:right; width:720px}
+#iStoreContent div.iStoreBox  ul.iStoreNewsList li p.iStoreNewsDate {color: #3a3a3a; padding:5px 8px 5px 20px; width:65px; float:left; margin:0; }
+#iStoreContent ul.iStoreNewsList li div.iStoreNewsBody {line-height:14px; clear:left; overflow:hidden; }
+
+/* ======================== iStoreCategoriesBox =========================== */
+
+ #iStoreCategoriesBox {
+/* background: url('http://www.wypasionastrona.pl/rimisj/istore/tlomenu2.png') no-repeat bottom center; 
+ padding-bottom: 40px; */
+ width: 282px;
+ margin-bottom: 10px;
+}
+ 
+  #iStoreCategoriesBox .iStoreBoxHeader {
+ 
+ 
+ display: block;
+ width: 253px;
+ padding-left: 20px;
+ padding-top: 15px;
+ padding-right: 12px;
+ padding-bottom: 18px;
+ background: url('http://static.istore.pl/istore/22649/files/18782872.png') no-repeat;
+ font-size: 11pt;
+ color: #fff;
+ text-transform: uppercase;
+
+ 
+}
+
+a.upLink {
+background: transparent url('http://www.wypasionastrona.pl/servizioabart/istore/poziom.png') no-repeat; 
+display: block;
+width: 70px;
+height: 30px;
+text-indent: -9999px;
+position: absolute;
+top: 195px;
+left: 170px;
+}
+
+
+#iStoreCategoriesBox ul#iStorieCategoriesList {
+	list-style: none;
+	margin-left: 0;
+	
+}
+
+#iStoreCategoriesBox ul#iStorieCategoriesList li {
+	margin: 0!important;
+	padding: 0!important;
+	
+}
+
+#iStoreCategoriesBox ul#iStorieCategoriesList li a {
+	display: block;
+	
+	width: 228px;
+	padding-top: 10px;
+  padding-left: 25px;
+	padding-bottom: 10px;
+	padding-right: 10px;
+  color: #000;
+	font-weight: bold;
+	font-size: 10pt;
+	margin-left: 10px;
+	margin-right: 2px;
+	margin-bottom: 1px;	
+}
+
+
+
+#iStoreCategoriesBox ul#iStorieCategoriesList li a:link,
+#iStoreCategoriesBox ul#iStorieCategoriesList li a:visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+	background: #dcdcdc url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
+
+	
+}
+
+#iStoreCategoriesBox ul#iStorieCategoriesList li a:focus,
+#iStoreCategoriesBox ul#iStorieCategoriesList li a:hover {
+  color: #000;
+	text-decoration: none;
+		background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
+
+}
+
+
+
+#iStoreCategoriesBox ul#iStorieCategoriesList li a:active {
+  color: #000;
+	text-decoration: none;
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
+
+
+}
+
+
+
+
+#iStoreCategoriesBox ul#iStorieCategoriesList li ul {
+	list-style: none;
+  width: 262px;
+  
+}
+
+
+
+#iStoreCategoriesBox ul#iStorieCategoriesList li.selected a {
+  color: #000;
+	text-decoration: none;
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
+	
+}
+
+
+#iStoreCategoriesBox ul#iStorieCategoriesList li ul {
+margin-left: 8px;
+margin-bottom: 0;
+}
+
+#iStoreCategoriesBox ul#iStorieCategoriesList li ul li a {
+	display: block;
+	
+	width: 220px;
+	padding-top: 10px;
+  padding-left: 25px;
+	padding-bottom: 10px;
+	padding-right: 10px;
+  color: #000;
+	font-weight: bold;
+	font-size: 10pt;
+	margin-left: 10px;
+	margin-right: 2px;
+	margin-bottom: 1px;	
+}
+
+
+#iStoreCategoriesBox ul#iStorieCategoriesList li ul li a:focus,
+#iStoreCategoriesBox ul#iStorieCategoriesList li ul li a:hover {
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+	background: #dcdcdc url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
+}
+
+
+#iStoreCategoriesBox ul#iStorieCategoriesList li ul li.selected a {
+  color: #000;
+	text-decoration: none;
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
+}
+
+li#cat1461725 {
+margin:0px;
+padding: 0px;
+
+}
+
+#iStoreSidebar #iStoreReadMoreBlock  {
+ background:  #8fb53e url('http://static.istore.pl/istore/22649/files/18782855.png') no-repeat bottom center;
+ width: 262px;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+ 
+ padding-bottom: 10px;
+}
+
+
+#iStoreSidebar #iStoreReadMoreBlock .iStoreBoxHeader  {
+ float:left;
+ display: block;
+ width: 242px;
+ padding: 10px;
+ background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x;
+ font-size: 11pt;
+ color: #fff;
+ text-transform: uppercase;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+
+}
+
+#iStoreSidebar #iStoreReadMoreBlock  ul {
+clear: left;
+
+
+}
+
+#iStoreSidebar #iStoreReadMoreBlock  li {
+list-style: none;
+margin: 0;
+padding: 0;
+}
+
+#iStoreSidebar #iStoreReadMoreBlock  li  a{
+color: #000;
+padding: 10px;
+display: block;
+width: 220px;
+font-size: 10pt;
+text-decoration: none;
+line-height: 12pt;
+}
+
+#iStoreSidebar #iStoreReadMoreBlock  li  a:hover{
+color: #666;
+}
+
+
+
+/* ======================== iStoreMenuBox =========================== */
+
+ #iStoreMenuBox {
+ /*
+ background: url('http://www.wypasionastrona.pl/rimisj/istore/tlomenu2.png') no-repeat bottom center; 
+ padding-bottom: 40px;*/
+ width: 282px;
+ margin-bottom: 10px;
+}
+ 
+  #iStoreMenuBox .iStoreBoxHeader {
+ 
+ 
+ display: block;
+ width: 253px;
+ padding-left: 20px;
+ padding-top: 15px;
+ padding-right: 12px;
+ padding-bottom: 18px;
+ background: url('http://static.istore.pl/istore/22649/files/18782872.png') no-repeat;
+ font-size: 11pt;
+ color: #fff;
+ text-transform: uppercase;
+
+ 
+}
+
+a.upLink {
+background: transparent url('http://www.wypasionastrona.pl/servizioabart/istore/poziom.png') no-repeat; 
+display: block;
+width: 70px;
+height: 30px;
+text-indent: -9999px;
+position: absolute;
+top: 195px;
+left: 170px;
+}
+
+
+#iStoreMenuBox ul#iStorieMenuList {
+	list-style: none;
+	margin-left: 0;
+	
+}
+
+#iStoreMenuBox ul#iStorieMenuList li {
+	margin: 0!important;
+	padding: 0!important;
+	
+}
+
+#iStoreMenuBox ul#iStorieMenuList li a {
+	display: block;
+	
+	width: 228px;
+	padding-top: 10px;
+  padding-left: 25px;
+	padding-bottom: 10px;
+	padding-right: 10px;
+  color: #000;
+	font-weight: bold;
+	font-size: 10pt;
+	margin-left: 10px;
+	margin-right: 2px;
+	margin-bottom: 1px;	
+}
+
+
+
+#iStoreMenuBox ul#iStorieMenuList li a:link,
+#iStoreMenuBox ul#iStorieMenuList li a:visited {
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+	background: #dcdcdc url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
+
+	
+}
+
+#iStoreMenuBox ul#iStorieMenuList li a:focus,
+#iStoreMenuBox ul#iStorieMenuList li a:hover {
+  color: #000;
+	text-decoration: none;
+		background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
+
+}
+
+
+
+#iStoreMenuBox ul#iStorieMenuList li a:active {
+  color: #000;
+	text-decoration: none;
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
+
+
+}
+
+
+
+
+#iStoreMenuBox ul#iStorieMenuList li ul {
+	list-style: none;
+  width: 262px;
+  
+}
+
+
+
+#iStoreMenuBox ul#iStorieMenuList li.selected a {
+  color: #000;
+	text-decoration: none;
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
+	
+}
+
+
+#iStoreMenuBox ul#iStorieMenuList li ul {
+margin-left: 8px;
+margin-bottom: 0;
+}
+
+#iStoreMenuBox ul#iStorieMenuList li ul li a {
+	display: block;
+	
+	width: 220px;
+	padding-top: 10px;
+  padding-left: 25px;
+	padding-right: 10px;
+  color: #000;
+	font-weight: bold;
+	font-size: 10pt;
+	margin-left: 10px;
+	margin-right: 2px;
+	margin-bottom: 1px;	
+}
+
+
+#iStoreMenuBox ul#iStorieMenuList li ul li a:focus,
+#iStoreMenuBox ul#iStorieMenuList li ul li a:hover {
+	color: #000;
+	font-weight: bold;
+	text-decoration: none;
+	background: #dcdcdc url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
+}
+
+
+#iStoreMenuBox ul#iStorieMenuList li ul li.selected a {
+  color: #000;
+	text-decoration: none;
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
+}
+
+
+
+
+/* ========================== iStoreContactBox ============================ */
+
+
+
+
+#iStoreContent .iStoreBoxWrapper .iStoreBoxContent {  /*tlo tresci z opis*/
+
+
+color:#393939;
+}
+
+
+
+
+#iStoreSidebar #iStoreContactBox  {
+ /*background:  url('http://static.istore.pl/istore/22649/files/18782855.png') no-repeat bottom center;
+ padding-bottom: 45px;*/
+ width: 282px;
+}
+
+#iStoreSidebar #iStoreContactBox .iStoreBoxHeader {overflow:hidden}
+#iStoreSidebar #iStoreContactBox .iStoreBoxHeader  {
+ display: block;
+ width: 253px;
+ padding-left: 20px;
+ padding-top: 15px;
+ padding-right: 12px;
+ padding-bottom: 18px;
+ background: url('http://static.istore.pl/istore/22649/files/18782872.png') no-repeat;
+ font-size: 11pt;
+ color: #fff;
+ text-transform: uppercase;
+ 
+}
+
+
+#iStoreSidebar #iStoreContactBox {
+
+}
+
+
+
+#iStoreSidebar #iStoreContactBox ul li {
+    padding-left:35px;
+   
+    padding-top:4px;
+    list-style: none!important; 
+}
+#iStoreSidebar #iStoreContactBox ul li b {
+  color: 002861;
+}
+
+
+
+
+.iStoreShopAgreementInfo {
+margin-left: 20px;
+
+}
+
+
+#iStoreSidebar #iStoreContactBox li {
+	list-style: none!important;
+	list-style-image: none;
+
+  margin-left:0;
+  list-style:outside;
+    padding-left: !important;
+  height: 40px;
+  padding-top: 5px;
+  color:#000;
+  font-size: 10.5pt;
+}
+
+#iStoreSidebar #iStoreContactBox li a {
+color: #000!important;
+}
+
+
+
+li.phone {
+width: 230px;
+padding: 10px;
+border-radius: 10px;
+background: #fff url("http://static.istore.pl/istore/22649/files/18782543.png") no-repeat 10px 5px;
+color:#002861;
+line-height: 13pt;
+}
+
+li.cellPhone {
+background: #fff url("http://static.istore.pl/istore/22649/files/18782543.png") no-repeat;
+line-height: 13pt;
+border-radius: 10px;
+color:#002861;
+}
+li.fax {
+background: url("http://static.istore.pl/istore/22649/files/18782543.png") no-repeat;
+line-height: 13pt;
+color:#002861;
+}
+li.email {
+width: 230px;
+padding: 10px;
+border-radius: 10px;
+background: #fff url(" 	http://static.istore.pl/istore/22649/files/18781641.png") no-repeat 7px 15px;
+color:#002861;
+line-height: 13pt;
+
+}
+li.twitter { 
+background: url("http://www.wypasionastrona.pl/powermode/istore/ico_contact.png") 0 -162px no-repeat;
+color:#002861;
+  line-height: 13pt;
+}
+
+#iStoreSidebar #iStoreContactBox li.phone b {
+color:#002861!important;
+
+}
+#iStoreSidebar #iStoreContactBox li.phone {
+background: url("http://static.istore.pl/istore/22649/files/18782543.png") no-repeat;
+  color:#000;
+  line-height: 13pt;
+}
+
+#iStoreSidebar #iStoreContactBox li.cellPhone {
+background: url("http://static.istore.pl/istore/22649/files/18782543.png") no-repeat;
+  color:#002861;
+  line-height: 13pt;
+}
+#iStoreSidebar #iStoreContactBox li.fax {
+background: url("http://static.istore.pl/istore/22649/files/18782543.png") no-repeat;
+  color:#002861;
+  line-height: 13pt;
+}
+#iStoreSidebar #iStoreContactBox li.email {
+background: url(" 	http://static.istore.pl/istore/22649/files/18781641.png") no-repeat 0px 10px;
+
+  color:#002861;
+  line-height: 13pt;
+}
+#iStoreSidebar #iStoreContactBox li.twitter {
+  background: url("http://www.wypasionastrona.pl/powermode/iistore/ico_contact.png") 0 -162px no-repeat;
+  color:#002861;
+  line-height: 13pt;
+}
+div#iStoreContent li.twitter {
+  /*background-image: url("img/ico_contact.png");  */
+  line-height: 13pt;
+}
+li.blip, #iStoreSidebar #iStoreContactBox li.blip {
+  background: url("http://www.wypasionastrona.pl/powermode/istore/ico_contact.png")  0 -212px no-repeat;
+  line-height: 13pt;
+}
+div#iStoreContent li.blip {
+  /*background-image: url("img/ico_contact.png");    */
+}
+li.gg, #iStoreSidebar #iStoreContactBox li.gg {
+  background: url("http://static.istore.pl/istore/22649/files/18780579.png") no-repeat;
+  line-height: 13pt;
+}
+
+/* ========= iStoreBreadCrumbs "Jesteś tutaj" czyli okruszki ===============  */
+
+
+
+#iStoreBreadCrumbs .iStoreBoxWrapper {
+	#position: absolute;
+ 	#top: 50%;
+	display: table-cell;
+	#display:block;
+	vertical-align: middle;
+}
+#iStoreBreadCrumbs .iStoreBoxContent {line-height:13px; padding-left:22px; 	/* set width and align center your object if you want to center content*/
+	#position: relative;	#top: -50%;	display:block;}
+
+#iStoreBreadCrumbs .iStoreBoxContent ul {display:inline; margin:0; }
+#iStoreBreadCrumbs .iStoreBoxContent ul li{display:inline; padding:0 0 0 12px; margin:0;}
+#iStoreBreadCrumbs .iStoreBoxContent ul li a{position:static; padding:0;}
+
+/* ========================== iStorePagination ============================  */
+
+#iStoreContent .iStorePagination {padding-top: 0px; float:right; margin-right:20px; float:right; position:relative; left:-50%; text-align:left; z-index:88}
+#iStoreContent .iStorePagination ul{margin:0; list-style:none; position:relative; left:50%; z-index:88}
+#iStoreContent .iStorePagination ul li {
+display: block;border-radius: 4px;
+position:relative;  float:left; margin-right: 5px; color:#000; text-align:center; list-style:none; list-style-image:none;background: #d3d3d3;
+margin-bottom: 3px;
+
+}
+#iStoreContent .iStorePagination ul li a {
+display: block;  font-weight:bold;
+color:#fff; text-decoration:none; position:static; padding:8px; border-radius: 4px;}
+#iStoreContent .iStorePagination ul li strong {  font-weight:bold; display:block; color:#000; text-align:center; list-style:none; padding:8px; list-style-image:none;background:#919191;border-radius: 4px;}
+#iStoreContent .iStorePagination ul li span {font-size:11px; line-height:12px; padding-top:7px; width:24px; height:20px;}
+#iStoreContent .iStorePagination ul li a:hover {
+  color:#000;
+  background:#919191;
+  font-weight:bold;
+}
+
+
+
+
+/*edit account box*/
+#iStoreContent #iStoreEditAccountBox .iStoreBoxToolbar .iStorePagination {padding-top: 12px; float:right; }
+#iStoreContent #iStoreEditAccountBox .iStoreBoxToolbar .iStorePagination ul{margin:0; height:auto;}
+#iStoreContent #iStoreEditAccountBox .iStoreBoxToolbar .iStorePagination ul li {width:20px; height:20px; float:left;  margin:0 3px 0 4px; font-weight:bold; color:#fff; text-align:center;  min-width: 20px !important; list-style:none; list-style-image:none;}
+#iStoreContent #iStoreEditAccountBox .iStoreBoxToolbar .iStorePagination ul li:first-child {width:20px; height:20px; min-width: 20px !important;}
+#iStoreContent #iStoreEditAccountBox .iStoreBoxToolbar .iStorePagination ul li a {color:#fff; text-decoration:none; line-height:100%}
+#iStoreContent #iStoreEditAccountBox .iStoreBoxToolbar .iStorePagination ul li strong { display:block; width:20px; height:20px; font-size:11px;}
+#iStoreContent #iStoreEditAccountBox .iStoreBoxToolbar .iStorePagination ul li span {font-size:11px; line-height:20px;}
+
+#iStoreProductsList .iStoreBoxFooter .iStoreBoxToolbar{margin-top:15px;}
+
+
+/* ============================= iStoreProduct ============================ */
+
+/* Social Blip, Fecbook, wykop, delicious*/
+.iStoreSocialNetworking {	background:#fff; text-align: right; position:absolute; bottom:-30px; right:0px;   margin-left:0px;   margin-top:0px;   width:87px;   z-index:2;  }
+
+/*iStoreProductLike*/
+
+
+
+
+/* ========================= Products ========================================  */
+div.iStoreCategoryDescription {padding:12px 14px; overflow:hidden; font-size:9.8pt; line-height:130%; background: #none;}
+
+div#iStoreContent div.iStoreBox div.iStoreBoxContent ul.iStoreProducts { margin:0;}
+
+div#iStoreProductsList ul.iStoreProducts li {list-style:none; list-style-image:none; margin-left:0; margin-right: 1px; margin-bottom: 1px; position:relative; z-index:99;}
+div#iStoreProductsList ul.iStoreProducts li ul li {}
+#iStoreProductsList {float:right; width:880px padding: 0px;}
+
+
+div#iStoreProductsList .iStoreProductComments {line-height:26px;
+display:none;
+}
+
+
+
+#dynamic2 #iStoreProductsList {margin-left:0px;}
+
+.iStorePrice {
+	font-size: 13pt;
+	color: #000;
+	white-space: nowrap;
+	font-weight: bold;
+	font-family: Arial;
+}
+
+.iStorePrice .iStoreCurrency{font-size:12px;}
+
+
+
+.iStoreAddToBasketLink {background: url('http://static.istore.pl/istore/22649/files/18780411.png') right top no-repeat !important; filter:none; height: 48px; width: 163px;
+text-indent: -9999px;
+}
+
+.iStoreAddToBasketLink {
+	display: block;
+	width: 163px;
+	height: 48px;
+	position: static;
+	border: 0;
+	padding: 0;
+}
+.iStoreAddToBasketLink:hover {
+	border: 0;
+}
+
+.iStoreAddToBasketLink strong {
+	display: none;
+}
+
+#iStoreBasket .description {
+color: #000;
+}
+
+#iStoreContent .iStoreProductContent h3 {margin:0 0 11px 110px; font-size:11px; background:none; text-transform:none;padding:0; clear:none; width:200px;}
+
+.iStoreProductContent .iStoreProductPurchase .iStoreProductCosts {}
+.iStoreProductContent .iStoreProductPurchase .iStoreProductCosts del {font-size:12px; color:#292929}
+.iStoreProductContent .iStoreProductDescription {margin-left:110px;}
+.iStoreProductContent .iStoreProductPurchase .iStoreAddToBasketLink {float:right; padding:0; line-height:125%;}
+
+/* ========================= LISTKi ========================================  */
+
+
+.displayAsTiles  ul.iStoreProducts li:hover div.hproduct {
+  /*-moz-box-shadow:0px 0px 16px #d9500f */
+
+}
+
+div#iStoreContent div.displayAsTiles div.iStoreBoxContent ul.iStoreProducts {
+ 
+}
+
+.displayAsTiles  ul.iStoreProducts li {
+  float: left;
+  height: 286px!important;
+  width: 280px;
+ margin-left: 12px!important;
+ margin-bottom: 15px!important;
+background: url('http://static.istore.pl/istore/22649/files/18783141.png') no-repeat;	
+}
+.displayAsTiles  ul.iStoreProducts li +li +li +li {
+}
+.displayAsTiles .iStoreProductContent {
+  height: 286px!important;
+  width: 280px;
+}
+
+.displayAsTiles .iStoreProductContent .iStoreProductDescription {
+	line-height: 1.1em;
+  color: #5d5c5c;
+	height: 60px; /* wysokosc okna z opisem */
+	float: left;
+	font-size: 9.8pt;
+	width: 250px;
+	position: relative;
+	left: -90px;
+	top: -75px;
+	clear: both;
+	
+}
+
+.displayAsTiles .iStoreProductContent h3.name  {
+display: block;
+position: relative;
+top: 20px;
+left: -113px;
+height:50px;
+width: 260px!important;
+padding-left: 10px;
+padding-right: 10px;
+text-align: center!important;
+vertical-align: top;
+}
+
+
+.displayAsTiles .iStoreProductContent h3.name a {
+	color: #002861!important;
+	font-size: 10.8pt;
+	font-weight: bold;
+
+}
+
+
+
+
+.displayAsTiles ul.iStoreProducts .iStoreAddToBasket {
+	width: 163px;
+  position: relative;
+  top: 37px;
+  clear: both;
+  left: 25px;
+}
+.displayAsTiles .iStoreProductPurchase {
+  display: block;
+  width: 240px;
+  clear: both;
+  position: relative;
+  top: 33px;
+  left: 40px;
+}
+
+.displayAsTiles .iStorePrice {
+font-weight: bold;
+font-size: 17pt;
+float: left;
+margin-left: 20px;
+}
+
+.displayAsTiles .iStoreProductCosts {
+display: block;
+position: relative;
+top: 30px;
+width: 240px;
+ text-align: center;
+  margin-left: 10px;
+color: #000!important;
+}
+
+.displayAsTiles .iStoreProductContent .title {
+color: #fff!important;
+
+}
+
+.displayAsTiles .iStoreProductCosts del.iStorePrice {
+
+float: left;
+color: #fff;	
+position: relative;
+font-size: 10pt;
+}
+
+#iStoreContent .displayAsTiles .iStoreProductImage {
+clear: both;
+position: relative;
+left: 100px;
+top: 20px;
+height: 85px;
+width: 120px;
+}
+
+
+
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedPL { background: url('http://static.istore.pl/istore/22649/files/18782153.png') no-repeat; height: 73px!important;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedDE { background: url('http://static.istore.pl/istore/22649/files/18782153.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedEN { background: url('http://static.istore.pl/istore/22649/files/18782153.png') no-repeat; height: 73px!important;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedRU { background: url('http://static.istore.pl/istore/22649/files/18782153.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedCZ { background: url('http://static.istore.pl/istore/22649/files/18782153.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedSK { background: url('http://static.istore.pl/istore/22649/files/18782153.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewPL { background: url('http://static.istore.pl/istore/22649/files/18781932.png') no-repeat; height: 73px!important;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewDE { background: url('http://static.istore.pl/istore/22649/files/18781932.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewEN { background: url('http://static.istore.pl/istore/22649/files/18781932.png') no-repeat; height: 73px!important;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewRU { background: url('http://static.istore.pl/istore/22649/files/18781932.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewCZ { background: url('http://static.istore.pl/istore/22649/files/18781932.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewSK { background: url('http://static.istore.pl/istore/22649/files/18781932.png') no-repeat;}
+
+
+.displayAsTiles ul.iStoreProductOptions li.iStoreProductOptionsFreeDelivery  {
+  text-indent: -9999px;
+   background: url('http://www.wypasionastrona.pl/kinkiety/istore/dostawa.png') no-repeat!important;
+	border: 0;
+	width: 37px;
+	height: 73px;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: 20px;
+	left: 15px;
+}
+
+
+
+
+.displayAsList ul.iStoreProductOptions li.iStoreProductOptionsFreeDelivery  {
+  text-indent: -9999px;
+   background: url('http://www.wypasionastrona.pl/kinkiety/istore/dostawa.png') no-repeat!important;
+	border: 0;
+	width: 23px;
+	height: 62px;
+	margin: 0;
+	padding: 0;
+
+	position: absolute;
+	top: 23px;
+	left: 5px;
+}
+
+#iStoreProductsList ul.iStoreProductOptions {position:absolute; width:69px; margin:0; left:0; top:0;}
+#iStoreProductsList ul.iStoreProductOptions li{width:37px; min-height:73px; height:73px; padding:0; margin:0; border:0; list-style:none; list-style-image:none;}
+
+#iStoreProductsList ul.iStoreSpecialIcons {
+	position: absolute;
+	top: 20px;
+	left: 15px;
+	margin: 0;
+	
+}
+#iStoreProductsList ul.iStoreSpecialIcons li {
+	border: 0;
+	position: static;
+	width: 37px;
+	height: 73px;
+	margin: 0;
+	padding: 0;
+	min-height: 15px;
+	display: block;
+}
+#iStoreProductsList ul.iStoreSpecialIcons li span {
+	display: none;
+}
+
+
+/*  KONIEC LISTKÓW */
+
+.displayAsList  ul.iStoreProducts li {
+	padding: 10px 0 0 5px;
+	margin-top: 15px!important;
+	overflow: hidden;
+	text-align: left!important;
+  background: url('http://static.istore.pl/istore/22649/files/18780014.png') no-repeat;
+  height: 120px;
+  
+  width: 860px!important;
+  margin-left: 10px!important;
+
+}
+.displayAsList  ul.iStoreProducts li:first-child {
+}
+
+
+#iStoreProductsList .iStoreProductComments {
+	line-height: 26px;
+}
+
+.displayAsList .iStoreProductContent .iStoreProductPurchase {
+	width: 170px;
+  float: right;
+  position: relative;
+  top: -10px;
+  
+}
+.displayAsList .iStoreProductPurchase .iStoreProductCosts {
+	float: right;
+	text-align: right;
+	padding: 10px 0 5px 0;
+	margin-right: 20px;
+	height: 32px;
+}
+.displayAsList .iStoreProductPurchase .iStoreAddToBasket {
+	clear: both;
+	float: right;
+	margin-right: 10px;
+	margin-top: 35px;
+}
+
+.displayAsList .iStoreProductContent .iStoreProductDescription {
+	width: 405px;
+	line-height: 1.2em;
+	color: #444;
+	height: 40px; /* wysokosc okna z opisem */
+	float: left;
+  margin-top: 10px;
+
+}
+
+
+.displayAsList .iStoreProductContent .iStoreProductImage {
+	float: left;
+	
+	position: relative;
+	top: 0px;
+	left: 40px;
+}
+.displayAsList ul.iStoreSpecialIcons li {
+width: 69px!important;
+position: relative;
+top: -12px;
+left: 610px;
+}
+
+#iStoreContent .displayAsList .iStoreProductContent h3 {
+	clear: none;
+	float: left;
+	margin-left: 5px;
+	width: 435px;
+	height: 30px;
+	margin-left: 115px;
+	margin-top: -10px;
+	font-size: 10pt!important;
+}
+#iStoreContent .displayAsList .iStoreProductContent h3 a {
+color: #000;
+}
+
+#iStoreContent .displayAsList .iStoreProductCosts del {
+	font-size: 12px;
+	color: #909090;
+	padding-right: 10px;
+}
+
+
+
+/* Stars Score  */
+.Score { display: inline;	line-height: 20px;	padding: 5px 0;	margin: 0 0 5px 0;	cursor: help;	white-space: nowrap;}
+.Score em { color: #e0e0e0;}
+.Score strong { display: inline; overflow: hidden;	padding: 3px;	line-height: 12px;	height:20px; width:100px;	position: relative; margin-left:10px; float:left; z-index:999;}
+.LargeScore strong {  padding: 3px;	font-size: 34px;	line-height: 34px;	height: 40px;	width:200px;	position: relative; float:left;}
+#iStoreProductDetails .iStoreProductComments .Score a {margin-left:0px; position:static; padding:0; line-height:26px;}
+#iStoreProductDetails .iStoreProductComments .Score a {margin-left:0px; position:static; padding:0; line-height:26px;}
+
+.Score strong span {  display: inline;}
+.Scored0 strong { background: url('http://static.istore.pl/istore/22649/files/18782286.png') 0 50% no-repeat ;}
+.Scored1 strong { background: url('http://static.istore.pl/istore/22649/files/18782308.png') 0 50% no-repeat;}
+.Scored2 strong {	background: url('http://static.istore.pl/istore/22649/files/18782319.png') 0 50% no-repeat;}
+.Scored3 strong { background: url('http://static.istore.pl/istore/22649/files/18782365.png') 0 50% no-repeat;}
+.Scored4 strong { background: url('http://static.istore.pl/istore/22649/files/18782397.png') 0 50% no-repeat;}
+.Scored5 strong { background: url('http://static.istore.pl/istore/22649/files/18782406.png') 0 50% no-repeat;}
+
+.LargeScore.Scored0 strong { background-image: url('http://static.istore.pl/istore/22649/files/18780146.png');}
+.LargeScore.Scored1 strong { background-image: url('http://static.istore.pl/istore/22649/files/18780198.png');}
+.LargeScore.Scored2 strong { background-image: url('http://static.istore.pl/istore/22649/files/18780279.png');}
+.LargeScore.Scored3 strong { background-image: url('http://static.istore.pl/istore/22649/files/18780312.png');}
+.LargeScore.Scored4 strong {background-image: url('http://static.istore.pl/istore/22649/files/18780332.png');}
+.LargeScore.Scored5 strong { background-image: url('http://static.istore.pl/istore/22649/files/18780346.png');}
+
+
+/*Details*/
+
+
+#iStoreProductDetails .iStoreBoxContent h1 {
+  padding: 10px;
+ background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x;
+ font-size: 15pt;
+ color: #fff;
+ text-transform: uppercase;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+}
+
+
+ .iStoreProductTitle {
+ font-weight: bold;
+
+
+}
+
+#colorbox, #cboxOverlay, #cboxWrapper{position:absolute; top:0; left:0; z-index:999999!important; overflow:hidden;}
+
+
+#iStoreProductDetails .text label {
+color: #444;
+font-weight: bold;
+}
+
+#iStoreProductDetails .text span {
+color: #d26613;
+font-weight: bold;
+}
+
+
+.iStoreProductLike {
+color: #f0f0f0!important;
+display: block;
+width: 300px;
+height: 30px;
+position: relative;
+left: 430px;
+top: -10px;
+}
+
+#iStoreProductDetails {
+/*background: #fff url('http://static.istore.pl/istore/22649/files/18782500.png') repeat-x bottom;  */
+background: #fff;
+padding: 0px;
+border-left: 1px solid #e3e3e3;
+border-right: 1px solid #e3e3e3;
+border-bottom: 1px solid #e3e3e3;
+border-radius: 10px;
+  margin-bottom: 20px;
+  
+}
+
+#iStoreProductDetails .iStoreBox {
+width: 860px;
+border-radius: 10px;
+}
+
+#iStoreProductDetails .iStoreBoxWrapper {
+overflow:hidden;
+border-radius: 10px;
+}
+
+#iStoreProductDetails .iStoreBoxContent {
+border-radius: 10px;
+  overflow:hidden;
+  min-height: 470px;
+	}
+#iStoreProductDetails .iStoreProductDescription {
+	clear: right;
+	float: right;
+	width: 500px;
+	position: relative;
+	margin-right: 70px;
+	color: #000;
+	font-size: 10pt;
+	padding: 0px;
+	top: 80px;
+}
+#iStoreProductDetails .iStoreProductDescription p {
+}
+#iStoreProductDetails .iStoreProductCosts {
+	display: none;
+}
+#iStoreContent #iStoreProductDetails ul.iStoreProductOptions {
+	list-style: none;
+	background: url('http://www.wypasionastrona.pl/kinkiety/istore/dostawa.png') no-repeat;
+	list-style-image: none;
+	width: 43px;
+	height: 63px;
+	position: absolute;
+	
+}
+
+#iStoreContent #iStoreProductDetails .iStoreProductOptions li {
+	list-style: none;
+	list-style-image: none;
+	
+}
+
+#iStoreContent #iStoreProductDetails .iStoreProductOptions span {
+display: none;
+}
+
+#iStoreProductDetails .iStoreProductCosts del {
+font-size: 10pt!important;
+
+}
+
+#iStoreProductPropertiesForm {
+	
+	position: relative;
+	padding: 10px;
+	margin: 0;
+	width: 550px;
+	height: 100px;
+	float: left;
+	margin-top: 10px;
+
+	
+}
+#iStoreProductPropertiesForm fieldset {
+	border: 0;
+	margin-top: 0;
+	padding-top: 10px;
+  height: 0px;
+}
+#iStoreProductPropertiesForm label {
+	text-align: right;
+	width: 135px;
+	float: left;
+	color: #f0f0f0;
+	font-size: 11px;
+	padding-top: 2px;
+	margin-right: 12px;
+}
+#iStoreProductPropertiesForm .iStoreProductTools {
+  overflow:hidden;
+  padding:5px 0;
+  margin-left:0;
+  position: relative;
+  top: -60px;
+  left: 320px;
+}
+#iStoreProductPropertiesForm .iStoreProductTools li {
+  float:left; 
+  margin-right:20px;
+  margin-left:0px;
+}
+
+#iStoreProductPropertiesForm .iStoreProductTools li a{
+    padding:3px 0 3px 20px;
+}
+
+#iStoreProductPropertiesForm .iStoreProductPurchase {
+	position: Relative;
+	top: 80px;
+	left: 30px;
+	width: 100%;
+	height: 32px;
+	padding: 12px 0px;
+	background: #e3e3e3;
+   
+
+}
+#iStoreProductPropertiesForm .iStoreProductCosts {
+	display: block;
+	margin-left: 15px;
+	float: left;
+
+}
+
+#iStoreProductPropertiesForm .iStoreProductCosts .iStorePrice {
+font-size: 15pt!important;
+color: #000;
+font-weight: bold;
+
+}
+
+#iStoreProductPropertiesForm .iStoreProductCosts del.iStorePrice {
+	color: #5c5c5c!important;
+font-size: 10pt!important;
+}
+#iStoreProductPropertiesForm .iStoreAddToBasket {
+	float: right;
+
+	margin-right: 60px;
+	
+	border-radius: 5px;
+	padding-left: 15px;
+}
+
+
+
+
+  /* Datails gallery*/
+#iStoreProductGallery {
+	float: left;
+	width: 268px;
+	position: relative;
+	background: none;
+	z-index: 2;
+	right: 0px;
+	background: #fff;
+}
+#iStoreProductGalleryPhoto {
+	padding: 0;
+	height: 297px;
+	width: 268px;
+	display: table;
+	min-width: 268px;
+}
+#iStoreProductGalleryPhoto a {
+	display: table-cell;
+	vertical-align: middle;
+	width: 240px;
+	height: 180px;
+	margin: 0 auto;
+	text-align: center;
+	padding: 0;
+	position: static;
+}
+#iStoreProductGalleryPhoto a img {
+	margin: 0 auto;
+	display: block;
+}
+#iStoreContent #iStoreProductGalleryThumbs {
+	padding: 8px 31px;
+	margin: 0;
+	overflow: hidden;
+
+	background: #fff;
+
+}
+#iStoreContent #iStoreProductGalleryThumbs li {
+	float: left;
+	width: 100px;
+	list-style: none;
+	list-style-image: none;
+	margin: 0 1px;
+	height: 75px;
+	display: table;
+}
+#iStoreContent #iStoreProductGalleryThumbs li a {
+	display: block;
+	width: 100px;
+	height: 75px;
+	text-align: center;
+	background: #fff;
+	padding: 0;
+	position: static;
+	display: table-cell;
+	vertical-align: middle;
+}
+#iStoreContent #iStoreProductGalleryControls {
+	margin: 0;
+}
+#iStoreContent #iStoreProductGalleryControls li {
+	list-style: none;
+	list-style-image: none;
+	margin: 0;
+}
+#iStoreProductGalleryControlPrev,
+#iStoreProductGalleryControlNext {
+	height: 92px;
+	width: 30px;
+	position: absolute;
+	bottom: 0;
+}
+#iStoreProductGalleryControlPrev {
+	left: 0;
+}
+#iStoreProductGalleryControlNext {
+	right: 0;
+}
+
+#iStoreProductGalleryControlNext a span,
+#iStoreProductGalleryControlPrev a span {
+	display: none;
+}
+#iStoreProductDetails .iStoreProductComments {
+	margin-top: 65px;
+	width: 354px;
+	margin-left: 2px;
+	padding-left: 35px;
+	position: absolute;
+}
+#iStoreProductGalleryControlPrev a {
+	padding: 0;
+	display: block;
+	height: 92px;
+	width: 30px;
+}
+#iStoreProductGalleryControlNext a {
+	padding: 0;
+	display: block;
+	height: 92px;
+	width: 30px;
+}
+
+#iStoreProductGalleryControlPrev a {
+	padding: 0;
+	background: url('http://static.istore.pl/istore/22649/photos/original/18780996.jpg') left center no-repeat;
+}
+#iStoreProductGalleryControlNext a {
+	padding: 0;
+	background: url('http://static.istore.pl/istore/22649/photos/original/18782139.jpg') right center no-repeat;
+}
+
+
+    #iStoreProductDetails .iStoreProductComments {margin-top:65px; width:354px; margin-left:2px; padding-left:35px; position:absolute; }
+/*opinie */
+
+#iStoreAddComment h3 {margin:10px 0; padding-top:0; border-top:0;}
+#iStoreAddComment .checkbox {padding:10px 0;}
+#iStoreAddComment input#opinie {margin:3px 7px 3px 0; float:left;}
+
+
+/* Filters Toggler  */
+/* Filters Togler  */
+.iStoreBoxToolbar {
+  position: relative;
+  overflow: hidden;
+	height: 28px;
+  padding-top:5px;
+}
+#iStoreProductsDisplayToggler {
+	padding: 0;
+	position: absolute;
+	right: 11px;
+	color: #000;
+}
+#iStoreContent #iStoreProductsDisplayToggler ul {
+	margin: 0;
+}
+#iStoreContent #iStoreProductsDisplayToggler ul li {
+	float: left;
+	list-style: none;
+	list-style-image: none;
+	margin: 0;
+	text-transform: uppercase
+}
+#iStoreContent #iStoreProductsDisplayToggler ul li a {
+  background-image: url('http://static.istore.pl/istore/22649/files/18780640.png');
+  background-repeat:no-repeat;  
+  padding: 0;
+	height: 20px;
+	width: 24px;
+	display: block;
+	margin: 0;
+}
+#iStoreProductsDisplayToggler ul li a#displayAsTiles {
+	background-position: 0 0;
+}
+#iStoreProductsDisplayToggler ul li a#displayAsTiles:hover {
+	background-position: 0 -40px;
+}
+#iStoreProductsDisplayToggler ul li.selected a#displayAsTiles {
+	background-position: 0 -20px;
+}
+#iStoreProductsDisplayToggler ul li a#displayAsList {
+	background-position: -28px 0;
+}
+#iStoreProductsDisplayToggler ul li a#displayAsList:hover {
+	background-position: -28px -40px;
+}
+#iStoreProductsDisplayToggler ul li.selected a#displayAsList {
+	background-position: -28px -20px;
+}
+#iStoreProductsDisplayToggler ul li a#displayAsGallery {
+	background-position: -56px 0;
+}
+#iStoreProductsDisplayToggler ul li a#displayAsGallery:hover {
+	background-position: -56px -40px;
+}
+#iStoreProductsDisplayToggler ul li.selected a#displayAsGallery {
+	background-position: -56px -20px;
+}
+#iStoreContent #iStoreProductsDisplayToggler ul li span {
+	padding: 4px 5px 5px 5px;
+	display: block;
+	font-size: 11px;
+}
+#iStoreContent #iStoreProductsDisplayToggler ul li a span {
+	display: none;
+}
+
+#iStoreContent #iStoreProductsSort {float:left; padding:8px 5px 0 0; color: #000;}
+#iStoreContent #iStoreProductsSort ul {margin-left:0;}
+#iStoreContent #iStoreProductsSort li {float:left; font-size:11px;margin:0 5px; list-style:none; list-style-image:none;}
+#iStoreContent #iStoreProductsSort li a {text-decoration:none; font-size:11px; z-index:9999; }
+
+
+#show, #hide {overflow:hidden; line-height:14px; margin:0; }
+#show a { 
+background: url('http://www.wypasionastrona.pl/kinkiety/istore/show.png') right 5px no-repeat;
+	padding-right: 20px;
+	display: block;
+	float: left;
+
+}
+#hide a {
+	background: url('http://www.wypasionastrona.pl/kinkiety/istore/hide.png') right 5px no-repeat;
+	padding-right: 20px;
+	display: block;
+	float: left;}
+#show a img, #hide a img {display:none;}
+
+#iStoreFiltersToggler { 
+width: 865px;
+background: #fff; 
+padding:2px 9px 5px 14px;
+border-left: 1px solid #e3e3e3;
+border-right: 1px solid #e3e3e3;
+
+
+}
+#iStoreFiltersToggler a {color:#000; text-decoration:none;font-size:11px;}
+
+#iStoreFilters {
+background: #fff url('http://static.istore.pl/istore/22649/files/18782500.png') repeat-x bottom; 
+padding-right: 8px;
+border-left: 1px solid #e3e3e3;
+border-right: 1px solid #e3e3e3;
+border-bottom: 1px solid #e3e3e3;
+border-bottom-left-radius: 10px;
+border-bottom-right-radius: 10px;
+}
+
+
+
+#iStoreFilters fieldset {border:0; margin:0; padding:0 12px;}
+
+#iStoreFiltersPriceRange{padding-left:9px; float:left; width:370px; height:20px; overflow:hidden; margin:0}
+#iStoreFiltersPriceRange input {width:96px; border: 1px solid #d5d5d5; margin:0; font-size:11px; line-height:13px; padding:2px 3px 3px 3px; color:#000; font-family:tahoma; background: #f0f0f0;}
+#iStoreFilters label {color:#5d5d5d; line-height:16px;}
+
+#iStoreFilters div.checkbox {height:20px; overflow:hidden;}
+#iStoreFilters div.checkbox .checkbox {margin:2px 8px 0 5px; width:16px; height:16px; font-size:16px;; float:left;}
+#iStoreFilters div.checkbox label {padding-top:4px;}
+#iStoreFilters .select {float:left; width:148px; font-size:11px; position:relative; margin:5px 0; overflow:visible; }
+#iStoreFilters .col1, #iStoreFilters .col5, #iStoreFilters .col9, #iStoreFilters .col13, #iStoreFilters .col17, #iStoreFilters .col21, #iStoreFilters .col25, #iStoreFilters .col29  {clear:left;}
+#iStoreFilters .select .filterTip {top:0px; left:-1px; background:#fff; position:absolute; overflow:hidden; border:2px solid #ccc; padding:10px; border-radius:5px 5px 5px 5px; -moz-border-radius:5px 5px 5px 5px; z-index:9999;}
+#iStoreFilters div.hover {z-index:99999}
+#iStoreFilters .select label{float:none;display:block; line-height:110%; min-height:26px; }
+#iStoreFilters .select .filterTip ul {margin:0; list-style-image:none; overflow:hidden;}
+#iStoreFilters .select .filterTip ul li{list-style-image:none; float:left; clear:both; margin-left:0; list-style:none; }
+#iStoreFilters .select .filterTip ul li div.checkbox {min-width: 150px; min-height:20px; height:auto;}
+#iStoreFilters .select .filterTip ul li div.checkbox input{float:left; width:13px; height:13px; }
+#iStoreFilters .select .filterTip ul li div.checkbox label {display:inline; float:left; width:auto; min-width:70px; padding:2px 0 0 4px; color:#0E273D }
+
+.submit button.submit {
+background: #002861;
+border: 2px solid #909090;
+padding:3px 8px;
+box-shadow: 0 0 5px rgba( 0, 0, 0, .15 ) ;
+	-webkit-box-shadow: 0 0 5px rgba( 0, 0, 0, .15 ) ;
+}
+
+.filterWrapper h4{padding-bottom:5px; font-size:12px; color:#0E273D }
+.filterWrapper .submit {padding-top:5px;}
+.filterWrapper .submit button {padding:2px 6px 5px 6px; color:#fff; font-size:10px; text-transform:lowercase; background: #858585; border:0; height:22px;}
+.filterWrapper .submit button.submit {background: #c10117; float:right; }
+.filterWrapper .buttons button {padding:2px 6px 5px 6px; color:#fff; font-size:10px; text-transform:lowercase; background: #858585; border:0; height:22px;}
+.filterWrapper .buttons button.submit {background: #c10117; float:right; }
+.filterWrapper div.checkbox input {float:left; width:13px; height:13px;}
+
+.filterTip .close {background: url(img/close.gif) no-repeat; width:12px; height:12px; float:right;}
+.filterTip .close span {display:none;}
+
+#iStoreContent #iStoreFilters .properties {border:1px solid #ccc; background:#fff;height:18px; text-align:left; width:145px; margin:4px 0 0 0; position:relative; }
+#iStoreFilters .properties a {display:block; color:#fefcf0; text-decoration:none; padding:0px 8px 4px 8px; position:static;}
+
+#iStoreFiltersSubmit { padding:8px 8px; overflow:hidden; clear:left; margin:0;}
+#iStoreFiltersSubmit .button {float:left; border:0; height:26px; margin-bottom:0; margin-left:200px;}
+#iStoreFiltersSubmit .button button {padding:4px 10px 4px 10px; color:#fffbf8; font-size:11px; line-height:14px; text-transform:lowercase; background:#898989; margin:0; height:auto; margin-right: 40px;}
+#iStoreFiltersSubmit .submit {float:left; border:0; height:26px; overflow:hidden; margin:0 0 0 10px;}
+#iStoreFiltersSubmit .submit button {padding:4px 10px 4px 10px; color:#fff; font-size:11px; line-height:14px; height:auto; text-transform:lowercase; margin:0;}
+
+
+#iStoreFiltersProductsNew {float:left; margin-bottom: 15px;}
+#iStoreFiltersProductsPromoted {float:left;margin-bottom: 15px;}
+
+/*Mooflow*/
+#iStoreProductsMooFlow {padding-top:470px; background:#none;margin-top:20px;}
+#iStoreProductsMooFlow div div img {padding-top:140px;}
+#iStoreProductsMooFlow .caption { margin:0; padding:25px 0px 20px 20px;position:relative;width:869px;z-index:1000;  }
+#iStoreProductsMooFlow .caption h3 {padding-top:20px; border-top:0; text-transform:none; margin:0; background:none;}
+#iStoreProductsMooFlow .caption .iStoreProductDescription {padding-left:10px; color: #000}
+#iStoreProductsMooFlow .iStoreProductPurchase {background:none repeat scroll 0 0 ;border:medium none; position:relative;width:204px; margin-top:-25px; float:right;}
+#iStoreProductsMooFlow .iStoreProductCosts {float:none;margin:0;text-align:center;}
+#iStoreProductsMooFlow .caption .iStoreProductCosts del {font-size:12px; color:#c4dbeb}
+#iStoreProductsMooFlow .iStoreAddToBasket {float:none; margin:0;padding-top:10px;}
+#iStoreProductsMooFlow .iStoreAddToBasket a {margin:0 auto;}
+
+#iStoreProductsMooFlow .mfNav .sliderCon {height:40px;left:0;padding:20px 0 0 0;position:absolute;top:0;width:810px;}
+#iStoreProductsMooFlow .mfNav .sliderCon .sliderNext { background:url("http://www.wypasionastrona.pl/powermode/istore/lewa.png") no-repeat center center ; cursor:pointer; display:block; height:40px; left:10px; position:absolute; top:150px; width:40px; }
+#iStoreProductsMooFlow .mfNav .sliderCon .slider .knob { border-radius: 5px; background:#ee1f27; border:0px solid #C10117; cursor:pointer; height:8px; }
+#iStoreProductsMooFlow .mfNav .sliderCon .sliderPrev { background:url("http://www.wypasionastrona.pl/powermode/istore/prawa.png") no-repeat center center ; cursor:pointer; display:block; height:40px; position:absolute; right:3px; top:150px; width:40px; }
+#iStoreProductsMooFlow .slider {border:1px solid #b5b5b5; border-radius: 5px; padding:1px 0px; margin:0 auto;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* iStoreOrder ---------------------------------------------------------------------------- */
+/* Menu Akordeonowe */
+
+#iStoreOrder {
+  width:860px;
+  padding-bottom:15px;
+}
+
+#withoutLoginForm {
+width: 845px;
+
+}
+
+#iStoreContent .iStoreBoxWrapper .iStoreBoxHeader h2 {
+
+ padding: 10px;
+ background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x;
+ color: #fff;
+ text-transform: uppercase;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+ margin-bottom: 20px;
+  }
+
+#iStoreStatic .iStoreBoxContent table td {
+border: 1px solid #e3e3e3;
+padding: 7px;
+background: #ccc;
+
+}
+
+.iStoreBoxContent table td a {
+color: #fff;
+}
+
+  
+#iStoreOrder .iStoreBoxContent {
+  overflow:hidden;
+ } 
+
+/**/
+
+    #iStoreOrder ol,#iStoreOrder ul{
+        list-style:none;
+        }
+
+    #iStoreOrder div.select select {
+        width:120px;
+        }
+
+    #iStoreLoginBox #allegroForm ul#allegroFormAccoutLinks {
+        margin-left:0;
+        padding-left:160px;
+        }
+
+    #iStoreLoginBox #allegroForm ul#allegroFormAccoutLinks li {
+        margin:0;
+        padding:0;
+        }
+
+    #iStoreLoginBox #iStoreOrder #allegroForm {
+    	clear:none;
+    	float:none;
+    	width:auto;
+        }
+
+    #iStoreOrder fieldset{
+        clear:none
+        }
+
+    #iStoreOrder fieldset div{
+        float:none
+        }
+
+    #iStoreOrder  form div {
+        clear:none;
+        width:auto;
+        }
+
+    #iStoreOrder label {
+        margin:0;
+        }
+
+    #iStoreOrder div.text label {
+        display:inline-block;
+        float:left;
+        width:150px;
+        }
+
+    #iStoreOrder div.password label {
+        display:inline-block;
+        float:left;
+        width:150px;
+        }
+
+    #iStoreOrder #withoutLoginForm h3,
+    #iStoreOrder #withoutLoginForm h4{
+        margin-bottom:15px;
+        }
+
+    #iStoreOrder .errorInfo{
+        font-size:11px;
+        margin:5px;
+        }
+
+    #iStoreOrder .formBox1{
+        float:left;
+        width:325px;
+        margin:0;
+        }
+
+    #iStoreOrder .formBox2{
+        float:right;
+        width:325px;
+        margin:0;
+        }
+
+    #iStoreAccountForm #iStoreOrder .formBox3{
+        float:none;
+        width:auto;
+        padding:0;
+        clear:both;
+        margin-bottom:10px;
+        }
+
+    #iStoreOrder .formBox3{
+        margin-bottom:10px;
+        }
+
+    #iStoreOrder .formBox3 textarea{
+        width:489px;
+        height:60px;
+        clear:left;
+        resize:vertical;
+        overflow:auto;
+        }
+
+    #iStoreOrder .formBox4,
+    #iStoreAccountForm #iStoreOrder .formBox4{
+        clear:both;
+        display:block;
+        margin-bottom:0px;
+        margin-top:5px;
+        }
+
+    #iStoreAccountForm #iStoreOrder .formBox9 + .formBox4,
+    #iStoreOrder #withoutLoginForm .formBox9 + .formBox4{
+        margin-bottom:20px;
+        }
+
+    #iStoreAccountForm #iStoreOrder fieldset{
+        padding:0;
+        margin:0;
+        }
+
+    #iStoreOrder form fieldset{
+        -moz-box-shadow:none;
+        -webkit-box-shadow:none;
+        box-shadow:none;
+        padding:0;
+        border:0;
+        padding:0;
+        margin:0
+        }
+
+    #iStoreOrder .formBox5,
+    #iStoreAccountForm #iStoreOrder .formBox5{
+        clear:both;
+        display:block;
+        width:325px;
+        margin-bottom:0;
+        margin-top:15px;
+        }
+
+    #iStoreOrder #orderInvoiceData {
+        margin-bottom:20px;
+        }
+
+    #iStoreOrder #InvoiceAddressNameDiv input{
+        margin-top:10px;
+        }
+
+    #iStoreOrder #orderInvoiceData {
+        padding-bottom:0px;
+        }
+    #iStoreOrder #orderInvoiceData .formBox2 {
+        margin-top:-17px;
+        margin-bottom:17px;
+        }
+
+    #iStoreOrder #iStoreAccountFormDeliveryData .formBox2 {
+        margin-top:-28px;
+        }
+
+    #iStoreOrder #withoutLoginForm div.text label,
+    #iStoreOrder #withoutLoginForm .select label,
+    #iStoreOrder .formBox5 div.text label,
+    #iStoreOrder .formBox3 div.text label,
+    #iStoreOrder #iStoreAccountFormDeliveryData div.text label,
+    #iStoreOrder #iStoreAccountFormDeliveryData .select label,
+    #iStoreOrder #orderInvoiceData div.text label,
+    #iStoreOrder #orderInvoiceData .select label,
+    #iStoreOrder #deliveryList label {
+        text-align:right;
+        padding-right:0;
+        margin-right:7px;
+        width:120px;
+        float:none;
+        display:inline-block;
+        vertical-align:middle;
+        }
+        
+     #iStoreOrder #deliveryList label {
+        line-height:18px;
+        margin-bottom:12px;
+     }
+
+    #iStoreOrder #withoutLoginForm div.text input.text,
+    #iStoreOrder #withoutLoginForm div.text select,
+    #iStoreOrder .formBox5 div.text input.text,
+    #iStoreOrder #iStoreAccountFormDeliveryData div.text input.text,
+    #iStoreOrder #iStoreAccountFormDeliveryData  select,
+    #iStoreOrder #orderInvoiceData div.text input.text,
+    #iStoreOrder #orderInvoiceData  select
+        {
+        width:165px;
+        }
+
+    #iStoreOrder div.text input,
+    #iStoreOrder div.text select,
+    #iStoreOrder div.text textarea {
+        vertical-align:top;
+        }
+
+    #iStoreOrder .userComments label{
+        text-align:left;
+        }
+
+    #iStoreOrder .formBox8,
+    #iStoreAccountForm #iStoreOrder .formBox8{
+        margin-bottom:20px;
+        padding-left:126px;
+        }
+
+    #iStoreAccountForm  #iStoreOrder #iStoreAccountFormDeliveryData{
+        margin-bottom:15px;
+        clear:both;
+        }
+
+    #iStoreOrder div.text{
+        position:relative;
+        overflow:visible;
+        margin:0 0 10px 0;
+        padding:0;
+        }
+
+    #iStoreOrder .allegroFormLoginPass div.text{
+        position:static;
+        }
+
+    #iStoreOrder .iStoreBoxContent h3 {
+        border:none;
+        clear:both;
+        margin:0 0 15px 0 ;
+        padding:0;
+        font-size:12px;
+        font-weight:bold;
+        text-transform:uppercase;
+        
+        }
+
+    #iStoreOrder .iStoreBoxContent h4 {
+        border:none;
+        clear:both;
+        margin:0 0 10px 0;
+        padding:0;
+        font-size:12px;
+        font-weight:bold;
+        text-transform:none;
+        }
+
+    #iStoreOrder .formBox6{
+        clear:both;
+        margin-bottom:5px;
+        margin-top:20px;
+        }
+
+    #iStoreOrder .formBox6,
+    #iStoreOrder .formBox9{
+        float:none
+        }
+
+    #iStoreOrder .formBox6 p{
+        vertical-align:top;
+        margin:0;
+        }
+
+    #iStoreOrder .formBox6 h3,
+    #iStoreOrder .formBox6 div{
+        display:inline-block;
+        }
+
+    #iStoreOrder .formBox6 h3,
+    #iStoreOrder .formBox9 h3{
+        padding-right:10px;
+        display:inline-block;
+        
+        }
+
+    div#iStoreContent #iStoreOrder .formBox6 p.error,
+    div#iStoreContent #iStoreOrder .formBox9 p.error{
+        padding:0;
+        display:inline-block;
+        vertical-align:top;
+        margin:0;
+        }
+
+    #iStoreOrder .formBox9{
+        padding-top:15px;
+        clear:both;
+        border-top-width:1px;
+        border-top-style:dotted;
+        }
+
+    #iStoreOrder #deliveryList{
+        padding-top:0px;
+        margin-bottom:0;
+        vertical-align:top;
+        width:670px;
+        }
+
+    #iStoreOrder #deliveryList #delivery{
+        display:block;
+        }
+
+    #iStoreOrder #delivery h4{
+        margin:10px 0 10px 0;
+        font-weight:bold;
+        font-size:12px;
+        }
+
+    #iStoreOrder #deliveryList select{
+        margin-bottom:10px;
+        min-width:170px;
+        }
+    
+    /*ie select fix*/
+   #iStoreOrder #deliveryList select.limited-width {
+        width: 170px; 
+        position: static;
+        }
+    
+    #iStoreOrder #deliveryList select.expanded-width {
+        width: auto; 
+        position: absolute;
+        z-index:9999;
+        }
+      /* end ie select fix*/
+      
+    #iStoreOrder #deliveryList #delivery #inpostErrorMsg p.error {
+        margin-left:0;
+        padding-left:0;
+        }
+
+    #iStoreOrder #deliveryList p.error{
+        padding:0 0 0 5px;
+        vertical-align:middle;
+        }
+
+    #iStoreOrder #deliveryList #inpostExtendedData div.text{
+        margin-bottom:0;
+        }
+
+    #iStoreOrder #iStoreOrderSummaryDeliveryData h3,
+    #iStoreOrder #iStoreOrderSummaryInvoiceData h3{
+        margin:0 10px 14px 10px;
+        text-align:center;
+        }
+
+    #iStoreOrder #iStoreAccountFormContactData2 {
+        padding-top:20px;
+        }
+
+    #iStoreOrder #iStoreAccountFormContactData1 .iStoreBoxContent,
+    #iStoreOrder #iStoreAccountFormContactData2 .iStoreBoxContent {
+        margin-bottom:10px;
+        }
+
+    #iStoreOrder #iStoreOrderSummaryDeliveryData .iStoreBoxContent,
+    #iStoreOrder #iStoreOrderSummaryInvoiceData .iStoreBoxContent{
+        padding:0 0 0 10px
+        }
+
+    #iStoreOrder #iStoreAccountFormContactData1 .iStoreBoxContent,
+    #iStoreOrder #iStoreAccountFormContactData2 .iStoreBoxContent {
+        padding:0;
+        }
+
+
+/* info1, info2 - ikony wykrzyknika i znaku zapytania dla walidacji w formularzach */
+#iStoreOrder .info1{background: url('https://img.istore.pl/css/client5/version1/skins/common/icons-validation.png') no-repeat left -23px; width:22px; height:22px; position:absolute; right:0; top:0; z-index:10;}
+#iStoreOrder .info1 span{display:none;width:220px; font-size:11px; position:absolute; bottom:27px; right:0; padding:7px; border-radius:3px; border:1px solid #a00; box-shadow:#777 0 0 1px; color:#a00; background-color:#fcc;}
+#iStoreOrder .info1:hover span{display:block; z-index:20;}
+#iStoreOrder .info2{background: url('https://img.istore.pl/css/client5/version1/skins/common/icons-validation.png') no-repeat left top; width:22px; height:22px; position:absolute; right:0; top:0;}
+#iStoreOrder .info2 span{display:none;width:220px; font-size:11px; position:absolute; bottom:27px; right:0; padding:7px; border-radius:3px; border:1px solid #aa4; box-shadow:#777 0 0 1px; background-color:#ffa; color:#222;}
+#iStoreOrder .info2:hover span{display:block; z-index:20;}
+#iStoreOrder #InvoiceAddressNameDiv .info1,#iStoreOrder #InvoiceAddressNameDiv .info2 {top:10px;}
+/**/
+
+
+/* Koszyk */
+
+
+#iStoreContent .iStoreBox#iStoreBasket .iStoreBoxHeader h2 {
+
+}                                       
+                                       
+#iStoreBasket #iStoreOrder .iStoreBoxContent {
+clear: both;
+padding-top: 15px;
+padding-right: 15px;
+width: 850px;
+
+}
+
+/*accordion*/
+#iStoreOrder #accordion {
+  overflow:hidden;
+  width: 860px;
+}
+#iStoreOrder #accordion > h3 {
+  background:#540508; 
+  padding:8px!important; 
+  font-size:14px;
+  margin-right: 10px;
+}
+#iStoreOrder #accordion h3.ui-state-active {
+  background:#3a3a3a; 
+  padding-top: 10px;
+  padding-bottom: 10px;
+  color:#3a3a3a;
+}
+#iStoreOrder #accordion h3 a {
+  background: url("https://img.istore.pl/css/client5/version1/skins/common/icon-arrow-white.png") no-repeat scroll 0px 3px;
+  color:#fff; 
+  text-decoration:none;
+  position:static;
+  padding:0 0 0 15px; 
+}
+#iStoreOrder #accordion h3.ui-state-active a {
+  background: url("https://img.istore.pl/css/client5/version1/skins/common/icon-arrow-white.png") no-repeat scroll 0px -33px; 
+  padding-left:15px;
+}/**/
+
+
+
+    #iStoreOrder .stylBox3{
+        float:right;
+        clear:right;
+        margin-bottom:0;
+        text-align:right;
+        }
+
+    div#iStoreContent #iStoreOrder .stylBox3 p.error{
+        margin:0 0 5px 0;
+        }
+
+    #iStoreOrder .stylBox1{
+        clear:both;
+        overflow:hidden;
+        margin-right:10px;
+        padding-top:15px;
+        }
+
+    #iStoreOrder .stylBox4 {
+        padding:10px 0 20px 0;
+        clear:right;
+        float:right;
+        }
+
+    #iStoreOrder .stylBox4 button{
+        float:right;
+        margin:0;
+        background: #3a3a3a;
+        padding: 5px;
+        }
+
+    #iStoreOrder #allegroForm {
+        height:auto;
+        }
+
+    #iStoreOrder .allegroFormLoginPass label{
+        text-align:right;
+        padding-right:10px;
+        }
+
+    #iStoreOrder .allegroFormLoginPass .error p.error{
+       padding-left:160px;
+       padding-top:2px;
+       clear:left;
+       margin-left:0;
+       width:130px;
+       display:block;
+       }
+
+    #iStoreOrder #allegroFormTerms{
+       clear:both;
+       }
+
+    #iStoreOrder #allegroFormTerms div label {
+       float:none;
+       width:auto;
+       display:inline-block;
+       width:700px;
+       padding-top:0;
+       padding-left: 10px;
+       }
+
+    #iStoreOrder #allegroFormTerms div input {
+        vertical-align:top;
+        }
+
+    #iStoreOrder .acceptAllegroFormLoginPass {
+        text-align:right;
+        margin:10px;
+        clear:both;
+        }
+
+    #iStoreOrder .acceptAllegroFormLoginPass button{
+        float:none;
+        background: #3a3a3a;
+      }
+
+    #iStoreOrder #allegroForm{
+        padding:20px 0 0 0;
+        }
+
+    #iStoreOrder .allegroInfo3{
+        float:right;
+        width:320px;
+        }
+
+    #iStoreOrder .allegroInfo3 a{
+        margin-right:20px;
+        display:inline-block;
+        position:static;
+        }
+
+    #iStoreOrder .allegroPayUInfo{
+        clear:both;
+        padding:10px;
+        margin-left:35px;
+        margin:0 0 20px;
+        width:40%;
+        float:right;
+        border-width:1px;
+        border-style:solid;
+        }
+
+    #iStoreOrder .allegroPayUInfo h4{
+        font-size:14px;
+        margin:10px 0 10px 0;
+        text-transform:none;
+        }
+
+    #iStoreOrder .allegroPayUInfo ul{
+        margin:0 0 20px 20px;
+        }
+
+    #iStoreOrder .allegroPayUInfo ul li,
+    #iStoreOrder .allegroPayUInfo ul li li,
+    #iStoreOrder .allegroPayUInfo ul ul {
+        margin-bottom:5px;
+        padding:0;
+        }
+
+    #iStoreOrder .allegroPayUInfo ul ul {
+        padding-top:10px;
+        margin-bottom:10px;
+        }
+
+    #iStoreOrder .allegroFormInfo{
+        margin:0 0 20px 0;
+        line-height:150%;
+        font-weight:bold;
+        }
+
+    #iStoreOrder .allegroFormRegulamin{
+        margin-bottom:20px;
+        }
+    #iStoreOrder .allegroFormRegulamin label{
+       padding-top:0;
+        }
+
+    #iStoreOrder .allegroFormRegulamin input{
+       margin-top:2px;
+        }
+
+    #iStoreOrder .allegroFormRegulamin input{
+        vertical-align:top;
+        }
+
+    #iStoreOrder .allegroFormRegulamin label{
+        display:inline-block;
+        width:300px;
+        }
+
+    #iStoreOrder .allegroFormBasket div{
+        font-weight:bold;
+        line-height:150%;
+        }
+
+    #iStoreOrder .buttonsArea button{
+        margin:0;
+        }
+
+    #iStoreOrder #allegroFormAccoutLinks{
+        margin-bottom:15px;
+        }
+
+    #iStoreOrder label{
+        font-size:12px;
+        }
+
+    #iStoreOrder .buttonsArea button + button{
+        margin-left:130px;
+        }
+
+    #iStoreOrder div.stylBox1{
+        float:none;
+        }
+
+    #iStoreOrder div.stylBox1 label{
+        padding:0;
+        }
+
+    #iStoreOrder div.stylBox1 input{
+        margin-right:5px;
+        }
+
+    #iStoreOrder table #CouponCode{
+       width:70px;
+       }
+
+    #iStoreOrder .iStoreBoxContent .iStoreBoxSection {
+        clear:both;
+        overflow:hidden;
+        padding-bottom:20px;
+        }
+
+    #iStoreOrder .iStoreBoxContent .iStoreBoxSection1 {
+        margin-bottom:20px;
+        zoom:1;
+        }
+
+    #iStoreOrder .iStoreBoxContent .iStoreBoxSection2 {
+        padding-left:20px;
+        padding-right:10px;
+        padding-top:10px;
+        height:70px;
+        }
+
+    #iStoreOrder .iStorePrintLink{
+        float:right;
+        padding-top:50px;
+        margin-right:20px;
+        }
+
+    #iStoreOrder .iStoreBoxContent .iStoreBoxSection2 p {
+        padding-top:16px;
+        padding-left:60px;
+        line-height:140%;
+        overflow:visible;
+        font-size:12px;
+        margin:5px 15px;
+        }
+
+    #iStoreOrder .iStoreBoxContent .iStoreBoxSection2 p span {
+        display:block;
+        }
+
+    #iStoreOrder .iStoreBoxContent .iStoreBoxSection3 {
+        overflow:visible;
+        font-size: 12px;
+        margin: 0 15px 0 15px;
+        float:left;
+        height:70px;
+        }
+
+    #iStoreOrder .iStoreBoxContent .iStoreBoxSection .iStoreBoxSectionPayment{
+        margin:6px 0 0 0;
+        }
+
+    #iStoreOrder .iStoreBoxContent .iStoreBoxSection .iStoreBoxSection3 > form {
+        padding:0;
+        }
+
+    #iStoreOrder .iStoreBoxContent .iStoreBoxSection .iStoreBoxSection3{
+        margin-left:240px;
+        }
+
+    #iStoreOrder .iStoreBoxContent .iStoreBoxSection3 button.submit{
+        margin-bottom:5px;
+        margin-top:6px;
+        background-image:none;
+        padding:10px 22px;
+        }
+
+    #iStoreOrder .iStoreBoxContent .iStoreBoxSection3 span{
+        display:block;
+        clear:both;
+        position:relative;
+        bottom:0;
+        }
+
+    #iStoreOrder #iStoreOrderSummaryDeliveryData,
+    #iStoreOrder #iStoreAccountFormContactData1{
+        width:49%;
+        float:left;
+        }
+
+    #iStoreOrder #iStoreOrderSummaryDeliveryData{
+        width:49%;
+        float:left;
+        clear:left;
+        }
+
+    #iStoreOrder #iStoreOrderSummaryInvoiceData,
+    #iStoreOrder #iStoreAccountFormContactData2 {
+        width:49%;
+        border:none;
+        float:right;
+        }
+
+    #iStoreOrder #iStoreOrderSummaryInvoiceData{
+        clear:right;
+        }
+
+    #iStoreOrder #iStoreOrderSummaryDeliveryData ul.iStoreBoxSection4{
+        margin-left:0;
+        list-style:none;
+        }
+
+    #iStoreOrder #iStoreOrderSummaryDeliveryData li,
+    #iStoreOrder #iStoreOrderSummaryInvoiceData li,
+    #iStoreOrder #iStoreOrderSummaryPaymentData li,
+    #iStoreOrder #iStoreAccountFormContactData1 li,
+    #iStoreOrder #iStoreAccountFormContactData2 li {
+        list-style-image:none;
+        }
+
+    #iStoreOrder #iStoreOrderSummaryDeliveryData ul.iStoreBoxSection4,
+    #iStoreOrder #iStoreOrderSummaryInvoiceData ul.iStoreBoxSection4,
+    #iStoreOrder #iStoreOrderSummaryPaymentData ul.iStoreBoxSection4,
+    #iStoreOrder #iStoreAccountFormContactData1 ul.iStoreBoxSection4,
+    #iStoreOrder #iStoreAccountFormContactData2 ul.iStoreBoxSection4{
+        margin:0;
+        display:inline-block;
+        }
+
+    #iStoreOrder .iStoreBoxSection4 li{
+        display:block;
+        padding-bottom:2px;
+        }
+
+    #iStoreOrder .iStoreBoxSection4 li em,
+    #iStoreOrder .istoreBoxComment em{
+        float:left;
+        display:inline-block;
+        margin-right: 7px;
+        text-align:right;
+        font-style:normal;
+        width:120px;
+        word-wrap:break-word;
+        }
+
+    #iStoreOrder .iStoreBoxSection4 li strong{
+        font-weight:bold;
+        width:180px;
+        display:inline-block;
+        word-wrap:break-word;
+        }
+
+    #iStoreOrder .istoreBoxComment{
+        clear:both;
+        margin-left:10px;
+        padding-top:15px;
+        }
+
+    #iStoreOrder .istoreBoxComment em{
+        font-style:normal;
+        margin-right:7px;
+        text-align: right;
+        width: 120px;
+        display:inline-block;
+        }
+
+    #iStoreContent #iStoreOrder #frm .iStoreBox{
+        border:none;
+        }
+
+	#frm h3 {
+		 padding: 10px!important;
+ background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x;
+ font-size: 15pt;
+ color: #fff;
+ text-transform: uppercase;
+ border-top-left-radius: 10px;
+ border-top-right-radius: 10px;
+ }
+
+    #iStoreOrder #allegroLoginForm #loginForm,
+    #iStoreOrder #allegroLoginForm #loginForm > fieldset,
+    #iStoreContent #iStoreOrder .iStoreMessageBox{
+        margin-top:0;
+        }
+
+    #iStoreOrder .istoreBoxComment div{
+        display:inline;
+        display:inline-block;
+        width:500px;
+        }
+
+    #iStoreOrder #iStoreOrderSummaryPaymentData{
+        border:0;
+        clear:both;
+        padding-top:10px;
+        margin-bottom:30px;
+        }
+
+    #iStoreOrder #iStoreOrderSummaryPaymentData .iStoreBoxContent{
+        padding-left:10px;
+        }
+
+    #iStoreOrder .iStorePaymentMethods{
+        margin-bottom:10px;
+        padding:2px 1px 1px;
+        }
+
+    #iStoreOrder .iStorePaymentMethods div.radio{
+        display:block;
+        width:165px;
+        position:relative;
+        vertical-align:middle;
+        line-height:50px;
+        margin:0 35px 10px 0;
+        width:130px;
+        }
+
+    #iStoreOrder div.iStorePaymentMethods label {
+        position:relative;
+        width:100px;
+        cursor:pointer;
+        float:none;
+        margin-left:30px;
+        }
+
+    #iStoreOrder div.iStorePaymentMethods label span {
+        vertical-align:middle;
+        height:50px;
+        padding:0 0 0 40px;
+        line-height:117%;
+        margin:0;
+        display:block;
+        display:table-cell;
+        font-size:12px;
+        }
+
+    #iStoreOrder div.iStorePaymentMethods div.radio input{
+        margin:0;
+        position:absolute;
+        left:7px;
+        top:18px;
+        }
+
+
+
+    #iStoreOrder fieldset {
+        margin-top:0;
+        }
+
+    #iStoreOrder select{
+        padding:0 0 0 3px;
+        }
+
+    #iStoreContent #iStoreOrder .iStoreBox ul li {
+        font-size: 12px;
+        line-height:130%;
+        margin:3px 0;
+        overflow:hidden;
+        }
+
+    #iStoreContent div.password{
+        padding:0;
+        }
+
+    #iStoreOrder input {
+        padding-left:3px;
+        padding-top:2px;
+        padding-bottom:2px;
+        padding-right:0;
+        }
+
+    #iStoreOrder form div {
+        clear:auto;
+        }
+
+    #iStoreOrder form div.buttonsArea {
+        margin-bottom:15px;
+        }
+
+
+
+    /* colorbox iStoreColorBoxContent */
+    #cboxLoadedContent .iStoreColorBoxContent {       /* overwrite style from #allegroInfo2 */
+        background: none repeat scroll 0 0 #FFFFFF; /* white background in colorbox div container */
+        border-radius: 0px;
+        -moz-box-shadow:none;
+        -webkit-box-shadow:none;
+        box-shadow: none;
+        left:0;
+        padding:15px;
+        position:static; /* overwrite position absolute to static  */
+        top:0;
+        }
+
+    #colorbox .iStoreBox,
+    #colorbox .iStoreBoxWrapper,
+    #colorbox .iStoreBoxContent{
+        width:auto;
+        }
+
+    #cboxLoadedContent .iStoreColorBoxContent h3 {
+        border-bottom: 1px solid #E9E9E9;
+        font-size: 14px;
+        margin: 0px 15px 10px 10px;
+        padding: 10px 0 10px 0;
+        text-transform: uppercase;
+        }
+
+    #cboxLoadedContent .iStoreColorBoxContent p{
+        font-size:12px;
+        line-height:130%;
+        margin:10px 0 10px 15px;
+        }
+
+    #cboxLoadedContent .iStoreColorBoxContent ul {
+        margin-left:30px;
+        }
+
+    #cboxLoadedContent .iStoreColorBoxContent ul li {
+        font-size:12px;
+        line-height:130%;
+        list-style-image: url('https://img.istore.pl/css/client5/version1/skins/modern/img/square.gif');   /* color */
+        list-style-position: outside;
+        margin:5px 0;
+        }
+
+    div#iStoreContent #iStoreOrder #formy_platnosci{
+        padding-top:10px;
+        padding-left:10px;
+        clear:both;
+        }
+
+    #iStoreOrder #checkoutAccountForm #allegroForm .allegroFormInfo2{
+        margin-top:15px;
+        display:block;
+        clear:both;
+        }
+
+    div#iStoreContent  #iStoreOrder form #formy_platnosci{
+        padding-top:20px;
+        padding-left:10px;
+        clear:both;
+        width:660px;
+        }
+
+    div#iStoreContent  #iStoreOrder #formy_platnosci label{
+        display:inline-block;
+        width:590px;
+        padding:0;
+        }
+
+    div#iStoreContent  #iStoreOrder #formy_platnosci input{
+        vertical-align:top;
+        }
+
+    #iStoreOrder .buttonsArea{
+        width:100%
+        }
+
+    #iStoreContent #iStoreOrder > .iStoreBoxContent{
+        padding-bottom:14px;
+        }
+
+    #iStoreOrder fieldset .iStoreMessageBox,
+    #iStoreOrder fieldset .iStoreMessageBox .iStoreBoxWrapper{
+        float:left;
+      
+        }
+
+
+
+    #iStoreOrder > .iStoreBoxContent {
+        float: none;
+        overflow: hidden;
+        padding-right:20px;
+        
+        }
+
+    #iStoreOrder .buttonsArea{
+        width:100%
+        }
+
+    #iStoreLoginBox #iStoreOrder #allegroForm {
+        float:left;
+        }
+
+    #iStoreOrder div.iStorePaymentMethods{
+        width:670px;
+        padding:1px;
+        }
+
+    #iStoreOrder div#idPaymentMethodsFirstRow.iStorePaymentMethods div.radio{
+        padding:1px;
+        padding-bottom:20px;
+        }
+
+    .iStoreBox #iStoreOrder .iStoreBoxContent .iStoreBoxHeader {
+        width:auto;
+        }
+
+    #iStoreOrder #iStoreOrderSummary #iStoreOrderSummaryDeliveryData ul li strong,
+    #iStoreOrder #iStoreOrderSummary #iStoreOrderSummaryPaymentData ul li strong,
+    #iStoreOrder #iStoreOrderSummary #iStoreOrderSummaryDeliveryData ul li em,
+    #iStoreOrder #iStoreOrderSummary #iStoreOrderSummaryPaymentData ul li em {
+    	font-style: normal;
+    	width: 140px;
+        }
+
+    #iStoreOrderSummary #iStoreOrderSummaryDeliveryData ul li em,
+    #iStoreOrderSummary #iStoreOrderSummaryPaymentData ul li em {
+    	float: none;
+        width:120px;
+        vertical-align:top;
+        }
+
+    #iStoreOrder .iStoreBoxContent fieldset.formBox4 #deliveryList label{
+        vertical-align:top;
+        padding-top:2px;
+        }
+
+    #iStoreOrder > .iStoreBoxContent{
+        overflow:hidden;
+        float:none;
+        }
+
+    #iStoreOrder .istoreBoxComment em{
+        font-size:12px;
+        }
+
+    #iStoreOrder ul li {
+        font-size:12px;
+        line-height:130%;
+        list-style-position:outside;
+        margin:3px 0;
+        list-style:disc;
+        }
+
+    #iStoreAccountForm  #iStoreOrder #iStoreAccountFormDeliveryData .formBox4,
+    #iStoreAccountForm  #iStoreOrder #orderInvoiceData .formBox4{
+        float:none;
+        }
+
+
+/* Ikona prezentowa */
+#iStoreOrder label.prezent2 {background: url('https://img.istore.pl/css/client5/version1/skins/common/icon-gift.png') no-repeat 21px center !important; padding:4px 0 4px 45px; position:relative;}
+#iStoreOrder label.prezent2 input {position:absolute; left:0; top:6px; *top:2px;}
+/**/
+
+
+
+
+    #iStoreOrder .allegroFormBasket button.buttonPayU{
+        padding:0;
+        border:0;
+        border-radius:0;
+        box-shadow:none;
+        -webkit-box-shadow:none;
+        position:relative;
+        *position:static;
+        }
+
+    #iStoreOrder div#checkoutAccountForm div#allegroForm div.allegroFormBasket {
+        text-align:center;
+        }
+
+    div#iStoreOrder div#allegroForm div.allegroFormRegulamin p#regulaminError {
+        display:block;
+        padding-top:20px;
+        }
+
+    #iStoreOrder .allegroFormBasket button.buttonPayU img{
+        width:auto;
+        height:auto;
+        }
+
+    #iStoreOrder #withoutLoginForm #formy_platnosci p.error {
+        margin-bottom:5px;
+        margin-left:24px;
+        display:inline-block;
+        }
+
+#iStoreLoginBox #iStoreOrder #allegroForm ul#allegroFormAccoutLinks{padding-left:160px;margin-left:0;}
+#iStoreLoginBox #iStoreOrder #allegroForm ul#allegroFormAccoutLinks li{list-style:none;}
+/* /iStoreOrder ---------------------------------------------------------------------------- */
+
+
+/* Checkout */
+#iStoreOrder #checkoutAccountForm {
+padding-top:10px;
+}
+
+#iStoreOrder #checkoutAccountForm .allegroPayUInfo{
+min-height:420px;
+}
+
+#iStoreOrder #checkoutAccountForm .allegroPayUInfo li{
+font-size:13px;
+margin-bottom:10px;
+}
+
+
+#iStoreOrder #checkoutAccountForm #allegroForm{
+width:350px;
+padding-top:5px;
+}
+
+#iStoreOrder #checkoutAccountForm #allegroForm .allegroFormInfo{
+margin-bottom:5px;
+font-weight:normal;
+margin-bottom:20px;
+}
+
+#iStoreOrder #checkoutAccountForm #allegroForm .allegroFormInfo2{
+font-size:11px;
+}
+
+#iStoreOrder #checkoutAccountForm #allegroForm .allegroFormInfo strong{
+font-weight:bold;
+display:block;
+}
+
+#iStoreOrder #checkoutAccountForm #allegroForm .allegroFormRegulamin #regulaminError{
+padding:0;
+margin:0 0 10px 0;
+}
+
+#iStoreOrder #checkoutAccountForm #allegroForm .allegroFormRegulamin{
+margin-bottom:25px;
+}
+
+#iStoreOrder #checkoutAccountForm #allegroForm .allegroFormBasket{
+text-align:center;
+margin-bottom:20px;
+}
+
+#iStoreOrder #checkoutAccountForm #allegroForm .allegroFormBasket button{
+border:0;
+background:none;
+padding:0;
+cursor:pointer;
+margin:0 auto;
+display:inline-block;
+float:none;
+border-radius: 0;
+-moz-border-radius: 0;
+-webkit-border-radius: 0;
+box-shadow: none ;
+-webkit-box-shadow: none ;
+}
+
+#iStoreOrder #checkoutAccountForm #allegroForm .allegroFormBasket button img{
+margin:0 auto;
+display:block;
+width:auto;
+height:auto;
+}
+
+
+
+
+/* CheckoutConfirm */
+#iStoreOrder #checkoutAccountForm form p {
+margin:0 0 20px 0;
+display:block;
+}
+
+#iStoreOrder #checkoutAccountForm form p.error {
+margin:0;
+display:inline-block;
+}
+
+#iStoreOrder #checkoutAccountForm .stylBox1  {
+padding-left:290px;
+}
+
+
+#iStoreOrder #checkoutAccountForm .iStoreBoxWrapper form {
+padding-left:10px;
+}
+
+#iStoreOrder #checkoutAccountForm form .formBox5 input#InpostEmail {
+width:165px;
+}
+
+
+/*  product/view */
+/* Ikona lupy na dużym zdjęciu produktu */
+#iStoreProductDetails .iStoreBoxContent #iStoreProductGallery #iStoreProductGalleryPhoto .iStoreProductImageLink span {
+display:block;
+width:34px;
+height:34px;
+position:absolute;
+top:253px;
+right:111px;
+background:transparent url('https://img.istore.pl/css/client5/version1/skins/common/lupa34x34px.png') no-repeat 0 0;
+z-index:100;
+cursor:pointer;
+}
+

@@ -36,7 +36,7 @@ $GET_tmp = $F->make_get();
   <div class="search_container search_form">
 <?php echo $F->draw_form('search', $F->make_link(CFG_COM_SEARCH), 'GET'); ?><br>
 <?php echo $F->draw_hidden_field('com', 'search'); ?>
-<table class="pass_table" style="border: 0">
+<table class="search_table" style="border: 0">
 	<tr>
 		<td><strong><?php echo Lang::_('Text'); ?></strong></td>
 		<td colspan="2"><?php echo $F->draw_input_field('product_text', '', ' style="width: 220px"'); ?></td>
@@ -65,75 +65,7 @@ $GET_tmp = $F->make_get();
 <?php echo $F->draw_form_close(); ?>
 <?php
 if( $F->not_null($product_list) && sizeof($product_list) > 0 ) {
-?>
-<div class="search_container search_result">
-<table class="tableBox" style="border: 0">
-	<tr class="tableBoxHeading">
-		<th><?php echo Lang::_('NAME') . ', ' . Lang::_('DESCRIPTION')?></th>
-		<th><?php echo Lang::_('CATALOG INDEX') ?></th>
-		<?php if( $P->logged_in ) { ?>
-		<th><?php echo Lang::_('QUANTITY_IN_warehouse') ?></th>
-		<th><?php echo Lang::_('PRICE') ?></th>
-		<th><?php echo Lang::_('ADD TO BASKET') ?></th>
-		<?php } ?>
-	</tr>
-	<?php
-	foreach( $product_list as $product ) {
-	   $GET_tmp = $F->add_local_get('id_product', $product['id_product'], $GET_tmp);
-
-	   if( $P->logged_in ) {
-	      $product_quantity = (int)(($product['quantity']>0)?$product['quantity']:0);
-	      $link_basket = $F->make_link(CFG_COM_BASKET, $F->add_local_get('mode', 'add_to_basket', $GET_tmp));
-	      $cell_basket = $F->draw_link($link_basket, 'onclick="add_basked()" title="' . Lang::_('add_to_basket') . '"', $F->static_image('icon/buy_16.png', Lang::_('add_to_basket')));
-	   }
-
-	   $link_product_info = $F->make_link(CFG_COM_PRODUCT_INFO, $GET_tmp);
-	   if( defined('SHOP_SHOW_PRODUCTS_DESCRIPTION_IN_LIST') && constant('SHOP_SHOW_PRODUCTS_DESCRIPTION_IN_LIST') == 'true')
-	   	$description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
-	   else $description_html = '';
-	   $cell_product_info = $F->draw_link($link_product_info, '',
-	   '<div class="catalog_product_name">' . $F->output_string_html( $product['name'] ) . '</div>
-	   <div class="catalog_product_description">' . $description_html . '</div>');
-
-
-	   $small_image_path = Data::get_product_image_path( $product['picture_small_url'] );
-       //FIXME
-	   $si_oc = "$.colorbox({href:'/" . Data::get_product_image_path( $product['picture_big_url'] ) . "', photo:true});";
-	   $small_image_html = $F->static_image($small_image_path, Lang::_('show_big_image'), " onclick=\"$si_oc\"");
-
-	   $catalog_index = $F->output_string_html( trim($product['catalog_index']) );
-	   
-	   if( $P->logged_in ) {
-	?>
-	<tr>
-		<td valign="top" width="50%"><?php echo  $F->draw_radio_field('list', $product['id_product'], false, 'style="display: none"') . $cell_product_info; ?></td>
-		<td width="5%"><?php echo $catalog_index; ?></td>
-		<td width="5%"><?php echo $product_quantity; ?></td>
-		<td width="20%"><?php echo Price::val( $product['price'] ) . '<br>(' . Price::tax( $product['vat'] ) . ')'; ?></td>
-		<td width="5%"><?php echo $cell_basket; ?></td>
-	</tr>
-	<?php
-	   //not logged in
-	   } else {
-	?>
-	<tr>
-		<td style="cursor: pointer;" width="5%"><?php echo $F->draw_radio_field('list', $product['id_product'], false, 'style="display: none"')
-		. $small_image_html; ?></td>
-		<td valign="top"><?php echo $cell_product_info; ?></td>
-	</tr>
-	<?php
-	//end else (not logged in)
-	   }
-	}
-	?>
-</table>
-<table style="border: 0">
-	<tr>
-		<td colspan="5"><?php echo $SP->display_links(); ?></td>
-	</tr>
-</table>
-</div>
-<?php
+include 'mod_in' . DS . 'product_list_m.php';
 }
 ?>
 <div class="search_container search_bottom container_bottom"></div>

@@ -33,6 +33,7 @@ if( $F->check_get('mode') ){
    $Page->redirect( $F->make_link(CFG_COM_CONTACT) );
 } else {
    //display basket
+	$Article = new Article(0);
    require 'contact' . DS . 'form.php';
 }
 ?>

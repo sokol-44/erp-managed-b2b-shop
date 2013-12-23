@@ -74,7 +74,9 @@ class Framework extends Framework_Data {
    }
 
    static function not_null($input) {
-      if (is_array($input)) {
+      if ( !$input ) {
+         return false;
+      } elseif (is_array($input)) {
          if (sizeof($input) > 0) return true;
          else return false;
       } elseif ( is_object($input) ) {

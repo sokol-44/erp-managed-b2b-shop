@@ -52,11 +52,11 @@ $GET = $F->add_local_get('action', 'send', $GET_tmp);
 	</tr>
 	<tr>
 		<td><strong><?php echo Lang::_('Password'); ?></strong><span class="need_el"></span></td>
-		<td colspan="2"><?php echo $F->draw_input_field('rf_upassword', '', ' style="width: 220px"'); ?></td>
+		<td colspan="2"><?php echo $F->draw_password_field('rf_upassword', ' style="width: 220px"'); ?></td>
 	</tr>
 	<tr>
 		<td><strong><?php echo Lang::_('Repeat Passoword'); ?></strong><span class="need_el"></span></td>
-		<td colspan="2"><?php echo $F->draw_input_field('rf_upass2', '', ' style="width: 220px"'); ?></td>
+		<td colspan="2"><?php echo $F->draw_password_field('rf_upass2', ' style="width: 220px"'); ?></td>
 	</tr>
 	<tr>
 		<td><strong><?php echo Lang::_('Address email'); ?><span class="need_el"></span></strong></td>

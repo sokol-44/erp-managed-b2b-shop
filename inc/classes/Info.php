@@ -64,7 +64,7 @@ class Info {
    static function sadd($message, $type = 'error') {
       if( $type != 'error' && $type != 'warning' && $type != 'success')
          $type = 'other';
-      echo 'INFO sadd';
+      echo 'INFO sadd' . $message;
       $Info = Info::g_global();
       $Info->add($message, $type);
    }

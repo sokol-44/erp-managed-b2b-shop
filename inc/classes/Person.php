@@ -211,8 +211,8 @@ class Person {
    	$data_u['rights_ids'] = array(4,5,6,7,8,9);
    	
    	$id_client_user = Data::insert_person_data('CLIENT', $data_u);
-   	
-   	return array($id_client, $id_client_user);
+
+   	return array('id_client' => $id_client, 'id_client_user' => $id_client_user);
    }
     
    public function get_account_manager_address( $id_client = false ) {

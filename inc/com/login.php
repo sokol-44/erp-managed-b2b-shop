@@ -33,15 +33,17 @@ if( $F->check_login('CLIENT') ) {
   <div class="login_container login_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
   <div class="login_container login_content">
 <?php echo $F->draw_form('login', $F->make_link(CFG_COM_LOGIN), 'post'); ?><br>
-<table class="pass_table" style="border: 0">
+<table class="pass_table" style="border:0">
 	<tr>
 		<td><strong><?php echo Lang::_('User'); ?></strong></td>
-		<td><?php echo $F->draw_input_field('lgn_CLIENT', '', ' style="width: 120px"'); ?></td>
-		<td rowspan="2"><?php echo $F->static_image_submit($Page->path_img . 'guzik-zaloguj.jpg', TEXT_LOGIN,''); ?></td>
+		<td><?php echo $F->draw_input_field('lgn_CLIENT', '', ' style="width: 120px"'); ?></td>	
 	</tr>
 	<tr>
 		<td><strong><?php echo Lang::_('PASSWORD'); ?></strong></td>
 		<td><?php echo $F->draw_password_field('pswrd_CLIENT', ' style="width: 120px"'); ?></td>
+	</tr>
+	<tr>
+		<td colspan="2" align="center"><?php echo $F->static_image_submit($Page->path_img . 'guzik-zaloguj.jpg', TEXT_LOGIN,''); ?></td>
 	</tr>
 </table>
 <?php echo $F->draw_form_close(); ?>

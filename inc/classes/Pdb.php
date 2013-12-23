@@ -142,7 +142,7 @@ class Pdb {
    function stream_open($path, $mode, $options, &$opened_path) {
       $this->parameters = $this->__extract_parameters($path);
       //$this->parameters = Pdb::__split_path($parameters);
-      //      var_dump($opened_path);
+      //var_dump($opened_path);
       $this->position = 0;
       $this->size = 0;
       $this->content = false;

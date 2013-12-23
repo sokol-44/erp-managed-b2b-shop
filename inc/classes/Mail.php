@@ -13,9 +13,10 @@ if( !defined('_I_INIT') ) die();
  * Send email from system
  */
 
-require('PHPMailer' . DS . 'class.phpmailer-lite.php');
+require('PHPMailer' . DS . 'class.phpmailer.php');
+require('PHPMailer' . DS . 'class.smtp.php');
 
-class Mail extends PHPMailerLite {
+class Mail extends PHPMailer {
    public $Subject_Begin         = '';
    private $_template_dir = '';
    private $_template = array();
@@ -23,6 +24,7 @@ class Mail extends PHPMailerLite {
 
    function __construct() {
       parent::__construct();
+      
       $this->_init();
       $this->_load_template();
    }
@@ -49,15 +51,33 @@ class Mail extends PHPMailerLite {
       $this->FromName = $config_mail['main_from_name'];
       $this->Subject_Begin =  $config_mail['main_from_subject'];
       $this->CharSet = 'UTF-8';
-
+      
       switch ($config_mail['send_method']) {
+         case 'smtp':
+            if ( isset($config_mail['send_method_smpt_host']) ) {
+            	$this->isSMTP();
+            	$this->SMTPAuth = true;
+            	$this->SMTPKeepAlive = true;
+            	$this->Host = $config_mail['send_method_smpt_host'];
+            	$this->Username = $config_mail['send_method_smpt_username'];
+            	$this->Password = $config_mail['send_method_smpt_password'];
+            	$this->Hostname = $this->Host;
+            	$this->SMTPDebug = false;
+            	// $this->Debugoutput = 'html';
+            	if ( isset($config_mail['send_method_smpt_secure']) && 
+            		( $config_mail['send_method_smpt_secure'] == 'ssl' && $config_mail['send_method_smpt_secure'] == 'tls' ) ) {
+            			$this->SMTPSecure = $config_mail['send_method_smpt_secure'];
+            	}
+            }
+            break;
          case 'sendmail':
             $this->IsSendmail();
             if ( isset($config_mail['send_method_sendmail_path']) ) {
                $this->Sendmail = $config_mail['send_method_sendmail_path'];
             }
-         default:
+            break;
          case 'mail':
+         default:
             $this->IsMail();
             break;
       }
@@ -79,7 +99,6 @@ class Mail extends PHPMailerLite {
    public function Send() {
       
       $template = $this->_template[$this->_template_name];
-      
       if( $template['type'] == 'html' ) {
          $this->IsHTML(true);
          $this->AltBody = strip_tags( $this->Body );
@@ -99,7 +118,7 @@ class Mail extends PHPMailerLite {
    public function SendAddSubject() {
       if( Framework::not_null($this->Subject) ) $this->Subject = $this->Subject_Begin . ' - ' . $this->Subject;
       else $this->Subject = $this->Subject_Begin;
-      
+
       return $this->Send();
    }
 

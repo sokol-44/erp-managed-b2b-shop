@@ -164,13 +164,13 @@ class Data_Person extends Data_Rights {
       } else if( $table == 'CLIENT' ) {
          $data_main_sql['name'] =  $data['name'];
          $data_main_sql['id_client'] =  $data['id_client'];
-         db_transaction_start();
+         $id_client_user_max = db_max(TBL_GLOBAL_CLIENT_USER, 'id_client_user', array('id_client_user' => '< 1000') );
+         $data_main_sql['id_client_user'] = $id_client_user_max+1;
          db_perform(TBL_GLOBAL_CLIENT_USER, $data_main_sql, 'INSERT');
          $id_insert_id = db_insert_id();
          foreach($data['rights_ids'] as $id_rights) {
             db_query("insert into " . TBL_GLOBAL_RIGHTS2CLIENT . ' (id_client_user, id_rights) values (' . (int)$id_insert_id . ', ' . (int)$id_rights . ')');
          }
-         db_transaction_end();
       }
       return $id_insert_id;
    }
@@ -330,6 +330,21 @@ class Data_Person extends Data_Rights {
          $res_pass = self::doClientUserSetPassword($param_array);
          $result['additional_data'] = 'ClientUserSetPassword:' . $res_pass['status'];
       }
+      
+      $rights_ids = array();
+      $rights_arr = array();
+      if( Framework::not_null($rights) && substr_count($rights, ':') > 1 ) {
+      	$rights_ids = explode(':', $rights);
+      } elseif( $add ) {
+      	$rights_ids = array(4,5,6,7,8,9);
+      }
+      foreach($rights_ids as $id_rights) {
+      	$rights_arr[] = '(' . (int)$id_client_user . ', ' . (int)$id_rights . ')';
+      }
+      if( Framework::not_null($rights_arr) ) {
+	     db_query("insert ignore into " . TBL_GLOBAL_RIGHTS2CLIENT . ' (id_client_user, id_rights) values '.implode(',', $rights_arr));
+      }
+      		
       return $result;
    }
    
@@ -341,7 +356,8 @@ class Data_Person extends Data_Rights {
           "" as additional_data,
           b_func_client_user_set_address("' . db_int($id_address) . '", "' . db_int($id_client_user) . '", "' . db_int($id_client) . '",
           "' . db_escape($description) . '", "' . db_escape($name) . '",  "' . db_escape($street) . '",
-          "' . db_escape($city) . '", "' . db_escape($zip_code) . '",  "' . db_escape($country) . '") as status';
+          "' . db_escape($city) . '", "' . db_escape($zip_code) . '",  "' . db_escape($country) . '",  
+          "' . db_escape($state) . '") as status';
    	
    	add_to_fp($query);
    	$result = db_query( $query );
@@ -365,7 +381,8 @@ class Data_Person extends Data_Rights {
    static function getClientUserAddressList($id_client_user, $id_address, $length) {
    	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
    	
-   	$query = 'select id_address, id_client, id_client_user, description, name, street, city, zip_code, country
+   	$query = 'select id_address, id_client, id_client_user, description, name, street, city, zip_code,
+   				country, state
    				from ' . TBL_GLOBAL_CLIENT_USER_ADDRESS . '
 					where id_client_user = "' . db_int($id_client_user) . '" 
 				   AND id_address ' . $comparision_dir . db_int($id_address) . '
@@ -379,7 +396,8 @@ class Data_Person extends Data_Rights {
    static function getClientAddressList($id_client, $id_address, $length) {
    	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
    
-   	$query = 'select id_address, id_client, id_client_user, description, name, street, city, zip_code, country
+   	$query = 'select id_address, id_client, id_client_user, description, name, street, city, zip_code,
+   				country, state
    				from ' . TBL_GLOBAL_CLIENT_USER_ADDRESS . '
 					where id_client = "' . db_int($id_client) . '"
 				   AND id_address ' . $comparision_dir . db_int($id_address) . '
@@ -393,7 +411,8 @@ class Data_Person extends Data_Rights {
    static function getAddressList($id_address, $length) {
    	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
    
-   	$query = 'select id_address, id_client, id_client_user, description, name, street, city, zip_code, country
+   	$query = 'select id_address, id_client, id_client_user, description, name, street, city, zip_code,
+   				country, state
    				from ' . TBL_GLOBAL_CLIENT_USER_ADDRESS . '
 					where id_address ' . $comparision_dir . db_int($id_address) . '
 				   ORDER BY id_address ' . $order_dir . ' LIMIT '. db_int($length);
@@ -558,7 +577,7 @@ class Data_Person extends Data_Rights {
    	$query = 'select id_address, id_client, id_client_user,
    				description, name, street, city, zip_code,country, date_created, date_modified,
    			   UNIX_TIMESTAMP(date_created) as ts_created, UNIX_TIMESTAMP(date_modified) as ts_modified,
-   				rights_edit, rights_use
+   				rights_edit, rights_use, state
 					from ' . TBL_GLOBAL_CLIENT_USER_ADDRESS . ' where id_address = ' . db_int($id_address);
    
    	return db_fetch_array( db_query( $query ) );
@@ -567,15 +586,15 @@ class Data_Person extends Data_Rights {
    static function get_address_list( $id_client, $id_client_user = 0 ) { 
    	if( $id_client_user > 0 ) {
    		$where = ' ( id_client = ' . db_int($id_client) . ' AND rights_use = "CLIENT" ) OR
-   				id_client_user = ' . db_int($id_client_user);
+   				id_client_user = ' . db_int($id_client_user) . ' AND state="ACTIVE"';;
    	} else {
-   		$where = ' id_client = ' . db_int($id_client);
+   		$where = ' id_client = ' . db_int($id_client) . ' AND state="ACTIVE"';;
    	}
    	
    	$query = 'select id_address, id_client, id_client_user,
    				description, name, street, city, zip_code,country, date_created, date_modified,
    			   UNIX_TIMESTAMP(date_created) as ts_created, UNIX_TIMESTAMP(date_modified) as ts_modified,
-   				rights_edit, rights_use
+   				rights_edit, rights_use, state
 					from ' . TBL_GLOBAL_CLIENT_USER_ADDRESS . ' where
 					' . $where;
    	
@@ -585,15 +604,15 @@ class Data_Person extends Data_Rights {
    static function get_account_manage_list( $id_client, $id_client_user = 0 ) { 
    	if( $id_client_user > 0 ) {
    		$where = ' ( id_client = ' . db_int($id_client) . ' AND rights_use = "CLIENT" ) OR
-   				id_client_user = ' . db_int($id_client_user);
+   				id_client_user = ' . db_int($id_client_user) . ' AND state="ACTIVE"';
    	} else {
-   		$where = ' id_client = ' . db_int($id_client);
+   		$where = ' id_client = ' . db_int($id_client) . ' AND state="ACTIVE"';;
    	}
    	
    	$query = 'select id_account_manager, id_client, id_client_user, account_manager_name,
    				fullname, phone1, phone2, email, date_created, date_modified,
    			   UNIX_TIMESTAMP(date_created) as ts_created, UNIX_TIMESTAMP(date_modified) as ts_modified,
-   				rights_edit, rights_use
+   				rights_edit, rights_use, state
 					from ' . TBL_GLOBAL_CLIENT_USER_ACCOUNT_MANAGER . ' where
 					' . $where;
    	

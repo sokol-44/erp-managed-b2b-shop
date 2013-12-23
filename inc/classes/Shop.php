@@ -26,17 +26,18 @@ class Shop {
 
    public function __wakeup() {
       self::$class = $this;
+      $this->attributes = array();
    }
    
    
    static function get_shop_attribute( $name ) {
    	$Shop = Shop::g_global();
    	$F = Framework::g_global();
-   	
+
    	if( $F->is_null($Shop->attributes) ) {
    		$Shop->attributes = Data::get_shop_attributes();
    	} 
-   	
+
    	if( isset( $Shop->attributes[$name] ) ) return  $Shop->attributes[$name];
    	
    	return false; 

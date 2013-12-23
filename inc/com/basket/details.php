@@ -65,10 +65,7 @@ echo $F->draw_form('basket_edit', $form_link);
 <script>
 function remove_from_basked() { return true; }
 </script>
-<table style="border: 0; width: 100%;">
-	<tr>
-		<td colspan="5"><?php //print_debug($product_list); ?></td>
-	</tr>
+<table class="basket_container basket_tools">
 	<tr>
 		<td colspan="5">
       <?php echo Lang::_('basket description'); ?><br>
@@ -79,7 +76,7 @@ function remove_from_basked() { return true; }
 <?php
 if( $F->not_null($product_list) ) {
 ?>
-<table style="border: 0; width: 100%;">
+<table class="basket_container basket_tools">
 	<tr>
 		<td align="left"><?php echo $basket_up . '&nbsp;' . $basket_down; ?></td>
 		<td colspan="3">&nbsp;</td>
@@ -121,7 +118,7 @@ if( $F->not_null($product_list) ) {
 	}
 	?>
 </table>
-<table  style="border: 0; width: 100%;">
+<table class="basket_container basket_tools">
 	<tr>
 		<td align="left"><?php echo $basket_up . '&nbsp;' . $basket_down; ?></td>
 		<td colspan="3">&nbsp;</td>

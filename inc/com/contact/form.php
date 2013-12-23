@@ -12,6 +12,11 @@ $GET = $F->add_local_get('action', 'send', $GET_tmp);
 ?>
 <div class="contact_form_container">
   <div class="contact_form_container contact_form_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
+<?php if( $F->not_null($Article) ) { ?>
+  <div class="contact_form_container contact_form_article article_container">
+  		  <div class="article_container article_content"><?php echo $Article->param['content']; ?></div>
+  </div>
+<?php } ?>
   <div class="contact_form_container contact_form_form">
 <?php echo $F->draw_form('contect_form', $F->make_link(CFG_COM_CONTACT, $GET), 'POST'); ?><br>
 <?php echo $F->draw_hidden_field('time', microtime(true)); ?>

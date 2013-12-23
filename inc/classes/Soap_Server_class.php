@@ -299,20 +299,21 @@ class ClientUserAddressData extends BasicSOAPDataMethods {
 	public $list = array('id_address', 'id_client_user', 'id_client', 'description', 'name',
 			'street', 'city', 'zip_code', 'country');
 	public $list_type = array('id_address' => 'INT+', 'id_client_user' => 'INT+', 'id_client' => 'INT+',
-			'street' => 'TEXT', 'city' => 'TEXT', 'zip_code' => 'TEXT', 'country' => 'TEXT');
+			'street' => 'TEXT', 'city' => 'TEXT', 'zip_code' => 'TEXT', 'country' => 'TEXT', 'state' => 'TEXT');
 	public $list_new = array('id_address', 'id_client_user', 'id_client', 'description', 'name',
-			'street', 'city', 'zip_code', 'country');
+			'street', 'city', 'zip_code', 'country', 'state');
 	public $list_update = array('id_address', 'id_client_user', 'id_client', 'description', 'name',
-			'street', 'city', 'zip_code', 'country');
+			'street', 'city', 'zip_code', 'country', 'state');
 }
 
 class AccountManagerData extends BasicSOAPDataMethods {
    public $list = array('id_account_manager', 'id_client_user', 'id_client', 'account_manager_name',
    		'fullname', 'phone1', 'phone2', 'email');
    public $list_type = array('id_account_manager' => 'INT', 'id_client_user' => 'INT+', 'id_client' => 'INT+',
-         'account_manager_name' => 'TEXT', 'fullname' => 'TEXT', 'phone1' => 'TEXT', 'phone2' => 'TEXT', 'email' => 'TEXT');
+         'account_manager_name' => 'TEXT', 'fullname' => 'TEXT', 'phone1' => 'TEXT', 'phone2' => 'TEXT',
+   		 'email' => 'TEXT', 'state' => 'TEXT');
    public $list_new = array('id_account_manager', 'id_client_user', 'id_client', 'account_manager_name',
-   		'fullname', 'phone1', 'phone2', 'email');
+   		'fullname', 'phone1', 'phone2', 'email', 'state');
    public $list_update = array('id_account_manager', 'id_client_user', 'id_client', 'account_manager_name');
 }
 

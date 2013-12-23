@@ -106,26 +106,39 @@ class Mail2Send {
    	$F = Framework::g_global();
    	$Lang = Lang::g_global();
    	$account_manager_data = $P->get_account_manager_address();
-   
+
    	if( $F->not_null($account_manager_data['email']) ) {
    		
    		$email_body = $Lang->get_translation_load('LONG_EMAIL_REGISTER');
    		$mail->Subject = $Lang->get_translation_load('LONG_EMAIL_REGISTER_SUBJECT');
    
    		$array_rep = array('data' => $F->get_current_datetime(),
-   				'rf_name' => $post_data['rf_name'], 'rf_email' => $post_data['cf_email'],
+   				'rf_name' => $post_data['rf_name'], 'rf_email' => $post_data['rf_email'],
    				'rf_telephone' => $post_data['rf_telephone'],
    				'rf_contents' => $post_data['rf_contents'],
    				'rf_uname' => $post_data['rf_uname'],
    				'rf_ulname' => $post_data['rf_ulname'],
    				'rf_uemail' => $post_data['rf_uemail'],
    				'rf_utelephone' => $post_data['rf_utelephone'],
+   				'id_client' => $client_data['id_client'],
+   				'id_client_user' => $client_data['id_client_user'],
    				'ip_address' => $_SERVER['REMOTE_ADDR'], 'browser' => $_SERVER['HTTP_USER_AGENT'] );
    
    		$mail = new Mail();
    		$mail->AddAddress($account_manager_data['email'], $account_manager_data['name']);
+   		$mail->AddCC($post_data['rf_email'], $post_data['rf_name']);
+   		$mail->AddBCC('michal.sokolowski@2m.net.pl');
+   		$mail->AddBCC('konrad.iwan@2m.net.pl');
    		$mail->Body = self::email_body_replace($email_body, $array_rep);
-   		return $mail->SendAddSubject();
+   		$res1 =  $mail->SendAddSubject();
+   		
+   		$res2 = true;
+//    		$mail = new Mail();
+//    		$mail->AddAddress($post_data['rf_email'], $post_data['rf_name']);
+//    		$mail->Body = self::email_body_replace($email_body, $array_rep);
+//    		$res2 =  $mail->SendAddSubject();
+
+   		return $res1 && $res2;
    	}
    	return false;
    }

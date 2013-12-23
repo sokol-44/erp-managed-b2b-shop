@@ -22,7 +22,7 @@ $remove_basket_link = $F->make_link(CFG_COM_BASKET_FAVORITE, $F->add_local_get('
 $remove_basket = $F->draw_link($remove_basket_link, 'title="' . Lang::_('remove BASKET') . '"', $F->static_image('icon/up_32.png', Lang::_('CHANGE_LEVEL_UP')));
 
 $arg = array('mode' => 'make_basket', 'id_shopping_basket_favorite' => $id_shopping_basket_favorite);
-$add_basket = $F->draw_link(
+$make_basket = $F->draw_link(
 		$F->make_link(CFG_COM_BASKET_FAVORITE, $arg), 'title="' . Lang::_('create BASKET') . '"',
 		$F->static_image('icon/folder_32.png') );
 
@@ -33,7 +33,7 @@ $add_basket = $F->draw_link(
 <script>
 function remove_from_basked() { return true; }
 </script>
-<table style="border: 0; width: 100%;">
+<table class="basket_container basket_tools">
 	<tr>
 		<td colspan="5"><?php //print_debug($product_list); ?></td>
 	</tr>
@@ -47,9 +47,8 @@ function remove_from_basked() { return true; }
 if( $F->not_null($product_list) ) {
 ?>
 	<tr>
-		<td align="left"><?php echo $basket_up . '&nbsp;' . $basket_down; ?></td>
-		<td colspan="3">&nbsp;</td>
-		<td align="right"><?php echo $add_basket . '&nbsp;' . $basket_order . '&nbsp;' .  $update_basket ?></td>
+		<td colspan="4">&nbsp;</td>
+		<td align="right"><?php echo $make_basket; ?></td>
 	</tr>
 </table>
 <div class="basket_container container_subheader"><?php echo Lang::_('basket products'); ?><div class="icon"></div></div>

@@ -16,7 +16,7 @@ $Page->add_js_file('jquery.colorbox.js');
 $Page->add_jq_init('colorize_table(".tableBox");');
 $Page->add_jq_init('set_toolbox_table(".tableBox");');
 
-$Page->head_title = Lang::_('BASKET_ORDER');
+$Page->head_title = Lang::_('BASKET_ORDER') . ' (' . Lang::_('basket nr:') . ' ' . $Shopping_Basket->id_shopping_basket . ')';
 // print_debug($Shopping_Basket);
 
 $GET_id = $F->make_get('mode');
@@ -51,15 +51,7 @@ function remove_from_basked() { return true; }
 <div class="prepare_order_container">
   <div class="prepare_order_container prepare_order_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
   <div class="prepare_order_container prepare_order_content">
-<table style="border: 0; width: 100%;">
-	<tr>
-		<td colspan="5"><?php //print_debug($product_list); ?></td>
-	</tr>
-	<tr>
-		<td colspan="5">
-      <h3><?php echo Lang::_('basket nr:') . ' ' . $Shopping_Basket->id_shopping_basket; ?></h3>
-      </td>
-	</tr>
+<table class="basket_container basket_tools">
 	<tr>
 		<td colspan="5">
       <?php echo Lang::_('order description'); ?><br>

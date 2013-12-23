@@ -239,7 +239,7 @@ class Data extends Data_Person {
       
       //FIXME - bandaid
       if( Framework::is_null($ret_array) ) {
-      	$ret_array = array('LEVEL_0' => 'LEVEL_0', 'USER' => 'USER');
+      	$ret_array = array('LEVEL_0' => 'LEVEL_0', 'USER' => 'USER', '');
       }
 
       return $ret_array;

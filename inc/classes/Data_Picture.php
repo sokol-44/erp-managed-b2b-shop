@@ -33,7 +33,8 @@ class Data_Picture extends Data_Article {
       $id_picture = (int)$id_picture;
       if( $id_picture > 0 ) {
 //          return IMAGE_SCRIPT . '&id=' . $id_picture . '&type=' . $type;
-         return URL_FULL . IMAGE_SCRIPT . '?id=' . $id_picture . '&type=' . $type;
+         //return URL_FULL . IMAGE_SCRIPT . '?id=' . $id_picture . '&type=' . $type;
+         return _I_ROOT_WWW_DIR . IMAGE_SCRIPT . '?id=' . $id_picture . '&type=' . $type;
       }
       
       return false;

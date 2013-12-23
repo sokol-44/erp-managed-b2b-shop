@@ -106,6 +106,7 @@ class Soap_Server_worker {
             $param_array = $ParamStartLength->return_array();
             add_to_fp('$param_array:'. print_r($param_array, true) );
             $res_array = Data::getClientList((int)$param_array['id_start'], (int)$param_array['length'], $where);
+            add_to_fp('$res_array:'. print_r($res_array, true) );
             $response = $this->_addArrayValues($res_array);
          } else {
             $response = $this->getReturnError('getClientNewList', $input, $ParamStartLength->return_error() );
@@ -456,7 +457,7 @@ class Soap_Server_worker {
                if( $mstr == 'new_id' && (int)$id_client_new > 0 ) {
                	$response_tmp[] = Data::doClientNewIdUpdateList((int)$param_array['id_client'], (int)$id_client_new);
                } else {
-               	$response = $this->getReturnError('doClientNewIdUpdateList', $val, 'WRONG_NEW_ID');
+               	$response_tmp[] = $this->getReturnError('doClientNewIdUpdateList', $val, 'WRONG_NEW_ID');
                }
             } else {
                $response_tmp[] = $this->getReturnError('doClientNewIdUpdateList', $val, $SingleValueClass->return_error(), false);
@@ -587,7 +588,7 @@ class Soap_Server_worker {
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = false;
 
-      add_to_fp('-------- doClientUserAdd');
+      add_to_fp('-------- doClientUserChange');
       if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
          $response_tmp = array();
          foreach($input['values'] as $key => $val) {
