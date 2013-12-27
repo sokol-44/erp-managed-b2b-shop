@@ -425,7 +425,13 @@ function test_doClientNewIdUpdateList( $client ) {
 	test_helper_multiple_in($in_oo, 'doClientNewIdUpdateList', $client );
 }
 
+function test_doClientUserNewIdUpdateList( $client ) {
+	$nt = time();
 
-
-
+// 	$in_oo[] = new ClientUserData(array('id_client' => '7396', 'id_client_user' => '7396', 
+// 			'description' => 'new_id_client_user:111117396:new_id_client:111117396'), 'UPDATE');
+	$in_oo[] = new ClientUserData(array('id_client' => '1943', 'id_client_user' => '20', 
+			'description' => 'new_id_client_user:1002'), 'UPDATE');
+	test_helper_multiple_in($in_oo, 'doClientUserNewIdUpdateList', $client );
+}
 ?>

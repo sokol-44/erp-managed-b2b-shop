@@ -454,7 +454,7 @@ class Soap_Server_worker {
                $param_array = $SingleValueClass->return_array();
                add_to_fp('$param_array:'. print_r($param_array, true) );
                list($mstr, $id_client_new) = explode(':', $param_array['description']);
-               if( $mstr == 'new_id' && (int)$id_client_new > 0 ) {
+               if( ($mstr == 'new_id' || $mstr == 'new_id_client') && (int)$id_client_new > 0 ) {
                	$response_tmp[] = Data::doClientNewIdUpdateList((int)$param_array['id_client'], (int)$id_client_new);
                } else {
                	$response_tmp[] = $this->getReturnError('doClientNewIdUpdateList', $val, 'WRONG_NEW_ID');
@@ -472,7 +472,42 @@ class Soap_Server_worker {
       return($response);
    }
    
+
+   function doClientUserNewIdUpdateList ( $input ) {
+   	$this->input_data_type = 'UPDATE';
+   	$this->SingleParam_MultipleReturns = false;
    
+   	add_to_fp('-------- doClientUserNewIdUpdateList');
+   	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+   		$response_tmp = array();
+   		foreach($input['values'] as $key => $val) {
+   			$SingleValueClass = new ClientUserData($val, $this->input_data_type);
+   			if( !$SingleValueClass->is_error() ) {
+   				$param_array = $SingleValueClass->return_array();
+   				add_to_fp('$param_array:'. print_r($param_array, true) );
+   				$new_param_array = explode(':', $param_array['description']);
+   				if( sizeof($new_param_array) > 0 && in_array('new_id_client_user', $new_param_array) !== FALSE ) {
+   					$new_ids_array['id_client_user'] = (int)$new_param_array[1];
+   					if( sizeof($new_param_array) > 2 ) $new_ids_array['id_client'] = (int)$new_param_array[3];
+   					else $new_ids_array['id_client'] = (int)$param_array['id_client'];
+   					
+   					$response_tmp[] = Data::doClientUserNewIdUpdateList($param_array, $new_ids_array);
+   				} else {
+   					$response_tmp[] = $this->getReturnError('doClientUserNewIdUpdateList', $val, 'WRONG_NEW_ID');
+   				}
+   			} else {
+   				$response_tmp[] = $this->getReturnError('doClientUserNewIdUpdateList', $val, $SingleValueClass->return_error(), false);
+   			}
+   		}
+   		add_to_fp(print_r($response_tmp, true));
+   		$response = $this->_addArrayValues($response_tmp);
+   	} else {
+   		$response = $this->getReturnError('doClientUserNewIdUpdateList', '', 'EMPTY_LIST');
+   	}
+   
+   	return($response);
+   }
+      
    function doClientAdd ( $input ) {
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = false;

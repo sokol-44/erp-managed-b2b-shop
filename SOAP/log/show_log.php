@@ -1,13 +1,34 @@
 <html>
 <head>
  <title>Dirlist</title>
+ <style type="text/css">
+ table {
+ 	border: 1px solid black;
+ 	border-collapse: collapse;
+ }
+ table th {
+ 	border: 1px solid black;
+ 	border-collapse: collapse; 
+ 	padding: 5px;
+ }
+ table td {
+ 	border: 1px solid black;
+ 	border-collapse: collapse; 
+ 	padding: 5px;
+ }
+ </style>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+	google.load("jquery", "1");
+</script>
 </head>
 <body>
-<table cellspacing="1" cellpadding="8" border="1">
+<table>
 <tr>
 <th>Name</th><th>XML</th><th>ALL IN</th><th>Date</th><th>Size</th></tr>
 <?php
 $dir_scan = scandir('.');
+$mthd_array = array();
 
 foreach( $dir_scan as $dir_element) {
 	$path_parts = pathinfo($dir_element);
@@ -15,7 +36,9 @@ foreach( $dir_scan as $dir_element) {
 		$f_stat = stat($dir_element);
 		$xml_file = $path_parts['filename'].'.xml';
 		$all_file = $path_parts['filename'].'.txt';
-		echo '<tr>';
+		$mthd = explode('--', $path_parts['filename']);
+		$mthd_array[$mthd[1]] += 1;
+		echo '<tr class="'.(empty($mthd[1])?'mthd_empty':'mthd_'.$mthd[1]).'">';
 		echo '<td><a href="' . $dir_element . '">' . $dir_element . '</a></td>';
 		if( is_file( $xml_file ) ) {
 			$xml_filesize = filesize($xml_file);
@@ -44,5 +67,31 @@ foreach( $dir_scan as $dir_element) {
 }
 ?>
 </table>
+<div style="position: fixed; right: 5px; top: 5px; border: 1px solid red; padding: 10px;">
+Method:<br>
+<select name="methods" id="methods" onchange="md(this)">
+<option value="0">- - - - - - - - - - - - - -</option>
+<?php 
+ksort($mthd_array);
+foreach( $mthd_array as $mthd => $count) {
+	if( empty($mthd) ) $mthd = 'empty';
+	echo '<option value="'.$mthd.'">'.$mthd.' - ' . $count . '</option>'."\n";
+}
+?>
+</select>
+</div>
+
+<script type="text/javascript">
+function md(obj_slc) {
+	var val = obj_slc.value;
+	if( val == "0" ) {
+		$("[class^=mthd_]").show();
+		$(".mthd_"+val).hide();
+	} else {
+		$("[class^=mthd_]").hide();
+		$(".mthd_"+val).show();
+	}
+}
+</script>
 </body>
 </html>

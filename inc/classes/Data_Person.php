@@ -447,13 +447,32 @@ class Data_Person extends Data_Rights {
    static function doClientNewIdUpdateList($id_client, $id_client_new) {
 
       $query = 'select "' . db_int($id_client) . '" as id_one,
-          "NEW ID:' . db_int($id_client_new) . '" as additional_data,
+          "NEW_ID_CLIENT:' . db_int($id_client_new) . '" as additional_data,
           b_func_client_id_change("' . db_int($id_client) . '", "' . db_int($id_client_new) . '") as status';
 
       add_to_fp($query);
       $result = db_query( $query );
       return db_fetch_array($result);
    }
+   
+
+   static function doClientUserNewIdUpdateList($param_array, $new_ids_array) {
+   
+   	extract($param_array);
+//    	$new_ids_array
+   	$query = 'select "' . db_int($id_client) . '" as id_one, 
+   		 "' . db_int($id_client_user) . '" as id_two,
+          "NEW_ID_CLIENT_USER:' . db_int($new_ids_array['id_client_user']) . 
+          (($id_client!=$new_ids_array['id_client'])?':NEW_ID_CLIENT:'.db_int($new_ids_array['id_client']):'') . 
+          '" as additional_data,
+          b_func_client_user_id_change("' . db_int($id_client) . '", "' . db_int($id_client_user)  . '",
+          "' . db_int($new_ids_array['id_client']) . '", "' . db_int($new_ids_array['id_client_user']) . '") as status';
+   
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	return db_fetch_array($result);
+   }   
+   
 
    static function insert_client_data_id($data) {
       
