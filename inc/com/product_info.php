@@ -19,7 +19,7 @@ if( $F->not_null($image_type) ) {
    	photo:true});');
 }
 
-$price_html = Price::val($product_info['price']) . ' <span class="product_vat">(' . Price::tax($product_info['vat']) . ')</span>';
+//$price_html = Price::val($product_info['price']) . ' <span class="product_vat">(' . Price::tax($product_info['vat']) . ')</span>';
 $description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product_info['description'] ) );
 
 $GET_basket = array('mode' => 'add_to_basket', 'id_product' => $id_product);
@@ -31,10 +31,27 @@ $add_basket_form = $F->draw_form('add_to_basket', $link_basket, 'GET') .
    $F->draw_hidden_field('mode', 'add_to_basket') .
    $F->draw_hidden_field('id_product', $id_product);
 
+$sbm = $F->static_image_submit($F->static_image_path('empty.gif'), Lang::_('add_to_basket'), 
+		array('width'=>155, 'height'=>45, 'style' => 'position: absolute; left: 0px;'));
+
 $add_basket_html = $add_basket_form .
-   $add_basket_quantity .
-   $F->static_image_submit($F->static_image_path('icon/buy_16.png'), Lang::_('add_to_basket')) .
-   $F->draw_form_close();
+'<div class="iStoreProductPurchase">
+		' . $add_basket_quantity . '
+	<div class="iStoreProductCosts">
+		<span class="iStorePrice"><strong>' . Price::val($product_info['price']) . '</strong> <small class="iStoreCurrency">PLN (netto)</small></span>
+	</div>
+	<div class="iStoreAddToBasket">
+		' . $sbm . '
+		<div class="iStoreAddToBasketLink">&nbsp;</div>
+	</div>
+</div>' .
+$F->draw_form_close();
+
+$F->static_image_submit($F->static_image_path('empty.gif'), Lang::_('add_to_basket')) .
+// $add_basket_html = $add_basket_form .
+//    $add_basket_quantity .
+//    $F->static_image_submit($F->static_image_path('icon/buy_16.png'), Lang::_('add_to_basket')) .
+//    $F->draw_form_close();
 
 $product_quantity = (int)(($product_info['quantity']>0)?$product_info['quantity']:0);
 $product_producent = $F->output_string_html( $product_info['producent'] );

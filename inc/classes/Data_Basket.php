@@ -121,16 +121,15 @@ class Data_Basket extends Data_Order {
    }
     
    static function remove_basket_product( $product_key, $basket_params) {
+   	print_debug($product_key);
       $product_params = Data_Products::get_product_params_from_key($product_key);
       $clear_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
       id_shopping_basket_version = ' . db_int($basket_params['id_shopping_basket_version']) . ' and
       id_product_subtype = ' . db_int($product_params['id_product_subtype']) . ' and
       id_product = ' . db_int($product_params['id_product']);
 
-      db_transaction_start();
       db_query( $clear_query );
       $res = db_affected_rows();
-      db_transaction_end();
    
       return $res;
    }

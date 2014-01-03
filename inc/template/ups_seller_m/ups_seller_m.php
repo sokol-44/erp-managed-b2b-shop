@@ -27,8 +27,8 @@ if( !defined('_I_INIT') ) die();
 		<link rel="stylesheet" href="inc/template/ups_seller_m/css/18784813.css" type="text/css" media="screen">
 		<link rel="stylesheet" href="inc/template/ups_seller_m/css/master.css" type="text/css" media="screen">
 		<link rel="stylesheet" href="inc/template/ups_seller_m/css/miniatures.css" type="text/css" media="screen">  
-		<link rel="stylesheet" href="inc/template/ups_seller_m/css/my_layout.css" type="text/css" media="screen">  
-		<link rel="stylesheet" href="inc/template/ups_seller_m/css/colorbox.css?ver=<?php echo time(); ?>" type="text/css" >
+		<link rel="stylesheet" href="inc/template/ups_seller_m/css/my_layout.css?ver=<?php echo time(); ?>" type="text/css" media="screen">  
+		<link rel="stylesheet" href="inc/template/ups_seller_m/css/colorbox.css" type="text/css" >
 
 <style type="text/css">embed[type*="application/x-shockwave-flash"],embed[src*=".swf"],object[type*="application/x-shockwave-flash"],object[codetype*="application/x-shockwave-flash"],object[src*=".swf"],object[codebase*="swflash.cab"],object[classid*="D27CDB6E-AE6D-11cf-96B8-444553540000"],object[classid*="d27cdb6e-ae6d-11cf-96b8-444553540000"],object[classid*="D27CDB6E-AE6D-11cf-96B8-444553540000"]{	display: none !important;}</style>	
 <link href="inc_html/css/jquery-ui.min.css?ver=<?php echo time(); ?>" rel="stylesheet" type="text/css" >

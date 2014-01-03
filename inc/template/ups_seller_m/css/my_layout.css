@@ -542,22 +542,50 @@ product_description
 product_add_basket
 */
 .product_add_basket {
-	text-align: right;
+ 	text-align: right;
 	padding: 5px;
-	position: absolute;
-	bottom: 3px;
-	right: 10px;
-	background-color: #ddd;
+   position: absolute;
+ 	bottom: 3px;
+ 	right: 10px;
+ 	background-image: url("../files/koszyk_dol.png");
+ 	background-position: center bottom;
+ 	background-repeat: no-repeat;
+/*  	background-color: rgb(215,215,215); */
 /* 	border: 3px solid #ccc; */
 /* 	border-bottom-left-radius: 12px; */
 /* 	border-bottom-right-radius: 12px; */
 /* 	border-top-right-radius: 12px; */
 }
 
+
+#add_to_basket div {
+   margin-bottom: 0;
+}
+
+.iStoreProductCosts {
+	padding-bottom: 5px;
+}
+
+.iStoreBoxContent {
+   padding-top: 2px;	
+}
+
 .product_add_basket input {
 	margin-left: 5px;
+	font-size: 13px;
 }
+
+
+#add_to_basket {
+   margin-bottom: 0;
+}
+
+
 div.add_basket_quantity {
+   
+}
+.add_basket_quantity input {
+	background-color: white;
 }
 /*
 Catalog
@@ -648,6 +676,36 @@ table.basket_container.basket_tools td {
 
 table .basket_tools input {
    color: black !important;
+}
+
+
+.basket_tools input[type="submit"] {
+	border: 2px solid rgb(153, 153, 153);
+	border-radius: 5px;
+   background-color: rgb(153, 153, 153);
+	padding-bottom: 2px;
+	padding-left: 5px;
+	padding-right: 5px;
+	padding-top: 2px;
+}
+
+.basket_tools input[type="submit"]:hover {
+   text-decoration: underline;
+   text-shadow: 0.1em 0.1em 0.2em black;
+}
+
+.basket_tools a {
+   border: 2px solid rgb(153, 153, 153);
+   border-radius: 5px;
+   background-color: rgb(153, 153, 153);
+   padding-bottom: 2px;
+   padding-left: 5px;
+   padding-right: 5px;
+   padding-top: 2px;
+   font-family: Arial, sans-serif;
+   font-size: 13px;
+   font-weight: bold;
+   vertical-align: middle;
 }
 
 table.search_table {
@@ -1039,8 +1097,9 @@ div.ToolBox {
 Pagination
 */
 div.SplitPageContainer {
-	float: left;
+/*	float: left; */
 	display: block;
+	clear: both;
 	width: 700px;
 	height: 50px;
 	overflow: hidden;

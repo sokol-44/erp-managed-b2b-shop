@@ -531,20 +531,20 @@ class Shopping_Basket {
    function remove_from_basket( $product_key ) {
 
       $res = $this->check_rights('MODIFY_CONTENTS');
-
+      
       if( !$res ) {
          Info::g('add', Lang::_('You don\'t have rights for REMOVE to basket: ' . $this->id_shopping_basket));
          return false;
       }
 
-      if( isset($this->contents[$key]) ) {
-         unset( $this->contents[$key] );
+      if( isset($this->contents[$product_key]) ) {
+         unset( $this->contents[$product_key] );
       }
 
       if( $this->add_check_version() ) {
          $this->db_save_contents();
       }
-       
+
       return $this->db_remove_product( $product_key );
    }
 

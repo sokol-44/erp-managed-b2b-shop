@@ -743,7 +743,7 @@ class Data_Products extends Data_Basket {
       $product_params = array('id_product' => 0, 'id_product_subtype' => 0);
       $res = explode('_', $key);
       $product_params['id_product'] = (int)$res['0'];
-      if( isset($key['1']) )$product_params['id_product_subtype'] = (int)$key['i'];
+      if( isset($res['1']) ) $product_params['id_product_subtype'] = (int)$res['1'];
       return $product_params;
    }
    

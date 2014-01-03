@@ -30,29 +30,33 @@ $remove_basket = $F->draw_link($remove_basket_link, 'title="' . Lang::_('remove 
 
 
 if( $Shopping_Basket->check_rights('MAKE_ORDER', false) )
-	$basket_order = $F->static_image_submit($F->static_image_src('icon/wallet_32.png'), Lang::_('PREPARE_ORDER_BASKET'),' name="PREPARE_ORDER_BASKET"');
+	//$basket_order = $F->static_image_submit($F->static_image_src('icon/wallet_32.png'), Lang::_('PREPARE_ORDER_BASKET'),' name="PREPARE_ORDER_BASKET"');
    //$basket_order = $F->dynamic_image_submit(Lang::_('PREPARE_ORDER_BASKET'),'PREPARE_ORDER_BASKET');
-   //$basket_order = $F->draw_submit('PREPARE_ORDER_BASKET', false, Lang::_('PREPARE_ORDER_BASKET'));
+   $basket_order = $F->draw_submit('PREPARE_ORDER_BASKET', false, Lang::_('PREPARE_ORDER_BASKET'));
+
 
 if( $Shopping_Basket->check_move('UP') && defined('SHOP_BASKET_SHOW_LEVEL_UP') && constant('SHOP_BASKET_SHOW_LEVEL_UP')  != "false" )
-	$basket_up = $F->static_image_submit($F->static_image_src('icon/up_32.png'), Lang::_('CHANGE_LEVEL_UP'),' name="CHANGE_LEVEL_UP"');
+	//$basket_up = $F->static_image_submit($F->static_image_src('icon/up_32.png'), Lang::_('CHANGE_LEVEL_UP'),' name="CHANGE_LEVEL_UP"');
   // $basket_up    = $F->dynamic_image_submit(Lang::_('CHANGE_LEVEL_UP'), 'CHANGE_LEVEL_UP');
-   //$basket_up    = $F->draw_submit('CHANGE_LEVEL_UP', false, Lang::_('SEND_BASKET_HIGHER'));
+   $basket_up    = $F->draw_submit('CHANGE_LEVEL_UP', false, Lang::_('SEND_BASKET_HIGHER'));
 
 if( $Shopping_Basket->check_move('DOWN') && defined('SHOP_BASKET_SHOW_LEVEL_UP') && constant('SHOP_BASKET_SHOW_LEVEL_UP')  != "false" )
-	$basket_down = $F->static_image_submit($F->static_image_src('icon/down_32.png'), Lang::_('CHANGE_LEVEL_DOWN'),' name="CHANGE_LEVEL_DOWN"');
+	//$basket_down = $F->static_image_submit($F->static_image_src('icon/down_32.png'), Lang::_('CHANGE_LEVEL_DOWN'),' name="CHANGE_LEVEL_DOWN"');
 //    $basket_down  = $F->dynamic_image_submit(Lang::_('CHANGE_LEVEL_DOWN'),'SEND_BASKET_LOWER');
-   //$basket_down  = $F->draw_submit('CHANGE_LEVEL_DOWN', false, Lang::_('SEND_BASKET_LOWER'));
+   $basket_down  = $F->draw_submit('CHANGE_LEVEL_DOWN', false, Lang::_('SEND_BASKET_LOWER'));
 
 //$update_basket = $F->dynamic_image_submit(Lang::_('UPDATE_BASKET'),'UPDATE_BASKET');
-$update_basket = $F->static_image_submit($F->static_image_src('icon/tick_32.png'), Lang::_('UPDATE_BASKET'),' name="UPDATE_BASKET"');
+//$update_basket = $F->static_image_submit($F->static_image_src('icon/tick_32.png'), Lang::_('UPDATE_BASKET'),' name="UPDATE_BASKET"');
+$update_basket = $F->draw_submit('UPDATE_BASKET', false, Lang::_('UPDATE_BASKET'));
 
 
 $arg = array('mode' => 'make_favorite_basket', 'id_shopping_basket' => $Shopping_Basket->id_shopping_basket);
+// $add_basket_fav = $F->draw_link(
+// 		$F->make_link(CFG_COM_BASKET_FAVORITE, $arg), 'title="' . Lang::_('MAKE FAVORITE BASKET') . '"',
+// 		$F->static_image('icon/heart_32.png') );
 $add_basket_fav = $F->draw_link(
 		$F->make_link(CFG_COM_BASKET_FAVORITE, $arg), 'title="' . Lang::_('MAKE FAVORITE BASKET') . '"',
-		$F->static_image('icon/heart_32.png') );
-
+		Lang::_('MAKE FAVORITE BASKET') );
 
 echo $F->draw_form('basket_edit', $form_link);
 /* print_debug( array( 'id_basket_current' => $Shopping_Basket_Chain->id_basket_current,

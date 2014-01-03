@@ -83,7 +83,9 @@ class Person {
 
       $this->id = $P_data['id_table'];
       $this->login = $P_data['login'];
-
+		
+      $this->client = $P_data['CLIENT'];
+	  unset($P_data['CLIENT']);
       $this->data = $P_data;
       unset($this->data['password']);
 
@@ -128,7 +130,8 @@ class Person {
 
    public function check_person_login($login, $password, $type) {
       $P_data = Data::get_login_data($login, $type);
-      if( $P_data ) {
+      if( $P_data && $P_data['state'] == 'ACTIVE' ) {
+		 if( $type == 'CLIENT' && $P_data['CLIENT']['state'] != 'ACTIVE' ) return false; 
          $res = gl_check_password($password, $P_data['password']);
          if( $res ) {
             $res_rights = Data::get_login_rights($P_data['id_table'], $type);

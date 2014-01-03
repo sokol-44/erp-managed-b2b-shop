@@ -37,7 +37,7 @@ fieldset { padding:0; margin: 0 0 1.5em 0; border:0; }
 legend { font-weight: bold; font-size:1.2em; }
 label { font-weight:normal; color: #535353}
 textarea, input[type='text'], input[type='password'], select { border: 1px solid #8c8c8c;
-background: url('../files/18780842.png') no-repeat;
+background: url('http://static.istore.pl/istore/22649/files/18780842.png') no-repeat;
 }
 textarea:hover, input[type='text']:hover, input[type='password']:hover, select:hover { border-color: #aaa; }
 textarea:focus, input[type='text']:focus, input[type='password']:focus, select:focus { }
@@ -87,7 +87,7 @@ a:visited { text-decoration: none; color: #3a3a3a; }
 a:hover { text-decoration: underline; color: #3a3a3a; }
 a:active, a:focus { text-decoration: underline; color: #e6a902; }
 
-body {background: #fff url('../files/18782566.jpg') no-repeat 50% 0;}
+body {background: #fff url('http://static.istore.pl/istore/22649/photos/original/18782566.jpg') no-repeat 50% 0;}
 
 
 hr {background:#ddd;color:#ddd;clear:both;float:none;width:100%;height:.1em;margin:0 0 1.45em;border:none;}
@@ -166,7 +166,7 @@ button.submit:hover {
   text-transform: uppercase;
  clear: both;
  padding: 10px;
- background: url('../files/18782888.png') repeat-x;
+ background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x;
  font-size: 15pt;
  color: #fff;
  text-transform: uppercase;
@@ -202,7 +202,7 @@ fieldset h3,
 
 #iStoreContent .iStoreBoxContent h2 {
  padding: 10px;
- background: url('../files/18782916.png') repeat-x;
+ background: url('http://static.istore.pl/istore/22649/files/18782916.png') repeat-x;
  font-size: 15pt;
  color: #fff;
  text-transform: uppercase;
@@ -214,7 +214,7 @@ fieldset h3,
 #iStoreContent .iStoreBoxContent h4
 {
  padding: 10px;
- background: url('../files/18782888.png') repeat-x;
+ background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x;
  font-size: 15pt;
  color: #fff;
  text-transform: uppercase;
@@ -266,7 +266,7 @@ color: #000;
 	position: relative;
 	top: -20px;
 	
-	background: url('../files/18781892.jpg') no-repeat;
+	background: url('http://static.istore.pl/istore/22649/photos/original/18781892.jpg') no-repeat;
 
 }
 #iStoreTop {height:155px; overflow:hidden;}
@@ -275,7 +275,7 @@ color: #000;
 #iStoreToolbarMenu {height:59px; width:580px;float:left; position: relative; top: -80px; left: 380px;}
 #iStoreTop #iStoreBasket {position:absolute; right: 0px; top:22px; height:36px; width:247px; color:#fff;}
 #iStoreSearch  {width:240px; float:right; height:33px; position: absolute;  right: 20px; top: 105px;}
-#iStoreContent {float:right; padding-left: 10px;width:880px; background: none;
+#iStoreContent {float:right; padding-left: 10px;width:880px; background: none;padding-top: 2px;
 font-size: 11pt;
 
 }
@@ -477,7 +477,7 @@ strong.required{color: #C10117; font-size: 10px; padding-left: 1px; vertical-ali
 #iStoreShopContactData {
 	float: left;
 	width: 340px;
-	background: #f1f1f1 url('../files/18782500.png') repeat-x bottom; 
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18782500.png') repeat-x bottom; 
 
 border: 1px solid #e3e3e3;
 
@@ -487,7 +487,7 @@ border-radius: 10px;
 
 #iStoreShopContactData  h3 {
 margin: 0;
-background: url('../files/18782888.png') repeat-x
+background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x
 }
 
 
@@ -521,7 +521,7 @@ background: url('../files/18782888.png') repeat-x
 #iStoreShopContactFormBox {
 	width: 425px;
 	float: right;
-	background: #f1f1f1 url('../files/18782500.png') repeat-x bottom; 
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18782500.png') repeat-x bottom; 
 
 border-left: 1px solid #e3e3e3;
 border-right: 1px solid #e3e3e3;
@@ -537,7 +537,7 @@ border-radius: 10px;
 #iStoreShopContactForm  h3 {
 width: 405px;
 margin: 0;
-background: url('../files/18782888.png') repeat-x
+background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x
 }
 
 #iStoreShopContactForm p.error {
@@ -1064,7 +1064,7 @@ width: 282px;
  padding-top: 15px;
  padding-right: 12px;
  padding-bottom: 18px;
- background: url('../files/18783008.png') no-repeat;
+ background: url('http://static.istore.pl/istore/22649/files/18783008.png') no-repeat;
  font-size: 10pt;
  color: #fff;
  text-transform: uppercase;
@@ -1079,7 +1079,7 @@ list-style: none;
 width: 263px;
 margin-left: 9px;
  /* tlo promocji */
-background: url('../files/18783174.png') no-repeat;	
+background: url('http://static.istore.pl/istore/22649/files/18783174.png') no-repeat;	
 height: 250px;
 
 
@@ -1217,24 +1217,24 @@ top:159px;
 }
 
 #iStoreSidebar #iStorePromotedProducts .jcarousel-prev {
-left:2px;	background: url("../files/18781020.png") no-repeat center center;
+left:2px;	background: url("http://static.istore.pl/istore/22649/files/18781020.png") no-repeat center center;
 
 }
 
 
  #iStoreSidebar #iStorePromotedProducts .jcarousel-next {
-left:225px;	background: url("../files/18782147.png") no-repeat center center;
+left:225px;	background: url("http://static.istore.pl/istore/22649/files/18782147.png") no-repeat center center;
 }
 
 
 #iStoreSidebar #iStorePromotedProducts .jcarousel-prev-vertical, #iStoreSidebar #iStorePromotedProducts .jcarousel-next-vertical { }
 #iStoreSidebar #iStorePromotedProducts .jcarousel-prev-vertical {
-background: url("../files/18780627.png") no-repeat center center;
+background: url("http://static.istore.pl/istore/22649/files/18780627.png") no-repeat center center;
 left: 110px;
 top: 50px;
 }
 #iStoreSidebar #iStorePromotedProducts .jcarousel-next-vertical {
-background: url("../files/18780552.png ") no-repeat center center;
+background: url("http://static.istore.pl/istore/22649/files/18780552.png ") no-repeat center center;
 left: 110px;
 top: 330px!important;
 }
@@ -1252,7 +1252,7 @@ width: 282px;
  padding-top: 15px;
  padding-right: 12px;
  padding-bottom: 18px;
- background: url('../files/18782916.png') no-repeat;
+ background: url('http://static.istore.pl/istore/22649/files/18782916.png') no-repeat;
  font-size: 10pt;
  color: #fff;
  text-transform: uppercase;
@@ -1267,7 +1267,7 @@ list-style: none;
 width: 263px;
 margin-left: 9px;
  /* tlo promocji */
-background: url('../files/18783052.png') no-repeat;	
+background: url('http://static.istore.pl/istore/22649/files/18783052.png') no-repeat;	
 height: 250px;
 
 }
@@ -1389,24 +1389,24 @@ top:159px;
 }
 
 #iStoreSidebar #iStoreNewProducts .jcarousel-prev {
-left:2px;	background: url("../files/18781020.png") no-repeat center center;
+left:2px;	background: url("http://static.istore.pl/istore/22649/files/18781020.png") no-repeat center center;
 
 }
 
 
  #iStoreSidebar #iStoreNewProducts .jcarousel-next {
-left:225px;	background: url("../files/18782147.png") no-repeat center center;
+left:225px;	background: url("http://static.istore.pl/istore/22649/files/18782147.png") no-repeat center center;
 }
 
 
 #iStoreSidebar #iStoreNewProducts .jcarousel-prev-vertical, #iStoreSidebar #iStoreNewProducts .jcarousel-next-vertical { }
 #iStoreSidebar #iStoreNewProducts .jcarousel-prev-vertical {
-background: url("../files/18780627.png") no-repeat center center;
+background: url("http://static.istore.pl/istore/22649/files/18780627.png") no-repeat center center;
 left: 110px;
 top: 50px;
 }
 #iStoreSidebar #iStoreNewProducts .jcarousel-next-vertical {
-background: url("../files/18780552.png ") no-repeat center center;
+background: url("http://static.istore.pl/istore/22649/files/18780552.png ") no-repeat center center;
 left: 110px;
 top: 330px!important;
 }
@@ -1465,7 +1465,7 @@ top: -15px;
 #iStoreContent  .iStoreTabs {
 	width: 880px;
 	overflow: hidden;
-	 background: url('../files/18782888.png') repeat-x;
+	 background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x;
 	border-top-right-radius: 5px;
 	border-top-left-radius: 5px;
 }
@@ -1524,7 +1524,7 @@ color: #000!important;
 
 
 #dynamic2 {
-/* background: #e3e3e3 url('../files/18782500.png') repeat-x bottom; */
+/* background: #e3e3e3 url('http://static.istore.pl/istore/22649/files/18782500.png') repeat-x bottom; */
 background: #fff;
 width: 880px;
 border-bottom-left-radius: 10px;
@@ -1703,7 +1703,7 @@ display: none;
 position: relative;
 top: 25px;
 width:3180px; color:#fff; font-size:11px;  clear:both; position:relative; bottom:0; left:-1000px; right:-1000px;
-background: url('../files/18782483.jpg') no-repeat;
+background: url('http://static.istore.pl/istore/22649/photos/original/18782483.jpg') no-repeat;
 
 }
 
@@ -1715,7 +1715,7 @@ background: url('../files/18782483.jpg') no-repeat;
 }
 #iStoreFooter .iStoreFooterBox {float:left;  }
 .footerSection1, .footerSection2, .footerSection3 {padding:30px 75px 5px 38px;  margin-bottom:25px;
-background: url('../files/18783207.png') no-repeat top left!important;
+background: url('http://static.istore.pl/istore/22649/files/18783207.png') no-repeat top left!important;
 
 
 }
@@ -1729,7 +1729,7 @@ font-weight: bold;
 
 #iStoreFooter .footerSection6 a.upLink,
 #iStoreFooter .footerSection6 a.upLink:hover  {
-  background: url('../files/18783249.png') center right no-repeat; 
+  background: url('http://static.istore.pl/istore/22649/files/18783249.png') center right no-repeat; 
   color:#fff; 
   border:0px;
   width: 100px;
@@ -1916,7 +1916,7 @@ ul.menugora li a {
 }
 
 ul.menugora li#promocje  a {
-background: url('../files/istore/promocje.png')repeat-x!important;
+background: url('http://static.istore.pl/istore/22649/files/istore/promocje.png')repeat-x!important;
 border-top-left-radius: 10px;
 border-top-right-radius: 10px;
 border-left: 1px silid #e3e3e4;
@@ -1925,12 +1925,12 @@ border-right: 1px silid #e3e3e4;
 }
 
 ul.menugora li#promocje  a:hover{
-background: url('../files/istore/promocje1.png')repeat-x!important;
+background: url('http://static.istore.pl/istore/22649/files/istore/promocje1.png')repeat-x!important;
 
 }
 
 ul.menugora li#nowosci a {
-background: url('../files/18782045.png')repeat-x!important;
+background: url('http://static.istore.pl/istore/22649/files/18782045.png')repeat-x!important;
 border-top-left-radius: 10px;
 border-top-right-radius: 10px;
 border-left: 1px silid #e3e3e4;
@@ -1939,11 +1939,11 @@ border-right: 1px silid #e3e3e4;
 }
 
 ul.menugora li#nowosci  a:hover{
-background: url('../files/18782065.png')repeat-x!important;
+background: url('http://static.istore.pl/istore/22649/files/18782065.png')repeat-x!important;
 }
 
 ul.menugora li#koszty a {
-background: url('../files/18780931.png')repeat-x!important;
+background: url('http://static.istore.pl/istore/22649/files/18780931.png')repeat-x!important;
 border-top-left-radius: 10px;
 border-top-right-radius: 10px;
 border-left: 1px silid #e3e3e4;
@@ -1952,7 +1952,7 @@ border-right: 1px silid #e3e3e4;
 }
 
 ul.menugora li#koszty  a:hover{
-background: url('../files/18780947.png')repeat-x!important;
+background: url('http://static.istore.pl/istore/22649/files/18780947.png')repeat-x!important;
 }
 
 
@@ -1984,7 +1984,7 @@ ul.menudol li a {
 	padding-top: 10px!important;
 	padding-left: 30px!important;
 	font-weight: bold!important;
-	background: url('../files/istore/lista.png') no-repeat;	
+	background: url('http://static.istore.pl/istore/22649/files/istore/lista.png') no-repeat;	
 }
 
 
@@ -2024,18 +2024,18 @@ ul.allegro li a {
 
 
 ul.allegro li#naszeaukcje a {
-background: url('../files/istore/allegro.png') no-repeat;	
+background: url('http://static.istore.pl/istore/22649/files/istore/allegro.png') no-repeat;	
 }
 
 ul.allegro li#dodajkonto a {
-background: url('../files/istore/rejestracja.png') no-repeat;	
+background: url('http://static.istore.pl/istore/22649/files/istore/rejestracja.png') no-repeat;	
 }
 ul.allegro li#naszeaukcje a:hover {
-background: url('../files/istore/allegro1.png') no-repeat;	
+background: url('http://static.istore.pl/istore/22649/files/istore/allegro1.png') no-repeat;	
 }
 
 ul.allegro li#dodajkonto a:hover{
-background: url('../files/istore/rejestracja1.png') no-repeat;	
+background: url('http://static.istore.pl/istore/22649/files/istore/rejestracja1.png') no-repeat;	
 }
 
 
@@ -2066,24 +2066,24 @@ ul.ikony li a {
 }
 
 ul.ikony li#facebook  a {
-background: url('../files/18780672.png') no-repeat!important;
+background: url('http://static.istore.pl/istore/22649/files/18780672.png') no-repeat!important;
 }
 ul.ikony li#tweeter  a {
-background: url('../files/18780815.png') no-repeat!important;
+background: url('http://static.istore.pl/istore/22649/files/18780815.png') no-repeat!important;
 }
 
 li.skype {
-background: url('../files/18782259.png') no-repeat!important;
+background: url('http://static.istore.pl/istore/22649/files/18782259.png') no-repeat!important;
 
 }
 
 
 ul.ikony li#skype  a {
-background: url('../files/18780792.png') no-repeat!important;
+background: url('http://static.istore.pl/istore/22649/files/18780792.png') no-repeat!important;
 
 }
 ul.ikony li#gg  a {
-background: url('../files/18780579.png') no-repeat!important;
+background: url('http://static.istore.pl/istore/22649/files/18780579.png') no-repeat!important;
 }
 ul.ikony li a:hover {
 -moz-box-shadow: 0 0 5px 5px #fff;
@@ -2117,7 +2117,7 @@ margin-left: 30px;
 	padding: 0;
 	width: 244px;
 	float: right;
-	background: url('../files/18783280.png') no-repeat;
+	background: url('http://static.istore.pl/istore/22649/files/18783280.png') no-repeat;
 }
 #iStoreSearch form div {
 	overflow: hidden;
@@ -2159,7 +2159,7 @@ bottom: 3px;
   display: block;
   background-color: none;
   box-shadow: none;
-  background: url('../files/18781414.png') no-repeat;
+  background: url('http://static.istore.pl/istore/22649/files/18781414.png') no-repeat;
 	height: 22px;
 	position: relative;
 	left: 20px;
@@ -2194,10 +2194,10 @@ bottom: 3px;
  display: block;
  width: 253px;
  padding-left: 20px;
- padding-top: 10px;
+ padding-top: 15px;
  padding-right: 12px;
- padding-bottom: 10px;
- background: url('../files/18782872.png') no-repeat;
+ padding-bottom: 18px;
+ background: url('http://static.istore.pl/istore/22649/files/18782872.png') no-repeat;
  font-size: 11pt;
  color: #fff;
  text-transform: uppercase;
@@ -2252,7 +2252,7 @@ left: 170px;
 	color: #000;
 	font-weight: bold;
 	text-decoration: none;
-	background: #dcdcdc url('../files/18780906.png') bottom right;
+	background: #dcdcdc url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
 
 	
 }
@@ -2261,7 +2261,7 @@ left: 170px;
 #iStoreCategoriesBox ul#iStorieCategoriesList li a:hover {
   color: #000;
 	text-decoration: none;
-		background: #f1f1f1 url('../files/18780906.png') bottom right;
+		background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
 
 }
 
@@ -2270,7 +2270,7 @@ left: 170px;
 #iStoreCategoriesBox ul#iStorieCategoriesList li a:active {
   color: #000;
 	text-decoration: none;
-	background: #f1f1f1 url('../files/18780906.png') bottom right;
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
 
 
 }
@@ -2289,7 +2289,7 @@ left: 170px;
 #iStoreCategoriesBox ul#iStorieCategoriesList li.selected a {
   color: #000;
 	text-decoration: none;
-	background: #f1f1f1 url('../files/18780906.png') bottom right;
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
 	
 }
 
@@ -2321,14 +2321,14 @@ margin-bottom: 0;
 	color: #000;
 	font-weight: bold;
 	text-decoration: none;
-	background: #dcdcdc url('../files/18780906.png') bottom right;
+	background: #dcdcdc url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
 }
 
 
 #iStoreCategoriesBox ul#iStorieCategoriesList li ul li.selected a {
   color: #000;
 	text-decoration: none;
-	background: #f1f1f1 url('../files/18780906.png') bottom right;
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
 }
 
 li#cat1461725 {
@@ -2338,7 +2338,7 @@ padding: 0px;
 }
 
 #iStoreSidebar #iStoreReadMoreBlock  {
- background:  #8fb53e url('../files/18782855.png') no-repeat bottom center;
+ background:  #8fb53e url('http://static.istore.pl/istore/22649/files/18782855.png') no-repeat bottom center;
  width: 262px;
  border-top-left-radius: 10px;
  border-top-right-radius: 10px;
@@ -2352,7 +2352,7 @@ padding: 0px;
  display: block;
  width: 242px;
  padding: 10px;
- background: url('../files/18782888.png') repeat-x;
+ background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x;
  font-size: 11pt;
  color: #fff;
  text-transform: uppercase;
@@ -2400,13 +2400,15 @@ color: #666;
 }
  
   #iStoreMenuBox .iStoreBoxHeader {
+ 
+ 
  display: block;
  width: 253px;
  padding-left: 20px;
- padding-top: 10px;
+ padding-top: 15px;
  padding-right: 12px;
- padding-bottom: 10px;
- background: url('../files/18782872.png') no-repeat;
+ padding-bottom: 18px;
+ background: url('http://static.istore.pl/istore/22649/files/18782872.png') no-repeat;
  font-size: 11pt;
  color: #fff;
  text-transform: uppercase;
@@ -2461,7 +2463,7 @@ left: 170px;
 	color: #000;
 	font-weight: bold;
 	text-decoration: none;
-	background: #dcdcdc url('../files/18780906.png') bottom right;
+	background: #dcdcdc url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
 
 	
 }
@@ -2470,7 +2472,7 @@ left: 170px;
 #iStoreMenuBox ul#iStorieMenuList li a:hover {
   color: #000;
 	text-decoration: none;
-		background: #f1f1f1 url('../files/18780906.png') bottom right;
+		background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
 
 }
 
@@ -2479,7 +2481,7 @@ left: 170px;
 #iStoreMenuBox ul#iStorieMenuList li a:active {
   color: #000;
 	text-decoration: none;
-	background: #f1f1f1 url('../files/18780906.png') bottom right;
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
 
 
 }
@@ -2498,7 +2500,7 @@ left: 170px;
 #iStoreMenuBox ul#iStorieMenuList li.selected a {
   color: #000;
 	text-decoration: none;
-	background: #f1f1f1 url('../files/18780906.png') bottom right;
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
 	
 }
 
@@ -2529,14 +2531,14 @@ margin-bottom: 0;
 	color: #000;
 	font-weight: bold;
 	text-decoration: none;
-	background: #dcdcdc url('../files/18780906.png') bottom right;
+	background: #dcdcdc url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
 }
 
 
 #iStoreMenuBox ul#iStorieMenuList li ul li.selected a {
   color: #000;
 	text-decoration: none;
-	background: #f1f1f1 url('../files/18780906.png') bottom right;
+	background: #f1f1f1 url('http://static.istore.pl/istore/22649/files/18780906.png') bottom right;
 }
 
 
@@ -2557,7 +2559,7 @@ color:#393939;
 
 
 #iStoreSidebar #iStoreContactBox  {
- /*background:  url('../files/18782855.png') no-repeat bottom center;
+ /*background:  url('http://static.istore.pl/istore/22649/files/18782855.png') no-repeat bottom center;
  padding-bottom: 45px;*/
  width: 282px;
 }
@@ -2567,10 +2569,10 @@ color:#393939;
  display: block;
  width: 253px;
  padding-left: 20px;
- padding-top: 10px;
+ padding-top: 15px;
  padding-right: 12px;
- padding-bottom: 10px;
- background: url('../files/18782872.png') no-repeat;
+ padding-bottom: 18px;
+ background: url('http://static.istore.pl/istore/22649/files/18782872.png') no-repeat;
  font-size: 11pt;
  color: #fff;
  text-transform: uppercase;
@@ -2626,19 +2628,19 @@ li.phone {
 width: 230px;
 padding: 10px;
 border-radius: 10px;
-background: #fff url("../files/18782543.png") no-repeat 10px 5px;
+background: #fff url("http://static.istore.pl/istore/22649/files/18782543.png") no-repeat 10px 5px;
 color:#002861;
 line-height: 13pt;
 }
 
 li.cellPhone {
-background: #fff url("../files/18782543.png") no-repeat;
+background: #fff url("http://static.istore.pl/istore/22649/files/18782543.png") no-repeat;
 line-height: 13pt;
 border-radius: 10px;
 color:#002861;
 }
 li.fax {
-background: url("../files/18782543.png") no-repeat;
+background: url("http://static.istore.pl/istore/22649/files/18782543.png") no-repeat;
 line-height: 13pt;
 color:#002861;
 }
@@ -2646,7 +2648,7 @@ li.email {
 width: 230px;
 padding: 10px;
 border-radius: 10px;
-background: #fff url(" 	../files/18781641.png") no-repeat 7px 15px;
+background: #fff url(" 	http://static.istore.pl/istore/22649/files/18781641.png") no-repeat 7px 15px;
 color:#002861;
 line-height: 13pt;
 
@@ -2662,23 +2664,23 @@ color:#002861!important;
 
 }
 #iStoreSidebar #iStoreContactBox li.phone {
-background: url("../files/18782543.png") no-repeat;
+background: url("http://static.istore.pl/istore/22649/files/18782543.png") no-repeat;
   color:#000;
   line-height: 13pt;
 }
 
 #iStoreSidebar #iStoreContactBox li.cellPhone {
-background: url("../files/18782543.png") no-repeat;
+background: url("http://static.istore.pl/istore/22649/files/18782543.png") no-repeat;
   color:#002861;
   line-height: 13pt;
 }
 #iStoreSidebar #iStoreContactBox li.fax {
-background: url("../files/18782543.png") no-repeat;
+background: url("http://static.istore.pl/istore/22649/files/18782543.png") no-repeat;
   color:#002861;
   line-height: 13pt;
 }
 #iStoreSidebar #iStoreContactBox li.email {
-background: url(" 	../files/18781641.png") no-repeat 0px 10px;
+background: url(" 	http://static.istore.pl/istore/22649/files/18781641.png") no-repeat 0px 10px;
 
   color:#002861;
   line-height: 13pt;
@@ -2700,7 +2702,7 @@ div#iStoreContent li.blip {
   /*background-image: url("img/ico_contact.png");    */
 }
 li.gg, #iStoreSidebar #iStoreContactBox li.gg {
-  background: url("../files/18780579.png") no-repeat;
+  background: url("http://static.istore.pl/istore/22649/files/18780579.png") no-repeat;
   line-height: 13pt;
 }
 
@@ -2798,7 +2800,7 @@ display:none;
 
 
 
-.iStoreAddToBasketLink {background: url('../files/18780411.png') right top no-repeat !important; filter:none; height: 48px; width: 163px;
+.iStoreAddToBasketLink {background: url('http://static.istore.pl/istore/22649/files/18780411.png') right top no-repeat !important; filter:none; height: 48px; width: 163px;
 text-indent: -9999px;
 }
 
@@ -2847,7 +2849,7 @@ div#iStoreContent div.displayAsTiles div.iStoreBoxContent ul.iStoreProducts {
   width: 280px;
  margin-left: 12px!important;
  margin-bottom: 15px!important;
-background: url('../files/18783141.png') no-repeat;	
+background: url('http://static.istore.pl/istore/22649/files/18783141.png') no-repeat;	
 }
 .displayAsTiles  ul.iStoreProducts li +li +li +li {
 }
@@ -2951,18 +2953,18 @@ width: 120px;
 
 
 
-div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedPL { background: url('../files/18782153.png') no-repeat; height: 73px!important;}
-div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedDE { background: url('../files/18782153.png') no-repeat;}
-div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedEN { background: url('../files/18782153.png') no-repeat; height: 73px!important;}
-div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedRU { background: url('../files/18782153.png') no-repeat;}
-div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedCZ { background: url('../files/18782153.png') no-repeat;}
-div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedSK { background: url('../files/18782153.png') no-repeat;}
-div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewPL { background: url('../files/18781932.png') no-repeat; height: 73px!important;}
-div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewDE { background: url('../files/18781932.png') no-repeat;}
-div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewEN { background: url('../files/18781932.png') no-repeat; height: 73px!important;}
-div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewRU { background: url('../files/18781932.png') no-repeat;}
-div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewCZ { background: url('../files/18781932.png') no-repeat;}
-div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewSK { background: url('../files/18781932.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedPL { background: url('http://static.istore.pl/istore/22649/files/18782153.png') no-repeat; height: 73px!important;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedDE { background: url('http://static.istore.pl/istore/22649/files/18782153.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedEN { background: url('http://static.istore.pl/istore/22649/files/18782153.png') no-repeat; height: 73px!important;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedRU { background: url('http://static.istore.pl/istore/22649/files/18782153.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedCZ { background: url('http://static.istore.pl/istore/22649/files/18782153.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsPromotedSK { background: url('http://static.istore.pl/istore/22649/files/18782153.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewPL { background: url('http://static.istore.pl/istore/22649/files/18781932.png') no-repeat; height: 73px!important;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewDE { background: url('http://static.istore.pl/istore/22649/files/18781932.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewEN { background: url('http://static.istore.pl/istore/22649/files/18781932.png') no-repeat; height: 73px!important;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewRU { background: url('http://static.istore.pl/istore/22649/files/18781932.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewCZ { background: url('http://static.istore.pl/istore/22649/files/18781932.png') no-repeat;}
+div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewSK { background: url('http://static.istore.pl/istore/22649/files/18781932.png') no-repeat;}
 
 
 .displayAsTiles ul.iStoreProductOptions li.iStoreProductOptionsFreeDelivery  {
@@ -3027,7 +3029,7 @@ div#iStoreProductsList ul.iStoreSpecialIcons li.iStoreProductIsNewSK { backgroun
 	margin-top: 15px!important;
 	overflow: hidden;
 	text-align: left!important;
-  background: url('../files/18780014.png') no-repeat;
+  background: url('http://static.istore.pl/istore/22649/files/18780014.png') no-repeat;
   height: 120px;
   
   width: 860px!important;
@@ -3119,19 +3121,19 @@ color: #000;
 #iStoreProductDetails .iStoreProductComments .Score a {margin-left:0px; position:static; padding:0; line-height:26px;}
 
 .Score strong span {  display: inline;}
-.Scored0 strong { background: url('../files/18782286.png') 0 50% no-repeat ;}
-.Scored1 strong { background: url('../files/18782308.png') 0 50% no-repeat;}
-.Scored2 strong {	background: url('../files/18782319.png') 0 50% no-repeat;}
-.Scored3 strong { background: url('../files/18782365.png') 0 50% no-repeat;}
-.Scored4 strong { background: url('../files/18782397.png') 0 50% no-repeat;}
-.Scored5 strong { background: url('../files/18782406.png') 0 50% no-repeat;}
+.Scored0 strong { background: url('http://static.istore.pl/istore/22649/files/18782286.png') 0 50% no-repeat ;}
+.Scored1 strong { background: url('http://static.istore.pl/istore/22649/files/18782308.png') 0 50% no-repeat;}
+.Scored2 strong {	background: url('http://static.istore.pl/istore/22649/files/18782319.png') 0 50% no-repeat;}
+.Scored3 strong { background: url('http://static.istore.pl/istore/22649/files/18782365.png') 0 50% no-repeat;}
+.Scored4 strong { background: url('http://static.istore.pl/istore/22649/files/18782397.png') 0 50% no-repeat;}
+.Scored5 strong { background: url('http://static.istore.pl/istore/22649/files/18782406.png') 0 50% no-repeat;}
 
-.LargeScore.Scored0 strong { background-image: url('../files/18780146.png');}
-.LargeScore.Scored1 strong { background-image: url('../files/18780198.png');}
-.LargeScore.Scored2 strong { background-image: url('../files/18780279.png');}
-.LargeScore.Scored3 strong { background-image: url('../files/18780312.png');}
-.LargeScore.Scored4 strong {background-image: url('../files/18780332.png');}
-.LargeScore.Scored5 strong { background-image: url('../files/18780346.png');}
+.LargeScore.Scored0 strong { background-image: url('http://static.istore.pl/istore/22649/files/18780146.png');}
+.LargeScore.Scored1 strong { background-image: url('http://static.istore.pl/istore/22649/files/18780198.png');}
+.LargeScore.Scored2 strong { background-image: url('http://static.istore.pl/istore/22649/files/18780279.png');}
+.LargeScore.Scored3 strong { background-image: url('http://static.istore.pl/istore/22649/files/18780312.png');}
+.LargeScore.Scored4 strong {background-image: url('http://static.istore.pl/istore/22649/files/18780332.png');}
+.LargeScore.Scored5 strong { background-image: url('http://static.istore.pl/istore/22649/files/18780346.png');}
 
 
 /*Details*/
@@ -3139,7 +3141,7 @@ color: #000;
 
 #iStoreProductDetails .iStoreBoxContent h1 {
   padding: 10px;
- background: url('../files/18782888.png') repeat-x;
+ background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x;
  font-size: 15pt;
  color: #fff;
  text-transform: uppercase;
@@ -3179,7 +3181,7 @@ top: -10px;
 }
 
 #iStoreProductDetails {
-/*background: #fff url('../files/18782500.png') repeat-x bottom;  */
+/*background: #fff url('http://static.istore.pl/istore/22649/files/18782500.png') repeat-x bottom;  */
 background: #fff;
 padding: 0px;
 border-left: 1px solid #e3e3e3;
@@ -3439,11 +3441,11 @@ font-size: 10pt!important;
 
 #iStoreProductGalleryControlPrev a {
 	padding: 0;
-	background: url('../files/18780996.jpg') left center no-repeat;
+	background: url('http://static.istore.pl/istore/22649/photos/original/18780996.jpg') left center no-repeat;
 }
 #iStoreProductGalleryControlNext a {
 	padding: 0;
-	background: url('../files/18782139.jpg') right center no-repeat;
+	background: url('http://static.istore.pl/istore/22649/photos/original/18782139.jpg') right center no-repeat;
 }
 
 
@@ -3480,7 +3482,7 @@ font-size: 10pt!important;
 	text-transform: uppercase
 }
 #iStoreContent #iStoreProductsDisplayToggler ul li a {
-  background-image: url('../files/18780640.png');
+  background-image: url('http://static.istore.pl/istore/22649/files/18780640.png');
   background-repeat:no-repeat;  
   padding: 0;
 	height: 20px;
@@ -3557,7 +3559,7 @@ border-right: 1px solid #e3e3e3;
 #iStoreFiltersToggler a {color:#000; text-decoration:none;font-size:11px;}
 
 #iStoreFilters {
-background: #fff url('../files/18782500.png') repeat-x bottom; 
+background: #fff url('http://static.istore.pl/istore/22649/files/18782500.png') repeat-x bottom; 
 padding-right: 8px;
 border-left: 1px solid #e3e3e3;
 border-right: 1px solid #e3e3e3;
@@ -3668,7 +3670,7 @@ width: 845px;
 #iStoreContent .iStoreBoxWrapper .iStoreBoxHeader h2 {
 
  padding: 10px;
- background: url('../files/18782888.png') repeat-x;
+ background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x;
  color: #fff;
  text-transform: uppercase;
  border-top-left-radius: 10px;
@@ -4455,7 +4457,7 @@ width: 850px;
 
 	#frm h3 {
 		 padding: 10px!important;
- background: url('../files/18782888.png') repeat-x;
+ background: url('http://static.istore.pl/istore/22649/files/18782888.png') repeat-x;
  font-size: 15pt;
  color: #fff;
  text-transform: uppercase;

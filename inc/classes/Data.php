@@ -199,8 +199,17 @@ class Data extends Data_Person {
       }
 
       if( $tbl_name != '' ) {
-         $res = db_query('select *, ' . $table_id . ' as id_table from ' . $tbl_name . ' where login = "' . db_escape($login) . '"');
-         return db_fetch_array($res);
+         $res_um = db_query('select *, ' . $table_id . ' as id_table from ' . $tbl_name . ' where login = "' . db_escape($login) . '"');
+         $um_arr = db_fetch_array($res_um);
+		 if( $table == 'CLIENT' ) {
+			$res_cli = db_query('select *  from ' . TBL_GLOBAL_CLIENT . ' where id_client = "' . db_int($um_arr['id_client']) . '"');
+			if( db_rows($res_cli) == 1 ) {
+				$um_arr['CLIENT'] = db_fetch_array($res_cli);
+			} else {
+				return false;
+			}
+		 }
+		 return $um_arr;
       } else {
          return false;
       }

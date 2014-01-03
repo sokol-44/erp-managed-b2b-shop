@@ -233,6 +233,8 @@ class Data_Person extends Data_Rights {
          'description' => 'BLOCKED'),
       array('name' => 'SUSPENDED',
          'description' => 'SUSPENDED'),
+      array('name' => 'NEW',
+         'description' => 'NEW'),
       array('name' => 'ERASED',
          'description' => 'ERASED')
       );
