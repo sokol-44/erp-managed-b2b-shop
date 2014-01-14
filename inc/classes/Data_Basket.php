@@ -29,11 +29,7 @@ class Data_Basket extends Data_Order {
       state
       from ' . TBL_SHOP_SHOPPING_BASKET . '
       where state != "ORDER" and id_client = ' . db_int($id_client) . '';
-      $basket_list_raw = db_result_array( db_query( $query ) );
-      $basket_list = array();
-      foreach( $basket_list_raw as $basket ) {
-         $basket_list[$basket['id_shopping_basket']] = $basket;
-      }
+      $basket_list = db_result_array_full_id( db_query( $query ) );
       return $basket_list;
    }
     
@@ -226,6 +222,7 @@ class Data_Basket extends Data_Order {
       $update_query = 'update ' . TBL_SHOP_SHOPPING_BASKET . ' set
          using_id_client_user = ' . db_int($basket_params['using_id_client_user']) . ',
          using_session_id = "' . db_escape($basket_params['using_session_id']) . '",
+         using_date = now(),
          state = "' . db_escape($basket_params['state']) . '"
          ' . $sql_set_m . ' where id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']);
       db_query( $update_query );

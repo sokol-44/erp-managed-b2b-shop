@@ -185,6 +185,7 @@ class Page {
          if ( $this->check_component_rights($F->com) ) {
             $this->list_places['component_html'][0]['script'] = $F->com;
          } else {
+         	//print_debug($P); die();
             $this->redirect( $F->make_link(DEFAULT_COM) );
          }
       } else {

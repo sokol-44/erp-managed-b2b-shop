@@ -9,6 +9,7 @@
 if( !defined('_I_INIT') ) die();
 
 class Shopping_Basket {
+	const TIME2FREE = 1800; // 30min
    static $class = false;
    public $contents = array();
    public $product_info_array = array();
@@ -257,16 +258,15 @@ class Shopping_Basket {
    function currently_other_using( $params = array() ) {
       $P = Person::g_global();
       //global param
-      $time_diff_ok = time()-1800;
+      $time_diff_ok = time()-self::TIME2FREE;
 
       if( $this->params['using_id_client_user'] != 0 && $this->params['using_session_id'] &&
             ($this->params['using_id_client_user'] != $P->id && $this->params['ts_using'] < $time_diff_ok) ) {
-         return true;
+         return $this->params['using_session_id'];
       }
 
       return false;
-   }
-   
+   }  
 
    function check_move( $direction = 'UP') {
       $Rights = Rights::g_global();
@@ -297,6 +297,7 @@ class Shopping_Basket {
 
       return $res;
    }
+
 
    function db_restore_contents() {
       //FIXME

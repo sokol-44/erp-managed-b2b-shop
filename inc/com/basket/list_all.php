@@ -17,46 +17,6 @@ $Page->head_title = Lang::_('BASKET list');
 <div class="basket_list_container">
   <div class="basket_list_container basket_list_title container_header"><?php echo $Page->head_title; ?><div class="icon"></div></div>
   <div class="basket_list_container basket_list_content">
-<?php
-echo Lang::_('Basket help for icons');
-?>
-<ul>
-	<li><?php echo $F->static_image('icon/delete_16.png', Lang::_('remove BASKET')) . ' - ' . Lang::_('remove BASKET'); ?>
-	</li>
-	<li><?php echo $F->static_image('icon/trash_16.png', Lang::_('clean product in BASKET')) . ' - ' . Lang::_('clean product in BASKET'); ?>
-	</li>
-	<li><?php echo $F->static_image('icon/up_16.png', Lang::_('switch working BASKET to this basket')) . ' - ' . Lang::_('switch working BASKET to this basket'); ?>
-	</li>
-	<li><?php echo $F->static_image('icon/add_up_16.png', Lang::_('add this basket to working BASKET')) . ' - ' . Lang::_('add this basket to working BASKET'); ?>
-	</li>
-	<li><?php echo $F->static_image('icon/stock_lock_16.png', Lang::_('lock this BASKET')) . ' - ' . Lang::_('lock this BASKET'); ?>
-	</li>
-	<li><?php echo $F->static_image('icon/stock_lock_open_16.png', Lang::_('unlock this BASKET')) . ' - ' . Lang::_('unlock this BASKET'); ?>
-	</li>
-</ul>
-<?php echo Lang::_('Basket help for colors');?>
-<ul>
-	<li><p class="basket mainbasket">
-			<?php echo Lang::_('current working basket');?>
-		</p></li>
-	<li><p class="basket">
-			<?php echo Lang::_('normal basket');?>
-		</p></li>
-	<li><p class="basket usedbasket">
-			<?php echo Lang::_('basket used by somebody else');?>
-		</p></li>
-	<li><p class="basket lockedbasket_user">
-			<?php echo Lang::_('basket locked by you');?>
-		</p></li>
-	<li><p class="basket lockedbasket_other">
-			<?php echo Lang::_('basket locked by somebody else');?>
-		</p></li>
-</ul>
-<?php
-// print_debug($Shopping_Basket);
-// print_debug($P);
-?>
-
 <?php echo Lang::_('Basket list');?>
 <table class="tableBox">
 	<tr class="tableBoxHeading">
@@ -193,6 +153,45 @@ echo Lang::_('Basket help for icons');
 }
 ?>
 </table>
+<?php
+echo Lang::_('Basket help for icons');
+?>
+<ul>
+	<li><?php echo $F->static_image('icon/delete_16.png', Lang::_('remove BASKET')) . ' - ' . Lang::_('remove BASKET'); ?>
+	</li>
+	<li><?php echo $F->static_image('icon/trash_16.png', Lang::_('clean product in BASKET')) . ' - ' . Lang::_('clean product in BASKET'); ?>
+	</li>
+	<li><?php echo $F->static_image('icon/up_16.png', Lang::_('switch working BASKET to this basket')) . ' - ' . Lang::_('switch working BASKET to this basket'); ?>
+	</li>
+	<li><?php echo $F->static_image('icon/add_up_16.png', Lang::_('add this basket to working BASKET')) . ' - ' . Lang::_('add this basket to working BASKET'); ?>
+	</li>
+	<li><?php echo $F->static_image('icon/stock_lock_16.png', Lang::_('lock this BASKET')) . ' - ' . Lang::_('lock this BASKET'); ?>
+	</li>
+	<li><?php echo $F->static_image('icon/stock_lock_open_16.png', Lang::_('unlock this BASKET')) . ' - ' . Lang::_('unlock this BASKET'); ?>
+	</li>
+</ul>
+<?php echo Lang::_('Basket help for colors');?>
+<ul>
+	<li><p class="basket mainbasket">
+			<?php echo Lang::_('current working basket');?>
+		</p></li>
+	<li><p class="basket">
+			<?php echo Lang::_('normal basket');?>
+		</p></li>
+	<li><p class="basket usedbasket">
+			<?php echo Lang::_('basket used by somebody else');?>
+		</p></li>
+	<li><p class="basket lockedbasket_user">
+			<?php echo Lang::_('basket locked by you');?>
+		</p></li>
+	<li><p class="basket lockedbasket_other">
+			<?php echo Lang::_('basket locked by somebody else');?>
+		</p></li>
+</ul>
+<?php
+// print_debug($Shopping_Basket);
+// print_debug($P);
+?>
   </div>
   <div class="basket_list_container basket_list_bottom container_bottom"></div>
 </div>

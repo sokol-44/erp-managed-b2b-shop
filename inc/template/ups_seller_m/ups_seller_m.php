@@ -24,7 +24,7 @@ if( !defined('_I_INIT') ) die();
 		<meta name="keywords" content="<?php echo $Page->put_head_keywords(); ?>">
 		<meta name="description" content="<?php echo $Page->put_head_description(); ?>">
  
-		<link rel="stylesheet" href="inc/template/ups_seller_m/css/18784813.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="inc/template/ups_seller_m/css/18784813.css?ver=<?php echo time(); ?>" type="text/css" media="screen">
 		<link rel="stylesheet" href="inc/template/ups_seller_m/css/master.css" type="text/css" media="screen">
 		<link rel="stylesheet" href="inc/template/ups_seller_m/css/miniatures.css" type="text/css" media="screen">  
 		<link rel="stylesheet" href="inc/template/ups_seller_m/css/my_layout.css?ver=<?php echo time(); ?>" type="text/css" media="screen">  

@@ -262,9 +262,16 @@ function db_query($query, $link = 'db_link') {
 
    if (defined('DEBUG_DB_QUERIES') && (DEBUG_DB_QUERIES == 'true')) {
       $dbg = debug_backtrace();
-      
+      $l = array();
+      foreach($dbg as $idx => $ar) {
+      	$fl = str_replace('C:\\Users\\ms.2M\\Dropbox\\Projects\\eclipse\\workspaceB2B', '', $ar['file']);
+      	if($fl == '') $l[$idx] = $ar['function'];
+      	else $l[$idx] = $fl . ' (' . $ar['function'] . ') : '. $ar['line'];
+      }
+      // C:\Users\ms.2M\Dropbox\Projects\eclipse\workspaceB2B\B2B\inc\classes\
       //$query_log[] = array ('q' => $query, 'f' => $dbg[0]['file'], 'l' => $dbg[0]['line'],  't' => microtime(TRUE));
-      $query_log[] = array ('q' => $query, 'f0' => $dbg[0]['file'], 'l0' => $dbg[0]['line'], 'f1' => $dbg[1]['file'], 'l1' => $dbg[1]['line'], 'ts' => (microtime(TRUE)-$tstart), 'ta' => microtime(TRUE));
+      // $query_log[] = array ('q' => $query, 'f0' => $dbg[0]['file'], 'l0' => $dbg[0]['line'], 'f1' => $dbg[1]['file'], 'l1' => $dbg[1]['line'], 'ts' => (microtime(TRUE)-$tstart), 'ta' => microtime(TRUE));
+      $query_log[] = array ('q' => $query,  'l' => $l, 'ts' => round(microtime(TRUE)-$tstart,6), 'ta' => microtime(TRUE));
 //       $query_log[] = array ('q' => $query, 'f' => $dbg[0]['file'], 'l' => $dbg[0]['line'], 't' => microtime(TRUE), 'b' => debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS));
    }
 

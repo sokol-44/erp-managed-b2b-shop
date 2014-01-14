@@ -435,7 +435,7 @@ a {
 }
  a:hover {
    color: darkblue;
-   text-shadow: 0.1em 0.1em 0.2em black;
+   text-shadow: 0.1em 0.1em 0.1em black;
 }
 
 
@@ -989,8 +989,9 @@ TD.headerNavigation {
 .tableBox td {
 }
 
-a div.catalog_product_name {
+a span.catalog_product_name {
 	color: black;
+	text-decoration: underline;
 }
 
 .tableBorder {

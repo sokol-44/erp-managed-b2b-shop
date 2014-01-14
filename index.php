@@ -46,4 +46,7 @@ print_debug($query_log);
 //print_debug($_GET);
 // $Info->reset();
 // echo '-->';
+
+print_debug(_I_ROOT_DIR);
+print_debug(_I_ROOT_WWW_DIR);
 ?>

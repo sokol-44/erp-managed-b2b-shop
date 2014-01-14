@@ -25,8 +25,8 @@ if( $SP->number_of_pages>1 ) echo $SP->display_links();
 	   	$description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product['description'], 100 ) );
 	   else $description_html = '';
 	   $cell_product_info = $F->draw_link($link_product_info, '',
-	   '<div class="catalog_product_name">' . $F->output_string_html( $product['name'] ) . '</div>
-	   <div class="catalog_product_description">' . $description_html . '</div>');
+	   '<span class="catalog_product_name">' . $F->output_string_html( $product['name'] ) . '</span>
+	   <span class="catalog_product_description">' . $description_html . '</span>');
 
 		$catalog_index = $F->output_string_html( trim($product['catalog_index']) );
 	   if( $P->logged_in ) {
