@@ -3,7 +3,7 @@
 # Server version:               5.1.40-community-log
 # Server OS:                    Win32
 # HeidiSQL version:             6.0.0.3603
-# Date/time:                    2011-01-07 15:16:48
+# Date/time:                    2010-12-03 15:45:01
 # --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -11,20 +11,21 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-# Dumping structure for function b2b_sklep.hash_aes_password
-DROP FUNCTION IF EXISTS `hash_aes_password`;
+# Dumping structure for function b2b_sklep.strip_tags
+DROP FUNCTION IF EXISTS `strip_tags`;
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `hash_aes_password`(`password` TINYTEXT, `salt` TINYTEXT) RETURNS tinytext CHARSET utf8
-    DETERMINISTIC
+CREATE DEFINER=`root`@`localhost` FUNCTION `strip_tags`( x longtext) RETURNS longtext CHARSET utf8
+    READS SQL DATA
 BEGIN
-	DECLARE hash_res TINYTEXT;
-	set hash_res = 
-			HEX( 
-				AES_ENCRYPT(
-					unhex(md5(password)),
-					unhex(md5( concat(password, salt) ))) 
-			);
-	RETURN hash_res;
+DECLARE sstart INT UNSIGNED;
+DECLARE ends INT UNSIGNED;
+SET sstart = LOCATE('<', x, 1);
+REPEAT
+SET ends = LOCATE('>', x, sstart);
+SET x = CONCAT(SUBSTRING( x, 1 ,sstart -1) ,SUBSTRING(x, ends +1 )) ;
+SET sstart = LOCATE('<', x, 1);
+UNTIL sstart < 1 END REPEAT;
+return x;
 END//
 DELIMITER ;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
