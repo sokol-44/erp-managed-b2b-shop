@@ -1,5 +1,7 @@
 <?php
 
+$Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
+$Shopping_Basket_Chain->logout_user();
 $P->logout();
 $Shopping_Basket_Chain = new Shopping_Basket_Chain();
 

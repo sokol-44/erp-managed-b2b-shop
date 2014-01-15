@@ -41,6 +41,7 @@ class Shopping_Basket_Chain {
       $this->id_client_user = (int)$P->id;
       $this->Basket_List = array();
 
+      //print_debug($this->return_params());
       //FIXME
       //for not logged users
       if( $P->logged_in ) {
@@ -195,7 +196,9 @@ class Shopping_Basket_Chain {
       	 $this->Basket_List[ $this->id_basket_current ]->check_rights('MODIFY_CONTENTS', false) &&
       	 $this->Basket_List[ $this->id_basket_current ]->currently_other_using() === FALSE &&
       	 $this->Basket_List[ $this->id_basket_current ]->currently_other_locked() === FALSE ) {
-      	
+
+      	if( $this->Basket_List[ $this->id_basket_current ]->basket_level_text() == 'FREE' ) 
+      		$this->Basket_List[ $this->id_basket_current ]->state_using_get();
       	return true;
       } else {
       	return $this->set_default_basket_by_date();	
@@ -203,7 +206,7 @@ class Shopping_Basket_Chain {
    }   
    
    public function set_lock_basket( $id_shopping_basket = 0 ) {
-       
+
       if( $this->_check_valid_basket($id_shopping_basket) &&
             $this->Basket_List[ $id_shopping_basket ]->check_rights('MODIFY_CONTENTS') &&
             $this->Basket_List[ $id_shopping_basket ]->check_rights('LOCK') ) {
@@ -275,7 +278,10 @@ class Shopping_Basket_Chain {
    private function _switch_default_basket( $id_shopping_basket ) {
       if( $this->_check_valid_basket($id_shopping_basket)  &&
           $this->Basket_List[ $id_shopping_basket ]->check_rights('MODIFY_CONTENTS') ) {
-         //$this->Basket_List[ $this->id_basket_current ]->state_using_clear();
+      	
+         if( $this->Basket_List[ $id_shopping_basket ]->basket_level_text() == 'FREE' ) 
+         		$this->Basket_List[ $id_shopping_basket ]->state_using_clear();
+      	
       	$this->id_basket_current = $id_shopping_basket;
       } else {
       	self::$id_basket_current = 0;
@@ -287,25 +293,42 @@ class Shopping_Basket_Chain {
    
 
    public function set_default_basket_by_date( $recurrence = false  ) {
-      $ts_modified = 0;
+      $ts_using = 0;
+      $ts_using_lock = 0;
+      $id_shopping_basket = 0;
+      $id_shopping_basket_lock = 0;
       $this->id_basket_set = false;
       $this->id_basket_current = 0;
 
       foreach ($this->Basket_List as $Basket ) {
+//       	print_debug( array(
+//       	$this->_check_valid_basket($Basket->id_shopping_basket)
+//       	,$Basket->params['ts_using'] > $ts_using 
+//       	,$Basket->currently_other_using() === FALSE 
+//       	,$Basket->currently_other_locked() === FALSE
+//       	), true);
       	if( $this->_check_valid_basket($Basket->id_shopping_basket) &&
       	$Basket->check_rights('MODIFY_CONTENTS', false) &&
-      	$Basket->params['ts_using'] > $ts_using ) {
-      		if( $Basket->currently_other_using() === FALSE &&
-      		$Basket->currently_other_locked() === FALSE ) {
+      	$Basket->currently_other_using() === FALSE &&
+      	$Basket->currently_other_locked() === FALSE ) {
+
+      		if( $Basket->basket_level_text() == 'LOCK' && $Basket->params['ts_using'] > $ts_using_lock) {
+      			$ts_using_lock = $Basket->param['ts_using'];
+      			$id_shopping_basket_lock = $Basket->id_shopping_basket;
+      		} elseif( $Basket->params['ts_using'] > $ts_using ) {
       			$ts_using = $Basket->param['ts_using'];
       			$id_shopping_basket = $Basket->id_shopping_basket;
       		}
       	}
       }
+
+      
+      if( $id_shopping_basket_lock > 0 ) $id_shopping_basket = $id_shopping_basket_lock;
       
       if( $id_shopping_basket > 0 ) {
       	$this->_switch_default_basket( $id_shopping_basket );
       } else {
+      	if( $recurrence ) die('$recurrence');
       	if( $recurrence ) $this->add_basket( true );
       	else $this->add_basket( );
       	$this->set_default_basket_by_date( true );
@@ -314,9 +337,10 @@ class Shopping_Basket_Chain {
    	
    public function return_default_basket_modify() {
 
-      if( $this->_check_valid_basket($this->id_basket_current) ) {
-         if( $this->Basket_List[ $id_shopping_basket ]->check_rights('MODIFY_CONTENTS') ) {
-            return $this->Basket_List[ $id_shopping_basket ];
+      if( $this->id_basket_current > 0  ) {
+         if( $this->_check_valid_basket($this->id_basket_current)  && 
+         	 $this->Basket_List[ $this->id_basket_current ]->check_rights('MODIFY_CONTENTS') ) {
+            return $this->Basket_List[ $this->id_basket_current ];
          } else {
             $this->id_basket_set = false;
             $this->set_default_basket_by_date();
@@ -384,9 +408,25 @@ class Shopping_Basket_Chain {
    }
 
 
+   public function logout_user() {
+
+   	foreach( $this->Basket_List as $Shopping_Basket ) {
+//    		print_debug( array(
+//    		$Shopping_Basket->id_shopping_basket
+//    		,$Shopping_Basket->currently_user_using()
+//    		,$Shopping_Basket->check_rights('MODIFY_CONTENTS')
+//    		,$Shopping_Basket->basket_level_text() == 'USE'
+//    		), true);
+   		if(   $Shopping_Basket->currently_user_using() &&
+   				$Shopping_Basket->check_rights('MODIFY_CONTENTS') &&
+      			$Shopping_Basket->basket_level_text() == 'USE' ) { 
+   			$Shopping_Basket->state_using_clear();
+   	   }
+   	}
+   	
+   }
+    
    public function login_user() {
-      $Shopping_Basket_tmp = reset($this->Basket_List);
-      $Shopping_Basket = clone $Shopping_Basket_tmp;
 
       $this->_reload_data();
 

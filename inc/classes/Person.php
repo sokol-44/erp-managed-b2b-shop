@@ -394,7 +394,7 @@ class Person {
    static public function get_client_user_data( $id, $table = 'CLIENT') {
       //'CLIENT', 'ADMIN'
       $idx=$id.'.'.$table;
-      if( isset(self::$person_rights_cache[$idx]) ) $client_client_data = $person_rights_cache[$idx];
+      if( isset(self::$person_rights_cache[$idx]) ) $client_client_data = self::$person_rights_cache[$idx];
       else {
          $client_client_data = Data::get_person_data( $table, $id );
          self::$person_rights_cache[$idx] = $client_client_data;

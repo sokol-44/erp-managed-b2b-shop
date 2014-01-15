@@ -3,10 +3,10 @@
 $Page->head_title = Lang::_('Login');
 
 
-$Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
 
 if( $P->logged_in ) $F->redirect( $F->make_link(CFG_COM_ACCOUNT) );
 
+$Shopping_Basket_Chain = Shopping_Basket_Chain::g_global();
 
 $Info = Info::g_global();
 
@@ -15,7 +15,7 @@ if( $F->check_login('CLIENT') ) {
    $status = $P->check_person_login($F->POST['lgn_CLIENT'], $F->POST['pswrd_CLIENT'], 'CLIENT');
    if( $status ) {
       //login
-      $Shopping_Basket_Chain->login_user();
+		$Shopping_Basket_Chain->login_user();
       $Info->add(Lang::_('LOGGED_IN_USER') . ' ' . $P->login, 'success');
       $Page->redirect( $F->make_link(CFG_COM_ACCOUNT) );
    } else {

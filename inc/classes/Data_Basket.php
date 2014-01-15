@@ -225,6 +225,7 @@ class Data_Basket extends Data_Order {
          using_date = now(),
          state = "' . db_escape($basket_params['state']) . '"
          ' . $sql_set_m . ' where id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']);
+      echo $update_query;
       db_query( $update_query );
       
       return true;

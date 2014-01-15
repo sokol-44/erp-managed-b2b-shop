@@ -92,11 +92,16 @@ class Shopping_Basket {
    }
     
    function state_using_get() {
-      $P = Person::g_global();
+      $P = Person::g_global(); 
+      $st = Rights::split_state( $this->params['state'] );
+      
+      
 
       if( $P->logged_in && $P->data['id_client'] == $this->params['id_client']) {
          $this->params['using_id_client_user'] = (int)$P->id;
          $this->params['using_session_id'] = $P->session_id;
+         if( $st['state_type'] == 'LOCK' ) $this->params['state'] = 'LOCK_'  . $st['state_lvl'];
+      	else $this->params['state'] = 'USE_'  . $st['state_lvl'];
       } elseif( $this->params['state'] == 'ORDER' ) {
          $this->params['using_id_client_user'] = NULL;
          $this->params['using_session_id'] = NULL;
@@ -130,7 +135,7 @@ class Shopping_Basket {
       $st = Rights::split_state( $this->params['state'] );
 
       $this->params['state'] = 'LOCK_'  . $st['state_lvl'];
-
+      
       return Data::put_basket_update_lock_data( $this->params );
    }
     
@@ -254,7 +259,17 @@ class Shopping_Basket {
        
       return false;
    }
-    
+
+   function currently_user_using( $params = array() ) {
+   	$P = Person::g_global();
+   	
+   	if( $this->params['using_id_client_user'] == $P->id ) {
+   		return true;
+   	}
+   	 
+   	return false;
+   }
+      
    function currently_other_using( $params = array() ) {
       $P = Person::g_global();
       //global param
