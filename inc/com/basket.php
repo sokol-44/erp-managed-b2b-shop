@@ -181,8 +181,10 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
          break;
    }
 } elseif( $F->check_get('add_basket') ) {
-   if( $P->logged_in ) $Shopping_Basket_Chain->add_basket();
-   $F->redirect( $F->make_link(CFG_COM_BASKET));
+   if( $P->logged_in ) $res = $Shopping_Basket_Chain->add_basket();
+   if( $res ) Info::sadd('BASKET ADDED', 'success');
+   else Info::sadd('BASKET ERROR');
+   $F->redirect( $F->make_link(CFG_COM_BASKET, array('show' => 'all')));
 } else {
    //display basket
    require 'basket' . DS . 'details.php';

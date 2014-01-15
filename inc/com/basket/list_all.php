@@ -155,10 +155,11 @@ $Page->head_title = Lang::_('BASKET list');
 </table>
 <?php
 if( $P->logged_in && $Shopping_Basket_Chain->get_can_add_basket() ) {
+
 	//$add_basket_link = $F->make_link(CFG_COM_BASKET, $F->add_local_get('add_basket', 'add_basket', $GET_tmp));
 	//$add_basket = $F->draw_link($add_basket_link, 'title="' . Lang::_('add BASKET') . '"', $F->static_image('icon/plus_16.png', Lang::_('add BASKET')) . ' ' . Lang::_('add BASKET') . ' ' . $F->static_image('icon/plus_16.png', Lang::_('add BASKET')));
 	$add_basket = $F->draw_link(
-		$F->make_link(CFG_COM_BASKET, $F->add_local_get('add_basket', 'add_basket', $GET_tmp)), 'title="' . Lang::_('add BASKET') . '"',
+		$F->make_link(CFG_COM_BASKET,array('add_basket' => 'add_basket')), 'title="' . Lang::_('add BASKET') . '"',
 		Lang::_('add BASKET') );
 ?>
 <table class="basket_container basket_tools">

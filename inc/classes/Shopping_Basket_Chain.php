@@ -103,7 +103,8 @@ class Shopping_Basket_Chain {
 
    public function remove_basket( $id_shopping_basket = 0) {
       if( $this->_check_valid_basket($id_shopping_basket) &&
-            $this->Basket_List[ $id_shopping_basket ]->check_rights('MODIFY_CONTENTS') ) {
+            $this->Basket_List[ $id_shopping_basket ]->check_rights('MODIFY_CONTENTS') ) 
+      {
          $res = $this->Basket_List[$id_shopping_basket]->remove_basket();
          unset($this->Basket_List[$id_shopping_basket]);
          if( (int)$id_shopping_basket == (int)$this->id_basket_current ) {
@@ -151,7 +152,8 @@ class Shopping_Basket_Chain {
             'id_client' => $this->id_client, 'id_shopping_basket' => 0, 'id_shopping_basket_version' => 0,
             'id_nr_shopping_basket' => $number, 'description' => '',
             'date_create' => date('Y-m-d H:i:s'), 'date_modified' => '', 'ts_create' => time(), 'ts_modified' => '',
-            'using_id_client_user' => $this->id_client, 'using_session_id' => $P->session_id, 'using_date' => 0);
+            'using_id_client_user' => $this->id_client, 'using_session_id' => $P->session_id,
+      		'using_date' => date('Y-m-d H:i:s'),'ts_using' => time());
       $new_basket = new Shopping_Basket( $params, $create, $contants );
       $this->Basket_List[$new_basket->id_shopping_basket] = $new_basket;
 

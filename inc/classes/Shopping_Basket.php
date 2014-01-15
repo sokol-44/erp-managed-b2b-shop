@@ -660,9 +660,7 @@ class Shopping_Basket {
          return false;
       }
 
-      // Data::remove_basket( $this->id_client, $id_nr_shopping_basket );
-      $version_list = $this->get_version_list();
-      return Data::remove_basket( $this->params, $version_list );
+      return Data::remove_basket( $this->params );
    }
     
     

@@ -165,22 +165,16 @@ class Data_Basket extends Data_Order {
       return compact('id_shopping_basket', 'id_shopping_basket_version');
    }
    
-   static function remove_basket( $basket_params, $basket_version_list) {
+   static function remove_basket( $basket_params) {
       //      self::remove_basket_product_list($id_nr_shopping_basket);
       //      self::remove_basket_pdata($id_nr_shopping_basket);
       db_transaction_start();
-      
-      if( count($basket_version_list) ) {
-         foreach( $basket_version_list as $version ) {
-            $basket_version_list_escape[] = db_int($version);
-         }
-         $sql_basket_version_list = implode(',', $basket_version_list_escape);
+      print_debug($basket_params);
          
          $verified_basket_version = 'select GROUP_CONCAT(id_shopping_basket_version) as list
             from ' . TBL_SHOP_SHOPPING_BASKET_VERSION . ' where
             id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']) . ' and
-            id_client = ' . db_int($basket_params['id_client']) . ' and
-            id_shopping_basket_version IN (' . $sql_basket_version_list . ')';
+            id_client = ' . db_int($basket_params['id_client']) . '';
          $verified_basket_version_list = db_fetch_result('list', db_query( $verified_basket_version ) );
       
          //main clear
@@ -191,15 +185,21 @@ class Data_Basket extends Data_Order {
          $clear_basket_version_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_VERSION . ' where
             id_shopping_basket_version IN (' . $verified_basket_version_list . ')';
          db_query( $clear_basket_version_query );
-       }
+
               
       $clear_basket_history_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_HISTORY . ' where
          id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']);
-      db_query( $clear_basket_history_query );
+     db_query( $clear_basket_history_query );
       
       $clear_basket_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET. ' where
          id_shopping_basket = ' . db_int($basket_params['id_shopping_basket']);
-      db_query( $clear_basket_query );
+     db_query( $clear_basket_query );
+      
+//       print_debug(
+//       	compact('sql_basket_version_list', 'verified_basket_version', 
+//       	 'clear_products_query', 'clear_basket_version_query', 'clear_basket_history_query', 'clear_basket_query') 	
+//       );
+      
       
       db_transaction_end();
       
