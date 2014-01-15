@@ -209,14 +209,16 @@ class Data_Person extends Data_Rights {
       //      $F = Framework::g_global();
 
       if( $table == 'ADMIN' ) {
-         $res = db_query('select distinct p.id_admin, p.login, p.password, p.description, p.email, p.created, p.last_login, p.state, GROUP_CONCAT(r.name) as rights_list, GROUP_CONCAT(r.id_rights) as rights_ids
+         $res = db_query('select distinct p.id_admin, p.login, p.password, p.description, p.email, 
+         		p.created, p.last_login, p.state, GROUP_CONCAT(r.name) as rights_list, GROUP_CONCAT(r.id_rights) as rights_ids
          	from ' . TBL_GLOBAL_ADMIN . ' p,
          	' . TBL_GLOBAL_RIGHTS2ADMIN . ' gl,
          	' . TBL_GLOBAL_RIGHTS . ' r ' .
       		' where p.id_admin = gl.id_admin and gl.id_rights = r.id_rights and p.id_admin = ' . (int)$id );
          return db_fetch_array($res);
       } else if( $table == 'CLIENT' ) {
-         $res = db_query('select distinct p.id_client_user, p.login, p.password, p.name, p.description, p.email, p.created, p.last_login, p.state, GROUP_CONCAT(r.name) as rights_list, GROUP_CONCAT(r.id_rights) as rights_ids
+         $res = db_query('select distinct p.id_client_user, p.login, p.password, p.name, p.description, p.email, 
+         		p.created, p.last_login, p.state, GROUP_CONCAT(r.name) as rights_list, GROUP_CONCAT(r.id_rights) as rights_ids
          	from ' . TBL_GLOBAL_CLIENT_USER . ' p,  ' . TBL_GLOBAL_RIGHTS2CLIENT . ' gl,  ' . TBL_GLOBAL_RIGHTS . ' r ' .
       		'where p.id_client_user = gl.id_client_user and gl.id_rights = r.id_rights and p.id_client_user = ' . (int)$id );
          return db_fetch_array($res);

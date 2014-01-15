@@ -21,12 +21,12 @@ $Page->head_title = Lang::_('BASKET list');
 <table class="tableBox">
 	<tr class="tableBoxHeading">
 		<th width="5%"><?php echo Lang::_('BASKET NUMBER'); ?></th>
-		<th width="15%"><?php echo Lang::_('STATE'); ?></th>
+		<th width="5%"><?php echo Lang::_('STATE'); ?></th>
 		<th width="5%"><?php echo Lang::_('TOTAL PRODUCTS'); ?></th>
 		<th width="5%"><?php echo Lang::_('PRODUCTS TYPES'); ?></th>
 		<th width="15%"><?php echo Lang::_('sum gross'); ?></th>
 		<th width="15%"><?php echo Lang::_('sum netto'); ?></th>
-		<th width="15%"><?php echo Lang::_('WHO_IS_USING'); ?></th>
+		<th width="5%"><?php echo Lang::_('WHO_IS_USING'); ?></th>
 		<th width="15%"><?php echo Lang::_('available actions'); ?></th>
 	</tr>
 	<?php

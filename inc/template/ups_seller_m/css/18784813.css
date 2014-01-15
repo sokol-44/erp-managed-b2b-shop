@@ -259,23 +259,25 @@ img.secure_
 color: #000;
 }
 #iStoreStatusMenu { width:15px; height: 20px; margin:0 15px 0 0;display:block; zoom:1;}
-#iStoreHeader {width:1185px; padding-top:0px; height:68px; }
+#iStoreHeader {width:1085px; padding-top:0px; height:68px; }
 #iStoreWrapper {
-	width :1180px;
+	width :1080px;
 	margin: 0 auto;
 	position: relative;
 	top: -20px;
 	
-	background: url('../files/18781892.jpg') no-repeat;
-
+	/*background: url('../files/18781892.jpg') no-repeat;
+*/
 }
 #iStoreTop {height:155px; overflow:hidden;}
 #iStoreBreadCrumbs {display: none; background:transparent; position:absolute; left:0px; top:140px; width:960px; height:30px;}
 #iStoreToolbar {  }
-#iStoreToolbarMenu {height:59px; width:580px;float:left; position: relative; top: -80px; left: 380px;}
-#iStoreTop #iStoreBasket {position:absolute; right: 0px; top:22px; height:36px; width:247px; color:#fff;}
+#iStoreToolbarMenu {height:59px; width:580px;float:left; position: relative; top: -80px; left: 320px;}
+#iStoreTop #iStoreBasket {position:absolute; z-index: 2; right: -30px; top:22px; height:136px; width:247px; color:#fff;
+background: url('../files/18781892a.png') no-repeat;
+background-position: 0px -22px;padding-left: 50px}
 #iStoreSearch  {width:240px; float:right; height:33px; position: absolute;  right: 20px; top: 105px;}
-#iStoreContent {float:right; padding-left: 10px;width:880px; background: none;
+#iStoreContent {float:right; padding-left: 10px;width:780px; background: none;
 font-size: 11pt;
 
 }

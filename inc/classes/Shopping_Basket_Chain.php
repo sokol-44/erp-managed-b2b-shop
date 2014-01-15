@@ -22,9 +22,15 @@ class Shopping_Basket_Chain {
 
    public function __construct() {
       self::$class = $this;
-
       $this->_reload_data();
 
+   }
+   
+   public function return_params() {
+   	$params = get_object_vars($this);
+   	$params['Basket_List'] = 'size:'.sizeof($this->Basket_List);
+   	$params['nr2id'] = 'size:'.sizeof($this->nr2id);
+   	return $params;
    }
 
    private function _reload_data() {
@@ -179,27 +185,19 @@ class Shopping_Basket_Chain {
    }
 
    public function _switch_to_working_basket(  ) {
-      $ts_modified = 0;
+      $ts_using = 0;
       $id_shopping_basket = 0;
-   	 
-   	foreach ($this->Basket_List as $id_shopping_basket => $Basket ) {
-	   	if( $this->_check_valid_basket($id_shopping_basket) &&
-	   	   $Basket->check_rights('MODIFY_CONTENTS') && 
-      		$param['ts_modified'] > $ts_modified ) {
-	   		if( $Basket->currently_other_using() === FALSE ) {
-	   			$ts_modified = $Basket->param['ts_modified'];
-	   			$id_shopping_basket = $Basket->id_shopping_basket;
-	   		}
-	   	}
-   	}
-   	
-		if( $id_shopping_basket > 0 ) {
-   	  $this->id_basket_current = $id_shopping_basket;
-   	  $this->param['id_nr_shopping_basket'] =  array_search($id_shopping_basket, $this->nr2id);
-   	  $this->id_basket_set = true;
-		} else {
-			$this->add_basket();
-		}
+      //print_debug($this->return_params());
+      
+      if( $this->id_basket_current > 0 && $this->_check_valid_basket($this->id_basket_current) &&
+      	 $this->Basket_List[ $this->id_basket_current ]->check_rights('MODIFY_CONTENTS', false) &&
+      	 $this->Basket_List[ $this->id_basket_current ]->currently_other_using() === FALSE &&
+      	 $this->Basket_List[ $this->id_basket_current ]->currently_other_locked() === FALSE ) {
+      	
+      	return true;
+      } else {
+      	return $this->set_default_basket_by_date();	
+      }
    }   
    
    public function set_lock_basket( $id_shopping_basket = 0 ) {
@@ -290,30 +288,25 @@ class Shopping_Basket_Chain {
       $ts_modified = 0;
       $this->id_basket_set = false;
       $this->id_basket_current = 0;
-//       echo ' a'.($recurrence?'Rt':'Rf');
-      foreach( $this->Basket_List as $id_shopping_basket => $Basket) {
-//          echo "<br> ^$id_shopping_basket:";
-//          echo (!$this->id_basket_set?'t':'f');
-//          echo ((empty($Basket->param['ts_modified']))?':t':':f');
-//          echo '#'.$Basket->param['ts_modified'] .'>'.$ts_modified.'#.';
-//          echo '<b>'.($Basket->check_rights('MODIFY_CONTENTS', false)?'t':'f') . '</b>';
-//          echo ':^';
-         if( ($Basket->param['ts_modified'] > $ts_modified || empty($Basket->param['ts_modified'])) &&
-            $Basket->check_rights('MODIFY_CONTENTS', false) && $Basket->currently_other_using() === FALSE ) {
-            $this->_switch_default_basket( $id_shopping_basket );
-            if( empty($Basket->param['ts_modified']) ) {
-               $ts_modified = time();
-               break;
-            } else {
-               $ts_modified = $Basket->param['ts_modified'];
-            }
-         }
+
+      foreach ($this->Basket_List as $Basket ) {
+      	if( $this->_check_valid_basket($Basket->id_shopping_basket) &&
+      	$Basket->check_rights('MODIFY_CONTENTS', false) &&
+      	$Basket->params['ts_using'] > $ts_using ) {
+      		if( $Basket->currently_other_using() === FALSE &&
+      		$Basket->currently_other_locked() === FALSE ) {
+      			$ts_using = $Basket->param['ts_using'];
+      			$id_shopping_basket = $Basket->id_shopping_basket;
+      		}
+      	}
       }
-      //dsadasdas();
-//       echo 'def:'.$this->id_basket_current;
-      if( !$this->_check_valid_basket($this->id_basket_current) && !$recurrence ) {
-         $this->add_basket( true );
-         $this->set_default_basket_by_date( true );
+      
+      if( $id_shopping_basket > 0 ) {
+      	$this->_switch_default_basket( $id_shopping_basket );
+      } else {
+      	if( $recurrence ) $this->add_basket( true );
+      	else $this->add_basket( );
+      	$this->set_default_basket_by_date( true );
       }
    }
    	

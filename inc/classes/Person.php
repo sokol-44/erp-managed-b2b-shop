@@ -402,6 +402,25 @@ class Person {
 
       return $client_client_data;
    }
+   
+   static public function get_client_user_short_text( $data ) {
+      $F = Framework::g_global();
+   	
+      $st = '';
+   	
+   	if( $F->not_null($data['name']) ) {
+   		$st = $data['name'];
+   	} elseif ( $F->not_null($data['login']) ) {
+   		$st = $data['login'];
+   	}
+   	
+   	if( $F->not_null($data['id_client_user']) ) {
+   		$st .= ' (' . $data['id_client_user'] . ')';
+   	} elseif ( $F->not_null($data['id_admin']) ) {
+   		$st .= ' (' . $data['id_admin'] . ')';
+   	}
+   	return $st;
+   }
 
    public function check_pass() {
       //

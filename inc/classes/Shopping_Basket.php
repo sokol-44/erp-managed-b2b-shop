@@ -247,7 +247,7 @@ class Shopping_Basket {
     
    function currently_user_locked( $params = array() ) {
       $P = Person::g_global();
-       
+
       if( $this->params['using_id_client_user'] == $P->id && $this->basket_level_text() == 'LOCK' ) {
          return true;
       }
@@ -259,13 +259,19 @@ class Shopping_Basket {
       $P = Person::g_global();
       //global param
       $time_diff_ok = time()-self::TIME2FREE;
-
-      if( $this->params['using_id_client_user'] != 0 && $this->params['using_session_id'] &&
-            ($this->params['using_id_client_user'] != $P->id && $this->params['ts_using'] < $time_diff_ok) ) {
-         return $this->params['using_session_id'];
+      
+      if(  $this->params['using_id_client_user'] == $P->id ) {
+//       	echo 'Y';
+      	return false;
+      } elseif( (int)$this->params['using_id_client_user'] == 0 || Framework::is_null($this->params['using_session_id']) )  {
+//       	echo 'EM';
+      	return false;
+      } elseif ( $this->params['ts_using'] < $time_diff_ok ) {
+//       	echo 'TO';
+      	return false;
       }
-
-      return false;
+// echo 'OU';
+      return true;
    }  
 
    function check_move( $direction = 'UP') {
@@ -309,8 +315,12 @@ class Shopping_Basket {
          $this->params = Data::get_basket_data($this->params);
          
          if( (int)$this->params['using_id_client_user'] > 0 ) {
-         	$client_user_data = Person::get_client_user_data( (int)$this->params['using_id_client_user'], 'CLIENT');
-         	$this->params['using_name'] = $client_user_data['name'];
+         	if( (int)$this->params['using_id_client_user'] == $P->id ) {
+         		$this->params['using_name'] = Person::get_client_user_short_text($P->data);
+         	} else {
+         		$client_user_data = Person::get_client_user_data( (int)$this->params['using_id_client_user'], 'CLIENT');
+         		$this->params['using_name'] = Person::get_client_user_short_text($client_user_data);
+         	}
          }
          
          //VERSIONS
@@ -323,10 +333,10 @@ class Shopping_Basket {
                $this->params['id_shopping_basket_version'] = $this->id_shopping_basket_version;
             }
             if( $basket_version['id_client_user'] == $P->id ) {
-               $basket_version['client_user_name'] = $P->data['name'];
+               $basket_version['client_user_name'] = Person::get_client_user_short_text($P->data);
             } else {
                $client_user_data = Person::get_client_user_data( (int)$basket_version['id_client_user'], 'CLIENT');
-               $basket_version['client_user_name'] = $client_user_data['name'];
+               $basket_version['client_user_name'] = Person::get_client_user_short_text($client_user_data);
             }
             $this->version[$basket_version['id_shopping_basket_version']] = $basket_version;
          }

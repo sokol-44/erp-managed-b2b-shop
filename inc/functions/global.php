@@ -18,8 +18,8 @@ function __autoload($name) {
 }
 
 
-function print_debug($var, $vd = false ) {
-   if($vd) {
+function print_debug($var, $var_export = false ) {
+   if($var_export) {
       $res = var_export($var, true);
    } else{
       $res = print_r($var, true);
