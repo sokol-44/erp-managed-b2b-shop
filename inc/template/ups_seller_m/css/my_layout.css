@@ -590,6 +590,65 @@ div.add_basket_quantity {
 .add_basket_quantity input {
 	background-color: white;
 }
+
+/*
+ Product columns
+*/
+.product_columns {
+   width: 255px;
+   float: left;
+}
+
+.product_in_box {
+   background: url('../files/product_small.png') no-repeat;
+   background-position: 4px 0;
+   width: 240px;
+   height: 280px;
+   padding: 5px 5px 0 5px;
+   margin-bottom: 5px;
+   clear: both;
+}
+.product_in_box_data {
+	height: 187px;
+	padding: 5px;
+}
+.product_in_box_data h4 {
+	background-color: black;
+}
+.product_in_box_bottom {
+   height: 42px;
+   text-align: center;
+   vertical-align: middle;
+   font-weight: bold;
+}
+
+.product_in_box_footer {
+   height: 42px;
+   text-align: center;
+   vertical-align: middle;
+   font-weight: bold;
+}
+
+
+.product_column_quality1 {
+   background-color: #Faa;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+}
+.product_column_quality5 {
+   background-color: #aaF;
+   -webkit-border-radius: 10px;
+   -moz-border-radius: 10px;
+   border-radius: 10px;
+}
+.product_column_quality10 {
+   background-color: #aFa;
+   -webkit-border-radius: 10px;
+   -moz-border-radius: 10px;
+   border-radius: 10px;
+}
+\
 /*
 Catalog
 */
