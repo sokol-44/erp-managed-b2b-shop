@@ -197,6 +197,12 @@ class Framework extends Framework_Data {
    }
 
 
+   function get_float($text, $translate = false) {
+   	if($translate) $text = Lang::_($text);
+
+   	return (float)str_replace(',', '.', $this->GET[$text]);
+   }
+   
    function check_get($text, $translate = false) {
       if($translate) $text = Lang::_($text);
 

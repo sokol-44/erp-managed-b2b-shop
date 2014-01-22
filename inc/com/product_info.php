@@ -72,7 +72,7 @@ if( $P->logged_in ) {
    <?php if( $F->not_null($image_type) ) echo '<div class="product product_image">' . $small_image_html . "</div>\n"; ?>
    <div class="product product_price"><?php echo '<span>' . Lang::_('PRICE') . '</span>: ' . $price_html; ?></div>
    <?php
-   //if ( $product_quantity > 0 )
+   if ( $P->logged_in )
       echo '<div class="product product_quantity"><span>' . Lang::_('QUANTITY_IN_WAREHAUSE') . '</span>: ' . $product_quantity . "</div>\n";
    if ( $F->not_null($product_producent) )
       echo '<div class="product product_producent"><span>' . Lang::_('PRODUCENT') . '</span>: ' . $product_producent . "</div>\n";
