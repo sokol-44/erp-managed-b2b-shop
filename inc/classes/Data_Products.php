@@ -370,8 +370,8 @@ class Data_Products extends Data_Basket {
    }
 
    static function doCategoryDelete($param_array) {
-       
-      extract( db_escape_array($param_array) );
+
+   	extract( param_array );
    
       $query = 'select "' . db_int($id_category) . '" as id_one,
           "" as additional_data,
@@ -382,8 +382,8 @@ class Data_Products extends Data_Basket {
    }
     
    static function doCategoryEdit($param_array) {
-       
-      extract( db_escape_array($param_array) );
+
+   	extract( param_array );
       
       $query = 'select "' . db_int($id_category) . '" as id_one,
           "" as additional_data,
@@ -395,10 +395,9 @@ class Data_Products extends Data_Basket {
    }
 
    static function doCategoryAdd($param_array) {
-       
-      extract( db_escape_array($param_array) );
-      
-      
+
+   	extract( param_array );
+   	
       $query = 'select "' . db_int($id_category) . '" as id_one,
           "" as additional_data,
           b_func_category_add("' . db_int($id_category) . '", "' . db_int($id_category_parent) . '", "' . db_int($sort_order) . '","' . db_int($root_number) . '",
@@ -410,7 +409,7 @@ class Data_Products extends Data_Basket {
 
    static function doCategoryAddOrUpdate($param_array) {
        
-      extract( db_escape_array($param_array) );
+      extract( param_array );
 
       $query = 'select "' . db_int($id_category) . '" as id_one,
           "" as additional_data,
@@ -422,8 +421,8 @@ class Data_Products extends Data_Basket {
    }
    
    static function doProductAdd($param_array) {
-       
-      extract( db_escape_array($param_array) );
+
+   	extract( param_array );
    
       $query = 'select "' . db_int($id_product) . '" as id_one,
           "" as additional_data,
@@ -437,8 +436,8 @@ class Data_Products extends Data_Basket {
    }
 
    static function doProductChange($param_array) {
-       
-      extract( db_escape_array($param_array) );
+
+   	extract( param_array );
        
       $query = 'select "' . db_int($id_product) . '" as id_one,
           "" as additional_data,
@@ -452,8 +451,8 @@ class Data_Products extends Data_Basket {
    }
    
    static function doProductAddOrUpdate($param_array) {
-       
-      extract( db_escape_array($param_array) );
+
+   	extract( param_array );
        
       $query = 'select "' . db_int($id_product) . '" as id_one,
           "" as additional_data,
@@ -795,8 +794,8 @@ class Data_Products extends Data_Basket {
                   'all_children' => $all_children,
                   'products_in_subcategories' => $products_in_subcategories,
                   'products_in_category' => $category['products_in_category'],
-                  'children' => $children,
-                  'path' => $path . $category['id_category']);
+            		'path' => $path . $category['id_category'],
+                  'children' => $children);
          }
       }
       
