@@ -305,10 +305,11 @@ class Framework extends Framework_Data {
    }
 
    function js_escape( $str, $str_separator = '"') {
-      $search = array('\\', $str_separator);
-      $replace = array('\\\\', '\\' . $str_separator);
-      $str = str_replace($search, $replace, $str);
-      return $str;
+	  $search = array('\\', $str_separator);
+	  $replace = array('\\\\', '\\' . $str_separator);
+	  $str = str_replace($search, $replace, $str);
+	  $str = preg_replace('~(*BSR_ANYCRLF)\R~', chr(92).chr(10), $str);
+	  return $str;
    }
    
    static function array_recursive_strip_tags( $array ) {

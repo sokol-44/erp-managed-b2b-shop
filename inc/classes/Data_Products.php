@@ -137,7 +137,7 @@ class Data_Products extends Data_Basket {
       	switch (constant('SHOP_CLIENT_PRICE_MODE')) {
       		case 'product_with_client_price_only':
       			$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
-     				p.picture_small_url, p.picture_big_url, p.picture_id, IFNULL( pcp.price, p.price) as price, p.vat, p.quantity, p.status
+     				p.picture_small_url, p.picture_big_url, p.picture_id, IF( pcp.price>0, pcp.price, p.price) as price, p.vat, p.quantity, p.status
      				from ' . TBL_SHOP_PRODUCT . ' p join ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' pcp on 
      				( p.id_product = pcp.id_product and pcp.id_client="' . (int)self::$Data_Products_params['id_client'] . '")
      				left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
@@ -146,7 +146,7 @@ class Data_Products extends Data_Basket {
       		case 'product_with_client_price':
       		default:
 				$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
-     				p.picture_small_url, p.picture_big_url, p.picture_id, IFNULL( pcp.price, p.price) as price, p.vat, p.quantity, p.status
+     				p.picture_small_url, p.picture_big_url, p.picture_id, IF( pcp.price>0, pcp.price, p.price) as price, p.vat, p.quantity, p.status
      				from ' . TBL_SHOP_PRODUCT . ' p left outer join ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' pcp on 
      				( p.id_product = pcp.id_product and pcp.id_client="' . (int)self::$Data_Products_params['id_client'] . '")
      				left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
@@ -773,6 +773,8 @@ class Data_Products extends Data_Basket {
       $tree = array();
 
       foreach($category_list as $category) {
+      	if( $category['id_category'] == 0 ) continue;
+      	
          if( $id_category_parent == $category['id_category_parent'] ) {
             $products_in_subcategories = 0;
             
