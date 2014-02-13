@@ -3,12 +3,12 @@ if( $SP->number_of_pages>1 ) echo $SP->display_links();
 ?>
 <table class="tableBox" style="border: 0">
 <tr class="tableBoxHeading">
-<th><?php echo Lang::_('NAME') . ', ' . Lang::_('DESCRIPTION')?></th>
-		<th><?php echo Lang::_('CATALOG INDEX') ?></th>
-		<th><?php echo Lang::_('QUANTITY_IN_warehouse') ?></th>
 		<?php if( $P->logged_in ) { ?>
 		<th><?php echo Lang::_('NETT PRICE') ?></th>
 		<?php } ?>
+		<th><?php echo Lang::_('QUANTITY_IN_warehouse') ?></th>
+		<th><?php echo Lang::_('CATALOG INDEX') ?></th>
+<th><?php echo Lang::_('NAME') . ', ' . Lang::_('DESCRIPTION')?></th>
 	</tr>
 	<?php
 	foreach( $product_list as $product ) {
@@ -32,10 +32,10 @@ if( $SP->number_of_pages>1 ) echo $SP->display_links();
 	   if( $P->logged_in ) {
 	?>
 	<tr>
-		<td valign="top" width="10%"><?php echo $cell_product_info . $F->draw_radio_field('list', (int)$product['id_product'], false, 'style="display: none"'); ?></td>
-		<td width="5%"><?php echo $catalog_index; ?></td>
-		<td width="5%" align="right"><?php echo (int)$product['quantity']; ?></td>
-		<td width="10%" align="right"><?php echo Price::val( $product['price'] ) ?></td>
+		<td width="15%" align="right"><?php echo Price::val( $product['price'] ) ?></td>
+		<td width="10%" align="right"><?php echo (int)$product['quantity']; ?></td>
+		<td width="25%"><?php echo $catalog_index; ?></td>
+		<td valign="top" width="50%"><?php echo $cell_product_info . $F->draw_radio_field('list', (int)$product['id_product'], false, 'style="display: none"'); ?></td>
 	</tr>
 	<?php
 	   //not logged in

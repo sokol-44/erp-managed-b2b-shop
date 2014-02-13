@@ -10,15 +10,13 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury .core_translation
-CREATE TABLE IF NOT EXISTS `core_translation` (
-  `id_translation` int(11) NOT NULL AUTO_INCREMENT,
-  `language` enum('pl','en') DEFAULT 'pl',
-  `definition` text NOT NULL,
-  `com` enum('catalog','basket','login','logout','load') DEFAULT NULL,
-  `translation` text NOT NULL,
-  PRIMARY KEY (`id_translation`),
-  KEY `search` (`language`,`definition`(10),`com`)
+-- Zrzut struktury .shop_product_attributes
+CREATE TABLE IF NOT EXISTS `shop_product_attributes` (
+  `id_product` int(11) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `val` tinytext,
+  PRIMARY KEY (`id_product`,`type`),
+  KEY `fk.shop_product_attributes.id_product` (`id_product`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- Data exporting was unselected.

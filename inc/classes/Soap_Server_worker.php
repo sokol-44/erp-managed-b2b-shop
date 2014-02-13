@@ -1396,7 +1396,56 @@ class Soap_Server_worker {
    	return($response);
    }   
    
-   
+
+
+   function getShopProductAttributeList( $input ) {//ParamStartLength, ClientData
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = true;
+   	 
+   	$ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
+   	 
+   	if( is_object($ParamStartLength) ) {
+   		if( !$ParamStartLength->is_error() ) {
+   			$param_array = $ParamStartLength->return_array();
+   			//add_to_fp('$param_array:'. print_r($param_array, true) );
+   			$res_array = Data::getShopProductAttributeList((int)$param_array['id_start'], (int)$param_array['length']);
+   			$response = $this->_addArrayValues($res_array);
+   		} else {
+   			$response = $this->getReturnError('getShopProductAttributeList', $input, $ParamStartLength->return_error() );
+   		}
+   	} else {
+   		$response = $this->getReturnError('getShopProductAttributeList', $input, 'WRONG CLASS');
+   	}
+   	 
+   	return($response);
+   }
+    
+   function doShopProductAttributeAddOrUpdate( $input ) {//ParamStartLength, ClientData
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = false;
+   	 
+   	add_to_fp('-------- doShopProductAttributeAddOrUpdate');
+   	 
+   	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+   		$response_tmp = array();
+   		foreach($input['values'] as $key => $val) {
+   			$SingleValueClass = new ShopProductAttributeData($val, $this->input_data_type);
+   			if( !$SingleValueClass->is_error() ) {
+   				$param_array = $SingleValueClass->return_array();
+   				add_to_fp('$param_array:'. print_r($param_array, true) );
+   				$response_tmp[] = Data::doShopProductAttributeAddOrUpdate($param_array);
+   			} else {
+   				$response_tmp[] = $this->getReturnError('doShopProductAttributeAddOrUpdate', $val, $SingleValueClass->return_error(), false);
+   			}
+   		}
+   		add_to_fp(print_r($response_tmp, true));
+   		$response = $this->_addArrayValues($response_tmp);
+   	} else {
+   		$response = $this->getReturnError('doShopProductAttributeAddOrUpdate', '', 'EMPTY_LIST');
+   	}
+   	 
+   	return($response);
+   }  
    
    
    function getShopAttributeList( $input ) {//ParamStartLength, ClientData
@@ -1446,7 +1495,30 @@ class Soap_Server_worker {
    	}
    	 
    	return($response);
-   }  
+   }
+   
+   function doRecalculateUPSData( $input ) {//ParamStartLength, ClientData
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = true;
+   
+   	$ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
+   
+   	if( is_object($ParamStartLength) ) {
+   		if( !$ParamStartLength->is_error() ) {
+   			$param_array = $ParamStartLength->return_array();
+   			//add_to_fp('$param_array:'. print_r($param_array, true) );
+   			$res_array = Data::doRecalculateUPSData((int)$param_array['id_start']);
+   			$response = $this->_addArrayValues($res_array);
+   		} else {
+   			$response = $this->getReturnError('doRecalculateUPSData', $input, $ParamStartLength->return_error() );
+   		}
+   	} else {
+   		$response = $this->getReturnError('doRecalculateUPSData', $input, 'WRONG CLASS');
+   	}
+   
+   	return($response);
+   }
+   
 // -------------------------   
    function getParamStartLength( $input ) {
       $in_o = array(

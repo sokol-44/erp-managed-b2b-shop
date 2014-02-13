@@ -50,9 +50,10 @@ class Data_Shop extends Data_Picture {
    	add_to_fp($query);
    	$result = db_query( $query );
    	$ar = db_affected_rows( $result );
-   
-   	if( $ar ) return array_merge($param, array('status' => 'SUCCESS,NEW'));
-   	else return array_merge($param, array('status' => 'SUCCESS,EXIST'));
+
+   	if( $ar == 1 ) return array_merge($param, array('status' => 'SUCCESS,NEW'));
+   	elseif( $ar == 2 ) return array_merge($param, array('status' => 'SUCCESS,EXIST'));
+   	else return array_merge($param, array('status' => 'ERROR,UNKNOWN'));
    }
     
    static function get_shop_attributes($attribute_type = false) {

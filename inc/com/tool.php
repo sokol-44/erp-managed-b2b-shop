@@ -27,6 +27,12 @@
    		'3' => array('id' => '3', 'text' => '3f/3f')
    );
    
+   $battery_maker_array = array(
+   		'0'  => array('id' => '',  'text' => 'Wszystkie'),
+   		'GT'  => array('id' => 'GT',  'text' => 'GT'),
+   		'GTEC' => array('id' => 'GTEC', 'text' => 'GTEC')
+   );
+   
 if( $F->check_get('search') ) {
    $filters = array();
    $load_result = array();
@@ -56,7 +62,7 @@ if( $F->check_get('search') ) {
    		$need_power = $additional_power*$need_power + $need_power;
    	}
    	
-   	$where_array = array();
+      	$where_array = array();
    	
    	if( $F->check_get('battery_typology') && isset( $battery_typology_array[$F->GET['battery_typology']] ) 
    		&& strlen($F->GET['battery_typology']) > 1 ) {
@@ -65,7 +71,12 @@ if( $F->check_get('search') ) {
    	
    	if( $F->check_get('battery_box') && isset( $battery_box_array[$F->GET['battery_box']] ) 
    		&& strlen($F->GET['battery_box']) > 1 ) {
-   		$where_array['bu.box'] = $battery_typology_array[$F->GET['battery_box']]['text'];
+   		$where_array['bu.box'] = $battery_box_array[$F->GET['battery_box']]['text'];
+   	}
+   	
+   	if( $F->check_get('battery_maker') && isset( $battery_maker_array[$F->GET['battery_maker']] ) 
+   		&& strlen($F->GET['battery_maker']) > 1 ) {
+   		$where_array['bu.maker'] = $battery_maker_array[$F->GET['battery_maker']]['text'];
    	}
    	
    } else {
@@ -82,11 +93,12 @@ if( $F->check_get('search') ) {
    
    $query = 'SELECT bu.id_ups, bu.model, bu.output_power, bu.output_power_w, bu.cabinet,
    bu.internal_count, bu.internal_capacity, bu.external_count, bu.external_capacity, 
-   bu.box, bu.typology, bu.phase, bu.output_power_w/bu.output_power as normalize_w
+   bu.box, bu.typology, bu.phase, bu.output_power_w/bu.output_power as normalize_w,
+   bu.quality, bu.maker
    FROM `tool_battery_ups` bu
-   WHERE bu.'.$where_denom.' >= ' . db_int($need_power) . '
+   WHERE bu.'.$where_denom.' >= ' . db_int($need_power) . ' ' . $where_add . '
    order by bu.'.$where_denom.'';
-   print_debug($query);
+//    print_debug($query);
    $db_res = db_query($query);
 
    $load_result = db_result_array_full_id($db_res);
@@ -121,6 +133,7 @@ if( $F->check_get('search') ) {
 
    if( $F->not_null($query2_arr) )  {
    	$query2 = implode("\nUNION ALL\n", $query2_arr);
+	// print_debug($query2);
    	$db_res2 = db_query($query2);
    	$load_result2 = db_result_array_full_id($db_res2);
    	//print_debug($load_result2);
@@ -145,7 +158,7 @@ if( $F->check_get('search') ) {
    	$min_time = 2400;
    	foreach($nr_ups as $tt => $tc) {
    		if( $tc>4 ) { $min_time = $tt; break; }
-   	}  	
+   	} 	
    	
    } else {
    	$load_result = array();
@@ -193,23 +206,30 @@ $GET_tmp = $F->make_get();
 		<td colspan="3"><?php echo $F->draw_input_field('battery_time', '30', ' style="width: 30px"'); ?> <strong>[min]</strong></td>
 	</tr>
 	<tr>
+		<td><strong>Producent:</strong></td>
+		<td colspan="3"><?php 
+		echo $F->draw_pull_down_menu('battery_maker', $battery_maker_array, $F->GET['battery_maker']);
+		?>
+		</td>
+	</tr>
+	<tr>
 		<td><strong>Typologia:</strong></td>
 		<td colspan="3"><?php 
-		echo $F->draw_pull_down_menu('battery_typology', $battery_typology_array);
+		echo $F->draw_pull_down_menu('battery_typology', $battery_typology_array, $F->GET['battery_typology']);
 		?>
 		</td>
 	</tr>
 	<tr>
 		<td><strong>Obudowa:</strong></td>
 		<td colspan="3"><?php 
-		echo $F->draw_pull_down_menu('battery_box', $battery_box_array);
+		echo $F->draw_pull_down_menu('battery_box', $battery_box_array, $F->GET['battery_box']);
 		?>
 		</td>
 	</tr>
 	<tr>
 		<td><strong>Fazy:</strong></td>
 		<td colspan="3"><?php 
-		echo $F->draw_pull_down_menu('battery_phase', $battery_phase_array);
+		echo $F->draw_pull_down_menu('battery_phase', $battery_phase_array, $F->GET['battery_phase']);
 		?>
 		</td>
 	</tr>
@@ -235,28 +255,31 @@ if( $F->not_null($load_result) ) {
 <!-- Wymagana moc: <?php echo round($need_power/$wm_sf,2); ?> [kVA]<br><br>-->
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
-		<th><?php echo Lang::_('UPS NAME') . '<br>' . Lang::_('UPS CABINET NAME') ?></th>
+		<th><?php /*echo Lang::_('UPS NAME')*/ ?>Producent<br>Model</th>
+		<th><?php echo Lang::_('UPS CABINET NAME') ?></th>
 		<th><?php echo Lang::_('OUTPUT_POWER'). '<br>[VA/W]'?></th>
-		<th><?php echo 'Typologia'; ?></th>
-		<th><?php echo 'Obudowa'; ?></th>
+		<th><?php echo 'Typologia'."<br>".'Obudowa'; ?></th>
 		<th><?php echo 'Fazy'; ?></th>
-		<th><?php echo Lang::_('UPS BACKUP TIME').' [min]' ?></th>
+		<th><?php echo 'Jakosc'; ?></th>
+		<th><?php /*echo Lang::_('UPS BACKUP TIME').' [min]'*/ ?>Czas podtrzymy&shy;wania [min]</th>
 	</tr>
 	<?php
 	foreach( $load_result as $product ) {
 		if( !isset($product['time']) ) continue;
- 		if( ($product['time']-$need_time) < -5 )  continue;
-		if( $product['time']-$need_time > $min_time )  continue;
+		if( $product['time'] < 5 ) continue;
+ 		// if( ($product['time']-$need_time) < -5 )  continue;
+		// if( $product['time']-$need_time > $min_time )  continue;
 		
 		if( $product['time'] < $need_time ) $time_txt = '<span style="color: red">'.(int)$product['time'].'</span>';
 		else $time_txt = '<span style="color: black">'.(int)$product['time'].'</span>';
 	?>
 	<tr>
-		<td valign="top" width="20%"><?php echo $product['model'] . '<BR>' . $product['cabinet']?></td>
+		<td valign="top" width="20%"><?php echo $product['model'].'<br>&nbsp;<small><i>'.$product['maker']."</i>"?></td>
+		<td valign="top" width="20%"><?php echo $product['cabinet']?></td>
 		<td valign="top" width="10%" align="right"><?php echo $product['output_power'].'/'.$product['output_power_w'] ?></td>
-		<td valign="top" width="20%" align="right"><?php echo strtolower($product['typology']); ?></td>
-		<td valign="top" width="20%" align="right"><?php echo $product['box']; ?></td>
+		<td valign="top" width="10%" align="right"><?php echo strtolower($product['typology'])."<br>".$product['box']; ?></td>
 		<td valign="top" width="5%" align="right"><?php echo $product['phase']; ?></td>
+		<td valign="top" width="5%" align="right"><?php echo $product['quality']; ?></td>
 		<td valign="top" width="5%" align="right"><?php echo $time_txt; ?></td>
 	</tr>
 <?php 

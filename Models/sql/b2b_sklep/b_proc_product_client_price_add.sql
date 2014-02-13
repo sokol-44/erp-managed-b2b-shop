@@ -2,7 +2,7 @@
 -- Host:                         sql.company.nazwa.pl
 -- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
 -- Serwer OS:                    Linux
--- HeidiSQL Wersja:              8.1.0.4545
+-- HeidiSQL Wersja:              8.3.0.4694
 -- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -10,9 +10,9 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury procedura company_20.b_proc_product_client_price_add
+-- Zrzut struktury procedura company_22.b_proc_product_client_price_add
 DELIMITER //
-CREATE DEFINER=`company_20`@`%` PROCEDURE `b_proc_product_client_price_add`(IN `id_client_in` INT, IN `id_product_in` INT, IN `price_in` DECIMAL(10,0), IN `vat_in` INT)
+CREATE  ` PROCEDURE `b_proc_product_client_price_add`(IN `id_client_in` INT, IN `id_product_in` INT, IN `price_in` DECIMAL(10,0), IN `vat_in` INT)
 BEGIN
 	INSERT INTO shop_product_client_price (`id_client`, `id_product`, `price`, `vat`)
 	VALUES (id_client_in, id_product_in, price_in, vat_in)

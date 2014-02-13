@@ -27,6 +27,12 @@
    		'3' => array('id' => '3', 'text' => '3f/3f')
    );
    
+   $battery_maker_array = array(
+   		'0'  => array('id' => '',  'text' => 'Wszystkie'),
+   		'GT'  => array('id' => 'GT',  'text' => 'GT'),
+   		'GTEC' => array('id' => 'GTEC', 'text' => 'GTEC')
+   );
+   
 if( $F->check_get('search') ) {
    $filters = array();
    $load_result = array();
@@ -68,6 +74,11 @@ if( $F->check_get('search') ) {
    		$where_array['bu.box'] = $battery_box_array[$F->GET['battery_box']]['text'];
    	}
    	
+   	if( $F->check_get('battery_maker') && isset( $battery_maker_array[$F->GET['battery_maker']] ) 
+   		&& strlen($F->GET['battery_maker']) > 1 ) {
+   		$where_array['bu.maker'] = $battery_maker_array[$F->GET['battery_maker']]['text'];
+   	}
+   	
    } else {
    	$where_denom = 'output_power_w';
    	$normalize_w = false;
@@ -82,7 +93,8 @@ if( $F->check_get('search') ) {
    
    $query = 'SELECT bu.id_ups, bu.model, bu.output_power, bu.output_power_w, bu.cabinet,
    bu.internal_count, bu.internal_capacity, bu.external_count, bu.external_capacity, 
-   bu.box, bu.typology, bu.phase, bu.quality, bu.output_power_w/bu.output_power as normalize_w
+   bu.box, bu.typology, bu.phase, bu.quality, bu.output_power_w/bu.output_power as normalize_w,
+   bu.maker
    FROM `tool_battery_ups` bu
    WHERE bu.'.$where_denom.' >= ' . db_int($need_power) . ' ' . $where_add . '
    order by bu.'.$where_denom.'';
@@ -149,7 +161,7 @@ if( $F->check_get('search') ) {
 	   			}
 	   			
 	   			//over
-	   			if( $ups_data['time'] > $need_time && 
+	   			if( $ups_data['time'] >= $need_time && 
 						 $ups_data['time'] < $time_over ) {
 	   				$ups_3cls_array[$quality_search]['over'] = $ups_data;
 	   				$time_over =  $ups_data['time'];
@@ -202,6 +214,13 @@ $GET_tmp = $F->make_get();
 	<tr>
 		<td><strong>Czas podtrzymywania:</strong></td>
 		<td colspan="3"><?php echo $F->draw_input_field('battery_time', '30', ' style="width: 30px"'); ?> <strong>[min]</strong></td>
+	</tr>
+	<tr>
+		<td><strong>Producent:</strong></td>
+		<td colspan="3"><?php 
+		echo $F->draw_pull_down_menu('battery_maker', $battery_maker_array, $F->GET['battery_maker']);
+		?>
+		</td>
 	</tr>
 	<tr>
 		<td><strong>Typologia:</strong></td>
@@ -259,8 +278,10 @@ echo '<div class="product_columns product_column_'.(int)$nr_col.' '.$class_add.'
 	  else $time_txt = '<span style="color: black">'.(int)$product['time'].' min</span>';
 	  
 	  $data = array(
-			'data'=> 'Model: ' . $product['model'] . "<br>" .
-			(($ups['bu.cabinet']!='')?"Szafka: ".$product['bu.cabinet']:'') . "<br>".
+			'data'=> 
+			'Producent: ' . $product['maker'] . "<br>".
+			'Model: ' . $product['model'] . "<br>" .
+			(($product['cabinet']!='')?"Szafka: ".$product['cabinet']."<br>":'') . "<br>".
 			'Typologia: ' . strtolower($product['typology']) . "<br>".
 			'Fazy: ' . strtolower($product['phase']) . "<br>",
 		 'bottom'=> 
@@ -269,7 +290,8 @@ echo '<div class="product_columns product_column_'.(int)$nr_col.' '.$class_add.'
 		);
 		echo product_box($data);
 	} else {
-		echo product_box( array('data'=> '<h5>Brak</h5>', 'bottom'=> '-', 'footer' => '-') );
+		echo product_box( false );
+		//echo product_box( array('data'=> '<h5>Brak</h5>', 'bottom'=> '-', 'footer' => '-') );
 	}
 	
 	if( Framework::not_null($ups_3cls_array[$quality]['under']) ) {
@@ -279,8 +301,10 @@ echo '<div class="product_columns product_column_'.(int)$nr_col.' '.$class_add.'
 	  else $time_txt = '<span style="color: black">'.(int)$product['time'].' min</span>';
 	  
 	  $data = array(
-			'data'=> 'Model: ' . $product['model'] . "<br>" .
-			(($ups['bu.cabinet']!='')?"Szafka: ".$product['bu.cabinet']:'') . "<br>".
+			'data'=> 
+			'Producent: ' . $product['maker'] . "<br>".
+			'Model: ' . $product['model'] . "<br>" .
+			(($product['cabinet']!='')?"Szafka: ".$product['cabinet']."<br>":'') . "<br>".
 			'Typologia: ' . strtolower($product['typology']) . "<br>".
 			'Fazy: ' . strtolower($product['phase']) . "<br>",
 		 'bottom'=> 
@@ -289,7 +313,8 @@ echo '<div class="product_columns product_column_'.(int)$nr_col.' '.$class_add.'
 		);
 		echo product_box($data);
 	} else {
-		echo product_box( array('data'=> '<h5>Brak</h5>', 'bottom'=> '-', 'footer' => '-') );
+		echo product_box( false );
+		//echo product_box( array('data'=> '<h5>Brak</h5>', 'bottom'=> '-', 'footer' => '-') );
 	}
 
 echo '</div>';
@@ -301,7 +326,24 @@ echo '</div>';
 
 function product_box($data) {
 
-if( !$data ) { }
+if( !$data ) { 
+return '
+<div class="product_in_box" style="visibility: hidden;">
+	<div class="product_in_box_data">
+	' . $data['data'] . '
+	</div>
+	<div class="product_in_box_bottom">
+	' . $data['bottom'] . '
+	</div>
+	<div class="product_in_box_footer">
+	' . $data['footer'] . '
+	</div>
+</div>
+';
+	
+
+
+}
 
 return '
 <div class="product_in_box">

@@ -194,7 +194,8 @@ class Data_Products extends Data_Basket {
          $res = db_affected_rows();
          db_transaction_end();
       }
-
+      
+      return $res;
    }
 
    static function get_product_info_list( array $product_key_array ) {
@@ -526,6 +527,38 @@ class Data_Products extends Data_Basket {
       add_to_fp($query);
       $result = db_query( $query );
       return db_fetch_array($result);
+   }
+   
+
+   static function getShopProductAttributeList( $id_product_start = 0, $length = 0 ) {
+   	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+   	$query = 'select `id_product`, `type`, `val`
+         	from ' . TBL_SHOP_PRODUCT_ATTRIBUTES . ' pa
+		where pa.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
+      ORDER BY pa.id_product ' . $order_dir . ' LIMIT ' . db_int($length);
+   	add_to_fp('$query ' . $query);
+   	$result = db_query( $query );
+   	return db_result_array_full($result);
+   }
+   
+   static function doShopProductAttributeAddOrUpdate( $param ) {
+   	 
+   	$query_prod = 'select id_product from ' . TBL_SHOP_PRODUCT . ' where id_product = "' . db_int($param['id_product']) . '"';
+   	$result_prod = db_query( $query_prod ); 	
+   	if( db_rows($result_prod) == 0 ) return array_merge($param, array('status' => 'ERROR,PRODUCT_DONT_EXIST'));
+   	
+   	$query = 'INSERT INTO ' . TBL_SHOP_PRODUCT_ATTRIBUTES . ' (`id_product`, `type`, `val`)
+   			VALUES ("' . db_int($param['id_product']) . '", "' . db_escape($param['type']) . '",
+   					  "' . db_escape($param['val']) . '")
+   					ON DUPLICATE KEY UPDATE `val` = "' . db_escape($param['val']) . '"';
+   	 
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	$ar = db_affected_rows( $result );
+   	 
+   	if( $ar == 1 ) return array_merge($param, array('status' => 'SUCCESS,NEW'));
+   	elseif( $ar == 2 ) return array_merge($param, array('status' => 'SUCCESS,EXIST'));
+   	else return array_merge($param, array('status' => 'ERROR,UNKNOWN'));
    }
 
    static function get_product_search( $length = 1, $where = '' ) {

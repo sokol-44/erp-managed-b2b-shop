@@ -434,4 +434,32 @@ function test_doClientUserNewIdUpdateList( $client ) {
 			'description' => 'new_id_client_user:1002'), 'UPDATE');
 	test_helper_multiple_in($in_oo, 'doClientUserNewIdUpdateList', $client );
 }
+
+// test_doShopProductAttributeAddOrUpdate( $client );
+// test_getShopProductAttributeList( $client );
+
+
+
+function test_getShopProductAttributeList( $client ) {
+	$nt = time();
+
+	$in_oo = new ParamStartLength(array('id_start' => '12599', 'length' => '0'));
+	test_helper_single_in($in_oo, 'getShopProductAttributeList', $client );
+}
+
+
+function test_doShopProductAttributeAddOrUpdate( $client ) {
+	$nt = time();
+
+	$list = array('id_product' => 12599, 'type' => 'name'.$nt, 'val' => 'val'.$nt);
+	$in_oo[] = new ShopProductAttributeData($list);
+
+	$list = array('id_product' => 12599, 'type' => 'BALANCE_FREE_CREDIT', 'val' => 'val'.$nt);
+	$in_oo[] = new ShopProductAttributeData($list);
+	
+	$list = array('id_product' => $nt, 'type' => 'BALANCE_FREE_CREDIT', 'val' => 'val'.$nt);
+	$in_oo[] = new ShopProductAttributeData($list);
+
+	test_helper_multiple_in($in_oo, 'doShopProductAttributeAddOrUpdate', $client);
+}
 ?>

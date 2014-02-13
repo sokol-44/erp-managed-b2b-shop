@@ -1,39 +1,43 @@
-# --------------------------------------------------------
-# Host:                         localhost
-# Server version:               5.1.40-community-log
-# Server OS:                    Win32
-# HeidiSQL version:             6.0.0.3603
-# Date/time:                    2011-01-07 15:16:47
-# --------------------------------------------------------
+-- --------------------------------------------------------
+-- Host:                         sql.company.nazwa.pl
+-- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
+-- Serwer OS:                    Linux
+-- HeidiSQL Wersja:              8.3.0.4694
+-- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-# Dumping structure for function b2b_sklep.b_func_product_to_category_add
-DROP FUNCTION IF EXISTS `b_func_product_to_category_add`;
+-- Zrzut struktury b_func_product_to_category_add
 DELIMITER //
-CREATE DEFINER=`root`@`localhost` FUNCTION `b_func_product_to_category_add`(`id_category_in` INT, `id_product_in` INT) RETURNS tinytext CHARSET utf8
+CREATE  ` FUNCTION `b_func_product_to_category_add`(`id_product_in` INT, `id_category_in` INT) RETURNS tinytext CHARSET latin2
     READS SQL DATA
 BEGIN
-	DECLARE status TINYTEXT DEFAULT NULL;
-	DECLARE status_category TINYTEXT DEFAULT NULL;
-	DECLARE status_product_category TINYTEXT DEFAULT NULL;
-
-	SELECT id_category INTO status_category FROM shop_product_to_category
-	WHERE `id_category` = id_category_in and `id_product` = id_product_in;
-	SET status_product_category = `b_func_product_category_check_exist`(id_category_in, id_product_in);
-	IF status_category IS NULL and status_product_category IS NOT NULL THEN
-		INSERT INTO shop_product_to_category (`id_category`, `id_product`)
-		VALUES (id_category_in, id_product_in);
-		SET status = 'SUCCESS';
+	DECLARE `status` TINYTEXT DEFAULT NULL;
+	DECLARE `status_product` TINYTEXT DEFAULT NULL;
+	DECLARE `status_category` TINYTEXT DEFAULT NULL;
+	DECLARE `status_product_category` TINYTEXT DEFAULT NULL;
+	 
+	SELECT id_product INTO status_product FROM shop_product WHERE `id_product` = id_product_in;
+	SELECT id_category INTO status_category FROM shop_category WHERE `id_category` = id_category_in;
+	IF status_product IS NULL OR status_category IS NULL THEN
+		SET status = 'ERROR,PRODUCT_OR_CATEGORY_DONT_EXIST';
 	ELSE
-		SET status = 'PRODUCT_TO_CATEGORY_EXIST';
+		SELECT id_category INTO status_product_category FROM shop_product_to_category 
+		WHERE `id_category` = id_category_in and `id_product` = id_product_in;
+		IF status_product_category IS NULL THEN
+			INSERT INTO shop_product_to_category (`id_category`, `id_product`)
+			VALUES (id_category_in, id_product_in);
+			SET status = 'SUCCESS,PRODUCT_TO_CATEGORY_NEW';
+		ELSE
+			SET status = 'SUCCESS,PRODUCT_TO_CATEGORY_EXIST';
+		END IF;
 	END IF;
 	return status;
 END//
 DELIMITER ;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

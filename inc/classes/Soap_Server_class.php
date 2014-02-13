@@ -470,6 +470,32 @@ class ShopAttributeData extends BasicSOAPDataMethods {
 	public $list = array('type', 'val');
 	public $list_type = array('type' => 'TEXT', 'val' => 'TEXT');
 	public $list_new = array('type', 'val');
-	public $list_update =array('type', 'val');
+	public $list_update = array('type', 'val');
+}
+
+class ShopProductAttributeData extends BasicSOAPDataMethods {
+	public $list = array('id_product', 'type', 'val');
+	public $list_type = array('id_product' => 'INT+', 'type' => 'TEXT', 'val' => 'TEXT');
+	public $list_new = array('id_product', 'type', 'val');
+	public $list_update = array('id_product', 'type', 'val');
+}
+
+
+/// UPS seller 
+class RomiUPSData extends BasicSOAPDataMethods {
+	public $list = array('id_product', 'maker', 'model', 'output_power', 'output_power_w', 'cabinet',
+			 'internal_count', 'internal_capacity', 'external_count', 'external_capacity', 
+			 'box', 'typology', 'phase');
+	public $list_type = array('id_product' =>  'INT+', 'maker' => 'TEXT', 'model' => 'TEXT', 
+			 'output_power' => 'INT+', 'output_power_w' => 'INT', 'cabinet' => 'TEXT',
+			 'internal_count' => 'INT+', 'internal_capacity' => 'INT+',
+			 'external_count' => 'INT', 'external_capacity' => 'INT', 
+			 'box' => 'TEXT', 'typology' => 'TEXT', 'phase' => 'TEXT');
+	public $list_new = array('id_product', 'maker', 'model', 'output_power', 'output_power_w', 'cabinet',
+			 'internal_count', 'internal_capacity', 'external_count', 'external_capacity', 
+			 'box', 'typology', 'phase');
+	public $list_update = array('id_product', 'maker', 'model', 'output_power', 'output_power_w', 'cabinet',
+			 'internal_count', 'internal_capacity', 'external_count', 'external_capacity', 
+			 'box', 'typology', 'phase');
 }
 ?>

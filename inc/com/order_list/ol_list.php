@@ -39,8 +39,10 @@ $GET_tmp = $F->add_local_get('mode', 'show_details', $GET_tmp);
 <table class="tableBox" style="border: 0">
 	<tr class="tableBoxHeading">
 		<th><?php echo Lang::_('ID') ?></th>
-		<th><?php echo Lang::_('order DESCRIPTION') . ',<br>' . Lang::_('basket DESCRIPTION'); ?></th>
-		<th><?php echo Lang::_('order statistic') . ',<br>' . Lang::_('order date') . ',<br>' . Lang::_('order update'); ?></th>
+<!-- 	<th><?php echo Lang::_('order DESCRIPTION') . ',<br>' . Lang::_('basket DESCRIPTION'); ?></th>  -->	
+<!-- <th><?php echo Lang::_('order statistic') . ',<br>' . Lang::_('order date') . ',<br>' . Lang::_('order update'); ?></th>-->
+		 <th><?php echo Lang::_('order date') ?></th>
+		<th><?php echo Lang::_('order update') ?></th>
 		<th><?php echo Lang::_('order STATE') ?></th>
 		<th><?php echo Lang::_('order details') ?></th>
 	</tr>
@@ -58,18 +60,20 @@ $GET_tmp = $F->add_local_get('mode', 'show_details', $GET_tmp);
 	   ?>
 	<tr valign="top">
 		<td width="5%"><?php echo $F->draw_radio_field('list', (int)$order->id_order, false, 'style="display: none"') . (int)$order->id_order; ?></td>
-		<td valign="top">
-	   <?php echo $cell_order_desc; ?></td>
-		<td width="10%">
+		<!-- td valign="top">
+	   <?php echo $cell_order_desc; ?></td> -->
+		<td width="10%"><!-- 
 <div class="basket order_total" style="width: 160px">
 <div class="basket_single basket_product_total"><?php echo Lang::_('TOTAL PRODUCTS'); ?><span id="nr"><?php echo $total['product_total']; ?></span></div>
 <div class="basket_single basket_product_types"><?php echo Lang::_('PRODUCTS TYPES'); ?><span id="nr"><?php echo $total['product_types']; ?></span></div>
 <div class="basket_single basket_sum_gross"><?php echo Lang::_('sum gross'); ?><span id="nr"><?php echo Price::val($total['sum_gross']); ?></span></div>
 <div class="basket_single basket_sum_netto"><?php echo Lang::_('sum_netto'); ?><span id="nr"><?php echo Price::val($total['sum_netto']); ?></span></div>
-</div>
-<?php echo Lang::_('order date') . ':<br>' . $F->output_string_html( $order->data['date_create'] ); ?><br><br>
-<?php if($F->not_null($order->data['date_modified'])) echo  Lang::_('order update') . ':<br>' . $F->output_string_html( $order->data['date_modified'] ); ?>
+</div> -->
+<?php echo $F->output_string_html( $order->data['date_create'] ); ?>
+<?php //echo Lang::_('order date') . ':<br>' . $F->output_string_html( $order->data['date_create'] ); ?>
+<?php //if($F->not_null($order->data['date_modified'])) echo  Lang::_('order update') . ':<br>' . $F->output_string_html( $order->data['date_modified'] ); ?>
 		</td>
+		<td width="10%"><?php echo $F->output_string_html( $order->data['date_modified'] ); ?></td>
 		<td width="10%"><?php echo Lang::_($order->data['name']); ?></td>
 		<td width="10%"><?php echo $cell_order_info; ?></td>
 	</tr>

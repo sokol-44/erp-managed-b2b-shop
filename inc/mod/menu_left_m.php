@@ -18,6 +18,7 @@ $fbsk= $F->draw_link($F->make_link(CFG_COM_BASKET_FAVORITE),'', Lang::_('Favorit
 
 
 $tool_battery_l = $F->draw_link($F->make_link(CFG_COM_TOOL,array('battery' => 'unload')),'', 'Dobór UPS');
+$tool_battery_l2 = $F->draw_link($F->make_link('tool',array('battery' => 'unload')),'', 'Dobór UPS Stary');
 ?>
 <div class="iStoreBox" id="iStoreMenuBox">
 <div class="iStoreBoxWrapper">
@@ -27,13 +28,18 @@ $tool_battery_l = $F->draw_link($F->make_link(CFG_COM_TOOL,array('battery' => 'u
 		<li><a href="<?php echo $acc; ?>"><?php echo Lang::_('Account'); ?></a></li>
 		<li><?php echo $ord ?></li>
 		<li><?php echo $inv ?>
+		<?php if( $F->com == CFG_COM_INVOICE ) { ?>
 			<ul><li><?php echo $invpay ?></li></ul>
+		<?php } ?>
 		</li>
 		<li><?php echo $bsk_all ?>
+		<?php if( $F->com == CFG_COM_BASKET ||  $F->com == CFG_COM_BASKET_FAVORITE  ) { ?>
 			<ul><li><?php echo $bsk ?></li></ul>
 			<ul><li><?php echo $fbsk ?></li></ul>
+		<?php } ?>
 		</li>
 		<li><?php echo $tool_battery_l; ?></li>
+		<li><?php echo $tool_battery_l2; ?></li>
 	</ul> 
 </div>
 </div>

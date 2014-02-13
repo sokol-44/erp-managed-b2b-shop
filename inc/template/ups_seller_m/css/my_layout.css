@@ -437,8 +437,8 @@ a {
    color: blue;
 }
  a:hover {
-   color: darkblue;
-   text-shadow: 0.1em 0.1em 0.1em black;
+   color: BLUE;
+   /*text-shadow: 0.1em 0.1em 0.1em black;*/
 }
 
 
@@ -1052,7 +1052,7 @@ TD.headerNavigation {
 }
 
 a span.catalog_product_name {
-	color: black;
+	/*color: black;*/
 	text-decoration: underline;
 }
 
@@ -1072,16 +1072,16 @@ a span.catalog_product_name {
 }
 
 .tableBox td {
-	padding: 5px;
+	padding: 2px;
 	border: 1px solid white;
 	border-collapse: collapse;
 	color: #111111;
 }
-
+/*
 .tableBox td a{
 	color: #212121;
 }
-
+*/
 .tableBox th {
 	padding: 5px;
 	border: 1px solid white;
@@ -1115,8 +1115,8 @@ a span.catalog_product_name {
 }
 
 .tableBox TR.tableRow-odd {
-	background: #d8d8d9;
-	/*background: #f8f8f9;*/
+	/*background: #d8d8d9;*/
+	background: #f8f8f9;
 }
 
 .tableBox TR.tableRow-even {

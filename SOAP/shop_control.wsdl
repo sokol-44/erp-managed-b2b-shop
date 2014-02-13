@@ -344,6 +344,24 @@
 	<wsdl:message name="doClientUserNewIdUpdateListResponse">
 		<wsdl:part name="doClientUserNewIdUpdateListResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="Request">
+		<wsdl:part name="Request" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="Response">
+		<wsdl:part name="Response" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doShopProductAttributeAddOrUpdateRequest">
+		<wsdl:part name="doShopProductAttributeAddOrUpdateRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doShopProductAttributeAddOrUpdateResponse">
+		<wsdl:part name="doShopProductAttributeAddOrUpdateResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getShopProductAttributeListRequest">
+		<wsdl:part name="getShopProductAttributeListRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getShopProductAttributeListResponse">
+		<wsdl:part name="getShopProductAttributeListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
 			<wsdl:output message="tns:getProductListResponse"></wsdl:output>
@@ -783,6 +801,19 @@
 							</wsdl:input>
 							<wsdl:output
 								message="tns:doClientUserNewIdUpdateListResponse">
+							</wsdl:output>
+						</wsdl:operation>						<wsdl:operation name="doShopProductAttributeAddOrUpdate">							<wsdl:input
+								message="tns:doShopProductAttributeAddOrUpdateRequest">
+							</wsdl:input>							<wsdl:output
+								message="tns:doShopProductAttributeAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="getShopProductAttributeList">
+							<wsdl:input
+								message="tns:getShopProductAttributeListRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:getShopProductAttributeListResponse">
 							</wsdl:output>
 						</wsdl:operation>
 	</wsdl:portType>
@@ -1395,6 +1426,28 @@
          </wsdl:output>
       </wsdl:operation>
       <wsdl:operation name="doClientUserNewIdUpdateList">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="doShopProductAttributeAddOrUpdate">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getShopProductAttributeList">
          <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
          <wsdl:input>
             <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"

@@ -1,27 +1,35 @@
-# --------------------------------------------------------
-# Host:                         localhost
-# Server version:               5.1.40-community-log
-# Server OS:                    Win32
-# HeidiSQL version:             6.0.0.3603
-# Date/time:                    2010-12-03 15:44:59
-# --------------------------------------------------------
+-- --------------------------------------------------------
+-- Host:                         sql.company.nazwa.pl
+-- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
+-- Serwer OS:                    Linux
+-- HeidiSQL Wersja:              8.3.0.4694
+-- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-# Dumping data for table b2b_sklep.shop_order: ~6 rows (approximately)
-DELETE FROM `shop_order`;
-/*!40000 ALTER TABLE `shop_order` DISABLE KEYS */;
-INSERT INTO `shop_order` (`id_order`, `id_client`, `date_create`, `date_modified`, `id_order_status`, `description`, `description_basket`) VALUES
-	(1, 1, '2010-12-03 13:08:25', NULL, 1, '#order description#\r\n\r\n#order description#', '#basket description#\r\n#basket description##basket description#\r\n\r\n#basket description#\r\n\r\n\r\n#basket description#\r\n#basket description##basket description#\r\n\r\n#basket description#\r\n\r\n\r\n#basket description#\r\n#basket description##basket description#\r\n\r\n#basket description#\r\n\r\n#basket description#\r\n#basket description##basket description#\r\n\r\n#basket description#'),
-	(2, 1, '2010-12-03 13:08:49', NULL, 1, 'sadsadsadasdsa', 'bbbbbbbbbbbbbbbbbbbbbdsadsadsas\r\nd\r\nsa\r\nd\r\nsa\r\nd\r\nsa\r\nd\r\nsa'),
-	(3, 1, '2010-12-03 13:18:18', NULL, 1, 'kjhlhjlkhjlhjk', ''),
-	(4, 1, '2010-12-03 14:09:47', NULL, 1, 'dsadsa\r\nds\r\nad\r\nsa\r\ndsa', 'dsadsadsadsa'),
-	(5, 1, '2010-12-03 14:25:31', NULL, 1, 'dsadasdasd', ''),
-	(6, 1, '2010-12-03 14:27:09', NULL, 1, 'NULL', '');
-/*!40000 ALTER TABLE `shop_order` ENABLE KEYS */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+-- Zrzut struktury .shop_order
+CREATE TABLE IF NOT EXISTS `shop_order` (
+  `id_order` int(11) NOT NULL AUTO_INCREMENT,
+  `id_client` int(11) DEFAULT NULL,
+  `date_create` datetime DEFAULT NULL,
+  `date_modified` datetime DEFAULT NULL,
+  `id_order_status` int(11) NOT NULL,
+  `hidden_status` tinytext,
+  `description` text,
+  `description_basket` text,
+  `id_shopping_basket` int(11) DEFAULT NULL,
+  `id_address` int(11) DEFAULT NULL,
+  `id_account_manager` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id_order`,`id_order_status`),
+  KEY `fk.order.id_client` (`id_client`),
+  KEY `fk.order.id_order_status` (`id_order_status`),
+  KEY `fk.order.id_shopping_basket` (`id_order_status`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- Data exporting was unselected.
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

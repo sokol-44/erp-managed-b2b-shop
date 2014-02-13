@@ -15,7 +15,7 @@ $category_tree = Data::get_categorie_tree();
 $categories_string = show_category($category_tree);
 $json_string = $F->json_string($category_tree);
 
-echo '<!--'.print_r($category_tree,true).'-->';
+//echo '<!--'.print_r($category_tree,true).'-->';
 
 
 if( !(SHOP_SHOW_CATALOG_ONLY_LOGGED == 'true' && !$P->logged_in) ) {
@@ -33,13 +33,16 @@ if( !(SHOP_SHOW_CATALOG_ONLY_LOGGED == 'true' && !$P->logged_in) ) {
 </div>';
 }
 
-function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
+function show_category($local_tree, $level = 0, $parent_id = 0 ) {
    $F = Framework::g_global();
-
+   $scategories_string = '';
+   
+   if( $level > 16 ) return '';
+   
    foreach($local_tree as $current_id => $category) {
       $all_products =  ($category['products_in_category'] + $category['products_in_subcategories']);
 
-      if( $category['parent'] == $parent_id && !(SHOP_SHOW_EMPTY!='true' && $all_products==0) ) {
+      if( $current_id > 0 && $category['parent'] == $parent_id && !(SHOP_SHOW_EMPTY!='true' && $all_products==0) ) {
          if (SHOP_SHOW_COUNTS == 'true') {
             $category['description'] .= "\n" . Lang::_("PRODUCTS_IN_CATEGORY") . ' ' . $all_products ;
          }
@@ -72,7 +75,7 @@ function show_category($local_tree, $categories_string = '', $parent_id = 0 ) {
          if( is_array($category['children']) && count($category['children']) > 0 &&
          isset($F->GET['catpath']) && $F->check_request_split_array('catpath', $current_id)) {
             $categories_string_tmp .= '<ul id="iStorieCategoriesList">'.
-            	show_category($category['children'], '', $current_id) . '</ul>';
+            	show_category($category['children'], $level+1, $current_id) . '</ul>';
          }
 
          $categories_string .= $categories_string_tmp . '</li>' . "\r\n";

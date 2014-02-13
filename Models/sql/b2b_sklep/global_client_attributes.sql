@@ -1,20 +1,25 @@
-# --------------------------------------------------------
-# Host:                         localhost
-# Server version:               5.1.40-community-log
-# Server OS:                    Win32
-# HeidiSQL version:             6.0.0.3603
-# Date/time:                    2010-12-03 15:44:59
-# --------------------------------------------------------
+-- --------------------------------------------------------
+-- Host:                         sql.company.nazwa.pl
+-- Wersja serwera:               5.5.25a-log - NetArt MySQL Server
+-- Serwer OS:                    Linux
+-- HeidiSQL Wersja:              8.3.0.4694
+-- --------------------------------------------------------
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET NAMES utf8 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
-# Dumping data for table b2b_sklep.global_client_attributes: ~0 rows (approximately)
-DELETE FROM `global_client_attributes`;
-/*!40000 ALTER TABLE `global_client_attributes` DISABLE KEYS */;
-/*!40000 ALTER TABLE `global_client_attributes` ENABLE KEYS */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+-- Zrzut struktury .global_client_attributes
+CREATE TABLE IF NOT EXISTS `global_client_attributes` (
+  `id_client` int(11) NOT NULL,
+  `type` varchar(50) NOT NULL,
+  `val` tinytext,
+  PRIMARY KEY (`id_client`,`type`),
+  KEY `fk.global_client_attributes.id_client` (`id_client`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- Data exporting was unselected.
+/*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
+/*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

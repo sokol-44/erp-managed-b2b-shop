@@ -10,22 +10,25 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury .shop_order_invoice
-CREATE TABLE IF NOT EXISTS `shop_order_invoice` (
-  `id_invoice` int(11) NOT NULL AUTO_INCREMENT,
-  `id_order` int(11) DEFAULT NULL,
-  `id_client` int(11) DEFAULT NULL,
-  `invoice_number` varchar(50) DEFAULT NULL,
-  `state` varchar(10) DEFAULT NULL,
-  `net_value` decimal(10,2) DEFAULT NULL,
-  `gross_value` decimal(10,2) DEFAULT NULL,
-  `date_issue` date DEFAULT NULL,
-  `date_pay` date DEFAULT NULL,
-  `invoice_image` longblob,
-  `description` tinytext,
-  PRIMARY KEY (`id_invoice`),
-  KEY `id_client-id_order` (`id_client`,`id_order`),
-  KEY `id_order` (`id_order`)
+-- Zrzut struktury .tool_battery_ups
+CREATE TABLE IF NOT EXISTS `tool_battery_ups` (
+  `id_ups` int(11) NOT NULL AUTO_INCREMENT,
+  `maker` varchar(20) DEFAULT NULL,
+  `model` varchar(50) DEFAULT NULL,
+  `output_power` int(11) DEFAULT NULL,
+  `output_power_w` int(11) DEFAULT NULL,
+  `cabinet` varchar(50) DEFAULT NULL,
+  `internal_count` int(11) DEFAULT NULL,
+  `internal_capacity` int(11) DEFAULT NULL,
+  `external_count` int(11) DEFAULT NULL,
+  `external_capacity` int(11) DEFAULT NULL,
+  `box` enum('RACK 19"','TOWER') DEFAULT NULL,
+  `typology` enum('LINE-INTERACTIVE','ON-LINE') DEFAULT NULL,
+  `phase` tinyint(4) DEFAULT NULL,
+  `quality` tinyint(4) DEFAULT NULL,
+  PRIMARY KEY (`id_ups`),
+  KEY `internal_capacity` (`internal_capacity`),
+  KEY `external_capacity` (`external_capacity`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin2;
 
 -- Data exporting was unselected.

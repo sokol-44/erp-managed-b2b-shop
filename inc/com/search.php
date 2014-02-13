@@ -65,7 +65,7 @@ $GET_tmp = $F->make_get();
 <?php echo $F->draw_form_close(); ?>
 <?php
 if( $F->not_null($product_list) && sizeof($product_list) > 0 ) {
-include 'mod_in' . DS . 'product_list_m.php';
+include 'mod_in' . DS . 'product_list_m2.php';
 }
 ?>
 <div class="search_container search_bottom container_bottom"></div>
