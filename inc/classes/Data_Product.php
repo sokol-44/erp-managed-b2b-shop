@@ -11,7 +11,8 @@ if( !defined('_I_INIT') ) die();
 class Data_Product extends Data_Basket {
    static $Data_Products_params = array('id_client' => 0, 'client_view' => false);
    static $root_number = false;
-   static $subproduct_separator = '_';
+   static $Data_Products_hidden_attributes = array('KALK_');
+  // static $subproduct_separator = '_';
 
    function __construct() {
 		//echo get_class();
@@ -717,7 +718,7 @@ class Data_Product extends Data_Basket {
    		} 
    	}
    	
-   	print_debug($group_order);
+   	//print_debug($group_order);
    	
    	$group_tmp = $group;
    	$attribute_order = array();

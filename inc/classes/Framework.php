@@ -62,8 +62,8 @@ class Framework extends Framework_Data {
       }
    }
 
-   static function output_string($string) {
-   	return htmlentities($string,  ENT_COMPAT, 'UTF-8', false );
+   static function output_string($string, $nl2br = false) {
+   	return nl2br(htmlentities($string,  ENT_COMPAT, 'UTF-8', false ));
      // return htmlspecialchars($string);
    }
 

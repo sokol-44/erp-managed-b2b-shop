@@ -5,7 +5,7 @@ $id_product = (int)$F->GET['id_product'];
 
 $product_info = Product::get_product_info( $id_product );
 
-$image_type = Data::get_product_image_type($product_info);
+$image_type = Product::get_product_image_type( $id_product );
 $small_image_html='';
 
 if( $F->not_null($image_type) ) {
@@ -85,5 +85,26 @@ if( $P->logged_in ) {
    <?php if( $F->not_null($image_type) ) echo '<div class="product product_image">' . $small_image_html . "</div>\n"; ?>
    <div class="product product_description"><?php echo $description_html; ?></div>
 <?php } ?>
+<div class="product product_attribute_group">
+<?php 
+if( $F->not_null($product_info['attribute_group']) ) {
+	$attribute_group = Product::get_attribute_group_display( $id_product );
+	foreach($attribute_group as $id_group => $group) {
+		if( $F->not_null($group['attribute']) ) {
+			echo '<div class="product product_attribute_group_header roduct_attribute_group_header_'.$id_group.' container_subheader">'.$group['group_name'].'</div>
+				<table class="tableBox" style="width: 75%;" >';
+			foreach($group['attribute'] as $id_attribute => $attribute) {
+			?>
+	<tr class="product product_attribute_attribute product_attribute_<?php echo $id_attribute?>">
+		<td style="width: 50%;"><?php echo $F->output_string($attribute['attribute_name'], true) ?></td>
+		<td style="width: 50%;"><?php echo $F->output_string($attribute['attribute_value'], true) ?></td>
+	</tr>
+			<?php 
+			}
+			echo '</table>';
+		}
+	}
+} ?>
+</div>
 </div>
 <div class="product product_bottom container_bottom"></div>
