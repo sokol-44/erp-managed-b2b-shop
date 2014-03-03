@@ -16,9 +16,10 @@ if( !defined('_I_INIT') ) die();
  * @author ms
  *
  */
-class Data_Rights extends Data_Products {
+class Data_Rights extends Data_Category {
 
    function __construct() {
+		//echo get_class();
       parent::__construct();
    }
     

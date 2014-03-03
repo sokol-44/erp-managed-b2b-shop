@@ -92,7 +92,7 @@ if( $F->check_get('search') ) {
    else $where_add = '';
    
    $query = 'SELECT bu.id_ups, bu.model, bu.output_power, bu.output_power_w, bu.cabinet,
-   bu.internal_count, bu.internal_capacity, bu.external_count, bu.external_capacity, bu.max_external,
+   bu.internal_count, bu.internal_capacity, bu.external_count, bu.external_capacity, 
    bu.box, bu.typology, bu.phase, bu.quality, bu.output_power_w/bu.output_power as normalize_w,
    bu.maker
    FROM `tool_battery_ups` bu
@@ -104,10 +104,10 @@ if( $F->check_get('search') ) {
    $load_result = db_result_array_full_id($db_res);
    
    $query2 = '';
-   $query2_tmpl1 = '(SELECT "#id_ups#" as id_ups, #cabinet_count# as cabinet_count, (bd_i.minutes-1) as time FROM tool_battery_data bd_i
+   $query2_tmpl1 = '(SELECT #id_ups# as id_ups, (bd_i.minutes-1) as time FROM tool_battery_data bd_i
 	WHERE bd_i.capacity = #cap1# and ( bd_i.result * #count1# ) <= #need_power_batt#
 	LIMIT 1)';
-   $query2_tmpl2 = '(SELECT "#id_ups#" as id_ups, #cabinet_count# as cabinet_count, (bd_i.minutes-1) as time FROM tool_battery_data bd_i
+   $query2_tmpl2 = '(SELECT #id_ups# as id_ups, (bd_i.minutes-1) as time FROM tool_battery_data bd_i
 	left join tool_battery_data bd_c ON ( bd_i.minutes = bd_c.minutes )
 	WHERE bd_i.capacity = #cap1# and bd_c.capacity = #cap2# and 
    ( bd_i.result * #count1# + bd_c.result * #count2# ) <= #need_power_batt#
@@ -115,18 +115,16 @@ if( $F->check_get('search') ) {
    $query2_arr = array();
 
    $need_power_batt = $need_power;
-   $ar_ch = array('#id_ups#', '#cabinet_count#', '#need_power_batt#', '#cap1#', '#count1#', '#cap2#', '#count2#');
+   $ar_ch = array('#id_ups#', '#need_power_batt#', '#cap1#', '#count1#', '#cap2#', '#count2#');
    foreach($load_result as $id_ups => $ups_data) {
    	if( $ups_data['internal_count'] > 0 && $ups_data['external_count'] > 0  ) {
    		if( $normalize_w ) $need_power_batt = $need_power * $ups_data['normalize_w'];
-   		for( $external_count=1; $external_count<=$ups_data['max_external']; $external_count++ ) {
-   			$ar_r = array($id_ups.'_'.$external_count, $external_count, $need_power_batt,
-   					$ups_data['internal_capacity'], $ups_data['internal_count'],
-   					$ups_data['external_capacity'], $ups_data['external_count'] * $external_count);
-   			$query2_arr[] = str_replace($ar_ch, $ar_r, $query2_tmpl2);
-   		}
+   		$ar_r = array($id_ups, $need_power_batt,
+   				$ups_data['internal_capacity'], $ups_data['internal_count'], 
+   				$ups_data['external_capacity'], $ups_data['external_count']);
+   		$query2_arr[] = str_replace($ar_ch, $ar_r, $query2_tmpl2);
    	} else {		
-   		$ar_r = array($id_ups.'_'.$external_count, 0, $need_power_batt, 
+   		$ar_r = array($id_ups, $need_power_batt, 
    				$ups_data['internal_capacity'] + $ups_data['external_capacity'],
    				$ups_data['internal_count'] + $ups_data['external_count'], 0 , 0);
    		$query2_arr[] = str_replace($ar_ch, $ar_r, $query2_tmpl1);
@@ -138,19 +136,14 @@ if( $F->check_get('search') ) {
    
    if( $F->not_null($query2_arr) )  {
    	$query2 = implode("\nUNION ALL\n", $query2_arr);
-    	//print_debug($query2);
+//    	print_debug($query2);
    	$db_res2 = db_query($query2);
    	$load_result2 = db_result_array_full_id($db_res2);
    	//print_debug($load_result2);
-   	$load_result3 = array();
    	foreach( $load_result2 as $id_ups => $ups_data ) {
-   		$id_ups_org = (int)$id_ups;
-   		$load_result3[$id_ups] = $load_result[$id_ups_org];
-   		$load_result3[$id_ups]['time'] = $ups_data['time'];
-   		$load_result3[$id_ups]['cabinet_count'] = $ups_data['cabinet_count'];
+   		$load_result[$id_ups]['time'] = $ups_data['time'];
    	}
    	
-   	$load_result = $load_result3;
    	//$need_time
    	
    	
@@ -204,8 +197,8 @@ $GET_tmp = $F->make_get();
 	</tr>
 </table>
 <div class="account_address_container container_subheader">Parametry szukane<div class="icon"></div></div>
-<?php echo $F->draw_form('tool_battery', '', 'GET'); ?><br>
-<?php echo $F->draw_hidden_field('com', 'tool_m'); ?>
+<?php echo $F->draw_form('tool_battery', $F->make_link(CFG_COM_TOOL), 'GET'); ?><br>
+<?php echo $F->draw_hidden_field('com', CFG_COM_TOOL); ?>
 <?php echo $F->draw_hidden_field('sub', 'tool_battery'); ?>
 <table class="pass_table" style="border: 0; width: 100%;">
 	<tr>
@@ -288,7 +281,7 @@ echo '<div class="product_columns product_column_'.(int)$nr_col.' '.$class_add.'
 			'data'=> 
 			'Producent: ' . $product['maker'] . "<br>".
 			'Model: ' . $product['model'] . "<br>" .
-(($product['cabinet']!='')?"Szafka: " . $product['cabinet_count'] . ' x '.$product['cabinet']."<br>":'') . "<br>".
+			(($product['cabinet']!='')?"Szafka: ".$product['cabinet']."<br>":'') . "<br>".
 			'Typologia: ' . strtolower($product['typology']) . "<br>".
 			'Fazy: ' . strtolower($product['phase']) . "<br>",
 		 'bottom'=> 
@@ -307,12 +300,11 @@ echo '<div class="product_columns product_column_'.(int)$nr_col.' '.$class_add.'
 	  if( $product['time'] < $need_time ) $time_txt = '<span style="color: red">'.(int)$product['time'].' min</span>';
 	  else $time_txt = '<span style="color: black">'.(int)$product['time'].' min</span>';
 	  
-	  
 	  $data = array(
 			'data'=> 
 			'Producent: ' . $product['maker'] . "<br>".
 			'Model: ' . $product['model'] . "<br>" .
-			(($product['cabinet']!='')?"Szafka: " . $product['cabinet_count'] . ' x '.$product['cabinet']."<br>":'') . "<br>".
+			(($product['cabinet']!='')?"Szafka: ".$product['cabinet']."<br>":'') . "<br>".
 			'Typologia: ' . strtolower($product['typology']) . "<br>".
 			'Fazy: ' . strtolower($product['phase']) . "<br>",
 		 'bottom'=> 

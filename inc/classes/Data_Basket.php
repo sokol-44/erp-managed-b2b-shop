@@ -11,7 +11,7 @@ if( !defined('_I_INIT') ) die();
 class Data_Basket extends Data_Order {
 
    function __construct() {
-      //echo 'Data_Basket';
+		//echo get_class();
       parent::__construct();
    }
 
@@ -105,7 +105,7 @@ class Data_Basket extends Data_Order {
       $product_array = db_result_array( db_query( $query ) );
       $contents = array();
       foreach( $product_array as $product ) {
-         $key = Data_Products::get_key_from_product_params( $product );
+         $key = Data_Product::get_key_from_product_params( $product );
          $contents[$key] = array(
                'quantity' => (int)$product['quantity'],
                'id_product' => (int)$product['id_product'],
@@ -118,7 +118,7 @@ class Data_Basket extends Data_Order {
     
    static function remove_basket_product( $product_key, $basket_params) {
    	print_debug($product_key);
-      $product_params = Data_Products::get_product_params_from_key($product_key);
+      $product_params = Data_Product::get_product_params_from_key($product_key);
       $clear_query = 'delete from ' . TBL_SHOP_SHOPPING_BASKET_PRODUCT . ' where
       id_shopping_basket_version = ' . db_int($basket_params['id_shopping_basket_version']) . ' and
       id_product_subtype = ' . db_int($product_params['id_product_subtype']) . ' and

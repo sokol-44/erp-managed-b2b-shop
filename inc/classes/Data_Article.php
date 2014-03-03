@@ -19,7 +19,7 @@ if( !defined('_I_INIT') ) die();
 class Data_Article extends Data_Contact{
 
 	function __construct() {
-		//echo 'Data_Article';
+		//echo get_class();
 		parent::__construct();
 	
 	}

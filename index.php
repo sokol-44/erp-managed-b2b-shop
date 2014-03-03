@@ -36,6 +36,7 @@ if( $template != '' && is_file($template) ) {
 // echo '<!--';
 //print_debug($Shopping_Basket_Chain);
 // print_debug($_SESSION);
+print_debug($_COOKIE);
 print_debug(Lang::$STR);
 print_debug($query_log);
 //print_debug($BackTrail);
@@ -47,6 +48,6 @@ print_debug($query_log);
 // $Info->reset();
 // echo '-->';
 
-print_debug(_I_ROOT_DIR);
-print_debug(_I_ROOT_WWW_DIR);
+// print_debug(_I_ROOT_DIR);
+// print_debug(_I_ROOT_WWW_DIR);
 ?>

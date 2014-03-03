@@ -32,6 +32,7 @@ if( !defined('_I_INIT') ) die();
 class Data_Person extends Data_Rights {
 
    function __construct() {
+		//echo get_class();
       parent::__construct();
    }
 
@@ -565,7 +566,7 @@ class Data_Person extends Data_Rights {
          	where ca.id_client = c.id_client and ca.id_client = "' . db_int($id_client) . '"' . $where_add;
       
       if ( $attribute_type == 'PRODUCT_VIEW_NAME' ) {
-         if ( Data_Products::$Data_Products_params['client_view'] ) return Data_Products::$Data_Products_params['client_view'];
+         if ( Data_Product::$Data_Products_params['client_view'] ) return Data_Product::$Data_Products_params['client_view'];
          elseif ( defined('SHOP_CLIENT_PRODUCT_PRICE_VIEW') ) return constant('SHOP_CLIENT_PRODUCT_PRICE_VIEW');
          else return false;
       } else {

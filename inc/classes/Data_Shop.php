@@ -26,7 +26,7 @@ if( !defined('_I_INIT') ) die();
 class Data_Shop extends Data_Picture {
 	
    function __construct() {
-      //echo 'Data_Shop';
+		//echo get_class();
       parent::__construct();
 
    }

@@ -1,0 +1,995 @@
+<?php
+/**
+ * Data_Products.php
+ * Copyright Michał Sokołowski 2010
+ *
+ * @author Michał Sokołowski <msokolowski@example.com>
+ */
+
+if( !defined('_I_INIT') ) die();
+
+class Data_Product extends Data_Basket {
+   static $Data_Products_params = array('id_client' => 0, 'client_view' => false);
+   static $root_number = false;
+   static $subproduct_separator = '_';
+
+   function __construct() {
+		//echo get_class();
+      parent::__construct();
+      self::_load_client_params();
+      self::_load_virtualdir_params();
+   }
+
+   static function _load_client_params() {
+      $P = Person::g_global();
+      
+      if( $P->logged_in && !defined('SHOP_CLIENT_PRICE_MODE_SET') ) {
+         self::$Data_Products_params['id_client'] = (int)$P->data['id_client'];
+         $view_name = Data_Person::get_client_attribute((int)$P->data['id_client'], 'PRODUCT_VIEW_NAME');
+         if( Framework::not_null($view_name) ) {
+            self::$Data_Products_params['client_view'] = $view_name;
+         } else {
+         	if( defined('SHOP_CLIENT_PRICE_MODE') && constant('SHOP_CLIENT_PRICE_MODE') != 'show_all' ) {
+         		self::$Data_Products_params['client_view'] = constant('SHOP_CLIENT_PRICE_MODE');
+         	}
+         }
+         define('SHOP_CLIENT_PRICE_MODE_SET', true);
+      }
+   }
+
+   static function _load_virtualdir_params() {
+      $F = Framework::g_global();
+
+      //pasmanteria_i_dodatki_krawieckie = 1
+      //produkty_medyczne = 2
+      $root_number = $F->return_virtualdir_id();
+      if( $root_number ) self::$root_number = $root_number;
+   }
+
+   static function get_categories_from_list( $list_in = false ) {
+      $F = Framework::g_global();
+
+      if( $list_in ) {
+         if( is_array($list_in) ) {
+            foreach($list_in as $val) {
+               $list[] = (int)$val;
+            }
+         } else {
+            $list_tmp = explode(',', $list_in);
+            foreach($list_tmp as $val) {
+               $list[] = (int)$val;
+            }
+         }
+      } elseif( isset($F->GET['catpath']) ) {
+         $list_tmp = $F->request_split_array('catpath', '_', 'GET');
+         foreach($list_tmp as $val) {
+            $list[] = (int)$val;
+         }
+      } else {
+         $list = array(0);
+      }
+
+      $query =  'select * from ' . TBL_SHOP_CATEGORY . '
+      where id_category IN (' . implode(',', $list) . ')
+      order by FIND_IN_SET(id_category,"' . implode(',', $list) . '")';
+
+      $result = db_query( $query );
+       
+      return db_result_array($result);
+
+      //fix for postgresql
+      //$array_res_tmp = db_result_array($result);
+
+      // $array_res = array();
+      // if( sizeof($array_res) > 1 ) {
+      // foreach($list as $id_category) {
+      // foreach($array_res_tmp as $key => $row) {
+      // if( $row['id_category'] == $id_category ) {
+      // $array_res[] = $row;
+      // unset($array_res_tmp[$key]);
+      // break 1;
+      // }
+      // }
+      // }
+      // } else {
+      // $array_res = $array_res_tmp;
+      // }
+
+      //return $array_res;
+   }
+   
+   static function get_children_of_category($id_category, $category_tree = array() ) {
+   	
+   	if( Framework::is_null($category_tree) ) {
+   		$category_tree = self::get_categorie_tree();
+   	}
+
+   	foreach( $category_tree as $id_category_new => $category_tree_new ) { 
+   		if( $id_category_new == $id_category ) {
+   			return $category_tree_new['all_children'];
+   		} elseif( in_array($id_category, $category_tree_new['all_children']) !== FALSE ) {
+   			return self::get_children_of_category($id_category, $category_tree_new['children']);
+   		}
+   	}
+   	return array();
+   }
+
+   static function get_categories_product_list($id_category, array $filters = array(), array $sort = array()) {
+      global $category_tree;
+      $F = Framework::g_global();
+      $SP = SplitPage::g_global();
+      
+      $where = array('status' => 'ACTIVE');
+
+      
+      if( defined('SHOP_SHOW_PRODUCTS_FROM_SUBCATEGORIES') && constant('SHOP_SHOW_PRODUCTS_FROM_SUBCATEGORIES') == 'true' 
+      		&& $id_category!=0) {
+      	
+      	$children = array_merge(array($id_category), self::get_children_of_category((int)$id_category) );
+      	
+      	if( $F->is_null($children) ) $where['p2c.id_category'] = (int)$id_category;
+			else $where['p2c.id_category'] = array('IN ('.implode(',',$children).')');
+      	
+      } else {
+         if( $id_category != 0 ) $where['p2c.id_category'] = (int)$id_category;
+      }
+
+      
+      if( $F->not_null(self::$Data_Products_params['client_view']) ) {
+      	switch (constant('SHOP_CLIENT_PRICE_MODE')) {
+      		case 'product_with_client_price_only':
+      			$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
+     				p.picture_small_url, p.picture_big_url, p.picture_id, IF( pcp.price>0, pcp.price, p.price) as price, p.vat, p.quantity, p.status
+     				from ' . TBL_SHOP_PRODUCT . ' p join ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' pcp on 
+     				( p.id_product = pcp.id_product and pcp.id_client="' . (int)self::$Data_Products_params['id_client'] . '")
+     				left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+    				 ( p.id_product = p2c.id_product )';
+      			break;
+      		case 'product_with_client_price':
+      		default:
+				$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
+     				p.picture_small_url, p.picture_big_url, p.picture_id, IF( pcp.price>0, pcp.price, p.price) as price, p.vat, p.quantity, p.status
+     				from ' . TBL_SHOP_PRODUCT . ' p left outer join ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' pcp on 
+     				( p.id_product = pcp.id_product and pcp.id_client="' . (int)self::$Data_Products_params['id_client'] . '")
+     				left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+    				 ( p.id_product = p2c.id_product )';
+      			break;
+      	}
+      } else {
+      	$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
+			p.picture_small_url, p.picture_big_url, p.picture_id, p.price as price, p.vat, p.quantity, p.status
+			from ' . TBL_SHOP_PRODUCT . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+			 ( p.id_product = p2c.id_product )';
+      }
+      
+      if( $F->not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
+      
+      if( $F->not_null($order) ) $order_str = ' order by p.name ';
+      else $order_str = ' order by p.name ';
+      
+      $query = $query_pm . $where_str . $order_str;
+
+      $sp_query = $SP->prepare_sql( $query );
+      
+      $res = db_query( $sp_query );
+      return db_result_array($res);
+   }
+
+   static function get_product_image_path( $raw_img ) {
+      $img_arr = explode('/', $raw_img);
+      //FIXME - hack
+      //return '/product_image/' . end($img_arr);
+      return $raw_img;
+   }
+
+   static function change_product_quantity_list( array $product_list ) {
+      $F = Framework::g_global();
+
+      if( $F->not_null($product_list) ) {
+         db_transaction_start();
+         foreach( $product_list as $key => $product_params ) {
+            $insert_query = 'update ' . TBL_SHOP_PRODUCT . ' set
+            quantity = quantity - ' . db_int($details['quantity']) . '
+            where id_product = ' . db_int($product_params['id_product']) . '';
+            //         print_debug($insert_query);
+            db_query( $insert_query );
+         }
+         //      print_debug($basket_params);
+         //      print_debug($basket_contents);
+         $res = db_affected_rows();
+         db_transaction_end();
+      }
+      
+      return $res;
+   }
+
+   static function get_product_info_list( array $product_key_array ) {
+      $F = Framework::g_global();
+
+      if( $F->not_null(self::$Data_Products_params['client_view']) ) {
+         if( defined('SHOP_CLIENT_PRICE_MODE') &&
+               constant('SHOP_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+            $where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
+         } else {
+            $where = ' and (p.id_client = ' . (int)self::$Data_Products_params['id_client'] . ' or p.id_client IS NULL)';
+         }
+         $product_from = self::$Data_Products_params['client_view'];
+      } else {
+         $where = '';
+         $product_from = TBL_SHOP_PRODUCT;
+      }
+ 
+      $product_and_subproducts_array = self::get_product_and_subproducts_from_key_list( $product_key_array );
+      
+      $id_product_array = $product_and_subproducts_array['id_product'];
+      
+      if( Framework::not_null($product_and_subproducts_array) ) {
+         
+         //MYSQL group_concat( column_name )
+         //POSTGRESQL = array_to_string(array_agg( column_name ),',')
+         $query = 'select p.id_product, p.name, p.description, p.producer, p.catalog_index,
+         p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
+         group_concat(p2c.id_category) as id_category_list
+         from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+         ( p.id_product = p2c.id_product )
+         where p.status = "ACTIVE" and
+         p.id_product IN (' . implode(',', $id_product_array) . ') ' . $where . '
+         group by p.id_product';
+         $result = db_query( $query );
+         $product_list_raw = db_result_array( $result );
+
+         $product_subtypes = array();
+         if( defined('TBL_SHOP_PRODUCT_SUBTYPE') && TBL_SHOP_PRODUCT_SUBTYPE=='') {
+            $query_subtype = 'select pst.id_product_subtype, pst.id_product, pst.description,
+            pst.picture_small_url, st.picture_big_url, pst.picture_id, pst.price_diff, pst.status
+            from ' . TBL_SHOP_PRODUCT_SUBTYPE . ' pst
+            where pst.status = "ACTIVE" and
+            pst.id_product IN (' . implode(',', $id_product_array) . ')' .
+            ' order by pst.description';
+            $result_subtype = db_query( $query_subtype );
+            $product_subtype_list = db_result_array_full( $result_subtype );
+         }
+         
+         $product_list = array();
+         foreach( $product_key_array as $key) {
+            $product_param = self::get_product_params_from_key($key);
+            
+            $product_ret  = self::_get_product_data_from_array($product_list_raw, $product_param);
+            
+            if( $F->not_null($product_ret) ) {
+               $product_list[$key] = $product_ret;
+               
+               if( $product_ret['id_product_subtype'] > 0 ) {
+                  $product_subtype = self::_get_product_subtype_data_from_array( $product_subtype_list, $product_ret );
+                  $product_list[$key] = self::_get_merge_info_subtype($product_array[$key], $product_subtype);
+               }
+            } else {
+               continue;
+            }
+         }
+         return $product_list;
+      } else {
+         return array();
+      }
+   }
+
+    static function _get_merge_info_subtype($product_array, $product_subtype) {
+      $F = Framework::g_global();
+      if( !$F->not_null($product_subtype['description']) )
+         $product_array['description'] .= $product_subtype['description'];
+      
+      if( !$F->not_null($product_subtype['picture_small_url']) )
+         $product_array['picture_small_url'] = $product_subtype['picture_small_url'];
+      
+      if( !$F->not_null($product_subtype['picture_big_url']) )
+         $product_array['picture_big_url'] = $product_subtype['picture_big_url'];
+      
+      if( !$F->not_null($product_subtype['picture_id']) )
+         $product_array['picture_id'] = $product_subtype['picture_id'];
+      
+      if( !$F->not_null($product_subtype['price_diff']) )
+         $product_array['price'] += $product_subtype['price_diff'];
+      
+      return $product_array;
+    }
+   
+   
+   static function _get_product_subtype_data_from_array( $product_subtype_list, $product_param ) {
+      foreach( $product_subtype_list as $product_subtype ) {
+         if( (int)$product_subtype['id_product_subtype'] == (int)$product_param['id_product_subtype'] ) {
+            return $product_subtype;
+         }
+      }
+   }
+   
+   static function _get_product_data_from_array( $product_list_raw, $product_param ) {
+      
+      $product_ret = array();
+      foreach( $product_list_raw as $product_info ) {
+         if( (int)$product_info['id_product'] == (int)$product_param['id_product'] ) {
+            $id_product_subtype = isset($product_param['id_product_subtype'])?(int)$product_param['id_product_subtype']:0;
+            $product_ret = array('id_product' => (int)$product_param['id_product'],
+                  'id_product_subtype' => (int)$id_product_subtype,
+                  'name' => $product_info['name'],
+                  'description' => $product_info['description'],
+                  'producer' =>$product_info['producer'],
+                  'catalog_index' => $product_info['catalog_index'],
+                  'picture_small_url' => $product_info['picture_small_url'],
+                  'picture_big_url' => $product_info['picture_big_url'],
+                  'picture_id' => $product_info['picture_id'],
+                  'price' => $product_info['price'],
+                  'vat' => $product_info['vat'],
+                  'quantity' => $product_info['quantity']
+            );
+         }
+      }
+      return $product_ret;
+   }
+
+   static function getProductClientPriceList( $id_product_start = 0, $id_client = 0, $length = 1, $where = '' ) {
+      list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+   
+      $query = 'select pcp.id_product, pcp.id_client, pcp.price, pcp.vat
+      from ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' pcp
+      where pcp.id_client = ' . db_int($id_client) . ' and pcp.id_product ' . $comparision_dir . db_int($id_client) . $where . '
+      ORDER BY pcp.id_client ' . $order_dir . ' LIMIT '. db_int($length);
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_result_array_full($result);
+   }
+
+   static function getClientPriceProductList( $id_client = 0, $id_product_start = 0, $length = 1, $where = '' ) {
+      list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+      
+      $query = 'select pcp.id_product, pcp.id_client, pcp.price, pcp.vat
+      from ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' pcp
+      where pcp.id_client = ' . db_int($id_client) . ' and pcp.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
+      ORDER BY pcp.id_product ' . $order_dir . ' LIMIT '. db_int($length);
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_result_array_full($result);
+   }
+   
+   static function getProductListFromCategory( $id_category = 0, $id_product_start = 0, $length = 1, $where = '' ) {
+      list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+   
+      $query = 'select p.id_product, p.name, p.description, p.producer, p.catalog_index,
+      p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+      from ' . TBL_SHOP_PRODUCT . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY .' p2c on
+      ( p.id_product = p2c.id_product and p2c.id_category = ' . db_int($id_category) . ')
+      where p.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
+      ORDER BY p.id_product ' . $order_dir . ' LIMIT '. db_int($length);
+      $result = db_query( $query );
+      return db_result_array_full($result);
+   }
+     
+   static function getProductList( $id_product_start = 0, $length = 1, $where = '' ) {
+      list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+      
+      $query = 'select p.id_product, p.name, p.description, p.producer, p.catalog_index,
+      p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+      from ' . TBL_SHOP_PRODUCT . ' p
+      where p.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
+      ORDER BY p.id_product ' . $order_dir . ' LIMIT '. db_int($length);
+      $result = db_query( $query );
+      return db_result_array_full($result);
+   }
+
+   static function doCategoryDelete($param_array) {
+
+   	extract( $param_array );
+   
+      $query = 'select "' . db_int($id_category) . '" as id_one,
+          "" as additional_data,
+          b_func_category_delete("' . db_int($id_category) . '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+    
+   static function doCategoryEdit($param_array) {
+
+   	extract( $param_array );
+      
+      $query = 'select "' . db_int($id_category) . '" as id_one,
+          "" as additional_data,
+          b_func_category_change("' . db_int($id_category) . '", "' . db_int($id_category_parent) . '", "' . db_int($sort_order) . '","' . db_int($root_number) . '",
+          "' . db_escape($name). '", "' . db_escape($description). '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+
+   static function doCategoryAdd($param_array) {
+
+   	extract( $param_array );
+   	
+      $query = 'select "' . db_int($id_category) . '" as id_one,
+          "" as additional_data,
+          b_func_category_add("' . db_int($id_category) . '", "' . db_int($id_category_parent) . '", "' . db_int($sort_order) . '","' . db_int($root_number) . '",
+          "' . db_escape($name). '", "' . db_escape($description). '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+
+   static function doCategoryAddOrUpdate($param_array) {
+       
+      extract( $param_array );
+
+      $query = 'select "' . db_int($id_category) . '" as id_one,
+          "" as additional_data,
+          b_func_category_set("' . db_int($id_category) . '", "' . db_int($id_category_parent) . '", "' . db_int($sort_order) . '","' . db_int($root_number) . '",
+          "' . db_escape($name). '", "' . db_escape($description). '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+   
+   static function doProductAdd($param_array) {
+
+   	extract( $param_array );
+   
+      $query = 'select "' . db_int($id_product) . '" as id_one,
+          "" as additional_data,
+          b_func_product_add("' . db_int($id_product) . '", "' . db_escape($name). '", "' . db_escape($description). '",
+          "' . db_escape($producer). '", "' . db_escape($catalog_index). '",
+          "' . db_escape($picture_small_url). '", "' . db_escape($picture_big_url). '", "' . db_escape($picture_id). '",
+          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_escape($quantity) . '", "' . db_escape($status) . '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+
+   static function doProductChange($param_array) {
+
+   	extract( $param_array );
+       
+      $query = 'select "' . db_int($id_product) . '" as id_one,
+          "" as additional_data,
+          b_func_product_change("' . db_int($id_product) . '", "' . db_escape($name). '", "' . db_escape($description). '",
+          "' . db_escape($producer). '", "' . db_escape($catalog_index). '",
+          "' . db_escape($picture_small_url). '", "' . db_escape($picture_big_url). '", "' . db_escape($picture_id). '",
+          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_escape($quantity_salt) . '", "' . db_escape($status) . '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+   
+   static function doProductAddOrUpdate($param_array) {
+
+   	extract( $param_array );
+       
+      $query = 'select "' . db_int($id_product) . '" as id_one,
+          "" as additional_data,
+          b_func_product_set("' . db_int($id_product) . '", "' . db_escape($name). '", "' . db_escape($description). '",
+          "' . db_escape($producer). '", "' . db_escape($catalog_index). '",
+          "' . db_escape($picture_small_url). '", "' . db_escape($picture_big_url). '", "' . db_escape($picture_id). '",
+          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_int($quantity) . '", "' . db_escape($status) . '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+   
+   static function doProductClientPriceClean( $id_client ) {
+//       $query = 'select "' . db_int($id_client) . '" as id_one, "" as additional_data,
+//        b_func_product_client_price_all_del("' . db_int($id_client) . '") as status';
+      $query = 'delete from ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' where id_client = "' . db_int($id_client) . '"';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_affected_rows();
+   }
+   
+   static function setClientProductPriceList( $id_client, $id_product_array) {
+//       $query = 'select "' . db_int($id_product) . '" as id_one, "' . db_int($id_client) . '" as id_two,
+//        "" as additional_data,
+//        b_func_product_client_price_add("' . db_int($id_product) . '", "' . db_int($id_client) . '", "' . db_float($price) . '", "' . db_float($vat) . '") as status';
+      
+      $query_start='insert ignore into  ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' (`id_product`, `id_client`, `price`) values ';
+
+      add_to_fp('setClientProductPriceList');
+      
+      $val_array = array();
+      $count=1;
+      $ins_count=0;
+      $id_client_db = db_int($id_client);
+      foreach( $id_product_array as $prod_val ) {
+         $val_array[] = '(' . db_int($prod_val['id_product']) . ',' . $id_client_db . ',' . db_float($prod_val['price']) . ' )';
+         if( $count%1000 == 0 ) {
+            $query = $query_start . implode(',', $val_array);
+            $val_array = array();
+            
+            add_to_fp($query);
+            $result = db_query( $query );
+            $ins_count += db_affected_rows();
+         }
+      }
+      
+      if( sizeof($val_array) > 0 ) {
+         $query = $query_start . implode(',', $val_array);
+
+         add_to_fp($query);
+         $result = db_query( $query );
+         $ins_count += db_affected_rows();
+      }
+ 
+      return $ins_count;
+   }
+   
+   static function setProductClientPrice( $id_product, $id_client, $price , $vat ) {
+      $query = 'select "' . db_int($id_product) . '" as id_one, "' . db_int($id_client) . '" as id_two,
+       "" as additional_data,
+       b_func_product_client_price_add("' . db_int($id_product) . '", "' . db_int($id_client) . '", "' . db_float($price) . '", "' . db_float($vat) . '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+   
+   static function setProduct2Category( $id_product, $id_category) {
+      $query = 'select "' . db_int($id_product) . '" as id_one, "' . db_int($id_category) . '" as id_two,
+       "" as additional_data,
+       b_func_product_to_category_add("' . db_int($id_product) . '", "' . db_int($id_category) . '") as status';
+      add_to_fp($query);
+      $result = db_query( $query );
+      return db_fetch_array($result);
+   }
+
+   static function getProductAttributeWGroupList( $id_product_start = 0, $length = 0 ) {
+   	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+   	$query = 'select `id_product`, 
+   			`id_attribute`, `attribute_order`, `attribute_name`, `attribute_value`, 
+   			`id_group`, `group_name`, `group_order`
+         	from ' . TBL_SHOP_PRODUCT_ATTRIBUTES_W_GROUP . ' pa
+		where pa.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
+      ORDER BY pa.id_product ' . $order_dir . ' LIMIT ' . db_int($length);
+   	add_to_fp('$query ' . $query);
+   	$result = db_query( $query );
+   	echo '1111';
+   	return db_result_array_full($result);
+   }
+    
+   static function doProductAttributeWGroupAddOrUpdate( $param ) {
+   	 
+   	$query_prod = 'select id_product from ' . TBL_SHOP_PRODUCT . ' where id_product = "' . db_int($param['id_product']) . '"';
+   	$result_prod = db_query( $query_prod );
+   	if( db_rows($result_prod) == 0 ) return array_merge($param, array('status' => 'ERROR,PRODUCT_DONT_EXIST'));
+   
+   	$query = 'INSERT INTO ' . TBL_SHOP_PRODUCT_ATTRIBUTES_W_GROUP . ' (`id_product`, `id_attribute`,
+   			`attribute_order`, `attribute_name`, `attribute_value`, 
+   			`id_group`, `group_name`, `group_order`)
+   			VALUES ("' . db_int($param['id_product']) . '", "' . db_int($param['id_attribute']) . '",
+   					"' . db_int($param['attribute_order']) . '", "' . db_escape($param['attribute_name']) . '",
+   					"' . db_escape($param['attribute_value']) . '",
+   					"' . db_escape($param['id_group']) . '", "' . db_escape($param['group_name']) . '",
+   				   "' . db_int($param['group_order']) . '")
+   					ON DUPLICATE KEY UPDATE `attribute_value` = "' . db_escape($param['attribute_value']) . '", 
+   					`attribute_order` = "' . db_int($param['attribute_order']) . '", 
+   					`group_order` = "' . db_int($param['group_order']) . '"';
+   	
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	$ar = db_affected_rows( $result );
+   	 
+   	if( $ar == 1 ) return array_merge($param, array('status' => 'SUCCESS,NEW'));
+   	elseif( $ar == 2 ) return array_merge($param, array('status' => 'SUCCESS,EXIST'));
+   	else return array_merge($param, array('status' => 'ERROR,UNKNOWN'));
+   }
+
+   static function getShopProductAttributeList( $id_product_start = 0, $length = 0 ) {
+   	list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+   	$query = 'select `id_product`, `type`, `val`
+         	from ' . TBL_SHOP_PRODUCT_ATTRIBUTES . ' pa
+		where pa.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
+      ORDER BY pa.id_product ' . $order_dir . ' LIMIT ' . db_int($length);
+   	add_to_fp('$query ' . $query);
+   	$result = db_query( $query );
+   	return db_result_array_full($result);
+   }
+   
+   static function doProductAttributeAddOrUpdate( $param ) {
+   	 
+   	$query_prod = 'select id_product from ' . TBL_SHOP_PRODUCT . ' where id_product = "' . db_int($param['id_product']) . '"';
+   	$result_prod = db_query( $query_prod ); 	
+   	if( db_rows($result_prod) == 0 ) return array_merge($param, array('status' => 'ERROR,PRODUCT_DONT_EXIST'));
+   	
+   	$query = 'INSERT INTO ' . TBL_SHOP_PRODUCT_ATTRIBUTES . ' (`id_product`, `type`, `val`)
+   			VALUES ("' . db_int($param['id_product']) . '", "' . db_escape($param['type']) . '",
+   					  "' . db_escape($param['val']) . '")
+   					ON DUPLICATE KEY UPDATE `val` = "' . db_escape($param['val']) . '"';
+   	 
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	$ar = db_affected_rows( $result );
+   	 
+   	if( $ar == 1 ) return array_merge($param, array('status' => 'SUCCESS,NEW'));
+   	elseif( $ar == 2 ) return array_merge($param, array('status' => 'SUCCESS,EXIST'));
+   	else return array_merge($param, array('status' => 'ERROR,UNKNOWN'));
+   }
+
+   static function get_product_search( $length = 1, $where = '' ) {
+      ///list($length, $comparision_dir, $order_dir) = Data::_length_dir($length);
+       
+      $query = 'select p.id_product, p.name, p.description, p.producer, p.catalog_index, p.picture_small_url,
+      p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+      from ' . TBL_SHOP_PRODUCT . ' p
+      where p.id_product ' . $comparision_dir . db_int($id_product_start) . $where . '
+      ORDER BY p.id_product ' . $order_dir . ' LIMIT ' . db_int($length);
+      $result = db_query( $query );
+
+      return db_result_array_full($result);
+   }
+   
+   static function get_product_image_type( $product_info ) {
+      $image_type = array('small_image_path' => false, 'big_image_path' => false);
+      
+      if( class_exists('Data_Picture') &&
+            Framework::not_null($product_info['picture_id']) &&
+            Data::check_picture_exist((int)$product_info['picture_id']) ) {
+      
+         $image_type['small_image_path'] = Data::get_picture_id_link($product_info['picture_id'], 'SMALL');
+         //$image_type['small_image_path'] = Framework::image_db(($product_info['picture_id']), 'SMALL', $product_info['name']);
+         $image_type['big_image_path'] = Data::get_picture_id_link($product_info['picture_id'], 'NORMAL');
+         
+      } elseif( Framework::not_null( $product_info['picture_small_url'] ) ) {
+         $image_type['small_image_path'] = Data::get_product_image_path( $product_info['picture_small_url'] );
+         $image_type['big_image_path'] = Data::get_product_image_path( $product_info['picture_big_url'] );
+      } else {
+         $image_type = false;
+      }
+      return $image_type;
+   }
+   
+   static function get_product_info( $id_product = 0 ) {
+      $F = Framework::g_global();
+      
+      if( $F->not_null(self::$Data_Products_params['client_view']) ) {
+         switch (constant('SHOP_CLIENT_PRICE_MODE')) {
+         	case 'product_with_client_price_only':
+         		$where = ' and p.id_client = ' . (int)self::$Data_Products_params['id_client'];
+         		$product_from = self::$Data_Products_params['client_view'];
+         		break;
+         	case 'product_with_client_price':
+         		$where = ' and (p.id_client = ' . (int)self::$Data_Products_params['id_client'] . ' or p.id_client IS NULL)';
+         		$product_from = self::$Data_Products_params['client_view'];
+         		break;
+         	default:
+        			$where = '';
+         		$product_from = TBL_SHOP_PRODUCT;
+         }
+      } else {
+         $where = '';
+         $product_from = TBL_SHOP_PRODUCT;
+      }
+
+      //MYSQL group_concat( column_name )
+      //POSTGRESQL = array_to_string(array_agg( column_name ),',')
+      $query = 'select p.id_product, p.name, p.description, p.producer, p.catalog_index,
+      p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status,
+      group_concat(p2c.id_category) as id_category_list
+      from ' . $product_from . ' p left join ' . TBL_SHOP_PRODUCT_TO_CATEGORY . ' p2c on
+      ( p.id_product = p2c.id_product )
+      where p.id_product = ' . (int)$id_product . $where . ' group by p.id_product';
+
+      $result = db_query( $query );     
+      if( db_rows($result) == 0 ) return false;
+      $product_info = db_fetch_array( $result );
+      $product_info['subtype'] = array();
+      
+      if( defined('TBL_SHOP_PRODUCT_SUBTYPE') && TBL_SHOP_PRODUCT_SUBTYPE!='') {
+      	$product_info['subtype'] = Data_Product::get_product_subtype_info( (int)$id_product );
+      }
+      
+      if( defined('TBL_SHOP_PRODUCT_ATTRIBUTES') && TBL_SHOP_PRODUCT_ATTRIBUTES!='') {
+      	$product_info['attribute'] = Data_Product::get_product_attributes_info( (int)$id_product );
+      }
+      
+      if( defined('TBL_SHOP_PRODUCT_ATTRIBUTES_W_GROUP') && TBL_SHOP_PRODUCT_ATTRIBUTES_W_GROUP!='') {
+      	$product_info['attribute_group'] = Data_Product::get_product_attribute_group_info( (int)$id_product );
+      }
+      
+      return $product_info;
+   }
+
+   static function get_product_attribute_group_info( $id_product = 0 ) {
+   	$F = Framework::g_global();
+   	$product_attributes = array();
+   	
+   	$query_attributes = 'select pag.id_product, pag.id_attribute, 
+   			pag.attribute_name, pag.attribute_value, pag.attribute_order,
+   			pag.id_group, pag.group_name, pag.group_order
+         from ' . TBL_SHOP_PRODUCT_ATTRIBUTES_W_GROUP . ' pag where
+         pag.id_product = ' . (int)$id_product . ' order by pag.id_group, pag.id_attribute';
+   	$result_attributes = db_query( $query_attributes );
+   	$product_attributes = db_result_array_full( $result_attributes );
+   	
+   	$group = array();
+   	$group_order = array();
+   	
+   	foreach( $product_attributes as $attribute ) {
+   		if( !isset($group[$attribute['id_group']]) ) {
+   			$group[$attribute['id_group']] = array(
+   				'id_group' => $attribute['id_group'],
+   				'group_name' => $attribute['group_name'],
+   				'group_order' => $attribute['group_order'],
+   				'attribute' => array()
+   			);
+   			$group_order[$attribute['id_group']] = $attribute['group_order'];
+   		} 
+   	}
+   	
+   	print_debug($group_order);
+   	
+   	$group_tmp = $group;
+   	$attribute_order = array();
+   	
+   	foreach( $group_tmp as $id_group => $group_tmp2 ) {
+   		foreach( $product_attributes as $attribute ) {
+   			if( $id_group == $attribute['id_group'] ) {
+   				$group[$id_group]['attribute'][$attribute['id_attribute']] = array(
+   						'id_attribute' => $attribute['id_attribute'],
+   						'attribute_name' => $attribute['attribute_name'],
+   						'attribute_value' => $attribute['attribute_value'],
+   						'attribute_order' => $attribute['attribute_order']
+   				);
+   				$attribute_order[$id_group][$attribute['id_attribute']] = $attribute['attribute_order'];
+   			}
+   		}
+   	}
+
+   	$group_tmp = $group;
+   	foreach( $group_tmp as $id_group => $group_tmp2 ) {
+   		$attribute = $group_tmp2['attribute'];
+   		//array_multisort( $attribute_order[$id_group], SORT_ASC, $attribute);
+   		uasort($attribute, function ($a, $b) { return $a['attribute_order'] - $b['attribute_order']; });
+   		$group[$id_group]['attribute']=$attribute;
+   	}
+
+   	uasort($group, function ($a, $b) { return $a['group_order'] - $b['group_order']; });
+   	//array_multisort($group_order, SORT_ASC, $group);
+   	
+   	return $group;
+   }
+   
+   static function get_product_attributes_info( $id_product = 0 ) {
+      $F = Framework::g_global();
+      $product_attributes = array();
+      
+      $query_attributes = 'select pa.id_product, pa.type, pa.val
+         from ' . TBL_SHOP_PRODUCT_ATTRIBUTES . ' pa where 
+         pa.id_product = ' . (int)$id_product . ' order by pa.type';
+      $result_attributes = db_query( $query_attributes );
+      $product_attributes_tmp = db_result_array_full( $result_attributes );
+      foreach( $product_attributes_tmp as $attribute ) {
+      	$product_attributes[$attribute['type']] = $attribute['val'];
+      }
+      return $product_attributes;
+   }
+   
+   static function get_product_subtype_info( $id_product = 0 ) {
+      $F = Framework::g_global();
+      $product_subtypes = array();
+      
+      $query_subtypes = 'select pst.id_product_subtype, pst.id_product, pst.description,
+         pst.picture_small_url, pst.picture_big_url, pst.picture_id, pst.price_diff, pst.status
+         from ' . TBL_SHOP_PRODUCT_SUBTYPE . ' pst where pst.status = "ACTIVE" and
+         pst.id_product = ' . (int)$id_product . ' order by pst.description';
+      $result_subtypes = db_query( $query_subtypes );
+      $product_subtypes = db_result_array_full_id( $result_subtypes );
+      return $product_subtypes;
+   }
+   
+   static function get_search_product_list(array $filters = array(), array $sort = array()) {
+      global $category_tree;
+      $F = Framework::g_global();
+      $SP = SplitPage::g_global();
+
+      if( false && SHOW_PRODUCTS_FROM_SUBCATEGORIES == 'true' ) {
+         // TODO
+         // Show products from subcategories
+      } else {
+         $where = $filters;
+         $where['p.status'] = 'ACTIVE';
+
+         if( $F->not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
+
+         if( $F->not_null(self::$Data_Products_params['client_view']) ) {
+         	switch (constant('SHOP_CLIENT_PRICE_MODE')) {
+         		case 'product_with_client_price_only':
+         			$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
+         				p.picture_small_url, p.picture_big_url, p.picture_id, pcp.price, p.vat, p.quantity, p.status
+				   		from `shop_product`  `p` join `shop_product_client_price` `pcp` 
+         				on (`p`.`id_product` = `pcp`.`id_product` AND pcp.id_client="' . (int)self::$Data_Products_params['id_client'] . '")';
+         			break;
+         		case 'product_with_client_price':
+         			$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
+         				p.picture_small_url, p.picture_big_url, p.picture_id, IFNULL( pcp.price, p.price) as price, p.vat, p.quantity, p.status
+				   		from `shop_product`  `p` left outer join `shop_product_client_price` `pcp` 
+         				on (`p`.`id_product` = `pcp`.`id_product` AND ( 
+         					pcp.id_client="' . (int)self::$Data_Products_params['id_client'] . '" OR pcp.id_client IS NULL ))';
+         			break;
+         		default:
+         			$query_pm = 'select distinct p.id_product, p.name, p.description, p.producer, p.catalog_index,
+        					p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+		      			FROM `shop_product` `p`';
+         			break;
+         	}
+         } else {
+         	$query_pm = 'select distinct p.id_product, p.name, p.description,  p.producer, p.catalog_index,
+        			p.picture_small_url, p.picture_big_url, p.picture_id, p.price, p.vat, p.quantity, p.status
+		      	FROM `shop_product` `p`';
+         }       
+
+         if( $F->not_null($order) ) $order_str = ' order by p.name ';
+         else $order_str = ' order by p.name ';
+         
+         $query = $query_pm . $where_str . $order_str;   
+         
+         $sp_query = $SP->prepare_sql( $query );
+      }
+      $res = db_query( $sp_query );
+      return db_result_array($res);
+   }
+   
+   //FIXME - implements proper filters
+   static function get_categories_list( array $filters ) {
+      $F = Framework::g_global();
+
+
+      $where = array();
+      
+      $product_from = TBL_SHOP_PRODUCT;      
+      
+      if( defined('SHOP_CLIENT_PRICE_MODE') &&  constant('SHOP_CLIENT_PRICE_MODE') == 'show_with_set_price_only_with') {
+      	$query_pm = 'SELECT p2c.id_category, p2c.id_product
+				   FROM `shop_product_to_category` `p2c` JOIN 
+				   `shop_product`  `p` ON (`p2c`.`id_product` = `p`.`id_product` AND p.status = "ACTIVE") JOIN
+				   `shop_product_client_price` `pcp` on (`p`.`id_product` = `pcp`.`id_product` AND pcp.id_client="' . (int)self::$Data_Products_params['id_client'] . '")';
+      } else {
+      	$query_pm = 'SELECT p2c.id_category, p2c.id_product
+		      	FROM `shop_product_to_category` `p2c` JOIN
+		      	`shop_product`  `p` ON (`p2c`.`id_product` = `p`.`id_product` AND p.status = "ACTIVE")';
+      }
+      
+      $where_root_number = '';
+      if( self::$root_number ) {
+         $where_root_number = ' where c.root_number = ' . db_int(self::$root_number);
+      }
+
+      //TODO p.quantity options
+      //AND p.quantity > 0
+
+      $query = 'SELECT c.id_category, c.name, c.description, c.id_category_parent,
+      COUNT(distinct p2c.id_product) AS products_in_category, c.sort_order,
+      GROUP_CONCAT(distinct p2c.id_product) AS ids_products_in_category
+   	  FROM ' . TBL_SHOP_CATEGORY . ' c LEFT OUTER JOIN (' . $query_pm . ') p2c
+   	  ON (c.id_category = p2c.id_category) ' . $where_root_number . '
+   	  GROUP BY c.id_category, c.name, c.description, c.id_category_parent, c.sort_order
+     	ORDER BY c.sort_order, c.name';
+
+      $res = db_query( $query );
+      return db_result_array($res);
+   }
+
+   static function get_categorie_tree( $filters = array(), $purge_empty = false ) {
+      $category_list = self::get_categories_list($filters);
+      $category_tree = self::__categories_make_tree($category_list);
+
+      //if( $purge_empty )
+      return $category_tree;
+
+   }
+   
+   static function get_product_and_subproducts_from_key_list( $product_key_array ) {
+      $product_and_subproducts_array = array(
+            'id_product' => array(),
+            'id_product_subtype' => array(),
+            'subtype2product' => array(),
+             );
+      foreach( $product_key_array  as $product_key ) {
+         $product_params = self::get_product_params_from_key( $product_key );
+
+         if( !array_search($product_params['id_product'], $product_and_subproducts_array['id_product']) ) {
+            $product_and_subproducts_array['id_product'][] = $product_params['id_product'];
+         }
+         if( isset($product_params['id_product_subtype'])  ) {
+            $product_and_subproducts_array['subtype2product'][$product_params['id_product_subtype']] = $product_params['id_product'];
+            if( !array_search($product_params['id_product_subtype'], $product_and_subproducts_array['id_product_subtype']) ) {
+               $product_and_subproducts_array['id_product_subtype'][] = $product_params['id_product_subtype'];
+            }
+         }
+      }
+
+      return $product_and_subproducts_array;
+   }
+    
+   static function get_key_from_product_params( $product_params ) {
+      $key = $product_params['id_product'] .
+      (((int)$product_params['id_product_subtype']>0)?'_' . (int)$product_params['id_product_subtype']:'');
+      return $key;
+   }
+    
+   static function get_product_params_from_key( $key ) {
+      $product_params = array('id_product' => 0, 'id_product_subtype' => 0);
+      $res = explode('_', $key);
+      $product_params['id_product'] = (int)$res['0'];
+      if( isset($res['1']) ) $product_params['id_product_subtype'] = (int)$res['1'];
+      return $product_params;
+   }
+   
+   private static function __categories_purge_empty ($id_category_parent, $local_tree) {
+      $tree = array();
+
+      foreach($local_tree as $key => $categories) {
+         if( $id_category_parent == $categories['id_category_parent'] ) {
+            if($categories['products_in_category'] > 0 ||
+                  (is_array($categories['children']) && sizeof($categories['children'])>0) ) {
+               $tree[$key] = $categories;
+               if( is_array($categories['children']) )
+                  $tree[$key]['children'] =  __categories_purge_empty($id_category_parent, $categories['children']);
+            } else {
+               $category_purged = true;
+            }
+         }
+      }
+      return $tree;
+   }
+
+   private static function __categories_make_tree ($category_list, $level = 0, $id_category_parent = 0, $path = '') {
+		$F = Framework::g_global();
+   	
+      if( $id_category_parent > 0 ) {
+         $path .= $id_category_parent . '_';
+      }
+      
+      $tree = array();
+
+      foreach($category_list as $category) {
+      	if( $category['id_category'] == 0 ) continue;
+      	
+      	if ( empty($category['ids_products_in_category']) ) $category['ids_products_in_category'] = array(); 
+      	elseif( !is_array($category['ids_products_in_category']) )
+      			$category['ids_products_in_category'] = explode(',', $category['ids_products_in_category']);
+      		
+      	$ids_products_in_sub_categories = array();
+      	
+         if( $id_category_parent == $category['id_category_parent'] ) {
+            $products_in_subcategories = 0;
+            
+            $children = self::__categories_make_tree($category_list, ($level+1), $category['id_category'], $path);
+            $all_children = array_keys($children);
+            foreach($all_children as $children_keys) {
+            	foreach( $children[$children_keys]['all_children'] as $key_chl ) {
+            		$all_children[] = $key_chl;
+            	}
+            	//$all_children = array_unique($all_children);
+               //$all_children = array_unique(array_merge($all_children, $children[$children_keys]['children'] ));
+              // $products_in_subcategories += $children[$children_keys]['products_in_category'] + $children[$children_keys]['products_in_subcategories'];
+               $ids_products_in_sub_categories = array_values( array_unique( array_merge(
+               		$ids_products_in_sub_categories,
+               		$children[$children_keys]['ids_products_in_category'],
+               		$children[$children_keys]['ids_products_in_sub_categories']
+      					) ) );
+            }
+             
+            $tree[$category['id_category']] = array('name' => $category['name'],
+                  'name_long' => $category['description'],
+                  'parent' => $category['id_category_parent'],
+                  'level' => $level,
+                  'all_children' => $all_children,
+                  'products_in_subcategories' => 
+            			(($F->not_null($ids_products_in_sub_categories))?sizeof($ids_products_in_sub_categories):0),
+                  'products_in_category' => $category['products_in_category'],
+            		'ids_products_in_category' => $category['ids_products_in_category'],
+            		'ids_products_in_sub_categories' => $ids_products_in_sub_categories,
+            		'path' => $path . $category['id_category'],
+                  'children' => $children);
+         }
+      }
+      
+      return $tree;
+   }
+
+
+}
+
+?>

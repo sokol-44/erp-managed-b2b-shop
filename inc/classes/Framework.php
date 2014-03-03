@@ -110,7 +110,13 @@ class Framework extends Framework_Data {
 
       $parameters_array = array();
       foreach($parameters_array_raw as $key => $val ) {
-         $parameters_array[] = urlencode($key) . '=' . urlencode($val);
+      	if( is_array($val) ) {
+      		foreach($val as $key2 => $val2) {
+      			$parameters_array[] = urlencode($key.'['.$key2.']') . '=' . urlencode($val2);
+      		} 
+      	} else {
+         	$parameters_array[] = urlencode($key) . '=' . urlencode($val);
+      	}
       }
 
 

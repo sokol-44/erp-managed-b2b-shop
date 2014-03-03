@@ -473,13 +473,24 @@ class ShopAttributeData extends BasicSOAPDataMethods {
 	public $list_update = array('type', 'val');
 }
 
-class ShopProductAttributeData extends BasicSOAPDataMethods {
+class ProductAttributeData extends BasicSOAPDataMethods {
 	public $list = array('id_product', 'type', 'val');
 	public $list_type = array('id_product' => 'INT+', 'type' => 'TEXT', 'val' => 'TEXT');
 	public $list_new = array('id_product', 'type', 'val');
 	public $list_update = array('id_product', 'type', 'val');
 }
 
+class ProductAttributeWGroupData extends BasicSOAPDataMethods {
+	public $list = array('id_product', 'id_attribute', 'attribute_name', 'attribute_value', 'attribute_order',
+				'id_group', 'group_name', 'group_order');
+	public $list_type = array('id_product' => 'INT+', 'id_group' => 'INT', 'id_attribute' => 'INT',
+				'attribute_name' => 'TEXT', 'attribute_value' => 'TEXT', 'attribute_order' => 'INT',
+				'group_name' => 'TEXT', 'group_order' => 'TEXT',);
+	public $list_new =  array('id_product', 'id_attribute', 'attribute_name', 'attribute_value', 'attribute_order',
+				'id_group', 'group_name', 'group_order');
+	public $list_update =  array('id_product', 'id_attribute', 'attribute_name', 'attribute_value', 'attribute_order',
+				'id_group', 'group_name', 'group_order');
+}
 
 /// UPS seller 
 class RomiUPSData extends BasicSOAPDataMethods {

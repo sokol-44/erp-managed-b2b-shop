@@ -20,7 +20,7 @@ class Data_Picture extends Data_Article {
    static $Data_Picture_params = array();
    
    function __construct() {
-   	//echo 'Data_Contact';
+		//echo get_class();
    	parent::__construct();
    }
    

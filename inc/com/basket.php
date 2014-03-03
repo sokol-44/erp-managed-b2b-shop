@@ -39,6 +39,27 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
          $F->redirect( $F->make_link(CFG_COM_BASKET, $F->make_get('mode')));
       }
       switch($F->GET['mode']) {
+         case 'add_to_basket_multiple':
+         	if( $F->check_get('ids_pq') && is_array($F->GET['ids_pq']) ) {
+         		foreach($ids_pq as $product_key => $sb_q ) {
+         			if( is_array($sb_q) ) {
+         				 $product_params = array(
+				            'id_product' => (int)$product_key,
+				            'id_product_subtype' => 
+         				 		((isset($sb_q['id_product_subtype']) && (int)$sb_q['id_product_subtype'] > 1 )?
+         				 		(int)$sb_q['id_product_subtype']:0)
+					      );
+         				 if( isset($sb_q['quantity']) && (int)$sb_q['quantity'] > 1 ) $quantity = (int)$sb_q['quantity'];
+         				 else $quantity = 1;
+         			} else {
+         				$product_params = Data::get_product_params_from_key($product_key);
+         				if( (int)$sb_q > 1 ) $quantity = (int)$sb_q;
+         				else $quantity = 1;
+         			}
+         			$Shopping_Basket->add_to_basket( $product_params, $quantity );
+         		}
+         	} 
+            break;
          case 'add_to_basket':
             if( $F->check_get('quantity') && (int)$F->GET['quantity'] > 1 ) $quantity = (int)$F->GET['quantity'];
             else $quantity = 1;

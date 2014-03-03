@@ -33,7 +33,7 @@ class Data_Order extends Data_Shop {
 			);
 	
    function __construct() {
-      //echo 'Data_Order';
+		//echo get_class();
       parent::__construct();
 
    }

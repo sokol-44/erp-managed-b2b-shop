@@ -250,7 +250,10 @@ if( $F->not_null($load_result) ) {
 ?>
 <hr>
 <div class="search_container search_result">
-<?php //print_debug($query) ?>
+<?php //print_debug($query) 
+
+
+?>
 <div class="account_address_container container_subheader">Wynik<div class="icon"></div></div>
 <!-- Wymagana moc: <?php echo round($need_power/$wm_sf,2); ?> [kVA]<br><br>-->
 <table class="tableBox" style="border: 0">
@@ -272,6 +275,16 @@ if( $F->not_null($load_result) ) {
 		
 		if( $product['time'] < $need_time ) $time_txt = '<span style="color: red">'.(int)$product['time'].'</span>';
 		else $time_txt = '<span style="color: black">'.(int)$product['time'].'</span>';
+		
+		
+		/*
+		$g = array('a' => 'b', 'c' => array('qq' => 'q1', 'ww'));
+		
+		$add_basket_link = $F->make_link(CFG_COM_BASKET, $g);
+		$add_basket_link = $F->draw_link($add_basket_link, 'title="' . Lang::_('show BASKET') . '"', Lang::_('show BASKET'), Lang::_('show BASKET'));
+		
+		echo $add_basket_link;
+		*/
 	?>
 	<tr>
 		<td valign="top" width="20%"><?php echo $product['model'].'<br>&nbsp;<small><i>'.$product['maker']."</i>"?></td>

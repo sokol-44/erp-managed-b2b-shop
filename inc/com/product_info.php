@@ -3,8 +3,7 @@ $GET_tmp = $F->make_get();
 
 $id_product = (int)$F->GET['id_product'];
 
-$product_info = Data::get_product_info( $id_product );
-
+$product_info = Product::get_product_info( $id_product );
 
 $image_type = Data::get_product_image_type($product_info);
 $small_image_html='';

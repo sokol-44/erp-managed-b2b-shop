@@ -1396,9 +1396,57 @@ class Soap_Server_worker {
    	return($response);
    }   
    
+   function getProductAttributeWGroupList( $input ) {//ParamStartLength, ClientData
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = true;
+
+   	$ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
+   	 
+   	if( is_object($ParamStartLength) ) {
+   		if( !$ParamStartLength->is_error() ) {
+   			$param_array = $ParamStartLength->return_array();
+   			//add_to_fp('$param_array:'. print_r($param_array, true) );
+   			$res_array = Data::getProductAttributeWGroupList((int)$param_array['id_start'], (int)$param_array['length']);
+   			$response = $this->_addArrayValues($res_array);
+   		} else {
+   			$response = $this->getReturnError('getProductAttributeWGroupList', $input, $ParamStartLength->return_error() );
+   		}
+   	} else {
+   		$response = $this->getReturnError('getProductAttributeWGroupList', $input, 'WRONG CLASS');
+   	}
+   	 
+   	return($response);
+   }
+   
+   function doProductAttributeWGroupAddOrUpdate( $input ) {//ParamStartLength, ClientData
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = false;
+   	 
+   	add_to_fp('-------- doProductAttributeWGroupAddOrUpdate');
+   	 
+   	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+   		$response_tmp = array();
+   		foreach($input['values'] as $key => $val) {
+   			$SingleValueClass = new ProductAttributeWGroupData($val, $this->input_data_type);
+   			if( !$SingleValueClass->is_error() ) {
+   				$param_array = $SingleValueClass->return_array();
+   				add_to_fp('$param_array:'. print_r($param_array, true) );
+   				$response_tmp[] = Data::doProductAttributeWGroupAddOrUpdate($param_array);
+   			} else {
+   				$response_tmp[] = $this->getReturnError('doProductAttributeWGroupAddOrUpdate', $val, $SingleValueClass->return_error(), false);
+   			}
+   		}
+   		add_to_fp(print_r($response_tmp, true));
+   		$response = $this->_addArrayValues($response_tmp);
+   	} else {
+   		$response = $this->getReturnError('doProductAttributeWGroupAddOrUpdate', '', 'EMPTY_LIST');
+   	}
+   	 
+   	return($response);
+   }
 
 
-   function getShopProductAttributeList( $input ) {//ParamStartLength, ClientData
+   function getProductAttributeList( $input ) {//ParamStartLength, ClientData
    	$this->input_data_type = 'NEW';
    	$this->SingleParam_MultipleReturns = true;
    	 
@@ -1420,28 +1468,28 @@ class Soap_Server_worker {
    	return($response);
    }
     
-   function doShopProductAttributeAddOrUpdate( $input ) {//ParamStartLength, ClientData
+   function doProductAttributeAddOrUpdate( $input ) {//ParamStartLength, ClientData
    	$this->input_data_type = 'NEW';
    	$this->SingleParam_MultipleReturns = false;
    	 
-   	add_to_fp('-------- doShopProductAttributeAddOrUpdate');
+   	add_to_fp('-------- doProductAttributeAddOrUpdate');
    	 
    	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
    		$response_tmp = array();
    		foreach($input['values'] as $key => $val) {
-   			$SingleValueClass = new ShopProductAttributeData($val, $this->input_data_type);
+   			$SingleValueClass = new ProductAttributeData($val, $this->input_data_type);
    			if( !$SingleValueClass->is_error() ) {
    				$param_array = $SingleValueClass->return_array();
    				add_to_fp('$param_array:'. print_r($param_array, true) );
-   				$response_tmp[] = Data::doShopProductAttributeAddOrUpdate($param_array);
+   				$response_tmp[] = Data::doProductAttributeAddOrUpdate($param_array);
    			} else {
-   				$response_tmp[] = $this->getReturnError('doShopProductAttributeAddOrUpdate', $val, $SingleValueClass->return_error(), false);
+   				$response_tmp[] = $this->getReturnError('doProductAttributeAddOrUpdate', $val, $SingleValueClass->return_error(), false);
    			}
    		}
    		add_to_fp(print_r($response_tmp, true));
    		$response = $this->_addArrayValues($response_tmp);
    	} else {
-   		$response = $this->getReturnError('doShopProductAttributeAddOrUpdate', '', 'EMPTY_LIST');
+   		$response = $this->getReturnError('doProductAttributeAddOrUpdate', '', 'EMPTY_LIST');
    	}
    	 
    	return($response);
