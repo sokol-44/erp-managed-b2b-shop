@@ -442,6 +442,38 @@ class Data_Product extends Data_Basket {
       return db_fetch_array($result);
    }
 
+   static function doProductSubtypeAddOrUpdate($param_array) {
+   	trigger_error('Not implemented ' . __METHOD__, E_USER_ERROR);
+   }
+   
+   static function doProductCleanStart($param_array) {
+   	$id_product = (int)$param_array['id_product'];
+   	$res = array();
+   	
+   	$del_cat = "delete from " . TBL_SHOP_PRODUCT_TO_CATEGORY . ' where id_product = ' . $id_product;
+   	$del_price = "delete from " . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' where id_product = ' . $id_product;
+   	$del_attr = "delete from " . TBL_SHOP_PRODUCT_ATTRIBUTES . ' where id_product = ' . $id_product;
+   	$del_attr_wg = "delete from " . TBL_SHOP_PRODUCT_ATTRIBUTES_W_GROUP . ' where id_product = ' . $id_product;
+   	
+   	db_transaction_start();
+   	db_query($del_cat);
+   	$res[] = 'CATEGORY:'.db_affected_rows();
+   	db_query($del_price);
+   	$res[] = 'PRICE:'.db_affected_rows();
+   	db_query($del_attr);
+   	$res[] = 'ATTRIBUTE:'.db_affected_rows();
+   	db_query($del_attr_wg);
+   	$res[] = 'ATTRIBUTE_W_GROUP:'.db_affected_rows();
+   	return implode(';', $res);
+   }   
+
+   static function doProductCleanStop($param_array) {
+   
+   	db_transaction_end();
+   	return true;
+   }   
+   
+   
    static function doProductChange($param_array) {
 
    	extract( $param_array );
@@ -517,10 +549,10 @@ class Data_Product extends Data_Basket {
       return $ins_count;
    }
    
-   static function setProductClientPrice( $id_product, $id_client, $price , $vat ) {
+   static function setProductClientPrice( $id_product, $id_client, $price) {
       $query = 'select "' . db_int($id_product) . '" as id_one, "' . db_int($id_client) . '" as id_two,
        "" as additional_data,
-       b_func_product_client_price_add("' . db_int($id_product) . '", "' . db_int($id_client) . '", "' . db_float($price) . '", "' . db_float($vat) . '") as status';
+       b_func_product_client_price_add("' . db_int($id_product) . '", "' . db_int($id_client) . '", "' . db_float($price) . '") as status';
       add_to_fp($query);
       $result = db_query( $query );
       return db_fetch_array($result);

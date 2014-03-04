@@ -350,17 +350,35 @@
 	<wsdl:message name="Response">
 		<wsdl:part name="Response" type="xsd:string"></wsdl:part>
 	</wsdl:message>
-	<wsdl:message name="doShopProductAttributeAddOrUpdateRequest">
-		<wsdl:part name="doShopProductAttributeAddOrUpdateRequest" type="xsd:string"></wsdl:part>
+	<wsdl:message name="doProductAttributeAddOrUpdateRequest">
+		<wsdl:part name="doProductAttributeAddOrUpdateRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
-	<wsdl:message name="doShopProductAttributeAddOrUpdateResponse">
-		<wsdl:part name="doShopProductAttributeAddOrUpdateResponse" type="xsd:string"></wsdl:part>
+	<wsdl:message name="doProductAttributeAddOrUpdateResponse">
+		<wsdl:part name="doProductAttributeAddOrUpdateResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
-	<wsdl:message name="getShopProductAttributeListRequest">
-		<wsdl:part name="getShopProductAttributeListRequest" type="xsd:string"></wsdl:part>
+	<wsdl:message name="getProductAttributeListRequest">
+		<wsdl:part name="getProductAttributeListRequest" type="xsd:string"></wsdl:part>
 	</wsdl:message>
-	<wsdl:message name="getShopProductAttributeListResponse">
-		<wsdl:part name="getShopProductAttributeListResponse" type="xsd:string"></wsdl:part>
+	<wsdl:message name="getProductAttributeListResponse">
+		<wsdl:part name="getProductAttributeListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProductAttributeWGroupListRequest">
+		<wsdl:part name="getProductAttributeWGroupListRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="getProductAttributeWGroupListResponse">
+		<wsdl:part name="getProductAttributeWGroupListResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doProductAttributeWGroupAddOrUpdateRequest">
+		<wsdl:part name="doProductAttributeWGroupAddOrUpdateRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doProductAttributeWGroupAddOrUpdateResponse">
+		<wsdl:part name="doProductAttributeWGroupAddOrUpdateResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doProductCleanAddOrUpdateRequest">
+		<wsdl:part name="doProductCleanAddOrUpdateRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doProductCleanAddOrUpdateResponse">
+		<wsdl:part name="doProductCleanAddOrUpdateResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
@@ -802,21 +820,41 @@
 							<wsdl:output
 								message="tns:doClientUserNewIdUpdateListResponse">
 							</wsdl:output>
-						</wsdl:operation>						<wsdl:operation name="doShopProductAttributeAddOrUpdate">							<wsdl:input
-								message="tns:doShopProductAttributeAddOrUpdateRequest">
+						</wsdl:operation>						<wsdl:operation name="doProductAttributeAddOrUpdate">							<wsdl:input
+								message="tns:doProductAttributeAddOrUpdateRequest">
 							</wsdl:input>							<wsdl:output
-								message="tns:doShopProductAttributeAddOrUpdateResponse">
+								message="tns:doProductAttributeAddOrUpdateResponse">
 							</wsdl:output>
 						</wsdl:operation>
-						<wsdl:operation name="getShopProductAttributeList">
+						<wsdl:operation name="getProductAttributeList">
 							<wsdl:input
-								message="tns:getShopProductAttributeListRequest">
+								message="tns:getProductAttributeListRequest">
 							</wsdl:input>
 							<wsdl:output
-								message="tns:getShopProductAttributeListResponse">
+								message="tns:getProductAttributeListResponse">
+							</wsdl:output>
+						</wsdl:operation>																		<wsdl:operation name="getProductAttributeWGroupList">							<wsdl:input
+								message="tns:getProductAttributeWGroupListRequest">
+							</wsdl:input>							<wsdl:output
+								message="tns:getProductAttributeWGroupListResponse">
 							</wsdl:output>
 						</wsdl:operation>
-	</wsdl:portType>
+						<wsdl:operation name="doProductAttributeWGroupAddOrUpdate">
+							<wsdl:input
+								message="tns:doProductAttributeWGroupAddOrUpdateRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doProductAttributeWGroupAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doProductCleanAddOrUpdate">
+							<wsdl:input
+								message="tns:doProductCleanAddOrUpdateRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doProductCleanAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation></wsdl:portType>
 	<wsdl:binding name="shop_control-SOAP" type="tns:shop_control">
 		<soap:binding style="rpc"
 			transport="http://schemas.xmlsoap.org/soap/http" />
@@ -1436,7 +1474,7 @@
                use="literal" />
          </wsdl:output>
       </wsdl:operation>
-      <wsdl:operation name="doShopProductAttributeAddOrUpdate">
+      <wsdl:operation name="doProductAttributeAddOrUpdate">
          <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
          <wsdl:input>
             <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
@@ -1447,7 +1485,40 @@
                use="literal" />
          </wsdl:output>
       </wsdl:operation>
-      <wsdl:operation name="getShopProductAttributeList">
+      <wsdl:operation name="getProductAttributeList">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="doProductAttributeWGroupAddOrUpdate">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="getProductAttributeWGroupList">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="doProductCleanAddOrUpdate">
          <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
          <wsdl:input>
             <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"

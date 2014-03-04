@@ -16,6 +16,11 @@ include "../inc/classes/Soap_Server_class.php";
 $fp = false;
 $fp_xml = false;
 
+$utime_array = explode(' ', microtime());
+$ts=date('Ymd_Hi_s_').sprintf('%06x',(int)(($utime_array[0]*0xffffff)&0xffffff));
+
+$fp = fopen('log/server2-'.$ts.'--scs_t.log', 'a+');
+
 // turn off the wsdl cache
 ini_set('soap.wsdl_cache_enabled', '0');
 // var_dump($soap_param_array);
@@ -84,10 +89,15 @@ $client = new SoapClient($soap_address, $soap_param_array);
 // test_getClientUserList( $client );
 // test_doClientUserNewIdUpdateList( $client );
 
-//PLACEHOLDERS
-test_doShopProductAttributeAddOrUpdate( $client );
-test_getShopProductAttributeList( $client );
+// test_doProductAttributeAddOrUpdate( $client );
+// test_getProductAttributeList( $client );
 
+// test_doProductAttributeWGroupAddOrUpdate( $client );
+// test_getProductAttributeWGroupList( $client );
+
+
+//PLACEHOLDERS
+test_doProductCleanAddOrUpdate( $client );
 ?>
 </pre>
 </body>

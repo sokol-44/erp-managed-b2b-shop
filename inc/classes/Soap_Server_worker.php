@@ -904,7 +904,55 @@ class Soap_Server_worker {
       
       return($response);
    }
+   
+   function doProductCleanAddOrUpdate( $input ) {
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = false;
+   
+   	add_to_fp('-------- doProductCleanAddOrUpdate');
+   	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+   		$response_tmp = array();
+   		foreach($input['values'] as $key => $val) {
+   			$SingleValueClass = new ProductData($val, $this->input_data_type);
+   			add_to_fp(print_r($SingleValueClass, true));
+   			if( !$SingleValueClass->is_error() ) {
+   				$param_array = $SingleValueClass->return_array();
+   				add_to_fp('$param_array:'. print_r($param_array, true) );
+   				//$res = array('id_one' => '', 'additional_data' => '', 'status' => '');
+   				
+   				$res_additional_data = array();
+   				
+   				$res_additional_data['doProductCleanStart'] = Data::doProductCleanStart($param_array);				
+   				//id_one, additional_data, status
+   				$res = Data::doProductAddOrUpdate($param_array);
+   				$res_additional_data['doProductAddOrUpdate'] = $res['additional_data'];
 
+   				foreach( $SingleValueClass->list_method as $key => $method_name ) {
+   					add_to_fp('list_method: '."$key => $method_name\n".print_r( $param_array[$key],true) );
+   					list($val_out, $status) = $SingleValueClass->data_exist($key, $param_array[$key]);
+   					if( Framework::not_null($val_out) ) {
+   						$input_val['values'] = $param_array[$key];
+   						add_to_fp('$input_val: '.print_r($input_val,true));
+   						$res_additional_data[$key] = $this->${method_name}( $input_val );
+   					}
+   				}
+   				
+   				$res_additional_data['doProductCleanStop'] = Data::doProductCleanStop($param_array);
+   				$res['additional_data'] = $res_additional_data;
+   				
+   				$response_tmp[] = $res;
+   			} else {
+   				$response_tmp[] = $this->getReturnError('doProductCleanAddOrUpdate', $val, $SingleValueClass->return_error(), false);
+   			}
+   		}
+   		add_to_fp(print_r($response_tmp, true));
+   		$response = $this->_addArrayValues($response_tmp);
+   	} else {
+   		$response = $this->getReturnError('doProductCleanAddOrUpdate', '', 'EMPTY_LIST');
+   	}
+   
+   	return($response);
+   }
 
    function setProductClientPrice( $input ) {
       $this->input_data_type = 'NEW';
@@ -917,7 +965,7 @@ class Soap_Server_worker {
             if( !$SingleValueClass->is_error() ) {
                $pa = $SingleValueClass->return_array();
                //add_to_fp('$param_array:'. print_r($param_array, true) );
-               $response_tmp[] = Data::setProductClientPrice($pa['id_product'], $pa['id_client'], $pa['price'] , $pa['vat']);
+               $response_tmp[] = Data::setProductClientPrice($pa['id_product'], $pa['id_client'], $pa['price']);
             } else {
                $response_tmp[] = $this->getReturnError('setProductClientPrice', $val, $SingleValueClass->return_error(), false);
             }
@@ -1095,7 +1143,7 @@ class Soap_Server_worker {
             $SingleValueClass = new Product2CategoryData($val, $this->input_data_type);
             if( !$SingleValueClass->is_error() ) {
                $pa = $SingleValueClass->return_array();
-               //add_to_fp('$param_array:'. print_r($param_array, true) );
+               add_to_fp('$param_array:'. print_r($param_array, true) );
                $response_tmp[] = Data::setProduct2Category($pa['id_product'], $pa['id_category']);
             } else {
                $response_tmp[] = $this->getReturnError('setProduct2Category', $val, $SingleValueClass->return_error(), false);
@@ -1493,7 +1541,7 @@ class Soap_Server_worker {
    	}
    	 
    	return($response);
-   }  
+   }
    
    
    function getShopAttributeList( $input ) {//ParamStartLength, ClientData

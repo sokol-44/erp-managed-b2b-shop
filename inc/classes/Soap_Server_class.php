@@ -20,7 +20,7 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
    public $list = array();
    public $list_new = array();
    public $list_update = array();
-   /* types: INT,INT+ (>zero),FLOAT,FLOAT+ (>zero),PATH,TXT,HTML,DATE,EMAIL,ARRAY, OBJ */
+   /* types: INT,INT+ (>zero),FLOAT,FLOAT+ (>zero),PATH,TXT,HTML,DATE,EMAIL,ARRAY,ARRAYOBJ,OBJ */
    public $list_type = array();
    /*
     * klasy:
@@ -39,19 +39,21 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
       if( $input ) {
          if( is_string($input) ) {
             $input = $this->fill_object( $input );
+      		$this->load_array( $input );
          } elseif (is_array($input) ) {
-            //ok -> $input = $input;
             add_to_fp("input_array\n".print_r($input, true));
+            $this->load_array( $input );
+         } elseif ( is_object($input) && get_class($input) == get_class($this) ) {
+            add_to_fp("input_object START\n".print_r($input, true));
+            $this->load_array( $input->return_array() );
+            add_to_fp("input_object END\n".print_r($input, true));
+            
          } else {
-            $input = array();
+            $this->load_array( array() );
          }
       } else {
-         $input = array();
+         $this->load_array( array() );
       }
-      
-      $this->load_array( $input );
-//       add_to_fp(print_r($this, true)."\n");
-      //var_dump($this);
       
    }
    
@@ -79,21 +81,39 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
       return true;
    }
    
+   
+   //FIXME - rekurencja !
    public function return_array() {
       add_to_fp('return_array()');
       if( $this->is_error() ) {
          return array();
       } else {
-         if( in_array('OBJ', $this->list_type) ) {
-            $res = array();
-            foreach ( $this->values as $key => $val ) {
-               if( is_object($val) ) $res[$key] = $this->_return_array($val);
-               else $res[$key] = $val;
-            }
-            return $res;
-         } else{
-            return $this->values;
-         }
+      	
+      	$res = $this->values;
+
+      	$res_obj = array_keys($this->list_type, 'OBJ');
+      	foreach($res_obj as $key => $val) {
+      		if( isset($this->values[$key]) && is_object($this->values[$key]) )
+      			$res[$key]->return_array();
+      	}
+      	
+      	$res_arrobj = array_keys($this->list_type, 'ARRAYOBJ');
+      	foreach($res_arrobj as $key => $val) {
+      		if( isset($this->values[$val]) && is_array($this->values[$val]) ) {
+					foreach($this->values[$val] as $key2 => $val2 ) {
+						if( is_object($val2) ) {
+							unset($res[$val][$key2]);
+							if( is_numeric($key2) )
+								$res[$val]['value_'.$key2] = $this->values[$val][$key2]->return_array();
+							else
+								$res[$val][$key2] = $this->values[$val][$key2]->return_array();
+						}
+					}
+      		}
+      	}
+      	
+      	add_to_fp('return_array:"'.print_r($res,true).'"');
+         return $res;
       }
    }
    
@@ -150,7 +170,7 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
    
    private function check_list( $input ) {
       foreach ($input as $key => $val ) {
-        if( in_array($key, $this->list) && (string)$val!='' ) {
+        if( in_array($key, $this->list) ) {
           list($val_check, $status) = $this->check_val($key, $val);
           if( $val_check !== FALSE ) {
              $this->values[$key] = $val_check;
@@ -158,6 +178,7 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
              $this->warning[] = array('check_val', $status.': '.$key.'=>'.$val);
           }
         } else {
+        		add_to_fp('check_list NF "'.$key.'";"'.$val.'"');
             $this->warning[] = array('check_list', $key.'=>'.$val);
         }
       }
@@ -166,15 +187,16 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
    private function check_val($key, $val) {
       $status = '';
       $val_out = false;
-      
-      if( in_array($key, $this->list_type) ) {
-         /* types: INT,INT+ (>zero),FLOAT,FLOAT+ (>zero),PATH,TXT,HTML,DATE,EMAIL,ARRAY   */
+      add_to_fp('check_val '.$key.';'.$this->list_type[$key].';'.$val);
+      if( isset($this->list_type[$key]) ) {
+         /* types: INT,INT+ (>zero),FLOAT,FLOAT+ (>zero),PATH,TXT,HTML,DATE,EMAIL,ARRAY,OBJ   */
          switch ($this->list_type[$key]) {
             case 'INT':
-               if( ctype_digit($val) ) $val_out = (int)$val;
+               if( is_numeric($val) ) $val_out = (int)$val;
                break;
             case 'INT+':
-               if( ctype_digit($val) && (int)$val>0 ) $val_out = (int)$val;
+            	add_to_fp('INT+:"'.print_r(array(is_numeric($val)?'t':'n', ((int)$val>0)?'t':'n'), true).'"');
+               if( is_numeric($val) && (int)$val>0 ) $val_out = (int)$val;
                break;
             case 'FLOAT':
                $val = str_replace(',', '.', $val);
@@ -188,6 +210,7 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
                $path_parts = pathinfo($val);
                if( ctype_print($val) && $path_parts ) $val_out = $path_parts['dirname'] . DS . $path_parts['basename'];
                break;
+            case 'TEXT':
             case 'TXT':
                $val_out = strip_tags($val);
                break;
@@ -204,9 +227,15 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
             case 'EMAIL':
                if( filter_var($val,FILTER_VALIDATE_EMAIL) ) $val_out = $val;
                break;
-            case 'OBJ':
+            case 'ARRAYOBJ':
                if( is_array($val) && class_exists($key) ) {
-                  $val_out = new $key($val, $this->type);
+               	foreach($val as $element) 
+                  	$val_out[] = new ${key}($element, $this->type);
+               }
+               break;
+            case 'OBJ':
+               if( class_exists($key) ) {
+                  $val_out[] = new ${key}($element, $this->type);
                }
                break;
             case 'ARRAY':
@@ -219,8 +248,13 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
       } else {
          $val_out = $val;
       }
-      
+      add_to_fp('ret:"'.print_r($val_out, true).'"');
       return array($val_out, $status);
+   }
+   
+   public function data_exist( $key, $val ) {
+   	add_to_fp('data_exist:'.$key."\n".print_r($this->values[$key], true));
+   	return $this->check_val($key, $val);
    }
    
    public function fill_object($add = 'null') {
@@ -359,17 +393,40 @@ class Product2CategoryData extends BasicSOAPDataMethods {
    public $list_update = array('id_product', 'id_category');
 }
 
+class ProductSubtypeData extends BasicSOAPDataMethods {
+   public $list = array('id_product_subtype', 'id_product', 'description', 'catalog_index',
+          'picture_small_url', 'picture_big_url', 'picture_id', 'price_diff', 'status');
+   public $list_type = array('id_product_subtype' => 'INT+', 'id_product' => 'INT+',
+   		 'description' => 'TEXT', 'catalog_index' => 'TEXT',
+          'picture_small_url' => 'PATH', 'picture_big_url' => 'PATH', 'picture_id' => 'INT+',
+          'price_diff' => 'FLOAT+', 'status' => 'TEXT'
+   		);
+	public $list_new = array('id_product_subtype', 'id_product', 'description', 'catalog_index');
+	public $list_update = array('id_product_subtype', 'id_product');
+	
+}
+
 class ProductData extends BasicSOAPDataMethods {
    public $list = array('id_product', 'name', 'description', 'producer', 'catalog_index',
           'picture_small_url', 'picture_big_url', 'picture_id', 'price', 'vat', 'quantity',
-          'status', 'category', 'price');
+          'status', 'Product2CategoryData', 'ProductClientPriceData', 'ProductAttributeData',
+   		 'ProductAttributeWGroupData');
    public $list_type = array('id_product' => 'INT+', 'name' => 'TEXT', 'description' => 'TEXT',
           'producer' => 'TEXT', 'catalog_index' => 'TEXT',
           'picture_small_url' => 'PATH', 'picture_big_url' => 'PATH', 'picture_id' => 'INT+',
           'price' => 'FLOAT+', 'vat' => 'FLOAT', 'quantity' => 'INT+', 'status' => 'TEXT',
-          'CategoryListData' => 'OBJ', 'ClientPriceListData' => 'OBJ');
+   		 'ProductSubtypeData' => 'ARRAYOBJ',
+          'Product2CategoryData' => 'ARRAYOBJ', 'ProductClientPriceData' => 'ARRAYOBJ',
+          'ProductAttributeData' => 'ARRAYOBJ', 'ProductAttributeWGroupData' => 'ARRAYOBJ'
+   		);
    public $list_new = array('id_product', 'price', 'vat', 'quantity');
    public $list_update = array('id_product');
+   public $list_method = array(
+   			'ProductSubtypeData' => 'doProductSubtypeAddOrUpdate', 
+   			'Product2CategoryData' => 'setProduct2Category', 
+   			'ProductClientPriceData' => 'setProductClientPrice',
+          	'ProductAttributeData' => 'doProductAttributeAddOrUpdate',  
+   			'ProductAttributeWGroupData' => 'doProductAttributeWGroupAddOrUpdate');
 }
 
 class ClientProductPriceListData extends BasicSOAPDataMethods {

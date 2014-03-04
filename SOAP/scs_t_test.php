@@ -19,7 +19,7 @@ function test_helper_multiple_in($data_in, $method, $client ) {
    print("IN:" . print_r($in_o, true) . '<br>');
    $in_o_x = ArrayToXML::toXml($in_o, 'DocumentElement');
    print("IN:" . xml_b( $in_o_x ). '<br>');
-   
+
    try { $resC = $client->$method($in_o_x); }
    catch (Exception $e) { /*var_dump($e);*/ print_lr( $client ); }
    print("RES:" . xml_b( $resC ). '<br>');
@@ -435,20 +435,14 @@ function test_doClientUserNewIdUpdateList( $client ) {
 	test_helper_multiple_in($in_oo, 'doClientUserNewIdUpdateList', $client );
 }
 
-// test_doShopProductAttributeAddOrUpdate( $client );
-// test_getShopProductAttributeList( $client );
-
-
-
-function test_getShopProductAttributeList( $client ) {
+function test_getProductAttributeList( $client ) {
 	$nt = time();
 
 	$in_oo = new ParamStartLength(array('id_start' => '12599', 'length' => '0'));
-	test_helper_single_in($in_oo, 'getShopProductAttributeList', $client );
+	test_helper_single_in($in_oo, 'getProductAttributeList', $client );
 }
 
-
-function test_doShopProductAttributeAddOrUpdate( $client ) {
+function test_doProductAttributeAddOrUpdate( $client ) {
 	$nt = time();
 
 	$list = array('id_product' => 12599, 'type' => 'name'.$nt, 'val' => 'val'.$nt);
@@ -460,6 +454,73 @@ function test_doShopProductAttributeAddOrUpdate( $client ) {
 	$list = array('id_product' => $nt, 'type' => 'BALANCE_FREE_CREDIT', 'val' => 'val'.$nt);
 	$in_oo[] = new ShopProductAttributeData($list);
 
-	test_helper_multiple_in($in_oo, 'doShopProductAttributeAddOrUpdate', $client);
+	test_helper_multiple_in($in_oo, 'doProductAttributeAddOrUpdate', $client);
+}
+
+function test_getProductAttributeWGroupList( $client ) {
+	$nt = time();
+
+	$in_oo = new ParamStartLength(array('id_start' => '12599', 'length' => '0'));
+	test_helper_single_in($in_oo, 'getProductAttributeWGroupList', $client );
+}
+
+function test_doProductAttributeWGroupAddOrUpdate( $client ) {
+	$nt = time();
+	
+	$list = array('id_product' => 12599, 'id_attribute' => 12599, 'attribute_order' => $nt, 'attribute_name' => 'anam'.$nt
+	, 'attribute_value' => 'val'.$nt, 'id_group' => 12599, 'group_name' => 'gname'.$nt, 'group_order' => $nt);
+	$in_oo[] = new ProductAttributeWGroupData($list);
+	
+	$list = array('id_product' => 12599, 'id_attribute' => 12599, 'attribute_order' => 1, 'attribute_name' => 'anam'
+			, 'attribute_value' => 'val'.$nt, 'id_group' => $nt, 'group_name' => 'gname', 'group_order' => $nt);
+	$in_oo[] = new ProductAttributeWGroupData($list);
+
+	$list = array('id_product' => $nt, 'id_attribute' => 12599, 'attribute_order' => 1, 'attribute_name' => 'anam'
+			, 'attribute_value' => 'val'.$nt, 'id_group' => 12599, 'group_name' => 'gname', 'group_order' => 2);
+	$in_oo[] = new ProductAttributeWGroupData($list);
+
+	test_helper_multiple_in($in_oo, 'doProductAttributeWGroupAddOrUpdate', $client);
+}
+
+
+function test_doProductCleanAddOrUpdate( $client ) {
+	$nt = time();
+	$in_oo = array();
+	$in_oo2 = array();
+	$in_oo3 = array();
+	$in_oo4 = array();
+	$in_oo5 = array();
+
+/*   			'ProductSubtypeData' => 'doProductSubtypeAddOrUpdate', 
+   			'Product2CategoryData' => 'setProduct2Category', 
+   			'ProductClientPriceData' => 'setProductClientPrice',
+          	'ProductAttributeData' => 'doProductAttributeAddOrUpdate',  
+   			'ProductAttributeWGroupData' => 'doProductAttributeWGroupAddOrUpdate');*/
+	
+	$in_oo2[] = new Product2CategoryData(array('id_product' => '1', 'id_category' => '16'));
+	$in_oo2[] = new Product2CategoryData(array('id_product' => '1', 'id_category' => '2'));
+	$in_oo3[] = new ProductClientPriceData(array('id_product' => '1', 'id_client' => '16', 'price' => 11));
+	$in_oo3[] = new ProductClientPriceData(array('id_product' => '1', 'id_client' => '1943', 'price' => 11));
+	$in_oo4[] = new ProductAttributeData(array('id_product' => '1', 'type' => 'BALANCE_FREE_CREDIT', 'val' => 'val'.$nt));
+	$in_oo4[] = new ProductAttributeData(array('id_product' => '1', 'type' => 'BALANCE_FREE_CREDIT'.$nt, 'val' => 'val'.$nt));
+	$in_oo5[] = new ProductAttributeWGroupData(
+			   array('id_product' => $nt, 'id_attribute' => 12599, 'attribute_order' => 1, 'attribute_name' => 'anam'
+			, 'attribute_value' => 'val'.$nt, 'id_group' => 12599, 'group_name' => 'gname', 'group_order' => 2));
+	$in_oo5[] = new ProductAttributeWGroupData(
+			array('id_product' => 1, 'id_attribute' => 12599, 'attribute_order' => 1, 'attribute_name' => 'anam'
+					, 'attribute_value' => 'val'.$nt, 'id_group' => 12599, 'group_name' => 'gname', 'group_order' => 2));
+	
+
+	$in_oo[] = new ProductData(array('id_product' => 1, 'name' => 'jeden', 'description' => 'desc 1', 'picture_small_url' => '', 'picture_big_url' => '',
+			'picture_id' => '', 'price' => '11.11', 'vat' => '11', 'quantity' => '11', 'status' => 'ACTIVE',
+			'Product2CategoryData' => $in_oo2, 
+			'ProductClientPriceData' => $in_oo3,
+			'ProductAttributeData' => $in_oo4,
+			'ProductAttributeWGroupData' => $in_oo5
+				));
+//	$in_oo[] = new ProductData(array('id_product' => 212, 'name' => 'jeden', 'description' => 'desc 1', 'picture_small_url' => '', 'picture_big_url' => '',
+//			'picture_id' => '', 'price' => '11.11', 'vat' => '11', 'quantity' => '11', 'status' => 'ACTIVE'));
+
+	test_helper_multiple_in($in_oo, 'doProductCleanAddOrUpdate', $client);
 }
 ?>
