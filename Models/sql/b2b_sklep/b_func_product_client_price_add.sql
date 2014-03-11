@@ -12,7 +12,7 @@
 
 -- Zrzut struktury b_func_product_client_price_add
 DELIMITER //
-CREATE  ` FUNCTION `b_func_product_client_price_add`(`id_product_in` INT, `id_client_in` INT, `price_in` DECIMAL(10,0), `vat_in` INT) RETURNS tinytext CHARSET utf8
+CREATE  ` FUNCTION `b_func_product_client_price_add`(`id_product_in` INT, `id_client_in` INT, `price_in` DECIMAL(10,0)) RETURNS tinytext CHARSET utf8
     MODIFIES SQL DATA
     DETERMINISTIC
 BEGIN
@@ -28,10 +28,10 @@ BEGIN
 	ELSE
 		SELECT id_product INTO status_product_price FROM shop_product_client_price WHERE `id_product` = id_product_in and `id_client` = id_client_in;
 		IF status_product_price IS NULL THEN
-			CALL b_proc_product_client_price_add(id_product_in, id_client_in, price_in, vat_in);
+			CALL b_proc_product_client_price_add(id_product_in, id_client_in, price_in);
 			SET status = CONCAT(@status_proc, ',PRODUCT_CLIENT_PRICE_NEW');
 		ELSE
-			CALL b_proc_product_client_price_add(id_product_in, id_client_in, price_in, vat_in);
+			CALL b_proc_product_client_price_add(id_product_in, id_client_in, price_in);
 			SET status = CONCAT(@status_proc, ',PRODUCT_CLIENT_PRICE_EXIST');
 		END IF;
 	END IF;

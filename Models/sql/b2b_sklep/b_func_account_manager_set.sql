@@ -12,7 +12,7 @@
 
 -- Zrzut struktury b_func_account_manager_set
 DELIMITER //
-CREATE  ` FUNCTION `b_func_account_manager_set`(`id_account_manager_in` INT, `id_client_in` INT, `id_client_user_in` INT, `account_manager_name_in` VARCHAR(10), `fullname_in` TINYTEXT, `phone1_in` TINYTEXT, `phone2_in` TINYTEXT,  `email_in` TINYTEXT) RETURNS tinytext CHARSET latin2
+CREATE  ` FUNCTION `b_func_account_manager_set`(`id_account_manager_in` INT, `id_client_in` INT, `id_client_user_in` INT, `account_manager_name_in` VARCHAR(10), `fullname_in` TINYTEXT, `phone1_in` TINYTEXT, `phone2_in` TINYTEXT, `email_in` TINYTEXT, `state_in` TINYTEXT) RETURNS tinytext CHARSET latin2
     READS SQL DATA
 BEGIN
 	DECLARE status TINYTEXT DEFAULT NULL;
@@ -35,16 +35,16 @@ BEGIN
 			ELSE
 				SET `status` = ',ACCOUNT_MANAGER_EXIST,NAME';	
 			END IF;
-			CALL b_proc_account_manager_set(`status_account_manage_name`, `id_client_in`, `id_client_user_in`, `account_manager_name_in`, `fullname_in`, `phone1_in`, `phone2_in`,  `email_in`);
+			CALL b_proc_account_manager_set(`status_account_manage_name`, `id_client_in`, `id_client_user_in`, `account_manager_name_in`, `fullname_in`, `phone1_in`, `phone2_in`,  `email_in`,  `state_in`);
 			SET `status` = CONCAT(@status_proc,`status`);
 		ELSE 
 			SELECT id_account_manager INTO status_account_manager FROM global_client_user_account_manager
 			WHERE `id_account_manager` = id_account_manager_in;
 			IF status_account_manager IS NULL THEN
-				CALL b_proc_account_manager_set(`id_account_manager_in`, `id_client_in`, `id_client_user_in`, `account_manager_name_in`, `fullname_in`, `phone1_in`, `phone2_in`,  `email_in`);
+				CALL b_proc_account_manager_set(`id_account_manager_in`, `id_client_in`, `id_client_user_in`, `account_manager_name_in`, `fullname_in`, `phone1_in`, `phone2_in`,  `email_in`, `state_in`);
 				SET `status` = CONCAT(@status_proc,',ACCOUNT_MANAGER_NEW,ID');
 			ELSE
-				CALL b_proc_account_manager_set(`id_account_manager_in`, `id_client_in`, `id_client_user_in`, `account_manager_name_in`, `fullname_in`, `phone1_in`, `phone2_in`,  `email_in`);
+				CALL b_proc_account_manager_set(`id_account_manager_in`, `id_client_in`, `id_client_user_in`, `account_manager_name_in`, `fullname_in`, `phone1_in`, `phone2_in`,  `email_in`,  `state_in`);
 				SET `status` = CONCAT(@status_proc,',ACCOUNT_MANAGER_EXIST,ID');
 			END IF;
 		END IF;

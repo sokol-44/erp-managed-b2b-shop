@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `shop_product_subtype` (
   `id_product_subtype` int(11) NOT NULL,
   `id_product` int(11) DEFAULT NULL,
   `description` text,
+  `catalog_index` varchar(250) DEFAULT NULL,
   `picture_small_url` tinytext,
   `picture_big_url` tinytext,
   `picture_id` int(11) DEFAULT NULL,

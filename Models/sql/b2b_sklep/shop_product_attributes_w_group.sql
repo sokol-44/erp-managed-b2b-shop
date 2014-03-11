@@ -10,17 +10,21 @@
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
--- Zrzut struktury procedura company_22.b_proc_product_client_price_add
-DELIMITER //
-CREATE  ` PROCEDURE `b_proc_product_client_price_add`(IN `id_product_in` INT, IN `id_client_in` INT, IN `price_in` DECIMAL(10,0))
-BEGIN
-	INSERT INTO shop_product_client_price (`id_client`, `id_product`, `price`)
-	VALUES (id_client_in, id_product_in, price_in)
-	ON DUPLICATE KEY UPDATE
-	`price` = price_in;
-	SET @status_proc = 'SUCCESS';
-END//
-DELIMITER ;
+-- Zrzut struktury .shop_product_attributes_w_group
+CREATE TABLE IF NOT EXISTS `shop_product_attributes_w_group` (
+  `id_product` int(11) NOT NULL,
+  `id_attribute` int(11) NOT NULL,
+  `attribute_name` varchar(50) NOT NULL,
+  `attribute_value` tinytext,
+  `attribute_order` int(11) NOT NULL,
+  `id_group` int(11) NOT NULL,
+  `group_name` varchar(50) NOT NULL,
+  `group_order` tinytext,
+  PRIMARY KEY (`id_product`,`id_attribute`,`id_group`),
+  KEY `fk.shop_product_attributes_w_group.id_product` (`id_product`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- Data exporting was unselected.
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
 /*!40014 SET FOREIGN_KEY_CHECKS=IF(@OLD_FOREIGN_KEY_CHECKS IS NULL, 1, @OLD_FOREIGN_KEY_CHECKS) */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

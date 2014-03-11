@@ -12,7 +12,7 @@
 
 -- Zrzut struktury .shop_order_status_history
 CREATE TABLE IF NOT EXISTS `shop_order_status_history` (
-  `id_order_status_history` int(11) unsigned zerofill NOT NULL AUTO_INCREMENT,
+  `id_order_status_history` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `id_order_status` int(11) NOT NULL,
   `id_order` int(11) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,

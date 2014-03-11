@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `tool_battery_ups` (
   `typology` enum('LINE-INTERACTIVE','ON-LINE') DEFAULT NULL,
   `phase` tinyint(4) DEFAULT NULL,
   `quality` tinyint(4) DEFAULT NULL,
+  `max_external` tinyint(4) DEFAULT NULL,
   PRIMARY KEY (`id_ups`),
   KEY `internal_capacity` (`internal_capacity`),
   KEY `external_capacity` (`external_capacity`)
