@@ -92,6 +92,14 @@ class Soap_Server_worker {
       }
       return $res;
    }
+   
+   function _method_didn_return_error( $res ) {
+   	if( isset($res['status']) ) {
+   		$status = explode(',', $res['status']);
+   		if( $status[0] == 'SUCCESS' ) return true;
+   	}
+   	return false;
+   }
 
    function getClientNewList( $input ) {//ParamStartLength, ClientData
    	$this->input_data_type = 'NEW';
@@ -591,6 +599,93 @@ class Soap_Server_worker {
    }
     
       
+   function doClientUserAddOrUpdate( $input ) {
+      $this->input_data_type = 'NEW';
+      $this->SingleParam_MultipleReturns = false;
+
+      add_to_fp('-------- doClientUserAdd');
+      if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+         $response_tmp = array();
+         foreach($input['values'] as $key => $val) {
+            $SingleValueClass = new ClientUserData($val, $this->input_data_type);
+            if( !$SingleValueClass->is_error() ) {
+               $param_array = $SingleValueClass->return_array();
+               add_to_fp('$param_array:'. print_r($param_array, true) );
+               $response_tmp[] = Data::doClientUserAdd($param_array, true);
+            } else {
+               $response_tmp[] = $this->getReturnError('doClientUserAdd', $val, $SingleValueClass->return_error(), false);
+            }
+         }
+         add_to_fp(print_r($response_tmp, true));
+         $response = $this->_addArrayValues($response_tmp);
+      } else {
+         $response = $this->getReturnError('doClientUserAdd', '', 'EMPTY_LIST');
+      }
+      
+      return($response);
+   }
+   
+
+   function doClientUserCleanAddOrUpdate( $input ) {
+   	$this->input_data_type = 'UPDATE';
+   	$this->SingleParam_MultipleReturns = false;
+   	
+   	add_to_fp('-------- doClientUserCleanAddOrUpdate');
+   	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+   		$response_tmp = array();
+   		foreach($input['values'] as $key => $val) {
+   			$SingleValueClass = new ClientUserData($val, $this->input_data_type);
+   			if( !$SingleValueClass->is_error() ) {
+   				$param_array = $SingleValueClass->return_array();
+   				add_to_fp('$param_array:'. print_r($param_array, true) );
+   				if( !$SingleValueClass->is_error() ) {
+   					$param_array = $SingleValueClass->return_array();
+   					add_to_fp('$param_array:'. print_r($param_array, true) );
+   					//$res = array('id_one' => '', 'additional_data' => '', 'status' => '');
+   				
+   					$res_additional_data = array();
+   				
+   					$res_additional_data['doClientUserCleanStart'] = Data::doBatchStart($param_array);
+   					//id_one, additional_data, status
+   					$res = Data::doClientUserAddOrUpdate($param_array);
+   					add_to_fp('$res:'. print_r($res, true) );
+   					$res_additional_data['doClientUserAddOrUpdate'] = $res['additional_data'];
+   					
+   					if( $this->_method_didn_return_error($res) ) {
+   						
+	   					foreach( $SingleValueClass->list_method as $key => $method_name ) {
+	   						add_to_fp('list_method: '."$key => $method_name\n".print_r( $param_array[$key],true) );
+	   						list($val_out, $status) = $SingleValueClass->data_exist($key, $param_array[$key]);
+	   						if( Framework::not_null($val_out) && Framework::not_null($param_array[$key]) ) {
+	   							$input_val['values'] = $param_array[$key];
+	   							add_to_fp('list_method $input_val: '.print_r($input_val,true));
+	   							$res_additional_data_tmp = Data::doClientUserCleanMethodData( $key, $param_array );
+	   							$res_additional_data[$key] = $this->${method_name}( $input_val );
+	   							$res_additional_data[$key]['Info']['Remove'] = $res_additional_data_tmp;
+	   						}
+   						}
+   						
+   					}
+   				
+   					$res_additional_data['doClientUserCleanStop'] = Data::doBatchStop($param_array);
+   					$res['additional_data'] = $res_additional_data;
+   				
+   					$response_tmp[] = $res;
+   				} else {
+   					$response_tmp[] = $this->getReturnError('doClientUserCleanAddOrUpdate', $val, $SingleValueClass->return_error(), false);
+   				}
+   			} else {
+   				$response_tmp[] = $this->getReturnError('doClientUserCleanAddOrUpdate', $val, $SingleValueClass->return_error(), false);
+   			}
+   		}
+   		add_to_fp(print_r('$response_tmp:'.$response_tmp, true));
+   		$response = $this->_addArrayValues($response_tmp);
+   	} else {
+   		$response = $this->getReturnError('doClientUserCleanAddOrUpdate', '', 'EMPTY_LIST');
+   	}
+   	
+   	return($response);
+   }
    
    
    function doClientUserAdd ( $input ) {
@@ -922,22 +1017,28 @@ class Soap_Server_worker {
    				
    				$res_additional_data = array();
    				
-   				$res_additional_data['doProductCleanStart'] = Data::doProductCleanStart($param_array);				
+   				$res_additional_data['doProductCleanStart'] = Data::doBatchStart($param_array);				
    				//id_one, additional_data, status
    				$res = Data::doProductAddOrUpdate($param_array);
    				$res_additional_data['doProductAddOrUpdate'] = $res['additional_data'];
 
-   				foreach( $SingleValueClass->list_method as $key => $method_name ) {
-   					add_to_fp('list_method: '."$key => $method_name\n".print_r( $param_array[$key],true) );
-   					list($val_out, $status) = $SingleValueClass->data_exist($key, $param_array[$key]);
-   					if( Framework::not_null($val_out) ) {
-   						$input_val['values'] = $param_array[$key];
-   						add_to_fp('$input_val: '.print_r($input_val,true));
-   						$res_additional_data[$key] = $this->${method_name}( $input_val );
-   					}
+   				if( $this->_method_didn_return_error($res) ) {
+   					
+	   				foreach( $SingleValueClass->list_method as $key => $method_name ) {
+	   					add_to_fp('list_method: '."$key => $method_name\n".print_r( $param_array[$key],true) );
+	   					list($val_out, $status) = $SingleValueClass->data_exist($key, $param_array[$key]);
+	   				   if( Framework::not_null($val_out) && Framework::not_null($param_array[$key]) ) {
+	   						$input_val['values'] = $param_array[$key];
+	   						add_to_fp('list_method $input_val: '.print_r($input_val,true));
+	   						$res_additional_data_tmp = Data::doProductCleanMethodData( $key, (int)$param_array['id_product'] );
+	   						$res_additional_data[$key] = $this->${method_name}( $input_val );
+	   						$res_additional_data[$key]['Info']['Remove'] = $res_additional_data_tmp;
+	   					}
+	   				}
+	   				
    				}
    				
-   				$res_additional_data['doProductCleanStop'] = Data::doProductCleanStop($param_array);
+   				$res_additional_data['doProductCleanStop'] = Data::doBatchStop($param_array);
    				$res['additional_data'] = $res_additional_data;
    				
    				$response_tmp[] = $res;
@@ -945,7 +1046,7 @@ class Soap_Server_worker {
    				$response_tmp[] = $this->getReturnError('doProductCleanAddOrUpdate', $val, $SingleValueClass->return_error(), false);
    			}
    		}
-   		add_to_fp(print_r($response_tmp, true));
+   		add_to_fp('before return:'.print_r($response_tmp, true));
    		$response = $this->_addArrayValues($response_tmp);
    	} else {
    		$response = $this->getReturnError('doProductCleanAddOrUpdate', '', 'EMPTY_LIST');
@@ -954,6 +1055,62 @@ class Soap_Server_worker {
    	return($response);
    }
 
+   function doClientCleanAddOrUpdate( $input ) {
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = false;
+   	 
+   	add_to_fp('-------- doClientUserCleanAddOrUpdate');
+   	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+   		$response_tmp = array();
+   		foreach($input['values'] as $key => $val) {
+   			$SingleValueClass = new ClientData($val, $this->input_data_type);
+   			add_to_fp(print_r($SingleValueClass, true));
+   			if( !$SingleValueClass->is_error() ) {
+   				$param_array = $SingleValueClass->return_array();
+   				add_to_fp('$param_array:'. print_r($param_array, true) );
+   				//$res = array('id_one' => '', 'additional_data' => '', 'status' => '');
+   					
+   				$res_additional_data = array();
+   					
+   				$res_additional_data['doClientCleanStart'] = Data::doBatchStart($param_array);
+   				//id_one, additional_data, status
+   				$res = Data::doClientAddOrUpdate($param_array);
+   				$res_additional_data['doClientAddOrUpdate'] = $res['additional_data'];
+   				
+   				if( $this->_method_didn_return_error($res) ) {
+   		
+	   				foreach( $SingleValueClass->list_method as $key => $method_name ) {
+	   					add_to_fp('list_method: '."$key => $method_name\n".print_r( $param_array[$key],true) );
+	   					list($val_out, $status) = $SingleValueClass->data_exist($key, $param_array[$key]);
+	   					if( Framework::not_null($val_out) && Framework::not_null($param_array[$key]) ) {
+	   						$input_val['values'] = $param_array[$key];
+	   						add_to_fp('list_method $input_val: '.print_r($input_val,true));
+	   						$res_additional_data_tmp = Data::doClientCleanMethodData( $key, (int)$param_array['id_client'] );
+	   						$res_additional_data[$key] = $this->${method_name}( $input_val );
+	   						$res_additional_data[$key]['Info']['Remove'] = $res_additional_data_tmp;
+	   					}
+   					}
+   				
+   				}
+   					
+   				$res_additional_data['doClientCleanStop'] = Data::doBatchStop($param_array);
+   				$res['additional_data'] = $res_additional_data;
+   					
+   				$response_tmp[] = $res;
+   			} else {
+   				$response_tmp[] = $this->getReturnError('doClientCleanAddOrUpdate', $val, $SingleValueClass->return_error(), false);
+   			}
+   		}
+
+   		add_to_fp(print_r($response_tmp, true));
+   		$response = $this->_addArrayValues($response_tmp);
+   	} else {
+   		$response = $this->getReturnError('doClientCleanAddOrUpdate', '', 'EMPTY_LIST');
+   	}
+   	 
+   	return($response);
+   }
+   
    function setProductClientPrice( $input ) {
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = false;

@@ -95,9 +95,13 @@ $client = new SoapClient($soap_address, $soap_param_array);
 // test_doProductAttributeWGroupAddOrUpdate( $client );
 // test_getProductAttributeWGroupList( $client );
 
+// test_doProductCleanAddOrUpdate( $client );
+// test_doClientCleanAddOrUpdate( $client );
+
 
 //PLACEHOLDERS
-test_doProductCleanAddOrUpdate( $client );
+test_doClientUserCleanAddOrUpdate( $client );
+
 ?>
 </pre>
 </body>

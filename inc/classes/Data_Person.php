@@ -311,6 +311,22 @@ class Data_Person extends Data_Rights {
       return db_fetch_array($result);
    }
    
+   
+   
+   static function doClientUserAddOrUpdate($param_array) {
+   
+   	$query = 'select id_client_user from ' . TBL_GLOBAL_CLIENT_USER . '
+   			 where id_client = "'.db_int($param_array['id_client']).'" and
+   			 id_client_user = "'.db_int($param_array['id_client_user']).'"';
+   	$result = db_query( $query );
+   	if( db_rows($result) > 0 ) {
+   		return Data_person::doClientUserAdd($param_array, false);
+   	} else {
+   		return Data_person::doClientUserAdd($param_array, true);
+   	}
+   
+   }
+   
    static function doClientUserAdd($param_array, $add  = false) {
       
       extract( $param_array );
@@ -429,7 +445,70 @@ class Data_Person extends Data_Rights {
    /*
     * new end
     */
-   static function doClientAdd($param_array, $add  = false) {
+   static function doClientAddOrUpdate($param_array) {
+   	
+   	$query = 'select id_client from ' . TBL_GLOBAL_CLIENT . ' where id_client = "'.db_int($param_array['id_client']).'"';
+   	$result = db_query( $query );
+   	if( db_rows($result) > 0 ) {
+   		return Data_person::doClientAdd($param_array, false);
+   	} else {
+   		return Data_person::doClientAdd($param_array, true);
+   	}
+   	
+   }
+   
+   static function doClientUserCleanMethodData( $what, $param_array ) {
+   	$id_client = db_int($param_array['id_client']);
+   	$id_client_user = db_int($param_array['id_client_user']);
+
+   	switch( $what ) {
+   		case 'ClientUserAddressData':
+   			$del_cat = "update " . TBL_GLOBAL_CLIENT_USER_ADDRESS . ' set state="NA"
+   					where id_client = ' . $id_client . ' and id_client_user = ' . $id_client_user;
+   			return 'ADDRESS:'.db_affected_rows();
+   			break;
+   		case 'ClientUserAttributeData':
+   			$del_cat = "delete from " . TBL_GLOBAL_CLIENT_USER_ATTRIBUTES . '
+   					where id_client = ' . $id_client . ' and id_client_user = ' . $id_client_user;
+   			return 'ATTRIBUTE:'.db_affected_rows();
+   			break;
+   		case 'AccountManagerData':
+   			$del_cat = "update " . TBL_GLOBAL_CLIENT_USER_ACCOUNT_MANAGER . ' set state="NA"
+   					where id_client = ' . $id_client . ' and id_client_user = ' . $id_client_user;
+   			return 'ACCOUNT_MANAGER:'.db_affected_rows();
+   			break;
+   		case 'ClientUserPasswordData':
+   			return 'RECURSION';
+   			break;
+   	}  	
+   	
+   	
+   }
+   
+   
+   static function doClientCleanMethodData( $what, $id_client ) {
+   
+   	$id_client = db_int($id_client);
+   
+   	switch( $what ) {
+   		case 'ClientProductPriceListData':
+   		case 'ProductClientPriceData':
+   			$del_cat = "delete from " . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' where id_client = ' . $id_client;
+   			return 'PRICE:'.db_affected_rows();
+   			break;
+   		case 'ClientAttributeData':
+   			$del_cat = "delete from " . TBL_GLOBAL_CLIENT_ATTRIBUTES . ' where id_client = ' . $id_client;
+   			return 'CATEGORY:'.db_affected_rows();
+   			break;
+   		case 'ClientUserData':
+   			return 'RECURSION';
+   			break;
+   	}
+   	 
+   	return false;
+   }
+    
+   static function doClientAdd($param_array, $add = false) {
       
       extract( $param_array );
       

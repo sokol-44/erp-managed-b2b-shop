@@ -90,16 +90,18 @@ function db_transaction_start($link = 'db_link') {
    global $$link;
    global $transaction_count;
    db_query('SET AUTOCOMMIT=0;', $link);
-   db_query('START TRANSACTION;', $link);
+   $res = db_query('START TRANSACTION;', $link);
    $transaction_count++;
+   return $res;
 }
 
 function db_transaction_end($link = 'db_link') {
    global $$link;
    global $transaction_count;
-   db_query('COMMIT;', $link);
+   $res = db_query('COMMIT;', $link);
    db_query('SET AUTOCOMMIT=1;', $link);
    $transaction_count--;
+   return $res;
 }
 
 function db_unroll_conditions($conditions_array, $type = 'and', $field_name = false) {

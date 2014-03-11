@@ -380,6 +380,18 @@
 	<wsdl:message name="doProductCleanAddOrUpdateResponse">
 		<wsdl:part name="doProductCleanAddOrUpdateResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="doClientCleanAddOrUpdateRequest">
+		<wsdl:part name="doClientCleanAddOrUpdateRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientCleanAddOrUpdateResponse">
+		<wsdl:part name="doClientCleanAddOrUpdateResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserCleanAddOrUpdateRequest">
+		<wsdl:part name="doClientUserCleanAddOrUpdateRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientUserCleanAddOrUpdateResponse">
+		<wsdl:part name="doClientUserCleanAddOrUpdateResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
 			<wsdl:output message="tns:getProductListResponse"></wsdl:output>
@@ -853,6 +865,22 @@
 							</wsdl:input>
 							<wsdl:output
 								message="tns:doProductCleanAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doClientCleanAddOrUpdate">
+							<wsdl:input
+								message="tns:doClientCleanAddOrUpdateRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientCleanAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doClientUserCleanAddOrUpdate">
+							<wsdl:input
+								message="tns:doClientUserCleanAddOrUpdateRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientUserCleanAddOrUpdateResponse">
 							</wsdl:output>
 						</wsdl:operation></wsdl:portType>
 	<wsdl:binding name="shop_control-SOAP" type="tns:shop_control">
@@ -1519,6 +1547,28 @@
          </wsdl:output>
       </wsdl:operation>
       <wsdl:operation name="doProductCleanAddOrUpdate">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="doClientCleanAddOrUpdate">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="doClientUserCleanAddOrUpdate">
          <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
          <wsdl:input>
             <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"

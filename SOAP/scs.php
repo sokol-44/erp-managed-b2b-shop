@@ -7,6 +7,7 @@ $utime_array = explode(' ', microtime());
 
 $ts=date('Ymd_Hi_s_').sprintf('%06x',(int)(($utime_array[0]*0xffffff)&0xffffff));
 
+//exec('/usr/bin/find /home/company/ftp/b2b-sklep/ups_seller2/SOAP/log -type f  -name "server2*" -mtime +1 -exec rm {} \;');
 
 $hdr = file_get_contents('php://input');
 $mthd_exp  = '/\:body><([a-z0-9\:]+)[\ >]/i';

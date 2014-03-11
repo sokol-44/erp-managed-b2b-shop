@@ -22,6 +22,8 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
    public $list_update = array();
    /* types: INT,INT+ (>zero),FLOAT,FLOAT+ (>zero),PATH,TXT,HTML,DATE,EMAIL,ARRAY,ARRAYOBJ,OBJ */
    public $list_type = array();
+   /* metody jakie wywołać dla wybranych elementów */
+   public $list_method = array();
    /*
     * klasy:
     * - sprawdzajaca instnienie, wraz z tym czy musi istniec
@@ -32,26 +34,30 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
     * - zwracajaca atrybury do sql (z escape) oraz uwzglednieniem intert(new)/update
     * - ogolna obsługa błedów (nieprawidłowych elementów
     */
+   
+   
    public function __construct( $input = false, $type = true ) {
       $this->type = $type;
       $this->init();
       //var_dump(array($this->new, $this->full));
       if( $input ) {
          if( is_string($input) ) {
+            add_to_fp("input_string\n".print_r($input, true));
             $input = $this->fill_object( $input );
       		$this->load_array( $input );
          } elseif (is_array($input) ) {
             add_to_fp("input_array\n".print_r($input, true));
             $this->load_array( $input );
          } elseif ( is_object($input) && get_class($input) == get_class($this) ) {
-            add_to_fp("input_object START\n".print_r($input, true));
+            add_to_fp("input_object\n".print_r($input, true));
             $this->load_array( $input->return_array() );
-            add_to_fp("input_object END\n".print_r($input, true));
-            
+//            add_to_fp("input_object END\n".print_r($input, true));          
          } else {
+         	add_to_fp("input_unknow\n".print_r($input, true));
             $this->load_array( array() );
          }
       } else {
+         add_to_fp("input_false\n");
          $this->load_array( array() );
       }
       
@@ -187,7 +193,7 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
    private function check_val($key, $val) {
       $status = '';
       $val_out = false;
-      add_to_fp('check_val '.$key.';'.$this->list_type[$key].';'.$val);
+//      add_to_fp('check_val '.$key.';'.$this->list_type[$key].';'.$val);
       if( isset($this->list_type[$key]) ) {
          /* types: INT,INT+ (>zero),FLOAT,FLOAT+ (>zero),PATH,TXT,HTML,DATE,EMAIL,ARRAY,OBJ   */
          switch ($this->list_type[$key]) {
@@ -195,7 +201,7 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
                if( is_numeric($val) ) $val_out = (int)$val;
                break;
             case 'INT+':
-            	add_to_fp('INT+:"'.print_r(array(is_numeric($val)?'t':'n', ((int)$val>0)?'t':'n'), true).'"');
+            	//add_to_fp('INT+:"'.print_r(array(is_numeric($val)?'t':'n', ((int)$val>0)?'t':'n'), true).'"');
                if( is_numeric($val) && (int)$val>0 ) $val_out = (int)$val;
                break;
             case 'FLOAT':
@@ -248,12 +254,12 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
       } else {
          $val_out = $val;
       }
-      add_to_fp('ret:"'.print_r($val_out, true).'"');
+//      add_to_fp('ret:"'.print_r($val_out, true).'"');
       return array($val_out, $status);
    }
    
    public function data_exist( $key, $val ) {
-   	add_to_fp('data_exist:'.$key."\n".print_r($this->values[$key], true));
+   	//add_to_fp('data_exist:'.$key."\n".print_r($this->values[$key], true));
    	return $this->check_val($key, $val);
    }
    
@@ -289,11 +295,21 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
 
 
 class ClientData extends BasicSOAPDataMethods {
-	public $list = array('id_client', 'name', 'description', 'email', 'phone', 'state');
+	public $list = array('id_client', 'name', 'description', 'email', 'phone', 'state', 
+			 'ClientPriceListData', 'ProductClientPriceData',
+			 'ClientAttributeData', 'ClientUserData',);
 	public $list_type = array('id_client' => 'INT+', 'name' => 'TEXT', 'description' => 'TEXT',
-			'email' => 'EMAIL', 'phone' => 'TEXT', 'state' => 'TEXT');
+			 'email' => 'EMAIL', 'phone' => 'TEXT', 'state' => 'TEXT', 
+   		 'ClientPriceListData' => 'ARRAYOBJ', 'ProductClientPriceData' => 'ARRAYOBJ',
+			 'ClientAttributeData' => 'ARRAYOBJ', 'ClientUserData' => 'ARRAYOBJ');
 	public $list_new = array('id_client', 'name');
 	public $list_update = array('id_client');
+   public $list_method = array(
+   			'ClientProductPriceListData' => 'setClientProductPriceList', 
+   			'ProductClientPriceData' => 'setProductClientPrice',
+          	'ClientAttributeData' => 'doClientAttributeAddOrUpdate',  
+   			//'ClientUserData' => 'doClientUserCleanAddOrUpdate');
+   			'ClientUserData' => 'doClientUserAdd');
 }
 
 class ClientAttributeData extends BasicSOAPDataMethods {
@@ -305,13 +321,23 @@ class ClientAttributeData extends BasicSOAPDataMethods {
 
 class ClientUserData extends BasicSOAPDataMethods {
    public $list = array('id_client_user', 'id_client', 'login', 'password', 'password_salt',
-         'description', 'name', 'email', 'phone', 'phone_cell', 'created', 'last_login', 'state');
+         'description', 'name', 'email', 'phone', 'phone_cell', 'created', 'last_login', 'state',
+   		'ClientUserAddressData', 'ClientUserAttributeData', 'AccountManagerData',
+		   'ClientUserPasswordData');
    public $list_type = array('id_client_user' => 'INT+', 'id_client' => 'INT+', 'login' => 'TEXT',
-         'password' => 'TEXT', 'password_salt' => 'TEXT', 'description' => 'TEXT', 'name' => 'TEXT',
-          'email' => 'EMAIL', 'phone' => 'TEXT', 'phone_cell' => 'TEXT',
-          'created' => 'DATE', 'last_login' => 'DATE', 'state' => 'TEXT');
+			'password' => 'TEXT', 'password_salt' => 'TEXT', 'description' => 'TEXT', 'name' => 'TEXT',
+         'email' => 'EMAIL', 'phone' => 'TEXT', 'phone_cell' => 'TEXT',
+         'created' => 'DATE', 'last_login' => 'DATE', 'state' => 'TEXT',
+   		'ClientUserAddressData' => 'ARRAYOBJ', 'ClientUserAttributeData' => 'ARRAYOBJ',
+   		'AccountManagerData' => 'ARRAYOBJ',
+   		'ClientUserPasswordData' => 'OBJ');
    public $list_new = array('id_client_user', 'id_client', 'login', 'password', 'name');
    public $list_update = array('id_client_user', 'id_client');
+   public $list_method = array(
+   			'ClientUserAddressData' => 'doClientUserAddressAddOrUpdate', 
+   			'ClientUserAttributeData' => 'doClientUserAttributeAddOrUpdate',
+   			'AccountManagerData' => 'doClientAccountManagerAddOrUpdate',
+          	'ClientUserPasswordData' => 'doClientUserSetPassword');
 }
 
 class ClientUserAttributeData extends BasicSOAPDataMethods {
@@ -331,7 +357,7 @@ class ClientUserPasswordData extends BasicSOAPDataMethods {
 
 class ClientUserAddressData extends BasicSOAPDataMethods {
 	public $list = array('id_address', 'id_client_user', 'id_client', 'description', 'name',
-			'street', 'city', 'zip_code', 'country');
+			'street', 'city', 'zip_code', 'country', 'state');
 	public $list_type = array('id_address' => 'INT+', 'id_client_user' => 'INT+', 'id_client' => 'INT+',
 			'street' => 'TEXT', 'city' => 'TEXT', 'zip_code' => 'TEXT', 'country' => 'TEXT', 'state' => 'TEXT');
 	public $list_new = array('id_address', 'id_client_user', 'id_client', 'description', 'name',
@@ -342,13 +368,13 @@ class ClientUserAddressData extends BasicSOAPDataMethods {
 
 class AccountManagerData extends BasicSOAPDataMethods {
    public $list = array('id_account_manager', 'id_client_user', 'id_client', 'account_manager_name',
-   		'fullname', 'phone1', 'phone2', 'email');
+   		'fullname', 'phone1', 'phone2', 'email', 'state');
    public $list_type = array('id_account_manager' => 'INT', 'id_client_user' => 'INT+', 'id_client' => 'INT+',
          'account_manager_name' => 'TEXT', 'fullname' => 'TEXT', 'phone1' => 'TEXT', 'phone2' => 'TEXT',
    		 'email' => 'TEXT', 'state' => 'TEXT');
    public $list_new = array('id_account_manager', 'id_client_user', 'id_client', 'account_manager_name',
    		'fullname', 'phone1', 'phone2', 'email', 'state');
-   public $list_update = array('id_account_manager', 'id_client_user', 'id_client', 'account_manager_name');
+   public $list_update = array('id_account_manager', 'id_client_user', 'id_client', 'account_manager_name', 'state');
 }
 
 class CategoryData extends BasicSOAPDataMethods {

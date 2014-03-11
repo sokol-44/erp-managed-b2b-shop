@@ -446,31 +446,41 @@ class Data_Product extends Data_Basket {
    	trigger_error('Not implemented ' . __METHOD__, E_USER_ERROR);
    }
    
-   static function doProductCleanStart($param_array) {
-   	$id_product = (int)$param_array['id_product'];
-   	$res = array();
+   static function doProductCleanMethodData( $what, $id_product) {
+		
+   	$id_product = db_int($id_product);
    	
-   	$del_cat = "delete from " . TBL_SHOP_PRODUCT_TO_CATEGORY . ' where id_product = ' . $id_product;
-   	$del_price = "delete from " . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' where id_product = ' . $id_product;
-   	$del_attr = "delete from " . TBL_SHOP_PRODUCT_ATTRIBUTES . ' where id_product = ' . $id_product;
-   	$del_attr_wg = "delete from " . TBL_SHOP_PRODUCT_ATTRIBUTES_W_GROUP . ' where id_product = ' . $id_product;
-   	
-   	db_transaction_start();
-   	db_query($del_cat);
-   	$res[] = 'CATEGORY:'.db_affected_rows();
-   	db_query($del_price);
-   	$res[] = 'PRICE:'.db_affected_rows();
-   	db_query($del_attr);
-   	$res[] = 'ATTRIBUTE:'.db_affected_rows();
-   	db_query($del_attr_wg);
-   	$res[] = 'ATTRIBUTE_W_GROUP:'.db_affected_rows();
-   	return implode(';', $res);
-   }   
+   	switch( $what ) {
+   		case 'ProductSubtypeData':
+   			trigger_error('Not implemented ' . __METHOD__, E_USER_ERROR);
+   			break;
+   		case 'Product2CategoryData':
+   			$del_cat = "delete from " . TBL_SHOP_PRODUCT_TO_CATEGORY . ' where id_product = ' . $id_product;
+   			return 'CATEGORY:'.db_affected_rows();
+   			break;
+   		case 'ProductClientPriceData':
+   			$del_price = "delete from " . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' where id_product = ' . $id_product;
+   			return 'PRICE:'.db_affected_rows();
+   			break;
+   		case 'ProductAttributeData':
+   			$del_attr = "delete from " . TBL_SHOP_PRODUCT_ATTRIBUTES . ' where id_product = ' . $id_product;
+   			return 'ATTRIBUTE:'.db_affected_rows();
+   			break;
+   		case 'ProductAttributeWGroupData':
+   			$del_attr_wg = "delete from " . TBL_SHOP_PRODUCT_ATTRIBUTES_W_GROUP . ' where id_product = ' . $id_product;
+   			return 'ATTRIBUTE_W_GROUP:'.db_affected_rows();
+   			break;   		
+   	}
 
-   static function doProductCleanStop($param_array) {
+   	return false;
+   }
    
-   	db_transaction_end();
-   	return true;
+   static function doBatchStart($param_array) {
+   	return db_transaction_start();
+   } 
+   
+   static function doBatchStop($param_array) {
+   	return db_transaction_end();
    }   
    
    

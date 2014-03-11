@@ -397,7 +397,7 @@ class Data_Order extends Data_Shop {
           "' . db_int($param['id_client']) . '", "' . db_int($param['id_client_user']) . '",
           "' . db_escape($param['account_manager_name']) . '", "' . db_escape($param['fullname']) . '",
           "' . db_escape($param['phone1']) . '", "' . db_escape($param['phone2']) . '",
-          "' . db_escape($param['email']) . '"", "' . db_escape($param['state']) . '") as status';
+          "' . db_escape($param['email']) . '", "' . db_escape($param['state']) . '") as status';
    
    	add_to_fp($query);
    	$result = db_query( $query );

@@ -223,11 +223,11 @@ function test_getClientUserAddressList( $client ) {
 function test_doClientUserAddressAddOrUpdate( $client ) {
 	$list = array('id_address' => 1, 'id_client_user' => 1, 'id_client' => 3, 
 			'description' => 'description'.time(), 'name' => 'name'.time(), 'street' => 'street'.time(),
-			 'city' => 'city'.time(), 'zip_code' => 'zip_code'.time(), 'country' => 'country'.time());
+			 'city' => 'city'.time(), 'zip_code' => 'zip_code'.time(), 'country' => 'country'.time(), 'state' => 'ACTIVE');
 	$in_oo[] = new ClientUserAddressData($list);
 	$list = array('id_address' => time(), 'id_client_user' => 1, 'id_client' => 3, 
 			'description' => 'description'.time(), 'name' => 'name'.time(), 'street' => 'street'.time(),
-			 'city' => 'city'.time(), 'zip_code' => 'zip_code'.time(), 'country' => 'country'.time());
+			 'city' => 'city'.time(), 'zip_code' => 'zip_code'.time(), 'country' => 'country'.time(), 'state' => 'ACTIVE');
 	$in_oo[] = new ClientUserAddressData($list);
 	test_helper_multiple_in($in_oo, 'doClientUserAddressAddOrUpdate', $client);
 }
@@ -359,7 +359,7 @@ function test_doClientAccountManagerAddOrUpdate( $client ) {
 
 	$list = array('id_account_manager' => 0, 'id_client' => '2', 'id_client_user' => '4',
 			'account_manager_name' => strrev($nt), 'fullname' => 'Michał Sokołowski', 'phone1' => '225552233',
-			'phone2' => $nt, 'email' => 'michal.sokolowski@2m.net.pl');
+			'phone2' => $nt, 'email' => 'michal.sokolowski@2m.net.pl', 'state' => 'ACTIVE');
 	
 	$in_oo[] = new AccountManagerData($list);
 	
@@ -502,7 +502,8 @@ function test_doProductCleanAddOrUpdate( $client ) {
 	$in_oo3[] = new ProductClientPriceData(array('id_product' => '1', 'id_client' => '16', 'price' => 11));
 	$in_oo3[] = new ProductClientPriceData(array('id_product' => '1', 'id_client' => '1943', 'price' => 11));
 	$in_oo4[] = new ProductAttributeData(array('id_product' => '1', 'type' => 'BALANCE_FREE_CREDIT', 'val' => 'val'.$nt));
-	$in_oo4[] = new ProductAttributeData(array('id_product' => '1', 'type' => 'BALANCE_FREE_CREDIT'.$nt, 'val' => 'val'.$nt));
+	$in_oo4[] = new ProductAttributeData(array('id_product' => '1', 'type' => 'BALANCE_FREE_CREDIT', 'val' => 'val_x_'.$nt));
+//	$in_oo4[] = new ProductAttributeData(array('id_product' => '1', 'type' => 'BALANCE_FREE_CREDIT'.$nt, 'val' => 'val'.$nt));
 	$in_oo5[] = new ProductAttributeWGroupData(
 			   array('id_product' => $nt, 'id_attribute' => 12599, 'attribute_order' => 1, 'attribute_name' => 'anam'
 			, 'attribute_value' => 'val'.$nt, 'id_group' => 12599, 'group_name' => 'gname', 'group_order' => 2));
@@ -523,4 +524,106 @@ function test_doProductCleanAddOrUpdate( $client ) {
 
 	test_helper_multiple_in($in_oo, 'doProductCleanAddOrUpdate', $client);
 }
+
+
+
+
+
+function test_doClientCleanAddOrUpdate( $client ) {
+	$nt = time();
+	$in_oo = array();
+	$in_oo2 = array();
+	$in_oo3 = array();
+	$in_oo4 = array();
+	$in_oo5 = array();
+
+	/*
+   			'ClientProductPriceListData' => 'setClientProductPriceList', 
+   			'ProductClientPriceData' => 'setProductClientPrice',
+          	'ClientAttributeData' => 'doClientAttributeAddOrUpdate',  
+   			'ClientUserData' => 'doClientUserCleanAddOrUpdate');
+   			*/
+
+	$in_oo2[] = new ProductClientPriceData(array('id_product' => '1', 'id_client' => '16', 'price' => 11));
+	$in_oo2[] = new ProductClientPriceData(array('id_product' => '1', 'id_client' => '1422', 'price' => 11));
+	
+	$list = array('id_client' => 1422, 'type' => 'name'.$nt, 'val' => 'val'.$nt);
+	$in_oo3[] = new ClientAttributeData($list);
+	$list = array('id_client' => 2, 'type' => 'BALANCE_FREE_CREDIT', 'val' => $nt);
+	$in_oo3[] = new ClientAttributeData($list);
+	
+	$in_oo4[] = new ClientUserData(array('id_client_user' => '1', 'id_client' => '1422', 'login' => '123xx', 'password' => 'xyz', 'password_salt' => '',
+			'description' => 'desc', 'name' => 'name'.microtime(true), 'email' => 'email', 'state' => 'ACTIVE'));
+	$in_oo4[] = new ClientUserData(array('id_client_user' => '1111', 'id_client' => '3', 'login' => '123xx', 'password' => 'xyz', 'password_salt' => '',
+			'description' => 'desc', 'name' => 'name'.microtime(true), 'email' => 'email', 'state' => 'ACTIVE'));
+
+	$in_oo[] = new ClientData(array('id_client' => '1422', 'name' => 'name'.microtime(true), 'description' => 'desc',
+          'email' => 'email', 'phone' => '555333444', 'state' => 'ACTIVE',
+			'ProductClientPriceData' => $in_oo2,
+			'ClientAttributeData' => $in_oo3,
+			'ClientUserData' => $in_oo4
+	));
+// 	print_r($in_oo);
+// 	print_r($in_oo[0]->return_array());
+// die();
+	test_helper_multiple_in($in_oo, 'doClientCleanAddOrUpdate', $client);
+}
+
+
+
+
+
+function test_doClientUserCleanAddOrUpdate( $client ) {
+	$nt = time();
+	$in_oo = array();
+	$in_oo2 = array();
+	$in_oo3 = array();
+	$in_oo4 = array();
+	$in_oo5 = array();
+
+	/*
+   			'ClientUserAddressData' => 'doClientUserAddressAddOrUpdate', 
+   			'ClientUserAttributeData' => 'doClientUserAttributeAddOrUpdate',
+   			'AccountManagerData' => 'doClientAccountManagerAddOrUpdate',
+          	'ClientUserPasswordData' => 'doClientUserSetPassword');
+	*/
+	$list = array('id_address' => 1, 'id_client_user' => 10, 'id_client' => 1422, 
+			'description' => 'description'.time(), 'name' => 'name'.time(), 'street' => 'street'.time(),
+			 'city' => 'city'.time(), 'zip_code' => 'zip_code'.time(), 'country' => 'country'.time(), 'state' => 'ACTIVE');
+	$in_oo2[] = new ClientUserAddressData($list);
+	$list = array('id_address' => time(), 'id_client_user' => 1, 'id_client' => 3, 
+			'description' => 'description'.time(), 'name' => 'name'.time(), 'street' => 'street'.time(),
+			 'city' => 'city'.time(), 'zip_code' => 'zip_code'.time(), 'country' => 'country'.time(), 'state' => 'ACTIVE');
+	$in_oo2[] = new ClientUserAddressData($list);
+
+	$list = array('id_client' => 1422, 'id_client_user' => 10, 'type' => 'name'.$nt, 'val' => 'val'.$nt);
+	$in_oo3[] = new ClientUserAttributeData($list);
+	
+	$list = array('id_client' => 2, 'id_client_user' => 4, 'type' => 'BALANCE_FREE_CREDIT', 'val' => $nt);
+	$in_oo3[] = new ClientUserAttributeData($list);
+
+	$list = array('id_account_manager' => 1, 'id_client' => '1422', 'id_client_user' => '10',
+		'account_manager_name' => strrev($nt), 'fullname' => 'Michał Sokołowski', 'phone1' => '225552233',
+		'phone2' => $nt, 'email' => 'michal.sokolowski@2m.net.pl', 'state' => 'ACTIVE');
+
+	$in_oo4[] = new AccountManagerData($list);
+
+	$in_oo[] = new ClientUserData(array('id_client_user' => '10', 'id_client' => '1422', 'login' => '123xx', 'password' => 'xyz', 'password_salt' => '',
+			'description' => 'desc', 'name' => 'name'.microtime(true), 'email' => 'email', 'state' => 'ACTIVE'
+			,'ClientUserAddressData' => $in_oo2
+			,'ClientUserAttributeData' => $in_oo3
+			,'AccountManagerData' => $in_oo4
+	));
+// 		print_r($in_oo4[0]);
+	   //print_r($in_oo[0]->return_array());
+// die();
+	test_helper_multiple_in($in_oo, 'doClientUserCleanAddOrUpdate', $client);
+}
+
+
+
+
+
+
+
 ?>
