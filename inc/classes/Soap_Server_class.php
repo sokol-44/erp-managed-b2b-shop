@@ -457,7 +457,7 @@ class ProductData extends BasicSOAPDataMethods {
 
 class ClientProductPriceListData extends BasicSOAPDataMethods {
    public $list = array('id_client', 'ProductPriceData');
-   public $list_type = array('id_client' => 'INT+', 'ProductPriceData' => 'OBJ');
+   public $list_type = array('id_client' => 'INT+', 'ProductPriceData' => 'ARRAYOBJ');
    public $list_new = array('id_client', 'ProductPriceData');
    public $list_update = array('id_client', 'ProductPriceData');
 }

@@ -530,15 +530,16 @@ class Data_Product extends Data_Basket {
       
       $query_start='insert ignore into  ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' (`id_product`, `id_client`, `price`) values ';
 
-      add_to_fp('setClientProductPriceList');
+      add_to_fp('Data::setClientProductPriceList');
       
       $val_array = array();
       $count=1;
       $ins_count=0;
       $id_client_db = db_int($id_client);
       foreach( $id_product_array as $prod_val ) {
+		 if( Framework::is_null($prod_val) ) continue;
          $val_array[] = '(' . db_int($prod_val['id_product']) . ',' . $id_client_db . ',' . db_float($prod_val['price']) . ' )';
-         if( $count%1000 == 0 ) {
+         if( sizeof($val_array)%1000 == 0 ) {
             $query = $query_start . implode(',', $val_array);
             $val_array = array();
             
