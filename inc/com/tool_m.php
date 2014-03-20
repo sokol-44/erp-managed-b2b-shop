@@ -104,10 +104,12 @@ if( $F->check_get('search') ) {
    $load_result = db_result_array_full_id($db_res);
    
    $query2 = '';
-   $query2_tmpl1 = '(SELECT "#id_ups#" as id_ups, #cabinet_count# as cabinet_count, (bd_i.minutes-1) as time FROM tool_battery_data bd_i
+   $query2_tmpl1 = '(SELECT "#id_ups#" as id_ups, #cabinet_count# as cabinet_count, (bd_i.minutes-1) as time 
+   FROM tool_battery_data bd_i
 	WHERE bd_i.capacity = #cap1# and ( bd_i.result * #count1# ) <= #need_power_batt#
 	LIMIT 1)';
-   $query2_tmpl2 = '(SELECT "#id_ups#" as id_ups, #cabinet_count# as cabinet_count, (bd_i.minutes-1) as time FROM tool_battery_data bd_i
+   $query2_tmpl2 = '(SELECT "#id_ups#" as id_ups, #cabinet_count# as cabinet_count, (bd_i.minutes-1) as time 
+   FROM tool_battery_data bd_i
 	left join tool_battery_data bd_c ON ( bd_i.minutes = bd_c.minutes )
 	WHERE bd_i.capacity = #cap1# and bd_c.capacity = #cap2# and 
    ( bd_i.result * #count1# + bd_c.result * #count2# ) <= #need_power_batt#
@@ -119,14 +121,14 @@ if( $F->check_get('search') ) {
    foreach($load_result as $id_ups => $ups_data) {
    	if( $ups_data['internal_count'] > 0 && $ups_data['external_count'] > 0  ) {
    		if( $normalize_w ) $need_power_batt = $need_power * $ups_data['normalize_w'];
-   		for( $external_count=1; $external_count<=$ups_data['max_external']; $external_count++ ) {
+   		for( $external_count=$ups_data['max_external']; $external_count>=1; $external_count-- ) {
    			$ar_r = array($id_ups.'_'.$external_count, $external_count, $need_power_batt,
    					$ups_data['internal_capacity'], $ups_data['internal_count'],
    					$ups_data['external_capacity'], $ups_data['external_count'] * $external_count);
    			$query2_arr[] = str_replace($ar_ch, $ar_r, $query2_tmpl2);
    		}
    	} else {		
-   		$ar_r = array($id_ups.'_'.$external_count, 0, $need_power_batt, 
+   		$ar_r = array($id_ups.'_0', 0, $need_power_batt, 
    				$ups_data['internal_capacity'] + $ups_data['external_capacity'],
    				$ups_data['internal_count'] + $ups_data['external_count'], 0 , 0);
    		$query2_arr[] = str_replace($ar_ch, $ar_r, $query2_tmpl1);
@@ -157,21 +159,31 @@ if( $F->check_get('search') ) {
    	foreach( array_keys($ups_3cls_array) as $quality_search ) {
    		$time_under = 0;
    		$time_over = 2400;
+   		$cabinet_under = 0;
+   		$cabinet_over = 0;
 	   	foreach( $load_result as $id_ups => $ups_data ) {
 	   		if( $ups_data['quality'] == $quality_search ) {
 	   			
 	   			//under
 	   			if( $ups_data['time'] < $need_time && 
-						 $ups_data['time'] > $time_under ) {
+						 ( ($ups_data['time'] > $time_under) ||
+   					   ( $ups_data['time'] == $time_under &&
+   					  $ups_data['cabinet_count'] < $cabinet_under)  ) 
+   					) {
 	   				$ups_3cls_array[$quality_search]['under'] = $ups_data;
 	   				$time_under =  $ups_data['time'];
+	   				$cabinet_under = $ups_data['cabinet_count'];
 	   			}
 	   			
 	   			//over
 	   			if( $ups_data['time'] >= $need_time && 
-						 $ups_data['time'] < $time_over ) {
+						 ( ( $ups_data['time'] < $time_over ) || 
+					 		( $ups_data['time'] == $time_over &&
+					 		$ups_data['cabinet_count'] < $cabinet_over ) )
+   					) {
 	   				$ups_3cls_array[$quality_search]['over'] = $ups_data;
 	   				$time_over =  $ups_data['time'];
+	   				$cabinet_over = $ups_data['cabinet_count'];
 	   			}
 	   		
 	   		}
@@ -306,13 +318,20 @@ echo '<div class="product_columns product_column_'.(int)$nr_col.' '.$class_add.'
 	  
 	  if( $product['time'] < $need_time ) $time_txt = '<span style="color: red">'.(int)$product['time'].' min</span>';
 	  else $time_txt = '<span style="color: black">'.(int)$product['time'].' min</span>';
-	  
+
+	  	if( (int)$product['cabinet_count'] == 1 ) {
+	  		$cabinet_txt = "Szafka: " . $product['cabinet'];
+		} elseif ( (int)$product['cabinet_count'] > 1 ) {
+	  		$cabinet_txt = "Szafka: " . (int)$product['cabinet_count'].' x '.$product['cabinet'];
+	  	}	else {
+	  		$cabinet_txt = '';
+	  	}
 	  
 	  $data = array(
 			'data'=> 
 			'Producent: ' . $product['maker'] . "<br>".
 			'Model: ' . $product['model'] . "<br>" .
-			(($product['cabinet']!='')?"Szafka: " . $product['cabinet_count'] . ' x '.$product['cabinet']."<br>":'') . "<br>".
+			(($cabinet_txt!='')?$cabinet_txt."<br>":'') . "<br>".
 			'Typologia: ' . strtolower($product['typology']) . "<br>".
 			'Fazy: ' . strtolower($product['phase']) . "<br>",
 		 'bottom'=> 
