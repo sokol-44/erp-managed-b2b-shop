@@ -392,6 +392,12 @@
 	<wsdl:message name="doClientUserCleanAddOrUpdateResponse">
 		<wsdl:part name="doClientUserCleanAddOrUpdateResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="doEmailSendRequest">
+		<wsdl:part name="doEmailSendRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doEmailSendResponse">
+		<wsdl:part name="doEmailSendResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
 			<wsdl:output message="tns:getProductListResponse"></wsdl:output>
@@ -881,6 +887,14 @@
 							</wsdl:input>
 							<wsdl:output
 								message="tns:doClientUserCleanAddOrUpdateResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doEmailSend">
+							<wsdl:input
+								message="tns:doEmailSendRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doEmailSendResponse">
 							</wsdl:output>
 						</wsdl:operation></wsdl:portType>
 	<wsdl:binding name="shop_control-SOAP" type="tns:shop_control">
@@ -1579,7 +1593,18 @@
                use="literal" />
          </wsdl:output>
       </wsdl:operation>
-	</wsdl:binding>
+      <wsdl:operation name="doEmailSend">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+   </wsdl:binding>
 	<wsdl:service name="shop_control">
 		<wsdl:port binding="tns:shop_control-SOAP" name="shop_control-SOAP">
 			<soap:address location="http://b2b_sklep.localhost/SOAP/scs.php" />

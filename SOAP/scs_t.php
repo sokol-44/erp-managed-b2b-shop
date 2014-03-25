@@ -97,11 +97,11 @@ $client = new SoapClient($soap_address, $soap_param_array);
 
 // test_doProductCleanAddOrUpdate( $client );
 // test_doClientCleanAddOrUpdate( $client );
+// test_doClientUserCleanAddOrUpdate( $client );
 
 
 //PLACEHOLDERS
-test_doClientUserCleanAddOrUpdate( $client );
-
+test_doEmailSend( $client );
 ?>
 </pre>
 </body>

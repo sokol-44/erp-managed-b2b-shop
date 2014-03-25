@@ -674,6 +674,15 @@ class Data_Person extends Data_Rights {
 
       return db_fetch_array($res);
    }
+   
+   static function get_client_user_data( $id_client_user ) {
+      $res = db_query('select cu.id_client_user, cu.id_client, cu.name, cu.description, cu.login, cu.email,
+      		cu.phone, cu.phone_cell, cu.state
+         	from ' . TBL_GLOBAL_CLIENT_USER . ' cu
+         	where cu.id_client_user = ' . db_int($id_client_user) );
+      
+      return db_fetch_array($res);
+   }
 
    static function get_address( $id_address ) {
    

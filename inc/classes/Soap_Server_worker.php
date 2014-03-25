@@ -49,6 +49,16 @@ class Soap_Server_worker {
       else return $array_res;
    }
    
+   public function getReturnStatusData($data) {
+      $array_res = array(
+				'id' => 0,
+				'additional_data' => '',
+				'status'  => ''
+            ) ;
+      
+      
+   }
+   
    private function _addArrayValues( $array ) {
       $res = array();
       $res['Info'] = array();
@@ -100,6 +110,47 @@ class Soap_Server_worker {
    	}
    	return false;
    }
+   
+   
+   function doEmailSend( $input ) {//ParamStartLength, ClientData
+   	$this->input_data_type = 'NEW';
+   	$this->SingleParam_MultipleReturns = false;	
+   	
+   	add_to_fp('-------- doEmailSend');
+   
+	   if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+	   	$response_tmp = array();
+	   	foreach($input['values'] as $key => $val) {
+	   		$SingleValueClass = new EmailData($val);
+	   	   if( !$SingleValueClass->is_error() ) {
+	            $param_array = $SingleValueClass->return_array();
+	            add_to_fp('$param_array:'. print_r($param_array, true) );
+	            if( strtolower($param_array['mode']) == 'auto' ) {
+		            if( method_exists('Mail2Send', $param_array['method']) ) {
+		            	add_to_fp("param_array['method']".$param_array['method']);
+// 			            $res_array = Mail2Send::{$param_array['method']}($param_array['data'], true);
+		            	$res_array = call_user_func_array( 
+		            			array('Mail2Send', $param_array['method']), array($param_array['data'], true)
+		            	);
+			            add_to_fp('$res_array:'. print_r($res_array, true) );
+			            $response_tmp[] = $res_array;
+		            } else {
+		            	$response_tmp[] = $this->getReturnError('doEmailSend', $input, 'METHOD: NOT IMPLEMENTED');
+		            }
+	            } else {
+	            	$response_tmp[] = $this->getReturnError('doEmailSend', $input, 'MODE: NOT IMPLEMENTED');
+	            }
+	         } else {
+	            $response_tmp[] = $this->getReturnError('doEmailSend', $input, $SingleValueClass->return_error() );
+	         }
+	   	}
+	   	add_to_fp(print_r($response_tmp, true));
+	   	$response = $this->_addArrayValues($response_tmp);
+	   } else {
+	   	$response = $this->getReturnError('doClientUserAdd', '', 'EMPTY_LIST');
+	   }
+   }
+   
 
    function getClientNewList( $input ) {//ParamStartLength, ClientData
    	$this->input_data_type = 'NEW';
@@ -463,7 +514,35 @@ class Soap_Server_worker {
                add_to_fp('$param_array:'. print_r($param_array, true) );
                list($mstr, $id_client_new) = explode(':', $param_array['description']);
                if( ($mstr == 'new_id' || $mstr == 'new_id_client') && (int)$id_client_new > 0 ) {
-               	$response_tmp[] = Data::doClientNewIdUpdateList((int)$param_array['id_client'], (int)$id_client_new);
+   					$res_additional_data = array();
+   				
+   					$res_additional_data['doClientNewIdUpdateStart'] = Data::doBatchStart($param_array);
+               	
+   					//id_one, additional_data, status
+   					$res = Data::doClientNewIdUpdateList((int)$param_array['id_client'], (int)$id_client_new);
+   					add_to_fp('$res:'. print_r($res, true) );
+   					$res_additional_data['doClientNewIdUpdateList'] = $res['additional_data'];
+   					
+   					if( $this->_method_didn_return_error($res) ) {
+   						
+	   					foreach( $SingleValueClass->list_method as $key => $method_name ) {
+	   						add_to_fp('list_method: '."$key => $method_name\n".print_r( $param_array[$key],true) );
+	   						list($val_out, $status) = $SingleValueClass->data_exist($key, $param_array[$key]);
+	   						if( Framework::not_null($val_out) && Framework::not_null($param_array[$key]) ) {
+	   							$input_val['values'] = $param_array[$key];
+	   							add_to_fp('list_method $input_val: '.print_r($input_val,true));
+	   							$res_additional_data_tmp = Data::doClientUserCleanMethodData( $key, $param_array );
+	   							$res_additional_data[$key] = $this->${method_name}( $input_val );
+	   							$res_additional_data[$key]['Info']['Remove'] = $res_additional_data_tmp;
+	   						}
+   						}
+   						
+   					}
+   				
+   					$res_additional_data['doClientNewIdUpdateStop'] = Data::doBatchStop($param_array);
+   					$res['additional_data'] = $res_additional_data;
+   				
+   					$response_tmp[] = $res;
                } else {
                	$response_tmp[] = $this->getReturnError('doClientNewIdUpdateList', $val, 'WRONG_NEW_ID');
                }

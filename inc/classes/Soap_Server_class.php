@@ -292,7 +292,12 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
  * - lista elementów
  * - wymagane elementy dla nowy/update
  */
-
+class EmailData extends BasicSOAPDataMethods {
+	public $list = array('mode', 'method', 'data');
+	public $list_type = array('mode' => 'TEXT', 'method' => 'TEXT', 'data' => 'ARRAY');
+	public $list_new = array('mode', 'method', 'data');
+	public $list_update = array('mode', 'method', 'data');
+}
 
 class ClientData extends BasicSOAPDataMethods {
 	public $list = array('id_client', 'name', 'description', 'email', 'phone', 'state', 
@@ -301,7 +306,8 @@ class ClientData extends BasicSOAPDataMethods {
 	public $list_type = array('id_client' => 'INT+', 'name' => 'TEXT', 'description' => 'TEXT',
 			 'email' => 'EMAIL', 'phone' => 'TEXT', 'state' => 'TEXT', 
    		 'ClientPriceListData' => 'ARRAYOBJ', 'ProductClientPriceData' => 'ARRAYOBJ',
-			 'ClientAttributeData' => 'ARRAYOBJ', 'ClientUserData' => 'ARRAYOBJ');
+			 'ClientAttributeData' => 'ARRAYOBJ', 'ClientUserData' => 'ARRAYOBJ',
+			 'EmailData' => 'ARRAYOBJ');
 	public $list_new = array('id_client', 'name');
 	public $list_update = array('id_client');
    public $list_method = array(
@@ -309,7 +315,8 @@ class ClientData extends BasicSOAPDataMethods {
    			'ProductClientPriceData' => 'setProductClientPrice',
           	'ClientAttributeData' => 'doClientAttributeAddOrUpdate',  
    			//'ClientUserData' => 'doClientUserCleanAddOrUpdate');
-   			'ClientUserData' => 'doClientUserAdd');
+   			'ClientUserData' => 'doClientUserAdd',
+   			'EmailData' => 'doEmailSend');
 }
 
 class ClientAttributeData extends BasicSOAPDataMethods {
@@ -330,14 +337,15 @@ class ClientUserData extends BasicSOAPDataMethods {
          'created' => 'DATE', 'last_login' => 'DATE', 'state' => 'TEXT',
    		'ClientUserAddressData' => 'ARRAYOBJ', 'ClientUserAttributeData' => 'ARRAYOBJ',
    		'AccountManagerData' => 'ARRAYOBJ',
-   		'ClientUserPasswordData' => 'OBJ');
+   		'ClientUserPasswordData' => 'OBJ', 'EmailData' => 'OBJ');
    public $list_new = array('id_client_user', 'id_client', 'login', 'password', 'name');
    public $list_update = array('id_client_user', 'id_client');
    public $list_method = array(
    			'ClientUserAddressData' => 'doClientUserAddressAddOrUpdate', 
    			'ClientUserAttributeData' => 'doClientUserAttributeAddOrUpdate',
    			'AccountManagerData' => 'doClientAccountManagerAddOrUpdate',
-          	'ClientUserPasswordData' => 'doClientUserSetPassword');
+          	'ClientUserPasswordData' => 'doClientUserSetPassword',
+   			'EmailData' => 'doEmailSend');
 }
 
 class ClientUserAttributeData extends BasicSOAPDataMethods {
@@ -434,13 +442,17 @@ class ProductSubtypeData extends BasicSOAPDataMethods {
 
 class ProductData extends BasicSOAPDataMethods {
    public $list = array('id_product', 'name', 'description', 'producer', 'catalog_index',
-          'picture_small_url', 'picture_big_url', 'picture_id', 'price', 'vat', 'quantity',
-          'status', 'Product2CategoryData', 'ProductClientPriceData', 'ProductAttributeData',
+          'picture_small_url', 'picture_big_url', 'picture_id', 'price', 'vat',
+   		 'promotion_price', 'promotion_date_start', 'promotion_date_end',
+   		 'quantity', 'status', 
+   		 'Product2CategoryData', 'ProductClientPriceData', 'ProductAttributeData',
    		 'ProductAttributeWGroupData');
    public $list_type = array('id_product' => 'INT+', 'name' => 'TEXT', 'description' => 'TEXT',
           'producer' => 'TEXT', 'catalog_index' => 'TEXT',
           'picture_small_url' => 'PATH', 'picture_big_url' => 'PATH', 'picture_id' => 'INT+',
-          'price' => 'FLOAT+', 'vat' => 'FLOAT', 'quantity' => 'INT+', 'status' => 'TEXT',
+          'price' => 'FLOAT+', 'vat' => 'FLOAT', 
+   		 'promotion_price' => 'FLOAT', 'promotion_date_start' => 'TEXT', 'promotion_date_end' => 'TEXT',
+   		 'quantity' => 'INT+', 'status' => 'TEXT',
    		 'ProductSubtypeData' => 'ARRAYOBJ',
           'Product2CategoryData' => 'ARRAYOBJ', 'ProductClientPriceData' => 'ARRAYOBJ',
           'ProductAttributeData' => 'ARRAYOBJ', 'ProductAttributeWGroupData' => 'ARRAYOBJ'

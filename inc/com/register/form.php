@@ -40,7 +40,7 @@ $GET = $F->add_local_get('action', 'send', $GET_tmp);
 	</tr>
 </table>
 <div class="register_form_container container_subheader"><?php echo Lang::_('admin account details'); ?><div class="icon"></div></div>
-<span class="dscr_el">Jest to główne konto firmy posiadające największe uprawnienia i służące do zarządzania innymi urzytkownikami przypisanymi do firmy.</span>
+<span class="dscr_el">Jest to główne konto firmy posiadające największe uprawnienia i służące do zarządzania innymi użytkownikami przypisanymi do firmy.</span>
 <table class="tableBox">
 	<tr>
 		<td><strong><?php echo Lang::_('Name'); ?></strong><span class="need_el"></span></td>

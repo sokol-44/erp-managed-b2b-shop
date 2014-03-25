@@ -482,7 +482,6 @@ function test_doProductAttributeWGroupAddOrUpdate( $client ) {
 	test_helper_multiple_in($in_oo, 'doProductAttributeWGroupAddOrUpdate', $client);
 }
 
-
 function test_doProductCleanAddOrUpdate( $client ) {
 	$nt = time();
 	$in_oo = array();
@@ -525,10 +524,6 @@ function test_doProductCleanAddOrUpdate( $client ) {
 	test_helper_multiple_in($in_oo, 'doProductCleanAddOrUpdate', $client);
 }
 
-
-
-
-
 function test_doClientCleanAddOrUpdate( $client ) {
 	$nt = time();
 	$in_oo = array();
@@ -568,10 +563,6 @@ function test_doClientCleanAddOrUpdate( $client ) {
 // die();
 	test_helper_multiple_in($in_oo, 'doClientCleanAddOrUpdate', $client);
 }
-
-
-
-
 
 function test_doClientUserCleanAddOrUpdate( $client ) {
 	$nt = time();
@@ -620,9 +611,15 @@ function test_doClientUserCleanAddOrUpdate( $client ) {
 	test_helper_multiple_in($in_oo, 'doClientUserCleanAddOrUpdate', $client);
 }
 
+function test_doEmailSend( $client ) {
+	$nt = time();
+	array('mode', 'method', 'data');
+	$list = array('mode' => 'auto', 'method' => 'to_client_register_confirmation', 'data' => 
+			array('id_client' => '1943', 'id_client_user' => '1004'));
+	$in_oo[] = new EmailData($list);
 
-
-
+	test_helper_multiple_in($in_oo, 'doEmailSend', $client);
+}
 
 
 

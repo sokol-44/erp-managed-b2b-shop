@@ -61,11 +61,14 @@ class Mail extends PHPMailer {
             	$this->Host = $config_mail['send_method_smpt_host'];
             	$this->Username = $config_mail['send_method_smpt_username'];
             	$this->Password = $config_mail['send_method_smpt_password'];
-            	$this->Hostname = $this->Host;
-            	$this->SMTPDebug = false;
-            	// $this->Debugoutput = 'html';
+            	$pos = strpos($this->Host, ':');
+            	if( $pos > 0 ) $this->Hostname = substr($this->Host, 0, $pos);
+            	else $this->Hostname = $this->Host;
+//             	print_debug( $config_mail);
+//             	$this->SMTPDebug = 2;
+//             	$this->Debugoutput = 'html';
             	if ( isset($config_mail['send_method_smpt_secure']) && 
-            		( $config_mail['send_method_smpt_secure'] == 'ssl' && $config_mail['send_method_smpt_secure'] == 'tls' ) ) {
+            		( $config_mail['send_method_smpt_secure'] == 'ssl' || $config_mail['send_method_smpt_secure'] == 'tls' ) ) {
             			$this->SMTPSecure = $config_mail['send_method_smpt_secure'];
             	}
             }

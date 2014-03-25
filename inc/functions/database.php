@@ -252,6 +252,8 @@ function db_query($query, $link = 'db_link') {
    global $$link;
    global $query_log;
 
+   if( !is_resource($$link) ) db_init(false, $link);
+   
    $tstart = microtime(true);
    
    $result = mysql_query($query, $$link) or
@@ -262,8 +264,12 @@ function db_query($query, $link = 'db_link') {
    	die('q:' . $query . ' ' . $result);
    }
 
-   if (defined('DEBUG_DB_QUERIES') && (DEBUG_DB_QUERIES == 'true')) {
-      $dbg = debug_backtrace();
+
+   if ( ( defined('DEBUG_DB_QUERIES') && DEBUG_DB_QUERIES == 'true' ) || 
+        ( isset($_GET['DEBUG_DB']) && $_GET['DEBUG_DB']=='true')
+      ) {
+   	
+   	$dbg = debug_backtrace();
       $l = array();
       foreach($dbg as $idx => $ar) {
       	$fl = str_replace('C:\\Users\\ms.2M\\Dropbox\\Projects\\eclipse\\workspaceB2B', '', $ar['file']);
@@ -299,6 +305,9 @@ function db_affected_rows() {
 
 function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link = 'db_link') {
    global $$link;
+   global $query_log;
+   
+   if( !is_resource($$link) ) db_init(false, $link);
 
    $error_data =  "\n". $sql_query . "\n" . $db_error_code . "\n" . print_r($debug_backtrace, true);
    
@@ -333,11 +342,16 @@ function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link 
      } else die('DB fatal error (2)');
    }
 
-   if (defined('DEBUG_DB_QUERIES') && (DEBUG_DB_QUERIES == 'true')) {
+   if ( ( defined('DEBUG_DB_QUERIES') && DEBUG_DB_QUERIES == 'true' ) || 
+        ( isset($_GET['DEBUG_DB']) && $_GET['DEBUG_DB']=='true')
+      ) {
       echo '<p align="left">ERROR:' . "$errno $error<br>\r\n" .
       'QUERY:' . htmlspecialchars($sql_query) . "<br>\r\n" .
       'BACKTRACE:' . str_replace('  ', '&nbsp;', nl2br(print_r($debug_backtrace, true))) . "<br>\r\n" .
       '</p>';
+      if( ( isset($_GET['DEBUG_DB']) && $_GET['DEBUG_DB']=='true') ) {
+      	echo '<pre>'.print_r($query_log, true).'</pre>';
+      }
    }
 
    //FIXME - don't die - propagate error - to other
