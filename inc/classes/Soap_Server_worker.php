@@ -620,8 +620,33 @@ class Soap_Server_worker {
       
       return($response);
    }
-
-
+   
+   function doClientRemovePermanently ( $input ) {
+   	$this->input_data_type = 'UPDATE';
+   	$this->SingleParam_MultipleReturns = false;
+   
+   	add_to_fp('-------- doClientRemovePermanently');
+   	if( isset($input['values']) && is_array($input['values']) && sizeof($input['values']) > 0) {
+   		$response_tmp = array();
+   		foreach($input['values'] as $key => $val) {
+   			$SingleValueClass = new ClientData($val, $this->input_data_type);
+   			if( !$SingleValueClass->is_error() ) {
+   				$param_array = $SingleValueClass->return_array();
+   				add_to_fp('$param_array:'. print_r($param_array, true) );
+   				$response_tmp[] = Data::doClientRemovePermanently($param_array, true);
+   			} else {
+   				$response_tmp[] = $this->getReturnError('doClientRemovePermanently', $val, $SingleValueClass->return_error(), false);
+   			}
+   		}
+   		add_to_fp(print_r($response_tmp, true));
+   		$response = $this->_addArrayValues($response_tmp);
+   	} else {
+   		$response = $this->getReturnError('doClientRemovePermanently', '', 'EMPTY_LIST');
+   	}
+   
+   	return($response);
+   }
+   
 
    function doClientAttributeAddOrUpdate( $input ) {//ParamStartLength, ClientData
    	$this->input_data_type = 'NEW';

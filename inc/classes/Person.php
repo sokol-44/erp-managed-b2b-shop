@@ -396,13 +396,28 @@ class Person {
       $idx=$id.'.'.$table;
       if( isset(self::$person_rights_cache[$idx]) ) $client_client_data = self::$person_rights_cache[$idx];
       else {
+      	
          $client_client_data = Data::get_person_data( $table, $id );
-         self::$person_rights_cache[$idx] = $client_client_data;
+   		if( Framework::not_null($client_client_data))
+   			self::$person_rights_cache[$idx] = $client_client_data;
       }
 
       return $client_client_data;
    }
-   
+
+   static public function get_client_first_client_user_data( $id_client, $right = false ) {
+   	//'CLIENT', 'ADMIN'
+   	$idx=(int)$id_client.'.CLIENT';
+   	if( isset(self::$person_rights_cache[$idx]) ) $client_client_data = self::$person_rights_cache[$idx];
+   	else {
+   		$client_client_data = Data::get_client_first_client_user_data( (int)$id_client, $righ ) ;
+   		if( Framework::not_null($client_client_data))
+   			self::$person_rights_cache[$idx] = $client_client_data;
+   	}
+   	 
+   	return $client_client_data;
+   }
+      
    static public function get_client_user_short_text( $data ) {
       $F = Framework::g_global();
    	

@@ -542,6 +542,8 @@ class Data_Product extends Data_Basket {
    }
    
    static function doProductClientPriceClean( $id_client ) {
+   	$F = Framework::g_global();
+   	
 //       $query = 'select "' . db_int($id_client) . '" as id_one, "" as additional_data,
 //        b_func_product_client_price_all_del("' . db_int($id_client) . '") as status';
       $query = 'delete from ' . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' where id_client = "' . db_int($id_client) . '"';

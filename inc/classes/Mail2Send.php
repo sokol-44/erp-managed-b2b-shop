@@ -125,10 +125,19 @@ class Mail2Send {
    	$Lang = Lang::g_global();
    	
    	$client_data = Data::get_client_data((int)$data['id_client']);
-   	$client_user_data = Data::get_client_user_data((int)$data['id_client_user']);
+   	
+   	if( (int)$data['id_client_user'] > 0 ) {
+   		$client_user_data = Person::get_client_user_data((int)$data['id_client_user']);
+   	} elseif( (int)$data['id_client_user'] == -2 ) { // first user (role="admin") to this client
+   		$client_user_data = Person::get_client_first_client_user_data((int)$data['id_client'], 'ADMIN');
+   	} elseif( (int)$data['id_client_user'] == -1 ) {
+   		$client_user_data = false;
+   	} else {
+   		$client_user_data = false;
+   	}
 
    	add_to_fp('to_client_register_confirmation $client_data:'. print_r($client_data, true) );
-   	add_to_fp('to_client_register_confirmation $$client_user_data:'. print_r($client_user_data, true) );
+   	add_to_fp('to_client_register_confirmation $client_user_data:'. print_r($client_user_data, true) );
    	if( $F->not_null($client_data) && $F->not_null($client_user_data) &&
          $data['id_client'] == $client_user_data['id_client'] ) {
    		
@@ -163,6 +172,31 @@ class Mail2Send {
    			'additional_data' => 'id_client_user:'.(int)$data['id_client_user'],
    			'status'  => ($res1?'SUCCESS':'ERROR'));
    		}
+   	} elseif( $F->not_null($client_data) && $F->is_null($client_user_data) ) {
+   		$mail = new Mail();
+   		
+   		$email_body = $Lang->get_translation_load('LONG_EMAIL_REGISTER_CLIENT_ONLY_CONFIRMATION');
+   		$mail->Subject = $Lang->get_translation_load('LONG_EMAIL_REGISTER_CLIENT_ONLY_CONFIRMATION_SUBJECT');
+   		
+   		$array_rep = array('data' => $F->get_current_datetime(),
+   				'id_client' => $client_data['id_client'],
+   				'c_name' => $client_data['name'],
+   				'c_email' => $client_data['email']);
+   		
+   		$mail->AddAddress($client_data['email'], $client_data['name']);
+   		 
+   		$mail->AddBCC('michal.sokolowski@2m.net.pl');
+   		$mail->AddBCC('konrad.iwan@2m.net.pl');
+   		$mail->Body = self::email_body_replace($email_body, $array_rep);
+   		$res1 =  $mail->SendAddSubject();
+   			
+   		if( !$SOAP ) return $res1;
+   		else {
+   			return array('id' => (int)$data['id_client'],
+   					'additional_data' => 'id_client_user:'.(int)$data['id_client_user'],
+   					'status'  => ($res1?'SUCCESS':'ERROR'));
+   		}
+   		   	
    	}
    	
    	if( !$SOAP ) return false;
@@ -175,12 +209,49 @@ class Mail2Send {
    
 
 
-   public static function to_client_user_register_confirmation( $data ) {
+   public static function to_client_user_register_confirmation( $data, $SOAP = false ) {
    	$P = Person::g_global();
    	$F = Framework::g_global();
    	$Lang = Lang::g_global();
+
+   	$client_user_data = Person::get_client_user_data((int)$data['id_client_user']);
    	
+   	add_to_fp('to_client_register_confirmation $client_user_data:'. print_r($client_user_data, true) );
+   	if( $F->not_null($client_user_data) ) {
+   		 
+   		$mail = new Mail();
    	
+   		$email_body = $Lang->get_translation_load('LONG_EMAIL_REGISTER_CLIENT_USER_CONFIRMATION');
+   		$mail->Subject = $Lang->get_translation_load('LONG_EMAIL_REGISTER_CLIENT_USER_CONFIRMATION_SUBJECT');
+   	
+   		$array_rep = array('data' => $F->get_current_datetime(),
+   				'id_client_user' => $client_user_data['id_client_user'],
+   				'cu_name' => $client_user_data['name'],
+   				'cu_lname' => $client_user_data['login'],
+   				'cu_email' => $client_user_data['email'],
+   				'cu_phone' => $client_user_data['phone']);
+   	
+   		$mail->AddAddress($client_user_data['email'], $client_user_data['name']);
+   		 
+   		$mail->AddBCC('michal.sokolowski@2m.net.pl');
+   		$mail->AddBCC('konrad.iwan@2m.net.pl');
+   		$mail->Body = self::email_body_replace($email_body, $array_rep);
+   		$res1 =  $mail->SendAddSubject();
+   			
+   		if( !$SOAP ) return $res1;
+   		else {
+   			return array('id' => (int)$data['id_client_user'],
+   					'additional_data' => '',
+   					'status'  => ($res1?'SUCCESS':'ERROR'));
+   		}
+   	}
+   	
+   	if( !$SOAP ) return false;
+   	else {
+   		return array('id' => (int)$data['id_client_user'],
+   				'additional_data' => '',
+   				'status'  => 'ERROR');
+   	}   	
    	
    	
    }

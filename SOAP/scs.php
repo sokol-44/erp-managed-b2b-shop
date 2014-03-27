@@ -1,4 +1,5 @@
 <?
+ob_start();
 include "init.php";
 
 include "scs_t_function.php";
@@ -63,20 +64,24 @@ ini_set('soap.wsdl_cache_enabled', '0');
 //auth
 //http://www.php.net/manual/en/soapserver.soapserver.php#78872
 
-$param_array = array(
-	'cache_wsdl'     => WSDL_CACHE_NONE,
-	'features'     => SOAP_SINGLE_ELEMENT_ARRAYS,
-	'login' => 'ala',
-	'password' => 'ola'
-);
-
-$server = new SoapServer('shop_control.wsdl', $param_array);
+$server = new SoapServer('shop_control.wsdl', $soap_param_array);
 //$s = new Soap_Server();
 $server->setClass('Soap_Server');
 $server->setPersistence(SOAP_PERSISTENCE_SESSION);
 
 add_to_fp("server in\n" . print_r($server , true) . "\n\n");
-$server->handle();
+
+use_soap_error_handler(true);
+register_shutdown_function( "check_for_fatal" );
+
+try {
+	if( function_exists('xdebug_disable') ) xdebug_disable();
+	ob_clean();
+	$server->handle();
+	ob_end_flush();
+} catch (SoapFault $exc) {
+	add_to_fp("SoapFault in\n" . print_r($exc , true) . "\n\n");
+}
 
 add_to_fp("server out\n" . print_r($server , true) . "\n\n");
 

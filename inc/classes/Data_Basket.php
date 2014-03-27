@@ -33,6 +33,20 @@ class Data_Basket extends Data_Order {
       return $basket_list;
    }
     
+   
+   static function remove_permanently_basket_client( $id_client ) {
+   	$nr_basket = 0;
+   	
+   	if( (int)$id_client>0 && Framework::not_null(Data::get_client_data( (int)$id_client ) ) ) {
+   		$basket_list = Data::get_basket_chain_basket_list( (int)$id_client );
+   		foreach( $basket_list as $id_shopping_basket => $basket_params ) {
+   			$nr_basket += Data::remove_basket($basket_params);
+   		}
+   		return $nr_basket;
+   	} else {
+   		return false;
+   	}
+   }
    //BASKET
 
    static function get_basket_data($basket_params) {
@@ -203,7 +217,7 @@ class Data_Basket extends Data_Order {
       
       db_transaction_end();
       
-      return true;
+      return db_affected_rows();
    }
    
    static function put_basket_update_lock_data($basket_params) {

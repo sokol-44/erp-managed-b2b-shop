@@ -24,7 +24,7 @@ $description_html = str_replace('\n', "<br>\n", $F->output_string_html( $product
 $GET_basket = array('mode' => 'add_to_basket', 'id_product' => $id_product);
 $link_basket = $F->make_link(CFG_COM_BASKET, $F->add_local_get($GET_basket, '', $GET_tmp) );
 
-$add_basket_quantity = '<div class="add_basket_quantity">' . Lang::_('QUANTITY') . $F->draw_input_field('quantity' , 1, 'size="1"') . '</div>';
+$add_basket_quantity = '<div class="add_basket_quantity">' . Lang::_('QUANTITY') . $F->draw_input_field('quantity' , 1, 'size="1"', 'text', false) . '</div>';
 $add_basket_form = $F->draw_form('add_to_basket', $link_basket, 'GET') .
    $F->draw_hidden_field('com', CFG_COM_BASKET) .
    $F->draw_hidden_field('mode', 'add_to_basket') .

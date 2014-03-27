@@ -314,8 +314,7 @@ class ClientData extends BasicSOAPDataMethods {
    			'ClientProductPriceListData' => 'setClientProductPriceList', 
    			'ProductClientPriceData' => 'setProductClientPrice',
           	'ClientAttributeData' => 'doClientAttributeAddOrUpdate',  
-   			//'ClientUserData' => 'doClientUserCleanAddOrUpdate');
-   			'ClientUserData' => 'doClientUserAdd',
+   			'ClientUserData' => 'doClientUserCleanAddOrUpdate',
    			'EmailData' => 'doEmailSend');
 }
 

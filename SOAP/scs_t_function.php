@@ -7,6 +7,8 @@ $soap_param_array = array(
 	'authentication' => SOAP_AUTHENTICATION_SIMPLE,
 	'login' => 'ala',
 	'password' => 'ola',
+	'compression' => true,
+	'exceptions' => true,
 	'trace' => true
 );
 
@@ -27,13 +29,32 @@ function add_to_fp($str) {
    
 }
 
+function check_for_fatal() {
+	$error = error_get_last();
+	if ( $error["type"] == E_ERROR ) {
+		add_to_fp('check_for_fatal nr: E_ERROR str '.$error["message"].', fl '.$error["file"].', ln '.$error["line"]);
+		ob_clean();
+		echo '<?xml version="1.0" encoding="UTF-8"?><SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Body><SOAP-ENV:Fault>'.
+				'<faultcode>SOAP-ENV:Server</faultcode>'.
+				'<faultstring>'.
+				$error["message"].', line '.$error["line"].' in '.pathinfo($error["file"], PATHINFO_BASENAME).
+				'</faultstring></SOAP-ENV:Fault></SOAP-ENV:Body></SOAP-ENV:Envelope>';
+		echo ob_end_flush();
+	}
+}
+
+
 function print_lr( $obj ) {
 
    if( is_object($obj) ) {
       echo '<pre>';
       echo "__getLastRequest\n" . xml_b($obj->__getLastRequest()) . "\n\n";
       echo "__getLastRequestHeaders\n" . xml_b($obj->__getLastRequestHeaders()) . "\n\n";
-      echo "__getLastResponse\n" . xml_b($obj->__getLastResponse()) . "\n\n";
+      $last_resp = $obj->__getLastResponse();
+      if( strpos($last_resp, 'xdebug-error') > 0 )
+      	echo '</pre><div style="border: 2px dashed blue">'.$last_resp.'</div><pre>';
+      else 
+      	echo "__getLastResponse\n" . xml_b($obj->__getLastResponse()) . "\n\n";
       echo "__getLastResponseHeaders \n" . xml_b($obj->__getLastResponseHeaders ()) . "\n\n";
       echo '</pre>';
    }

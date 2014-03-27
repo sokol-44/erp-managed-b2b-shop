@@ -465,16 +465,19 @@ class Data_Person extends Data_Rights {
    		case 'ClientUserAddressData':
    			$del_cat = "update " . TBL_GLOBAL_CLIENT_USER_ADDRESS . ' set state="NA"
    					where id_client = ' . $id_client . ' and id_client_user = ' . $id_client_user;
+   			db_query($del_cat);
    			return 'ADDRESS:'.db_affected_rows();
    			break;
    		case 'ClientUserAttributeData':
-   			$del_cat = "delete from " . TBL_GLOBAL_CLIENT_USER_ATTRIBUTES . '
+   			$del_att = "delete from " . TBL_GLOBAL_CLIENT_USER_ATTRIBUTES . '
    					where id_client = ' . $id_client . ' and id_client_user = ' . $id_client_user;
+   			db_query($del_att);
    			return 'ATTRIBUTE:'.db_affected_rows();
    			break;
    		case 'AccountManagerData':
-   			$del_cat = "update " . TBL_GLOBAL_CLIENT_USER_ACCOUNT_MANAGER . ' set state="NA"
+   			$del_acmgr = "update " . TBL_GLOBAL_CLIENT_USER_ACCOUNT_MANAGER . ' set state="NA"
    					where id_client = ' . $id_client . ' and id_client_user = ' . $id_client_user;
+   			db_query($del_acmgr);
    			return 'ACCOUNT_MANAGER:'.db_affected_rows();
    			break;
    		case 'ClientUserPasswordData':
@@ -482,7 +485,7 @@ class Data_Person extends Data_Rights {
    			break;
    	}  	
    	
-   	
+   	return false;
    }
    
    
@@ -493,12 +496,14 @@ class Data_Person extends Data_Rights {
    	switch( $what ) {
    		case 'ClientProductPriceListData':
    		case 'ProductClientPriceData':
-   			$del_cat = "delete from " . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' where id_client = ' . $id_client;
+   			$del_prc = "delete from " . TBL_SHOP_PRODUCT_CLIENT_PRICE . ' where id_client = ' . $id_client;
+   			db_query($del_prc);
    			return 'PRICE:'.db_affected_rows();
    			break;
    		case 'ClientAttributeData':
-   			$del_cat = "delete from " . TBL_GLOBAL_CLIENT_ATTRIBUTES . ' where id_client = ' . $id_client;
-   			return 'CATEGORY:'.db_affected_rows();
+   			$del_attr = "delete from " . TBL_GLOBAL_CLIENT_ATTRIBUTES . ' where id_client = ' . $id_client;
+   			db_query($del_attr);
+   			return 'ATTRIBUTE:'.db_affected_rows();
    			break;
    		case 'ClientUserData':
    			return 'RECURSION';
@@ -507,7 +512,60 @@ class Data_Person extends Data_Rights {
    	 
    	return false;
    }
-    
+   
+   
+   static function doClientRemovePermanently( array $param_array ) {
+   
+   	$id_client = (int)$param_array['id_client'];
+   	//count
+   	$nr_basket = Data::remove_permanently_basket_client( $id_client );
+   	//array
+   	$client_user = Data::client_remove_client_user( $id_client );
+   	
+   	$tmp_cli = array();
+   	$tmp_cli['ProductClientPriceData'] = Data::doClientCleanMethodData('ProductClientPriceData', $id_client);
+   	$tmp_cli['ClientAttributeData'] = Data::doClientCleanMethodData('ClientAttributeData', $id_client);
+   	
+   	$del_cli = "delete from " . TBL_GLOBAL_CLIENT . ' where id_client = ' . db_int($id_client);
+   	add_to_fp('doClientRemovePermanently:'.$del_cli);
+   	db_query($del_cli);
+   	$res_cli_del = db_affected_rows();
+   	
+   	$additional_data = array(
+   			'BASKET' => $nr_basket,
+   			'CLIENT_USER' => $client_user,
+   			'CLIENT' => $tmp_cli
+   	);
+   	
+   	$return = array('id' => (int)$id_client,
+   			'additional_data' => $additional_data,
+   			'status'  => (($res_cli_del>0)?'SUCCESS':'ERROR'));
+   	
+   	return $return;
+   }
+   
+   static function client_remove_client_user( $id_client ) {
+   	$user_client_list = self::get_persons_list('CLIENT', $id_client);
+   	
+   	$res = array();
+   	foreach( $user_client_list as $user_client ) {
+   		$id_client_user = (int)$user_client['id_client_user'];
+   		$param_array = array('id_client' => $id_client, 'id_client_user' => $id_client_user);
+   		$tmp = array();
+   		$tmp[] = Data::doClientUserCleanMethodData('ClientUserAddressData', $param_array);
+   		$tmp[] = Data::doClientUserCleanMethodData('ClientUserAttributeData', $param_array);
+   		$tmp[] = Data::doClientUserCleanMethodData('AccountManagerData', $param_array);
+   		$del_cliusr = "delete from " . TBL_GLOBAL_CLIENT_USER . ' 
+   				where id_client = "' . db_int($id_client) . '" and id_client_user = "' . db_int($id_client_user) . '"';
+   		add_to_fp('client_remove_client_user:'.$del_cliusr);
+   		db_query($del_cliusr);
+   		$tmp[] = 'CLIENT:'.db_affected_rows();
+   		
+   		$res['CLIENT_'.$id_client_user] = implode(',',$tmp);
+   	}
+   	return $res;
+   }
+       
    static function doClientAdd($param_array, $add = false) {
       
       extract( $param_array );
@@ -667,7 +725,8 @@ class Data_Person extends Data_Rights {
    }
    
    static function get_client_data( $id_client ) {
-      $res = db_query('select distinct h.id_client, h.name, h.description, h.email, h.phone, h.created, h.state, count(hu.id_client_user) as count_users
+      $res = db_query('select distinct h.id_client, h.name, h.description, h.email, h.phone, h.created, h.state,
+      		count(hu.id_client_user) as count_users, group_concat(hu.id_client_user) as ids_client_user
          	from ' . TBL_GLOBAL_CLIENT . ' h ,
          	' . TBL_GLOBAL_CLIENT_USER . ' hu
          	where h.id_client = hu.id_client and h.id_client = ' . db_int($id_client) );
@@ -675,6 +734,27 @@ class Data_Person extends Data_Rights {
       return db_fetch_array($res);
    }
    
+   static public function get_client_first_client_user_data( $id_client, $right = false ) {
+   	//'CLIENT', 'ADMIN'
+   	
+   	$where = '';
+   	if( Framework::not_null($right) ) {
+   		$where = ' and p.id_client_user IN (SELECT gl.id_client_user from 
+   		' . TBL_GLOBAL_RIGHTS2CLIENT . ' gl join  ' . TBL_GLOBAL_RIGHTS . ' r
+   		on (gl.id_rights = r.id_rights and r.scope = "CLIENT" ) 
+   		where r.name = "' . db_escape($right) . '")';
+   	}
+
+   	$query = 'select p.id_client, p.id_client_user, p.login, p.password, p.name, p.description, p.email,
+        		p.created, p.last_login, p.state, GROUP_CONCAT(r.name) as rights_list, GROUP_CONCAT(r.id_rights) as rights_ids
+        		from ' . TBL_GLOBAL_CLIENT_USER . ' p,  ' . TBL_GLOBAL_RIGHTS2CLIENT . ' gl,  ' . TBL_GLOBAL_RIGHTS . ' r
+      		where p.id_client_user = gl.id_client_user and gl.id_rights = r.id_rights and
+   			p.id_client = ' . (int)$id_client . ' ' . $where . '
+      		group by p.id_client_user order by p.created, p.id_client_user asc limit 1';
+   	$res = db_query($query);
+   	return db_fetch_array($res);
+   }
+      
    static function get_client_user_data( $id_client_user ) {
       $res = db_query('select cu.id_client_user, cu.id_client, cu.name, cu.description, cu.login, cu.email,
       		cu.phone, cu.phone_cell, cu.state

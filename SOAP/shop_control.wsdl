@@ -398,6 +398,12 @@
 	<wsdl:message name="doEmailSendResponse">
 		<wsdl:part name="doEmailSendResponse" type="xsd:string"></wsdl:part>
 	</wsdl:message>
+	<wsdl:message name="doClientRemovePermanentlyRequest">
+		<wsdl:part name="doClientRemovePermanentlyRequest" type="xsd:string"></wsdl:part>
+	</wsdl:message>
+	<wsdl:message name="doClientRemovePermanentlyResponse">
+		<wsdl:part name="doClientRemovePermanentlyResponse" type="xsd:string"></wsdl:part>
+	</wsdl:message>
 	<wsdl:portType name="shop_control">						<wsdl:operation name="getProductList">
 			<wsdl:input message="tns:getProductListRequest"></wsdl:input>
 			<wsdl:output message="tns:getProductListResponse"></wsdl:output>
@@ -895,6 +901,14 @@
 							</wsdl:input>
 							<wsdl:output
 								message="tns:doEmailSendResponse">
+							</wsdl:output>
+						</wsdl:operation>
+						<wsdl:operation name="doClientRemovePermanently">
+							<wsdl:input
+								message="tns:doClientRemovePermanentlyRequest">
+							</wsdl:input>
+							<wsdl:output
+								message="tns:doClientRemovePermanentlyResponse">
 							</wsdl:output>
 						</wsdl:operation></wsdl:portType>
 	<wsdl:binding name="shop_control-SOAP" type="tns:shop_control">
@@ -1594,6 +1608,17 @@
          </wsdl:output>
       </wsdl:operation>
       <wsdl:operation name="doEmailSend">
+         <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
+         <wsdl:input>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:input>
+         <wsdl:output>
+            <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
+               use="literal" />
+         </wsdl:output>
+      </wsdl:operation>
+      <wsdl:operation name="doClientRemovePermanently">
          <soap:operation soapAction="http://b2b_sklep.localhost/SOAP/scs.php" />
          <wsdl:input>
             <soap:body namespace="http://b2b_sklep.localhost/SOAP/scs.php"
