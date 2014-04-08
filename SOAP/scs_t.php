@@ -47,7 +47,7 @@ $client = new SoapClient($soap_address, $soap_param_array);
 // test_doClientUserSetPassword( $client );
 // test_doClientUserDelete( $client );
 // test_doProductAdd( $client );
-// test_doProductChange( $client );
+test_doProductChange( $client );
 // test_doCategoryAdd( $client );
 // test_doCategoryEdit( $client );
 // test_doCategoryDelete( $client );
@@ -101,10 +101,13 @@ $client = new SoapClient($soap_address, $soap_param_array);
 
 // test_doEmailSend( $client );
 
+// test_doClientCleanAddOrUpdate( $client );
+// test_doClientRemovePermanently( $client );
+
+// test_getAllDatabaseData( $client );
 
 //PLACEHOLDERS
-test_doClientCleanAddOrUpdate( $client );
-test_doClientRemovePermanently( $client );
+
 ?>
 </pre>
 </body>

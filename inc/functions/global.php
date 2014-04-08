@@ -39,7 +39,9 @@ function get_best_tmp_dir() {
    return sys_get_temp_dir();
 }
 
-
+function gl_escapeshellarg_walk($str, $idx) {
+   	return escapeshellarg($str);
+}
 
 class File_Debug {
    private $save_debug_fd = false;

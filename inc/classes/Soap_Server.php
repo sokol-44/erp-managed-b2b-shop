@@ -127,9 +127,42 @@ class Soap_Server {
             'DateTime' => date("Y-m-d\TH:i:sP")
             ) );
       
-      $res_xml = ArrayToXML::toXml($return_data);
-      add_to_fp('$res_xml ' . $res_xml);
-      return $res_xml;
+      if(  strpos($return_data['status'], 'FILE:') == 0 && 
+      	  strpos($return_data['status'], 'FILE:') !== FALSE ) {
+      	
+      	
+      	$dta = strpos($return_data['status'], ':');
+      	if( $dta > 0 ) $fn=substr($return_data['status'], $dta+1);
+      	
+      	add_to_fp('$dta ;' . $dta . '; ' . print_r($return_data,true).' ;fn:'.$fn);
+
+      	add_to_fp(' $is_file='.(is_file($fn)?'t':'n').' $is_readable='.(is_readable($fn)?'t':'n'));
+      	
+      	if( is_file($fn) && is_readable($fn) ) {
+//       		sleep(1);
+      		clearstatcache(true, $fn);
+      		$stat_ar = stat($fn);
+      		add_to_fp('file - add from ' . print_r($fn, true) . ' stat:' . print_r($stat_ar, true));
+      		$return_data['additional_data'] = file_get_contents($fn);
+      		//$return_data['additional_data'] = '<![CDATA['.file_get_contents($fn).']]>';
+      		//return file_get_contents($fn);
+      	} else {
+      		add_to_fp('file - error ' . print_r($fn, true));     
+      		$return_data['additional_data'] = $return_data['status']; 
+      		$return_data['status'] = 'ERROR,WRONG_FILE';
+      	}
+      	
+      	$res_xml = ArrayToXML::toXml($return_data);
+      	add_to_fp('$res_xml ' . $res_xml);
+      	return $res_xml;
+      	
+      } else {
+      	
+      	$res_xml = ArrayToXML::toXml($return_data);
+      	add_to_fp('$res_xml ' . $res_xml);
+      	return $res_xml;
+      }
+      
    }
 
 }

@@ -216,6 +216,9 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
                $path_parts = pathinfo($val);
                if( ctype_print($val) && $path_parts ) $val_out = $path_parts['dirname'] . DS . $path_parts['basename'];
                break;
+            case 'UUID':
+            	if( preg_replace('/[a-f0-9\-]+/i', '', $val) == '' ) $val_out = (int)$val;
+               break;
             case 'TEXT':
             case 'TXT':
                $val_out = strip_tags($val);
@@ -300,11 +303,11 @@ class EmailData extends BasicSOAPDataMethods {
 }
 
 class ClientData extends BasicSOAPDataMethods {
-	public $list = array('id_client', 'name', 'description', 'email', 'phone', 'state', 
+	public $list = array('id_client', 'name', 'description', 'email', 'phone', 'state',
 			 'ClientPriceListData', 'ProductClientPriceData',
 			 'ClientAttributeData', 'ClientUserData',);
 	public $list_type = array('id_client' => 'INT+', 'name' => 'TEXT', 'description' => 'TEXT',
-			 'email' => 'EMAIL', 'phone' => 'TEXT', 'state' => 'TEXT', 
+			 'email' => 'EMAIL', 'phone' => 'TEXT', 'state' => 'TEXT',
    		 'ClientPriceListData' => 'ARRAYOBJ', 'ProductClientPriceData' => 'ARRAYOBJ',
 			 'ClientAttributeData' => 'ARRAYOBJ', 'ClientUserData' => 'ARRAYOBJ',
 			 'EmailData' => 'ARRAYOBJ');
@@ -456,7 +459,7 @@ class ProductData extends BasicSOAPDataMethods {
           'Product2CategoryData' => 'ARRAYOBJ', 'ProductClientPriceData' => 'ARRAYOBJ',
           'ProductAttributeData' => 'ARRAYOBJ', 'ProductAttributeWGroupData' => 'ARRAYOBJ'
    		);
-   public $list_new = array('id_product', 'price', 'vat', 'quantity');
+   public $list_new = array('id_product', 'name', 'price', 'vat', 'quantity');
    public $list_update = array('id_product');
    public $list_method = array(
    			'ProductSubtypeData' => 'doProductSubtypeAddOrUpdate', 
@@ -523,7 +526,6 @@ class ParamDoubleStartLength extends BasicSOAPDataMethods {
           'length' => 'INT+', 'options' => 'TEXT');
    public $list_new = array('id_start_one', 'id_start_two', 'length');
    public $list_update = array('id_start_one', 'id_start_two', 'length');
-   
 }
 
 class StatusData extends BasicSOAPDataMethods {

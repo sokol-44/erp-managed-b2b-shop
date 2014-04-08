@@ -58,6 +58,7 @@ class Data_Order extends Data_Shop {
       on (o.id_account_manager = cuam.id_account_manager)
       where o.id_order ' . $comparision_dir . db_int($id_order_start) . $where . '
       ORDER BY o.id_order ' . $order_dir . ' LIMIT '. db_int($length);
+      add_to_fp($query);
       
       $result = db_query( $query );
       $ret_tmp = db_result_array_full($result);

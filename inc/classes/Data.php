@@ -305,6 +305,51 @@ class Data extends Data_Person {
       return $list_places;
    }
 
+   function getAllDatabaseData( $param ) {
+   	$tmp_dir = ini_get('upload_tmp_dir') ? ini_get('upload_tmp_dir') : sys_get_temp_dir();
+   	$tmp_fn = tempnam($tmp_dir, microtime(true).'-');
+   	$res = array('id' => $param['id_start'], 'additional_data' => '', 'status' => '');
+
+   	add_to_fp('getAllDatabaseData ' . PHP_OS . ' fn:'.$tmp_fn);
+   	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+   		$res = array('id_one' => $param['id_start'], 'additional_data' => 'WIN', 'status' => 'ERROR');	
+   		$mysqldump_where = 'C:\wamp\bin\mysql\mysql5.5.24\bin\mysqldump';
+   	} else {
+   		$mysqldump_where = stristr(':',  exec("whereis mysqldump"));
+   		$mysqldump_where = trim( substr($string, $mysqldump_where) );
+   	}
+   	
+   	add_to_fp('$mysqldump_where '.$mysqldump_where.' DB:' . print_r($config_db, true));
+   	$return_var = 0;
+   	
+   	if( $mysqldump_where != '' ) {
+   		$config_db = $GLOBALS['config']['DB'];
+   		array_walk($config_db, 'gl_escapeshellarg_walk');
+   		$cmd = $mysqldump_where . " --host=".$config_db['server']." --port=".$config_db['port'] .
+   		" --user=".$config_db['username']." --password=".$config_db['password']." --result-file=".$tmp_fn .
+   		" --single-transaction" . //--xml 
+   		" --ignore-table=".$config_db['database'].".core_db_errors" .
+   		" --ignore-table=".$config_db['database'].".core_sessions" .
+   		" " . $config_db['database'];
+   		add_to_fp('$cmd '.$cmd);
+   		//$fp=fopen($tmp_fn, 'w');fwrite($fp, str_repeat(time().' ', rand(10,20)));fflush($fp);fclose($fp);
+   		//sleep(20);
+   		passthru($cmd, $return_var);
+   		if( $return_var == 0 ) {
+   			$res = array('id_one' => $param['id_start'], 'additional_data' => '', 'status' => 'FILE:'.$tmp_fn);
+   		} else {
+   			$res = array('id_one' => $param['id_start'], 'additional_data' => 'mysqldump error', 'status' => 'ERROR');
+   		}
+   	} else {
+   		$res = array('id_one' => $param['id_start'], 'additional_data' => 'no whereis', 'status' => 'ERROR');
+   	}
+   	
+   	add_to_fp('$res '.$res);
+   	
+   	return $res;
+   }
+
+   
 }
 
 ?>

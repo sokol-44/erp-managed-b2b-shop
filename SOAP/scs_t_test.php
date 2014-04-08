@@ -2,8 +2,10 @@
 
 function test_helper_single_in($data_in, $method, $client ) {
    echo "test_$method REAL\n";
+   //var_dump( $data_in);
    $in_o = array( 'value_1' => $data_in->return_array() );
    $in_o_x = ArrayToXML::toXml($in_o, 'DocumentElement');
+   //add_to_fp(print_r($in_o_x));
    print("IN:" . xml_b( $in_o_x ). '<br>');
    try { $resC = $client->$method($in_o_x); }
    catch (Exception $e) { /*var_dump($e);*/ print_lr( $client ); }
@@ -96,8 +98,9 @@ function test_doProductChange( $client ) {
    $in_oo = array();
    $in_oo[] = new ProductData(array('id_product' => 1, 'name' => 'jeden', 'description' => 'desc 1', 'picture_small_url' => '', 'picture_big_url' => '',
          'picture_id' => '', 'price' => '11.11', 'vat' => '11', 'quantity' => '11', 'status' => 'ACTIVE'));
-   $in_oo[] = new ProductData(array('id_product' => 212, 'name' => 'jeden', 'description' => 'desc 1', 'picture_small_url' => '', 'picture_big_url' => '',
-         'picture_id' => '', 'price' => '11.11', 'vat' => '11', 'quantity' => '11', 'status' => 'ACTIVE'));
+   $in_oo[] = new ProductData(array('id_product' => 1, 'quantity' => rand(10,100)), 'UPDATE');
+   //$in_oo[] = new ProductData(array('id_product' => 212, 'name' => 'jeden', 'description' => 'desc 1', 'picture_small_url' => '', 'picture_big_url' => '',
+   //      'picture_id' => '', 'price' => '11.11', 'vat' => '11', 'quantity' => '11', 'status' => 'ACTIVE'));
    test_helper_multiple_in($in_oo, 'doProductChange', $client);
 }
 
@@ -642,6 +645,9 @@ function test_doEmailSend( $client ) {
 	test_helper_multiple_in($in_oo, 'doEmailSend', $client);
 }
 
-
+function test_getAllDatabaseData( $client ) {
+   $in_oo = new ParamStartLength(array('id_start' => time(), 'length' => '1'));
+   test_helper_single_in($in_oo, 'getAllDatabaseData', $client );
+}
 
 ?>

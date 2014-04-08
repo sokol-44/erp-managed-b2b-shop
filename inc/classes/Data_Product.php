@@ -428,33 +428,29 @@ class Data_Product extends Data_Basket {
    }
    
    static function doProductAdd($param_array) {
-
-   	extract( $param_array );
+   	add_to_fp('doProductAdd');
    
-      $query = 'select "' . db_int($id_product) . '" as id_one,
-          "" as additional_data,
-          b_func_product_add("' . db_int($id_product) . '", "' . db_escape($name). '", "' . db_escape($description). '",
-          "' . db_escape($producer). '", "' . db_escape($catalog_index). '",
-          "' . db_escape($picture_small_url). '", "' . db_escape($picture_big_url). '", "' . db_escape($picture_id). '",
-          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_escape($quantity) . '", "' . db_escape($status) . '") as status';
+      $query = 'select id_product ' . TBL_SHOP_PRODUCT . ' where
+     	id_product = ' . db_int($param_array['id_product']);
+      $res = array('id_one' => $param_array['id_product'], 'additiona_data' => '', 'status' => '');
+      
       add_to_fp($query);
       $result = db_query( $query );
-      $status = db_fetch_array($result);
-      if( $F->not_null($promotion_price) && 
-      	$F->not_null($promotion_date_start) && $F->not_null($promotion_date_end) &&
-      	strpos( $status['status'], 'ERROR') === FALSE  ) {
-
-      	$query_promotion = 'update ' . TBL_SHOP_PRODUCT . ' set
-   			`promotion_price` = "' .  db_float($promotion_price) . '",
-   			`promotion_date_start` = "' . db_escape($promotion_date_start) . '",
-   			`promotion_date_end` = "' . db_escape($promotion_date_end) . '"
-			 	where id_product = "' . db_int($id_product) . '"';
-      	$status['additional_data'] = 'PROMOTION_SET';
-      	$result = db_query( $query );
+      $ar = db_rows($result);
+      
+      if( $ar > 0 ) {
+      	$res['status'] = 'ERROR,EXIST';
+      	return $res;
       }
-      return $status;
+      
+      return Data::doProductChange($param_array);
    }
 
+   static function doProductAddOrUpdate($param_array) {
+   	add_to_fp('doProductAddOrUpdate');
+   	return Data::doProductChange($param_array);
+   }
+   
    static function doProductSubtypeAddOrUpdate($param_array) {
    	trigger_error('Not implemented ' . __METHOD__, E_USER_ERROR);
    }
@@ -500,45 +496,32 @@ class Data_Product extends Data_Basket {
    static function doProductChange($param_array) {
    	$F = Framework::g_global();
 
-   	extract( $param_array );
-       
-      $query = 'select "' . db_int($id_product) . '" as id_one,
-          "" as additional_data,
-          b_func_product_change("' . db_int($id_product) . '", "' . db_escape($name). '", "' . db_escape($description). '",
-          "' . db_escape($producer). '", "' . db_escape($catalog_index). '",
-          "' . db_escape($picture_small_url). '", "' . db_escape($picture_big_url). '", "' . db_escape($picture_id). '",
-          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_escape($quantity_salt) . '", "' . db_escape($status) . '") as status';
-      add_to_fp($query);
-      $result = db_query( $query );
-      $status = db_fetch_array($result);
-      if( $F->not_null($promotion_price) && 
-      	$F->not_null($promotion_date_start) && $F->not_null($promotion_date_end) &&
-      	strpos( $status['status'], 'ERROR') === FALSE  ) {
+   	//extract( $param_array );
+   	add_to_fp('doProductChange');
+   	$keys=array('id_product');
+   	$update_array = array();
+   	$insert_array = array();
+   	foreach( $param_array as $key => $val ) {
+   		if( !in_array($key, $keys ) ) {
+   			$update_array[] = '`' . db_escape($key) . '`="' . db_escape($val) . '"';
+   		}
+   		$insert_array[] = '`' . db_escape($key) . '`="' . db_escape($val) . '"';
+   	}
+   	$query = 'insert into ' . TBL_SHOP_PRODUCT . ' set '.implode(',',$insert_array).'
+   			ON DUPLICATE KEY UPDATE '.implode(',',$update_array);
+   	
+   	$res = array('id_one' => $param_array['id_product'], 'additiona_data' => '', 'status' => '');
 
-      	$query_promotion = 'update ' . TBL_SHOP_PRODUCT . ' set
-   			`promotion_price` = "' .  db_float($promotion_price) . '",
-   			`promotion_date_start` = "' . db_escape($promotion_date_start) . '",
-   			`promotion_date_end` = "' . db_escape($promotion_date_end) . '"
-			 	where id_product = "' . db_int($id_product) . '"';
-      	$status['additional_data'] = 'PROMOTION_SET';
-      	$result = db_query( $query );
-      }
-      return $status;
-   }
-   
-   static function doProductAddOrUpdate($param_array) {
-
-   	extract( $param_array );
-       
-      $query = 'select "' . db_int($id_product) . '" as id_one,
-          "" as additional_data,
-          b_func_product_set("' . db_int($id_product) . '", "' . db_escape($name). '", "' . db_escape($description). '",
-          "' . db_escape($producer). '", "' . db_escape($catalog_index). '",
-          "' . db_escape($picture_small_url). '", "' . db_escape($picture_big_url). '", "' . db_escape($picture_id). '",
-          "' . db_escape($price). '", "' . db_escape($vat) . '", "' . db_int($quantity) . '", "' . db_escape($status) . '") as status';
-      add_to_fp($query);
-      $result = db_query( $query );
-      return db_fetch_array($result);
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	$ar = db_affected_rows( $result );
+   	 
+   	if( $ar == 1 ) $res['status'] = 'SUCCESS,NEW';
+   	elseif( $ar == 2 ) $res['status'] = 'SUCCESS,EXIST';
+   	elseif( $ar == 0 ) $res['status'] = 'SUCCESS,EXIST,NODIFF';
+   	else $res['status'] = 'ERROR,UNKNOW';
+   		
+   	return $res;
    }
    
    static function doProductClientPriceClean( $id_client ) {

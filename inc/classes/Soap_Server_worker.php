@@ -395,6 +395,29 @@ class Soap_Server_worker {
       return($response);
    }
     
+   function getAllDatabaseData( $input ) { //ParamStartLength, OrderData
+      $this->input_data_type = 'UPDATE';
+      $this->SingleParam_MultipleReturns = false;
+      
+      add_to_fp('in: getAllDatabaseData');
+      
+      $ParamStartLength = $this->_getSingleValue($input, 'ParamStartLength');
+      if( is_object($ParamStartLength) ) {
+         if( !$ParamStartLength->is_error() ) {
+         	$param_array = $ParamStartLength->return_array();
+         	add_to_fp('$param_array:'. print_r($param_array, true) );
+				$response = Data::getAllDatabaseData( $param_array ) ;
+         } else {
+            $response = $this->getReturnError('getAllDatabaseData', $input, $ParamStartLength->return_error() );
+         }
+      } else {
+         $response = $this->getReturnError('getAllDatabaseData', $input, 'WRONG CLASS');
+      }
+      add_to_fp('$response:'. print_r($response, true) );
+      
+      return($response);
+   }
+    
    function getOrderList( $input ) { //ParamStartLength, OrderData
       $this->input_data_type = 'NEW';
       $this->SingleParam_MultipleReturns = true;

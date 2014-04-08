@@ -8,7 +8,7 @@ $utime_array = explode(' ', microtime());
 
 $ts=date('Ymd_Hi_s_').sprintf('%06x',(int)(($utime_array[0]*0xffffff)&0xffffff));
 
-//exec('/usr/bin/find /home/company/ftp/b2b-sklep/ups_seller2/SOAP/log -type f  -name "server2*" -mtime +1 -exec rm {} \;');
+$find_del = exec('/usr/bin/find /home/company/ftp/b2b-sklep/ups_seller2/SOAP/log/ -type f  -name "server2*" -cmin +2880 -delete -exec /bin/echo {} \; | wc -l', $output, $ret_find);
 
 $hdr = file_get_contents('php://input');
 $mthd_exp  = '/\:body><([a-z0-9\:]+)[\ >]/i';
@@ -30,6 +30,8 @@ if( !empty($_GET['s']) ) {
 
 $fp = fopen('log/server2-'.$ts.'.log', 'a+');
 $fp_xml = fopen('log/server2-'.$ts.'.xml', 'a+');
+
+add_to_fp('ret_find ' . (($ret_find>0)?'ERROR':'OK') . ' cnt:' . trim($find_del) );
 
 // add_to_fp("out \n" . print_r($out,true));
 // add_to_fp("input \n" . substr($hdr, 0, 512) . "\n\n");
