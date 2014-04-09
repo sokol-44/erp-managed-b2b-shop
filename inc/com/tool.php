@@ -62,6 +62,19 @@ if( $F->check_get('search') ) {
    		$need_power = $additional_power*$need_power + $need_power;
    	}
    	
+   	$need_power_org = $need_power;
+   	
+   	if( (int)$F->GET['additional_power'] > 0  ) {
+   		$additional_power = (int)$F->GET['additional_power']/100;
+   		$need_power = $additional_power*$need_power + $need_power;
+   	}
+   	
+   	$received_power = ((int)$F->GET['received_power']/100)*$need_power;
+   	
+   	if( $received_power > $need_power ) $need_power = $received_power;
+   	
+   	$need_power_batt = $received_power;
+   	
       	$where_array = array();
    	
    	if( $F->check_get('battery_typology') && isset( $battery_typology_array[$F->GET['battery_typology']] ) 
@@ -114,7 +127,6 @@ if( $F->check_get('search') ) {
 	LIMIT 1)';
    $query2_arr = array();
    
-   $need_power_batt = $need_power;
    $ar_ch = array('#id_ups#', '#cabinet_count#', '#need_power_batt#', '#cap1#', '#count1#', '#cap2#', '#count2#');
    foreach($load_result as $id_ups => $ups_data) {
    	if( $ups_data['internal_count'] > 0 && $ups_data['external_count'] > 0  ) {
@@ -239,6 +251,10 @@ $GET_tmp = $F->make_get();
 		echo $F->draw_pull_down_menu('battery_phase', $battery_phase_array, $F->GET['battery_phase']);
 		?>
 		</td>
+	</tr>
+	<tr>
+		<td><strong>Moc odbierana:</strong></td>
+		<td colspan="3"><?php echo $F->draw_input_field('received_power', '100', ' style="width: 30px"'); ?> <strong>[%]</strong></td>
 	</tr>
 	<tr>
 		<td><strong>Moc zapasowa:</strong></td>
