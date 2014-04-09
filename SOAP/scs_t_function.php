@@ -9,11 +9,15 @@ $soap_param_array = array(
 	'password' => 'ola',
 	'compression' => true,
 	'exceptions' => true,
-	'trace' => true
+	'trace' => true,
+	'location' => ''
 );
 
 $soap_address = 'http://b2b_sklep.localhost/SOAP/shop_control.wsdl';
 //$soap_address = 'http://sklep-b2b.pl/SOAP/shop_control.wsdl';
+//$soap_address = 'http://ups_seller.sklep-b2b.pl/SOAP/shop_control.wsdl';
+
+$soap_location = str_replace('shop_control.wsdl', 'scs.php', $soap_address);
 
 function add_to_fp($str) {
    global $fp;
@@ -21,12 +25,23 @@ function add_to_fp($str) {
    if( isset($fp) && is_resource($fp) ) {
       //fwrite($fp, print_r(debug_backtrace(), true));
       fwrite($fp, "\n--> " . microtime(true) . "\n");
-      fwrite($fp, $str);
+      fwrite($fp, trim($str));
       fwrite($fp, "\n<--\n");
    } else {
 
    }
    
+}
+
+function calculate_hash() {
+	$sec = 'dfsfi8CTRJHnoOI243NvirtdsHMIU216asiudnfpou';
+	$salt = round(microtime(true),2);
+	$hf = 'md5';
+	$u = 1;
+	$hash = hash($hf, $sec . $salt);
+	$ret = '?u='.urlencode($u).'&h='.urlencode($hash).'&s='.urlencode($salt).'&hf='.urlencode($hf);
+	return $ret;
+	//return compact('salt', 'hash', 'u');
 }
 
 function check_for_fatal() {

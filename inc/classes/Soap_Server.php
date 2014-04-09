@@ -17,17 +17,33 @@ class Soap_Server {
    private $worker = false;
 
    function __auth() {
-      $get = Framework::$GET;
       $F = Framework::g_global();
-      
+      $get = $F->GET;
+      //add_to_fp('Soap_Server __auth ' . print_r($get, true) . ';');
       if( Framework::not_null($get['h']) && Framework::not_null($get['s']) ) {
-            
+
          if( Framework::is_null($get['u']) ) $get['u'] = 'empty';
          $secret = $this->acces_array[$get['u']];
          
          if( Framework::is_null($get['hf']) ) $get['hf'] = 'md5';
+         $get['hf'] = trim(strtolower($get['hf']));
+            
+         if( strpos($get['hf'], 'hmac') === false ) {
+         	$hmac = false;
+         } else {
+         	$get['hf'] = str_replace('hmac', '', $get['hf']);
+         	$hmac = true;
+         }
          
-         if ( Framework::not_null($secret) && abs( (int)$get['s']-time() ) < 72000 ) {
+         $s = strstr($get['s'], '.', true);
+         if( $s !== false ) {
+         	$stime = (int)$s;
+         } else {
+         	$stime = (int)$get['s'];
+         }
+          
+         if ( Framework::not_null($secret) && abs( (int)$stime-time() ) < 72000 ) {
+
             if( ctype_xdigit($get['h']) ) {
                $hash = $get['h'];
             } elseif ( ctype_alnum(str_replace('=', '', $get['h'])) ) {
@@ -40,19 +56,22 @@ class Soap_Server {
             } else {
                $hash = false;
             }
-            add_to_fp(var_export($hash ,true));
-			
+            //add_to_fp(var_export($hash ,true));
+
             if( $hash && in_array($get['hf'],hash_algos()) ) {
-               $hash_local = hash($get['hf'], $secret . $get['s']);
-               add_to_fp("HASH  ");
+            	
+            	if( $hmac ) $hash_local = hash_hmac($get['hf'], $secret, $get['s']);
+               else $hash_local = hash($get['hf'], $secret . $get['s']);
+               
+               //add_to_fp("HASH sec: '$secret': $hash_local == $hash ");
                if( $hash_local == $hash ) {
-                  add_to_fp("AUTH\n");
+                  //add_to_fp("AUTH\n");
                   $this->auth = true;
                }
             }
          }
       }
-      
+      add_to_fp('Soap_Server __auth '.var_export($this->auth ,true));
       //TODO - remove prom production
       $this->auth = true;
        /*Array
@@ -73,7 +92,7 @@ class Soap_Server {
 
    function __construct() {
       $this->nr_req++;
-      add_to_fp("Soap_Server.php\n");
+      add_to_fp("Soap_Server __construct\n");
       $this->__init_worker();
       $this->__auth();
    }

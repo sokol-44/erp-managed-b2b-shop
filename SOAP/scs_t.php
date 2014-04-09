@@ -19,12 +19,14 @@ $fp_xml = false;
 $utime_array = explode(' ', microtime());
 $ts=date('Ymd_Hi_s_').sprintf('%06x',(int)(($utime_array[0]*0xffffff)&0xffffff));
 
-$fp = fopen('log/server2-'.$ts.'--scs_t.log', 'a+');
+$fp = fopen('log/server2-'.$ts.'--scs_t.txt', 'a+');
 
 // turn off the wsdl cache
 ini_set('soap.wsdl_cache_enabled', '0');
 // var_dump($soap_param_array);
 // var_dump($soap_address);
+$hash_url = calculate_hash();
+$soap_param_array['location'] = $soap_location.$hash_url;
 $client = new SoapClient($soap_address, $soap_param_array);
 //$client->__setSoapHeaders( $soapHeaders );
 
