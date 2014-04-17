@@ -321,8 +321,9 @@ class Shopping_Basket_Chain {
       		}
       	}
       }
-
       
+		//print_debug(compact('ts_using', 'ts_using_lock', 'id_shopping_basket', 'id_shopping_basket_lock'));
+      //die();
       if( $id_shopping_basket_lock > 0 ) $id_shopping_basket = $id_shopping_basket_lock;
       
       if( $id_shopping_basket > 0 ) {
@@ -398,7 +399,7 @@ class Shopping_Basket_Chain {
 
    public function return_basket_next( $skip_current = false ) {
       $Shopping_Basket = current($this->Basket_List);
-      if( $this->id_basket_current == $Shopping_Basket->id_shopping_basket ) {
+      if( $skip_current && $this->id_basket_current == $Shopping_Basket->id_shopping_basket ) {
          next($this->Basket_List);
          $Shopping_Basket = current($this->Basket_List);
       }
@@ -406,7 +407,40 @@ class Shopping_Basket_Chain {
       next($this->Basket_List);
       return $Shopping_Basket;
    }
+   
+   public function return_basket_next_modify( $skip_current = false ) {
+   	
+   	$Shopping_Basket = current($this->Basket_List);
+   	
+   	if( $Shopping_Basket === false ) return false;
+   	
+   	while( $Shopping_Basket = next($this->Basket_List) ) {
+   		
+   		if( $Shopping_Basket->check_rights('MODIFY_CONTENTS', false) ) {
+   			return $Shopping_Basket;
+   		}
+   	}
+   	
+   	return $Shopping_Basket;
+   }
+   
+   public function return_basket_next_view( $skip_current = false ) {
+   	
+   	$Shopping_Basket = current($this->Basket_List);
+   	
+   	if( $Shopping_Basket === false ) return false;
 
+   	while( $Shopping_Basket = next($this->Basket_List) ) {
+
+   		if( !$Shopping_Basket->check_rights('MODIFY_CONTENTS', false) && 
+      		  $Shopping_Basket->check_rights('VIEW', false) ) {
+   			return $Shopping_Basket;
+   		}
+   	}
+   	
+   	return $Shopping_Basket;
+   }
+   
 
    public function logout_user() {
 
@@ -418,7 +452,7 @@ class Shopping_Basket_Chain {
 //    		,$Shopping_Basket->basket_level_text() == 'USE'
 //    		), true);
    		if(   $Shopping_Basket->currently_user_using() &&
-   				$Shopping_Basket->check_rights('MODIFY_CONTENTS') &&
+   				$Shopping_Basket->check_rights('MODIFY_CONTENTS', false) &&
       			$Shopping_Basket->basket_level_text() == 'USE' ) { 
    			$Shopping_Basket->state_using_clear();
    	   }

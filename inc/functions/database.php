@@ -104,6 +104,28 @@ function db_transaction_end($link = 'db_link') {
    return $res;
 }
 
+
+function db_unroll_sort($conditions_array = false) {
+
+	$return_str = '';
+	if( is_array($conditions_array) ) {
+		foreach( $conditions_array as $attr => $val ) {
+			if( Framework::not_null($val) && 
+				( strtoupper($val) == 'ASC' ||  strtoupper($val) == 'DESC' )   ) {
+				$return_array[] = db_escape($attr) . ' ' . $val;
+			} else {
+				$return_array[] = db_escape($attr);
+			}
+			$return_str = implode(', ', $return_array);
+		}
+	} else {
+		return '';
+	}
+
+	return $return_str;
+}
+
+
 function db_unroll_conditions($conditions_array, $type = 'and', $field_name = false) {
 
    $return_str = '';

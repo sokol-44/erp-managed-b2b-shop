@@ -24,6 +24,8 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
    public $list_type = array();
    /* metody jakie wywołać dla wybranych elementów */
    public $list_method = array();
+   /* lista kluczy głównych */
+   public $list_primary_key = array();
    /*
     * klasy:
     * - sprawdzajaca instnienie, wraz z tym czy musi istniec
@@ -195,7 +197,7 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
       $val_out = false;
 //      add_to_fp('check_val '.$key.';'.$this->list_type[$key].';'.$val);
       if( isset($this->list_type[$key]) ) {
-         /* types: INT,INT+ (>zero),FLOAT,FLOAT+ (>zero),PATH,TXT,HTML,DATE,EMAIL,ARRAY,OBJ   */
+         /* types: INT,INT+ (>zero),FLOAT,FLOAT+ (>zero),PATH,TXT,HTML,DATE,EMAIL,ARRAY,OBJ, ARRAYOBJ   */
          switch ($this->list_type[$key]) {
             case 'INT':
                if( is_numeric($val) ) $val_out = (int)$val;
@@ -289,6 +291,82 @@ class BasicSOAPDataMethods { /* implements ArrayAccess */
       }
       return $values;
    }
+
+
+   public function get_primary_key() {
+   	if( sizeof($this->list_primary_key) == 1 )
+   	 	return $this->values[ reset($this->list_primary_key) ];
+   	elseif( sizeof($this->list_primary_key) == 0 )
+   		return false;
+   	else {
+   		$ret = array();
+   		foreach($this->list_primary_key as $pkey) {
+   			$ret[$pkey] = $thiis->values[$pkey];
+   		}
+   		return $ret;
+   	}
+   }
+	
+   public function get_inst_upd_arr() {
+
+   	$insert_array = array();
+   	$update_array = array();
+   	
+   	foreach( $this->values as $key => $val ) {
+   		if( $this->list_type[$key] != 'ARRAY' &&
+   				$this->list_type[$key] != 'OBJ' &&
+   				$this->list_type[$key] != 'ARRAYOBJ' ) {
+				list($key_db, $val_db) = $this->__db_escape_w_type($key, $val);
+	   		if( !in_array($key, $this->list_primary_key ) ) {
+	   			$update_array[] = '`' . $key_db . '`="' . $val_db . '"';
+	   		}
+   			$insert_array[] = '`' . $key_db . '`="' . $val_db . '"';
+   		}
+   	}
+
+   	add_to_fp('$values: '. print_r($this->values, this));
+   	add_to_fp('$update_array: '. print_r($update_array, this));
+   	add_to_fp('$insert_array: '. print_r($insert_array, this));
+   	$res = compact('insert_array', 'update_array');
+   	add_to_fp('get_inst_upd_arr: '.print_r($res, this));
+   	return $res;
+   }
+   
+   private function __db_escape_w_type($key, $val) {
+   	
+   	$val_out = '';
+   	if( isset($this->list_type[$key]) ) {
+         /* types: INT,INT+ (>zero),FLOAT,FLOAT+ (>zero),PATH,TXT,HTML,DATE,EMAIL,ARRAY,OBJ, ARRAYOBJ   */
+   		switch ($this->list_type[$key]) {
+   			case 'INT':
+   			case 'INT+':
+   				$val_out = db_int($val);
+   				break;
+   			case 'FLOAT':
+   			case 'FLOAT+':
+   				$val_out = db_float($val);
+   				break;
+   			case 'PATH':
+   			case 'UUID':
+   			case 'TEXT':
+   			case 'TXT':
+   			case 'HTML':
+   			case 'DATE':
+   			case 'EMAIL':
+   				$val_out = db_escape($val);
+   				break;
+   			case 'ARRAYOBJ':
+   			case 'OBJ':
+   			case 'ARRAY':
+   			default:
+   				break;
+   		}
+   	} else {
+   		$val_out = db_escape($val);
+   	}
+   	return ( array(db_escape($key), $val_out) ) ;
+   }
+
 }
 /*
  * atrybuty w tablicach:
@@ -303,16 +381,17 @@ class EmailData extends BasicSOAPDataMethods {
 }
 
 class ClientData extends BasicSOAPDataMethods {
-	public $list = array('id_client', 'name', 'description', 'email', 'phone', 'state',
+	public $list = array('id_client', 'name', 'description', 'email', 'phone', 'state', 'guid',
 			 'ClientPriceListData', 'ProductClientPriceData',
 			 'ClientAttributeData', 'ClientUserData',);
 	public $list_type = array('id_client' => 'INT+', 'name' => 'TEXT', 'description' => 'TEXT',
-			 'email' => 'EMAIL', 'phone' => 'TEXT', 'state' => 'TEXT',
+			 'email' => 'EMAIL', 'phone' => 'TEXT', 'state' => 'TEXT', 'guid' => 'UUID', 
    		 'ClientPriceListData' => 'ARRAYOBJ', 'ProductClientPriceData' => 'ARRAYOBJ',
 			 'ClientAttributeData' => 'ARRAYOBJ', 'ClientUserData' => 'ARRAYOBJ',
 			 'EmailData' => 'ARRAYOBJ');
 	public $list_new = array('id_client', 'name');
 	public $list_update = array('id_client');
+	public $list_primary_key = array('id_client');
    public $list_method = array(
    			'ClientProductPriceListData' => 'setClientProductPriceList', 
    			'ProductClientPriceData' => 'setProductClientPrice',
@@ -329,19 +408,20 @@ class ClientAttributeData extends BasicSOAPDataMethods {
 }
 
 class ClientUserData extends BasicSOAPDataMethods {
-   public $list = array('id_client_user', 'id_client', 'login', 'password', 'password_salt',
+   public $list = array('id_client_user', 'id_client', 'login', 'password', 'password_salt', 'guid', 
          'description', 'name', 'email', 'phone', 'phone_cell', 'created', 'last_login', 'state',
    		'ClientUserAddressData', 'ClientUserAttributeData', 'AccountManagerData',
 		   'ClientUserPasswordData');
    public $list_type = array('id_client_user' => 'INT+', 'id_client' => 'INT+', 'login' => 'TEXT',
 			'password' => 'TEXT', 'password_salt' => 'TEXT', 'description' => 'TEXT', 'name' => 'TEXT',
          'email' => 'EMAIL', 'phone' => 'TEXT', 'phone_cell' => 'TEXT',
-         'created' => 'DATE', 'last_login' => 'DATE', 'state' => 'TEXT',
+         'created' => 'DATE', 'last_login' => 'DATE', 'state' => 'TEXT', 'guid' => 'UUID',
    		'ClientUserAddressData' => 'ARRAYOBJ', 'ClientUserAttributeData' => 'ARRAYOBJ',
    		'AccountManagerData' => 'ARRAYOBJ',
    		'ClientUserPasswordData' => 'OBJ', 'EmailData' => 'OBJ');
    public $list_new = array('id_client_user', 'id_client', 'login', 'password', 'name');
    public $list_update = array('id_client_user', 'id_client');
+	public $list_primary_key = array('id_client_user');
    public $list_method = array(
    			'ClientUserAddressData' => 'doClientUserAddressAddOrUpdate', 
    			'ClientUserAttributeData' => 'doClientUserAttributeAddOrUpdate',
@@ -397,10 +477,10 @@ class CategoryData extends BasicSOAPDataMethods {
 }
 
 class OrderData extends BasicSOAPDataMethods {
-   public $list = array('id_order', 'id_client', 'date_create', 'date_modified', 'id_order_status',
+   public $list = array('id_order', 'id_client', 'date_create', 'date_modified', 'id_order_status', 'guid',
           'hidden_status', 'description', 'description_basket', 'id_shopping_basket', 'id_address');
    public $list_type = array('id_order' => 'INT+', 'id_client' => 'INT+', 'date_create' => 'DATE',
-          'date_modified' => 'DATE', 'id_order_status' => 'INT', 'hidden_status' => 'TEXT',
+          'date_modified' => 'DATE', 'id_order_status' => 'INT', 'hidden_status' => 'TEXT', 'guid' => 'UUID',
           'description' => 'TEXT', 'description_basket' => 'TEXT', 'id_shopping_basket' => 'INT+',
    		 'id_address' => 'INT', 'id_account_manager' => 'INT', 'OrderAttributeData' => 'OBJ');
    public $list_new = array('id_order', 'id_client');
@@ -446,15 +526,16 @@ class ProductData extends BasicSOAPDataMethods {
    public $list = array('id_product', 'name', 'description', 'producer', 'catalog_index',
           'picture_small_url', 'picture_big_url', 'picture_id', 'price', 'vat',
    		 'promotion_price', 'promotion_date_start', 'promotion_date_end',
-   		 'quantity', 'status', 
+   		 'quantity', 'status', 'guid',
    		 'Product2CategoryData', 'ProductClientPriceData', 'ProductAttributeData',
    		 'ProductAttributeWGroupData');
+   public $list_primary_key = array('id_product');
    public $list_type = array('id_product' => 'INT+', 'name' => 'TEXT', 'description' => 'TEXT',
-          'producer' => 'TEXT', 'catalog_index' => 'TEXT',
+          'producer' => 'TEXT', 'catalog_index' => 'TEXT', 
           'picture_small_url' => 'PATH', 'picture_big_url' => 'PATH', 'picture_id' => 'INT+',
           'price' => 'FLOAT+', 'vat' => 'FLOAT', 
    		 'promotion_price' => 'FLOAT', 'promotion_date_start' => 'TEXT', 'promotion_date_end' => 'TEXT',
-   		 'quantity' => 'INT+', 'status' => 'TEXT',
+   		 'quantity' => 'INT', 'status' => 'TEXT', 'guid' => 'UUID',
    		 'ProductSubtypeData' => 'ARRAYOBJ',
           'Product2CategoryData' => 'ARRAYOBJ', 'ProductClientPriceData' => 'ARRAYOBJ',
           'ProductAttributeData' => 'ARRAYOBJ', 'ProductAttributeWGroupData' => 'ARRAYOBJ'

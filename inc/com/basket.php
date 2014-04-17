@@ -117,8 +117,8 @@ $BC->add_crumb( array( 'name' => Lang::_('Basket'), 'path' => $F->make_link(CFG_
             //trow some error
             if( $P->logged_in && $F->check_get('id_shopping_basket') ) {
                $res = $Shopping_Basket_Chain->remove_basket( (int)$F->GET['id_shopping_basket'] );
-               if( $res ) Info::sadd('BASKET DELETED', 'success');
-               else Info::sadd('DELETE ERROR', 'success');
+               if( $res ) Info::sadd('BASKET DELETED SUCCESSFULLT', 'success');
+               else Info::sadd('BASKET DELETE ERRROR');
             } else {
                Info::sadd('NOT_ENOUGH_RIGHTS');
             }

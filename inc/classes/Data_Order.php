@@ -51,7 +51,7 @@ class Data_Order extends Data_Shop {
       
       $query = 'select o.id_order, o.id_client, o.date_create, o.date_modified, o.id_order_status,
       o.description, o.description_basket, o.id_shopping_basket, o.id_address, os.name as status_name,
-      o.id_account_manager, cuam.account_manager_name
+      o.id_account_manager, o.guid, cuam.account_manager_name
       from ' . TBL_SHOP_ORDER . ' o left join ' . TBL_SHOP_ORDER_STATUS . ' os
       on (o.id_order_status = os.id_order_status)
       left outer join ' . TBL_GLOBAL_CLIENT_USER_ACCOUNT_MANAGER . ' cuam 

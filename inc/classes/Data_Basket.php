@@ -183,7 +183,7 @@ class Data_Basket extends Data_Order {
       //      self::remove_basket_product_list($id_nr_shopping_basket);
       //      self::remove_basket_pdata($id_nr_shopping_basket);
       db_transaction_start();
-      print_debug($basket_params);
+      //print_debug($basket_params);
          
          $verified_basket_version = 'select GROUP_CONCAT(id_shopping_basket_version) as list
             from ' . TBL_SHOP_SHOPPING_BASKET_VERSION . ' where
@@ -214,10 +214,11 @@ class Data_Basket extends Data_Order {
 //       	 'clear_products_query', 'clear_basket_version_query', 'clear_basket_history_query', 'clear_basket_query') 	
 //       );
       
+		$del_basket = db_affected_rows(); 
+     
+		db_transaction_end();
       
-      db_transaction_end();
-      
-      return db_affected_rows();
+		return $del_basket;
    }
    
    static function put_basket_update_lock_data($basket_params) {

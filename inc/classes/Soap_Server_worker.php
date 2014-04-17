@@ -508,7 +508,7 @@ class Soap_Server_worker {
             if( !$SingleValueClass->is_error() ) {
                $param_array = $SingleValueClass->return_array();
                add_to_fp('$param_array:'. print_r($param_array, true) );
-               $response_tmp[] = Data::doClientAdd($param_array, false);
+               $response_tmp[] = Data::doClientAdd($SingleValueClass, false);
             } else {
                $response_tmp[] = $this->getReturnError('doClientChange', $val, $SingleValueClass->return_error(), false);
             }
@@ -630,7 +630,7 @@ class Soap_Server_worker {
             if( !$SingleValueClass->is_error() ) {
                $param_array = $SingleValueClass->return_array();
                add_to_fp('$param_array:'. print_r($param_array, true) );
-               $response_tmp[] = Data::doClientAdd($param_array, true);
+               $response_tmp[] = Data::doClientAdd($SingleValueClass, true);
             } else {
                $response_tmp[] = $this->getReturnError('doClientAdd', $val, $SingleValueClass->return_error(), false);
             }
@@ -738,7 +738,7 @@ class Soap_Server_worker {
             if( !$SingleValueClass->is_error() ) {
                $param_array = $SingleValueClass->return_array();
                add_to_fp('$param_array:'. print_r($param_array, true) );
-               $response_tmp[] = Data::doClientUserAdd($param_array, true);
+               $response_tmp[] = Data::doClientUserAdd($SingleValueClass, true);
             } else {
                $response_tmp[] = $this->getReturnError('doClientUserAdd', $val, $SingleValueClass->return_error(), false);
             }
@@ -827,7 +827,7 @@ class Soap_Server_worker {
             if( !$SingleValueClass->is_error() ) {
                $param_array = $SingleValueClass->return_array();
                add_to_fp('$param_array:'. print_r($param_array, true) );
-               $response_tmp[] = Data::doClientUserAdd($param_array, true);
+               $response_tmp[] = Data::doClientUserAdd($SingleValueClass, true);
             } else {
                $response_tmp[] = $this->getReturnError('doClientUserAdd', $val, $SingleValueClass->return_error(), false);
             }
@@ -853,7 +853,7 @@ class Soap_Server_worker {
             if( !$SingleValueClass->is_error() ) {
                $param_array = $SingleValueClass->return_array();
                add_to_fp('$param_array:'. print_r($param_array, true) );
-               $response_tmp[] = Data::doClientUserAdd($param_array, false);
+               $response_tmp[] = Data::doClientUserAdd($SingleValueClass, false);
             } else {
                $response_tmp[] = $this->getReturnError('doClientUserChange', $val, $SingleValueClass->return_error(), false);
             }
@@ -1084,9 +1084,8 @@ class Soap_Server_worker {
             $SingleValueClass = new ProductData($val, $this->input_data_type);
             add_to_fp(print_r($SingleValueClass, true));
             if( !$SingleValueClass->is_error() ) {
-               $param_array = $SingleValueClass->return_array();
-               add_to_fp('$param_array:'. print_r($param_array, true) );
-               $response_tmp[] = Data::doProductChange($param_array);
+               add_to_fp('$param_array:'. print_r($SingleValueClass->return_array(), true) );
+               $response_tmp[] = Data::doProductChange( $SingleValueClass );
             } else {
                $response_tmp[] = $this->getReturnError('doProductChange', $val, $SingleValueClass->return_error(), false);
             }
@@ -1101,7 +1100,7 @@ class Soap_Server_worker {
    }
    
    function doProductAddOrUpdate( $input ) {
-      $this->input_data_type = 'NEW';
+      $this->input_data_type = 'UPDATE';
       $this->SingleParam_MultipleReturns = false;
 
       add_to_fp('-------- doProductAddOrUpdate');
@@ -1111,9 +1110,8 @@ class Soap_Server_worker {
             $SingleValueClass = new ProductData($val, $this->input_data_type);
             add_to_fp(print_r($SingleValueClass, true));
             if( !$SingleValueClass->is_error() ) {
-               $param_array = $SingleValueClass->return_array();
-               add_to_fp('$param_array:'. print_r($param_array, true) );
-               $response_tmp[] = Data::doProductAddOrUpdate($param_array);
+               add_to_fp('$param_array:'. print_r($SingleValueClass->return_array(), true) );
+               $response_tmp[] = Data::doProductAddOrUpdate( $SingleValueClass );
             } else {
                $response_tmp[] = $this->getReturnError('doProductAddOrUpdate', $val, $SingleValueClass->return_error(), false);
             }
@@ -1128,7 +1126,7 @@ class Soap_Server_worker {
    }
    
    function doProductCleanAddOrUpdate( $input ) {
-   	$this->input_data_type = 'NEW';
+   	$this->input_data_type = 'UPDATE';
    	$this->SingleParam_MultipleReturns = false;
    
    	add_to_fp('-------- doProductCleanAddOrUpdate');
@@ -1146,7 +1144,7 @@ class Soap_Server_worker {
    				
    				$res_additional_data['doProductCleanStart'] = Data::doBatchStart($param_array);				
    				//id_one, additional_data, status
-   				$res = Data::doProductAddOrUpdate($param_array);
+   				$res = Data::doProductAddOrUpdate( $SingleValueClass );
    				$res_additional_data['doProductAddOrUpdate'] = $res['additional_data'];
 
    				if( $this->_method_didn_return_error($res) ) {
@@ -1201,7 +1199,7 @@ class Soap_Server_worker {
    					
    				$res_additional_data['doClientCleanStart'] = Data::doBatchStart($param_array);
    				//id_one, additional_data, status
-   				$res = Data::doClientAddOrUpdate($param_array);
+   				$res = Data::doClientAddOrUpdate( $SingleValueClass );
    				$res_additional_data['doClientAddOrUpdate'] = $res['additional_data'];
    				
    				if( $this->_method_didn_return_error($res) ) {

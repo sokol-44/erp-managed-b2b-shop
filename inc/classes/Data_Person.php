@@ -313,23 +313,37 @@ class Data_Person extends Data_Rights {
    
    
    
-   static function doClientUserAddOrUpdate($param_array) {
-   
-   	$query = 'select id_client_user from ' . TBL_GLOBAL_CLIENT_USER . '
-   			 where id_client = "'.db_int($param_array['id_client']).'" and
-   			 id_client_user = "'.db_int($param_array['id_client_user']).'"';
+   static function doClientUserAddOrUpdate(ClientUserData $ClientUserData) {
+
+   	add_to_fp('doClientUserAddOrUpdate');
+   	$db_in = $ClientUserData->get_inst_upd_arr();
+   	add_to_fp('$db_in'.print_r($db_in, true));
+   	
+   	$query = 'insert into ' . TBL_GLOBAL_CLIENT . ' set '.implode(', ', $db_in['insert_array']).'
+   			ON DUPLICATE KEY UPDATE '.implode(', ', $db_in['update_array']);
+   	
+   	$res = array('id_one' => $ClientUserData->get_primary_key(), 'additiona_data' => '', 'status' => '');
+   	
+   	add_to_fp($query);
    	$result = db_query( $query );
-   	if( db_rows($result) > 0 ) {
-   		return Data_person::doClientUserAdd($param_array, false);
-   	} else {
-   		return Data_person::doClientUserAdd($param_array, true);
-   	}
-   
+   	$ar = db_affected_rows( $result );
+   	
+   	if( $ar == 1 ) $res['status'] = 'SUCCESS,NEW';
+   	elseif( $ar == 2 ) $res['status'] = 'SUCCESS,EXIST';
+   	elseif( $ar == 0 ) $res['status'] = 'SUCCESS,EXIST,NODIFF';
+   	else $res['status'] = 'ERROR,UNKNOW';
+   	
+   	return $res;
    }
    
-   static function doClientUserAdd($param_array, $add  = false) {
+   static function doClientUserAdd(ClientUserData $ClientUserData, $add  = false) {
       
       extract( $param_array );
+
+      $query = 'select id_client_user from ' . TBL_GLOBAL_CLIENT_USER . '
+   			 where id_client = "'.db_int($param_array['id_client']).'" and
+   			 id_client_user = "'.db_int($param_array['id_client_user']).'"';
+      
       
       if( $add ) {
          $query = 'select "' . db_int($id_client) . '" as id_one, "' . db_int($id_client_user) . '" as id_two,
@@ -370,7 +384,28 @@ class Data_Person extends Data_Rights {
    }
    
    static function doClientUserAddressAddOrUpdate($param_array) {
+
+   	add_to_fp('doClientUserAddressAddOrUpdate');
+   	$db_in = $ClientData->get_inst_upd_arr();
+   	add_to_fp('$db_in'.print_r($db_in, true));
+   	
+   	$query = 'insert into ' . TBL_GLOBAL_CLIENT . ' set '.implode(', ', $db_in['insert_array']).'
+   			ON DUPLICATE KEY UPDATE '.implode(', ', $db_in['update_array']);
+   	
+   	$res = array('id_one' => $ClientData->get_primary_key(), 'additiona_data' => '', 'status' => '');
+   	
+   	add_to_fp($query);
+   	$result = db_query( $query );
+   	$ar = db_affected_rows( $result );
    	 
+   	if( $ar == 1 ) $res['status'] = 'SUCCESS,NEW';
+   	elseif( $ar == 2 ) $res['status'] = 'SUCCESS,EXIST';
+   	elseif( $ar == 0 ) $res['status'] = 'SUCCESS,EXIST,NODIFF';
+   	else $res['status'] = 'ERROR,UNKNOW';
+   	 
+   	return $res;
+   	
+   	
    	extract( $param_array );
    	
    	$query = 'select "' . db_int($id_client_user) . '" as id_one, "' . db_int($id_address) . '" as id_two,
@@ -445,16 +480,27 @@ class Data_Person extends Data_Rights {
    /*
     * new end
     */
-   static function doClientAddOrUpdate($param_array) {
+   static function doClientAddOrUpdate( ClientData $ClientData ) {
+
+   	add_to_fp('doClientAddOrUpdate');
+   	$db_in = $ClientData->get_inst_upd_arr();
+   	add_to_fp('$db_in'.print_r($db_in, true));
    	
-   	$query = 'select id_client from ' . TBL_GLOBAL_CLIENT . ' where id_client = "'.db_int($param_array['id_client']).'"';
+   	$query = 'insert into ' . TBL_GLOBAL_CLIENT . ' set '.implode(', ', $db_in['insert_array']).'
+   			ON DUPLICATE KEY UPDATE '.implode(', ', $db_in['update_array']);
+   	
+   	$res = array('id_one' => $ClientData->get_primary_key(), 'additiona_data' => '', 'status' => '');
+   	
+   	add_to_fp($query);
    	$result = db_query( $query );
-   	if( db_rows($result) > 0 ) {
-   		return Data_person::doClientAdd($param_array, false);
-   	} else {
-   		return Data_person::doClientAdd($param_array, true);
-   	}
-   	
+   	$ar = db_affected_rows( $result );
+   	 
+   	if( $ar == 1 ) $res['status'] = 'SUCCESS,NEW';
+   	elseif( $ar == 2 ) $res['status'] = 'SUCCESS,EXIST';
+   	elseif( $ar == 0 ) $res['status'] = 'SUCCESS,EXIST,NODIFF';
+   	else $res['status'] = 'ERROR,UNKNOW';
+   	 
+   	return $res;   	
    }
    
    static function doClientUserCleanMethodData( $what, $param_array ) {
@@ -566,24 +612,21 @@ class Data_Person extends Data_Rights {
    	return $res;
    }
        
-   static function doClientAdd($param_array, $add = false) {
-      
-      extract( $param_array );
-      
-      if( $add ) {
-         $query = 'select "' . db_int($id_client) . '" as id_one,
-          "" as additional_data,
-          b_func_client_add("' . db_int($id_client) . '", "' . db_escape($name) . '", "' . db_escape($description) . '",
-          "' . db_escape($email) . '", "' . db_escape($phone) . '", "' . db_escape($state) . '") as status';
-      } else {
-         $query = 'select "' . db_int($id_client) . '" as id_one,
-          "" as additional_data,
-          b_func_client_change("' . db_int($id_client) . '", "' . db_escape($name) . '", "' . db_escape($description) . '",
-          "' . db_escape($email) . '", "' . db_escape($phone) . '", "' . db_escape($state) . '") as status';
-      }
-      add_to_fp($query);
+   static function doClientAdd(ClientData $ClientData, $add = false) {
+
+   	add_to_fp('doClientAdd');
+   	$id_client = (int)$ClientData->get_primary_key();
+   	
+   	$res = array('id_one' => $id_client, 'additiona_data' => '', 'status' => '');
+      $query = 'select id_client from ' . TBL_GLOBAL_CLIENT . ' where id_client = "'.db_int($id_client).'"';
       $result = db_query( $query );
-      return db_fetch_array($result);
+      if( db_rows($result) > 0 ) {
+      	$res['status'] = 'ERROR,EXIST';
+      	return $res;
+      } else {
+      	return Data_person::doClientAddOrUpdate($ClientData, false);
+      }
+       
    }
    
    static function doClientNewIdUpdateList($id_client, $id_client_new) {

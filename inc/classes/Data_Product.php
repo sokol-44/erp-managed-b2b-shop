@@ -120,7 +120,10 @@ class Data_Product extends Data_Basket {
       $F = Framework::g_global();
       $SP = SplitPage::g_global();
       
-      $where = array('status' => 'ACTIVE');
+      $where = array('p.status' => 'ACTIVE');
+      if( $F->not_null($filters) ) {
+      	$where = array_merge($where, $filters);
+      }
 
       
       if( defined('SHOP_SHOW_PRODUCTS_FROM_SUBCATEGORIES') && constant('SHOP_SHOW_PRODUCTS_FROM_SUBCATEGORIES') == 'true' 
@@ -165,7 +168,7 @@ class Data_Product extends Data_Basket {
       
       if( $F->not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
       
-      if( $F->not_null($order) ) $order_str = ' order by p.name ';
+      if( $F->not_null($sort) ) $order_str = ' order by ' . db_unroll_sort($sort);
       else $order_str = ' order by p.name ';
       
       $query = $query_pm . $where_str . $order_str;
@@ -427,9 +430,11 @@ class Data_Product extends Data_Basket {
       return db_fetch_array($result);
    }
    
-   static function doProductAdd($param_array) {
+   static function doProductAdd( ProductData $ProductData ) {
    	add_to_fp('doProductAdd');
-   
+   	
+   	$param_array = $SingleValueClass->return_array();
+   	
       $query = 'select id_product ' . TBL_SHOP_PRODUCT . ' where
      	id_product = ' . db_int($param_array['id_product']);
       $res = array('id_one' => $param_array['id_product'], 'additiona_data' => '', 'status' => '');
@@ -443,12 +448,12 @@ class Data_Product extends Data_Basket {
       	return $res;
       }
       
-      return Data::doProductChange($param_array);
+      return Data::doProductChange( $ProductData );
    }
 
-   static function doProductAddOrUpdate($param_array) {
+   static function doProductAddOrUpdate( ProductData $ProductData ) {
    	add_to_fp('doProductAddOrUpdate');
-   	return Data::doProductChange($param_array);
+   	return Data::doProductChange( $ProductData );
    }
    
    static function doProductSubtypeAddOrUpdate($param_array) {
@@ -493,24 +498,18 @@ class Data_Product extends Data_Basket {
    }   
    
    
-   static function doProductChange($param_array) {
+   static function doProductChange( ProductData $ProductData ) {
    	$F = Framework::g_global();
 
    	//extract( $param_array );
    	add_to_fp('doProductChange');
-   	$keys=array('id_product');
-   	$update_array = array();
-   	$insert_array = array();
-   	foreach( $param_array as $key => $val ) {
-   		if( !in_array($key, $keys ) ) {
-   			$update_array[] = '`' . db_escape($key) . '`="' . db_escape($val) . '"';
-   		}
-   		$insert_array[] = '`' . db_escape($key) . '`="' . db_escape($val) . '"';
-   	}
-   	$query = 'insert into ' . TBL_SHOP_PRODUCT . ' set '.implode(',',$insert_array).'
-   			ON DUPLICATE KEY UPDATE '.implode(',',$update_array);
+   	$db_in = $ProductData->get_inst_upd_arr();
+		add_to_fp('$db_in'.print_r($db_in, true));
+
+   	$query = 'insert into ' . TBL_SHOP_PRODUCT . ' set '.implode(', ', $db_in['insert_array']).'
+   			ON DUPLICATE KEY UPDATE '.implode(', ', $db_in['update_array']);
    	
-   	$res = array('id_one' => $param_array['id_product'], 'additiona_data' => '', 'status' => '');
+   	$res = array('id_one' => $ProductData->get_primary_key(), 'additiona_data' => '', 'status' => '');
 
    	add_to_fp($query);
    	$result = db_query( $query );
