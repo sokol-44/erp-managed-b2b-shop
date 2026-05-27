@@ -34,6 +34,7 @@ This project represents a piece of my professional history. While it has not see
 
 As of 2026, my roadmap for this repository includes:
 *   **Documentation Overhaul:** Comprehensive restructuring and expansion of the documentation to make the codebase accessible and understandable for modern developers.
+*   **Translate:** Most of the code is in English, but there is some Polish comments and variable naming.
 *   **Codebase Archiving:** Cleaning up the existing codebase and ensuring its integrity.
 *   **AI-Assisted Revitalization:** I am leveraging modern AI tools to accelerate the documentation and refactoring processes. To ensure high-quality standards, every AI-generated contribution is carefully verified, tested, and curated to maintain the architectural intent of the original system.
 
