@@ -28,6 +28,15 @@ The database schema has been designed to handle relational B2B data. Source file
 
 *Note: While the primary implementation targets MySQL, the data access layer was designed with potential PostgreSQL compatibility in mind.*
 
+## Status & Future Development
+
+This project represents a piece of my professional history. While it has not seen active maintenance for approximately ten years, I am currently in the process of reviving it as a showcase of my foundational engineering work.
+
+As of 2026, my roadmap for this repository includes:
+*   **Documentation Overhaul:** Comprehensive restructuring and expansion of the documentation to make the codebase accessible and understandable for modern developers.
+*   **Codebase Archiving:** Cleaning up the existing codebase and ensuring its integrity.
+*   **AI-Assisted Revitalization:** I am leveraging modern AI tools to accelerate the documentation and refactoring processes. To ensure high-quality standards, every AI-generated contribution is carefully verified, tested, and curated to maintain the architectural intent of the original system.
+
 ## License
 
 This project is licensed under the **AGPL-3.0 License**. See the [LICENSE](LICENSE) file for details.
