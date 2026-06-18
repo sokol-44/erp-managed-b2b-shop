@@ -127,4 +127,17 @@ if( $P->logged_in && $Shopping_Basket_Chain->get_can_add_basket() ) {
 </div>
 <?php
 }
+/**
+ * View template block rendering an interactive summary list tracking all current shopping baskets.
+ * * Iterates across chains of multiple user selection baselines, evaluating action conditions, 
+ * permission restrictions (e.g., LOCK, UNLOCK, USE), concurrency indicators, and total metrics.
+ *
+ * @package Views
+ * @subpackage Basket
+ * @psr-5
+ * @todo Enforce a clear Model-View-Controller abstraction layer to completely isolate inline PHP data processing out of raw template output presentation scopes.
+ * @todo Standardize short bracket array structures `[]` across loop environments.
+ * @todo Modernize script injections by passing configuration state parameters into decoupling client-side JSON adapters rather than mapping dynamic raw string concats inside `<script>` blocks.
+ * @todo Eliminate multiple duplicate initialization assignments discovered across consecutive calculations calls loops.
+ */
 ?>

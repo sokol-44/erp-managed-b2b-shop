@@ -3,7 +3,7 @@
  * init.php Global initialization file
  * Copyright Michał Sokołowski 2010
  *
- * @author Michał Sokołowski <msokolowski@example.com>
+ * @author Michał Sokołowski
  */
 
 //deactivate magic GPC

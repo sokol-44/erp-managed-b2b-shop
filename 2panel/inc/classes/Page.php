@@ -3,7 +3,7 @@
  * Page.php Global initialization file
  * Copyright Michał Sokołowski 2010
  *
- * @author Michał Sokołowski <msokolowski@example.com>
+ * @author Michał Sokołowski
  */
 
 if( !defined('_I_INIT') ) die();

@@ -1,26 +1,40 @@
 <?php
 /**
- * Data.php Global initialization file
+ * database.php Global initialization file
  * Copyright Michał Sokołowski 2010
  *
- * @author Michał Sokołowski <msokolowski@example.com>
+ * @author Michał Sokołowski
  */
 
 if( !defined('_I_INIT') ) die();
 
 
+/**
+ * Initializes and establishes a connection to the MySQL database server.
+ *
+ * Automatically checks configuration options, structures server strings with specified ports,
+ * establishes a standard or persistent connection, chooses the database schema context,
+ * and configures communication character encodings to UTF-8.
+ *
+ * @param array|false $config_db Optional custom configuration settings array containing server credentials. Defaults to false.
+ * @param string $link The identifier name of the global variable assigned to store the connection resource handler. Defaults to 'db_link'.
+ * @return resource|false Returns the established database connection resource handle on success, or false on mapping failures.
+ * @todo Migrate from the deprecated, completely removed `ext/mysql` API extension to secure `PDO` or `mysqli`.
+ * @todo Eliminate unsafe dynamic variable-variable connections definitions (`$$link`).
+ * @todo Refactor the hardcoded port fallback constraints (`'3305'`) out of initialization routines.
+ */
 function db_init($config_db = false, $link = 'db_link') {
    global $$link;
 
    if( !$config_db )
    $config_db = $GLOBALS['config']['DB'];
-   
+
    if( !empty($config_db['port']) && $config_db['port']!='3305' && (int)$config_db['port']>1024 ) {
 	$server = $config_db['server'] . ':' . $config_db['port'];
    } else {
     $server = $config_db['server'];
    }
-   
+
    if ($config_db['plink'] == 'true') {
       $$link = mysql_pconnect($server, $config_db['username'], $config_db['password']);
    } else {
@@ -38,6 +52,13 @@ function db_init($config_db = false, $link = 'db_link') {
    return $$link;
 }
 
+/**
+ * Safely terminates open transaction locks and closes an existing active database connection.
+ *
+ * @param string $link The identifier name of the target global connection reference key to disconnect. Defaults to 'db_link'.
+ * @return void
+ * @todo Replace dynamic variable references with structured connection management repositories.
+ */
 function db_close($link = 'db_link') {
    global $$link;
    global $transaction_count;
@@ -48,6 +69,21 @@ function db_close($link = 'db_link') {
    }
 }
 
+/**
+ * Compiles and dispatches dynamic non-parameterized INSERT or UPDATE SQL statements from data maps.
+ *
+ * Sanitizes array value blocks before generating execution statements and applying conditions.
+ *
+ * @param string $table Target database table name string.
+ * @param array $data_array Associative array dictionary mapping database column fields to unescaped input parameters.
+ * @param string $action Determines data writing operations criteria ('INSERT' or 'UPDATE'). Defaults to 'insert'.
+ * @param string|array $where Dynamic filtering conditions context applied on targets during updates. Defaults to ''.
+ * @param string $link The connection resource handler variable identifier name. Defaults to 'db_link'.
+ * @return resource|false Result payload handle returned from statement operations, or false when execution anomalies arise.
+ * @todo Refactor the unparameterized structural rendering blocks to eliminate high SQL Injection vulnerabilities.
+ * @todo Implement the non-functional `FIXME` block tracking unique duplicate constraints checks inside insertion passes.
+ * @todo Remove the fatal `die()` routine triggered by unmapped execution parameters with structured exception components.
+ */
 function db_perform($table, $data_array, $action = 'insert', $where = '', $link = 'db_link') {
    global $$link;
 
@@ -86,6 +122,13 @@ function db_perform($table, $data_array, $action = 'insert', $where = '', $link 
    return db_query($query, $link);
 }
 
+/**
+ * Halts auto-commit state triggers and launches a physical engine transaction isolation layer.
+ *
+ * @param string $link Active global database resource token reference target identity. Defaults to 'db_link'.
+ * @return resource|false Returns query result status payload configurations or false when queries break.
+ * @todo Replace tracking counters flags (`$transaction_count++`) with native database nested tracking mechanisms.
+ */
 function db_transaction_start($link = 'db_link') {
    global $$link;
    global $transaction_count;
@@ -95,6 +138,12 @@ function db_transaction_start($link = 'db_link') {
    return $res;
 }
 
+/**
+ * Flushes database changes, ends execution barriers, and reenables automated commit rules.
+ *
+ * @param string $link Active global database resource token reference target identity. Defaults to 'db_link'.
+ * @return resource|false Target operational results handle context.
+ */
 function db_transaction_end($link = 'db_link') {
    global $$link;
    global $transaction_count;
@@ -104,13 +153,19 @@ function db_transaction_end($link = 'db_link') {
    return $res;
 }
 
-
+/**
+ * Transforms an associative parameters array mapping attributes into sorted ORDER BY SQL string segments.
+ *
+ * @param array|false $conditions_array Key-value properties map indexing columns against ordering rules ('ASC'/'DESC'). Defaults to false.
+ * @return string Safe compiled sorting segment parameters statement block, or an empty string.
+ * @todo Address loose array append indicators structures triggering tracking exceptions when uninitialized.
+ */
 function db_unroll_sort($conditions_array = false) {
 
 	$return_str = '';
 	if( is_array($conditions_array) ) {
 		foreach( $conditions_array as $attr => $val ) {
-			if( Framework::not_null($val) && 
+			if( Framework::not_null($val) &&
 				( strtoupper($val) == 'ASC' ||  strtoupper($val) == 'DESC' )   ) {
 				$return_array[] = db_escape($attr) . ' ' . $val;
 			} else {
@@ -125,7 +180,18 @@ function db_unroll_sort($conditions_array = false) {
 	return $return_str;
 }
 
-
+/**
+ * Translates multi-dimensional logical criteria array matrices into unparameterized WHERE SQL constraint strings.
+ *
+ * Iterates across arrays evaluating values to match dynamic constraints like LIKE wildcards, IN bounds, NULL values, or inequalities.
+ *
+ * @param array $conditions_array Nested constraints mapping parameters tracking column values logic.
+ * @param string $type The logical connector join clause separating independent array criteria ('and' / 'or'). Defaults to 'and'.
+ * @param string|bool $field_name Optional implicit parent field fallback descriptor tag context. Defaults to false.
+ * @return string Compiled WHERE statement logic segment string.
+ * @todo Fix logical processing anomalies (e.g., duplicate condition flags and risky index checks like `strpos(...) == 0`).
+ * @todo Transition string matching filters (e.g., `>=`) into dynamic prepared query arrays.
+ */
 function db_unroll_conditions($conditions_array, $type = 'and', $field_name = false) {
 
    $return_str = '';
@@ -151,7 +217,7 @@ function db_unroll_conditions($conditions_array, $type = 'and', $field_name = fa
                $return_array[] = db_escape($attr) . ' >= \'' . db_escape(trim(substr(trim($val), 2))) . '\'';
             } elseif( strpos(trim($val), '<=') == 0 && strpos(trim($val), '<=') !== FALSE ) {
                $return_array[] = db_escape($attr) . ' <= \'' . db_escape(trim(substr(trim($val), 2))) . '\'';
-            } elseif( ( strpos(trim($val), '!=') == 0 && strpos(trim($val), '!=') !== FALSE ) ||
+            } elseif( (strpos($val, '!=') == 0 && strpos($val, '!=') !== FALSE ) ||
             			 ( strpos(trim($val), '<>') == 0 && strpos(trim($val), '<>') !== FALSE ) ) {
                $return_array[] = db_escape($attr) . ' != \'' . db_escape(trim(substr(trim($val), 2))) . '\'';
             } elseif( strpos(trim($val), '=') == 0 && strpos(trim($val), '=') !== FALSE ) {
@@ -173,14 +239,27 @@ function db_unroll_conditions($conditions_array, $type = 'and', $field_name = fa
    return $return_str;
 }
 
+/**
+ * Returns the maximum unique primary index counter discovered inside a specific table.
+ *
+ * If no explicit column target parameter is configured, it queries table status variables
+ * to capture upcoming auto-increment limits.
+ *
+ * @param string $table Target table name to query.
+ * @param string|bool $row_name Specific target row identifier, or false to evaluate meta indicators. Defaults to false.
+ * @param string|array $where Variable constraint rules array or raw query string modifier blocks. Defaults to ''.
+ * @param string $link The identifier designation of the targeted storage handle resource global variable name. Defaults to 'db_link'.
+ * @return int|string The calculated maximum numerical value or system attribute.
+ * @todo Eliminate hardcoded table structures definitions (`"global_client_user"`) embedded inside logic fallbacks.
+ */
 function db_max($table, $row_name = false, $where = '', $link = 'db_link') {
    global $$link;
-	
+
    $where_str = '';
    if( Framework::not_null($where) ) $where_str = ' where ' . db_unroll_conditions($where);
-   
+
    $query_array = array();
-   
+
    if( Framework::is_null($row_name) ) {
    	$res_ai = db_query('SHOW TABLE STATUS LIKE "global_client_user"');
    	$max = db_fetch_result('Auto_increment', $res_ai)-1;
@@ -189,15 +268,27 @@ function db_max($table, $row_name = false, $where = '', $link = 'db_link') {
    	$res_ai = db_query($query);
    	$max = db_fetch_result('max', $res_ai);
    }
-   
+
    return $max;
 }
 
+/**
+ * Grabs the unique numeric primary identifier generated during the most recent insertion query transaction.
+ *
+ * @param string $link The target database communication stream global identifier token. Defaults to 'db_link'.
+ * @return int Unique row insert sequence value.
+ */
 function db_insert_id($link = 'db_link') {
    global $$link;
    return mysql_insert_id(${$link});
 }
 
+/**
+ * Converts value attributes into standard floating-point datatypes while keeping SQL string markers.
+ *
+ * @param mixed $value Raw input parameter numerical target.
+ * @return float|string Normalized numeric datatype or structural string value marker.
+ */
 function db_float($value){
    if( strtoupper($value) == 'NULL' ) return 'null';
    else {
@@ -205,15 +296,27 @@ function db_float($value){
    }
 }
 
+/**
+ * Enforces integer datatype transformations on inputs while keeping SQL NULL markers.
+ *
+ * @param mixed $value Raw variable numerical target.
+ * @return int|string Transformed output integer value or structural string value marker.
+ */
 function db_int($value){
    if( strtoupper($value) == 'NULL' ) return 'null';
    else return (int)$value;
 }
 
-
+/**
+ * Recursively applies string escaping transformations across nested array collections.
+ *
+ * @param array|string $array_in Core targets data dataset container holding items requiring escaping rules.
+ * @param string $link The connection resource handle designation tag identifier name. Defaults to 'db_link'.
+ * @return array|string Fully neutralized data parameter collection map or variable string.
+ */
 function db_escape_array($array_in, $link = 'db_link') {
    global $$link;
-   
+
    $ret = array();
    if( is_array($array_in) ) {
       foreach($array_in as $key_in => $val_in) {
@@ -229,6 +332,13 @@ function db_escape_array($array_in, $link = 'db_link') {
    }
 }
 
+/**
+ * Neutralizes control character strings utilizing core engine extension escapers or local system wrappers.
+ *
+ * @param string $string Raw target text segment containing data to format.
+ * @param string $link Target database stream connection handler global variable locator name. Defaults to 'db_link'.
+ * @return string Safe, modified output data text parameter.
+ */
 function db_escape($string, $link = 'db_link') {
    global $$link;
 
@@ -245,10 +355,17 @@ function db_escape($string, $link = 'db_link') {
    return $ret;
 }
 
-
+/**
+ * Executes a specific custom SQL database function, passing escaped data rows as parameters.
+ *
+ * @param string $name Target identifier name of the system function to call.
+ * @param array $data Ordered sequential dataset values passed into parameters.
+ * @param string $link Core connection resource token variable designation identifier name. Defaults to 'db_link'.
+ * @return string Converted result data output context.
+ */
 function db_call_func($name, $data, $link = 'db_link') {
    global $$link;
-   
+
    $data = db_escape_array($data);
 
    $data_str = '"' . implode('", "', $data) . '"';
@@ -257,40 +374,59 @@ function db_call_func($name, $data, $link = 'db_link') {
    return $res;
 }
 
+/**
+ * Triggers a stored database procedure execution layout block, forwarding parameter maps.
+ *
+ * @param string $name Target name identifying the routine to trigger.
+ * @param array $data Input dataset contents mapped as execution settings.
+ * @param string $link Core connection resource token variable designation identifier name. Defaults to 'db_link'.
+ * @return resource|false Dynamic statement results tracking descriptor.
+ * @todo Finalize dynamic sorting configuration criteria parameters highlighted in architectural comments.
+ */
 function db_call_proc($name, $data, $link = 'db_link') {
    global $$link;
-   
+
    $data = db_escape_array($data);
-   
+
    // TODO kolejność, moze parametr to regulujący
-   
+
    $data_str = '"' . implode('", "', $data) . '"';
    $sql = $name . '(' . $data_str . ');';
    return db_query($sql);
 }
 
-
+/**
+ * Routes a raw unparameterized SQL command statement through to active connection handles.
+ *
+ * Automatically attempts lazy initialization connections when inactive handlers are monitored,
+ * captures performance trace durations metrics, and redirects compilation faults towards logging engines.
+ *
+ * @param string $query Complete target SQL query command statement context.
+ * @param string $link Core connection resource global target identity indicator. Defaults to 'db_link'.
+ * @return resource|false Statement response metrics handle descriptor context.
+ * @todo Modernize error tracking routines and remove unsafe conditional runtime termination overrides (`die()`).
+ */
 function db_query($query, $link = 'db_link') {
    global $$link;
    global $query_log;
 
    if( !is_resource($$link) ) db_init(false, $link);
-   
+
    $tstart = microtime(true);
-   
+
    $result = mysql_query($query, $$link) or
    db_error($query, mysql_errno(), mysql_error(), debug_backtrace(), $$link);
-   
+
    if( mysql_errno() > 0  ) {
    	if( defined('SOAP_ENVIRONMENT') && constant('SOAP_ENVIRONMENT') ) add_to_fp("db_error:\n" . $query);
    	die('q:' . $query . ' ' . $result);
    }
 
 
-   if ( ( defined('DEBUG_DB_QUERIES') && DEBUG_DB_QUERIES == 'true' ) || 
+   if ( ( defined('DEBUG_DB_QUERIES') && DEBUG_DB_QUERIES == 'true' ) ||
         ( isset($_GET['DEBUG_DB']) && $_GET['DEBUG_DB']=='true')
       ) {
-   	
+
    	$dbg = debug_backtrace();
       $l = array();
       foreach($dbg as $idx => $ar) {
@@ -309,6 +445,13 @@ function db_query($query, $link = 'db_link') {
    return $result;
 }
 
+/**
+ * Returns the exact numeric total of structural database rows held inside an execution result handle.
+ *
+ * @param resource $result Database execution query resource envelope handle tracking entries.
+ * @param string $link Connection resource handle designation variable identity marker name. Defaults to 'db_link'.
+ * @return int Total number of rows located inside results array blocks.
+ */
 function db_rows($result, $link = 'db_link') {
    global $$link;
 
@@ -319,20 +462,39 @@ function db_rows($result, $link = 'db_link') {
    }
 }
 
+/**
+ * Computes the total quantity of field rows modified during the preceding write, delete, or modify operation query context.
+ *
+ * @return int Quantitative count mapping rows modified by the engine.
+ * @todo Fix broken side-effect dependencies where global connection tokens tracking references (`$$link`) evaluate missing contexts.
+ */
 function db_affected_rows() {
    global $$link;
    return mysql_affected_rows();
 }
 
-
+/**
+ * Core exception fallback engine intercepting failed statements to register diagnostic reports.
+ *
+ * Gathers system arrays, active backtrace elements, and environment variables blocks,
+ * logging structured diagnostic payloads into dedicated persistent tracking registers.
+ *
+ * @param string $sql_query Complete string context of the failed SQL query block statement.
+ * @param int $errno Specific error code index returned by storage systems.
+ * @param string $error Text summary explanation detailing compilation failures.
+ * @param array $debug_backtrace Captured call execution state snapshots trace data. Defaults to array().
+ * @param string $link The dynamic connection instance variable name string target. Defaults to 'db_link'.
+ * @return string|void Returns structural system message details or aborts thread activities.
+ * @todo Refactor nested copy-paste termination parameters and eliminate structural security log leakage risks.
+ */
 function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link = 'db_link') {
    global $$link;
    global $query_log;
-   
+
    if( !is_resource($$link) ) db_init(false, $link);
 
    $error_data =  "\n". $sql_query . "\n" . $db_error_code . "\n" . print_r($debug_backtrace, true);
-   
+
    if( defined('TBL_CORE_DB_ERRORS') ) $table = TBL_CORE_DB_ERRORS;
    elseif( isset($GLOBALS['config']['TABLES']['CORE_DB_ERRORS']) && $GLOBALS['config']['TABLES']['CORE_DB_ERRORS'] != '')
    	$table = $GLOBALS['config']['TABLES']['CORE_DB_ERRORS'];
@@ -364,7 +526,7 @@ function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link 
      } else die('DB fatal error (2)');
    }
 
-   if ( ( defined('DEBUG_DB_QUERIES') && DEBUG_DB_QUERIES == 'true' ) || 
+   if ( ( defined('DEBUG_DB_QUERIES') && DEBUG_DB_QUERIES == 'true' ) ||
         ( isset($_GET['DEBUG_DB']) && $_GET['DEBUG_DB']=='true')
       ) {
       echo '<p align="left">ERROR:' . "$errno $error<br>\r\n" .
@@ -384,15 +546,15 @@ function db_error($sql_query, $errno, $error, $debug_backtrace = array(), $link 
    } else die('DB fatal error (SUCCESS)');
 }
 
-
-
 /**
- * Return all rows of data numbered by id
- * (if id is not set, it choses first column of result)
- * @param db result $result
- * @param string $id
- * @param db handler $link
- * @return array()
+ * Formats a complete multi-row database result collection, indexing row parameters by an explicit unique identifier value.
+ *
+ * If no explicit index field identity key parameter gets targeted, the method extracts column settings from the leading array index position.
+ *
+ * @param resource $result Query response tracking source data records.
+ * @param string|bool $id Specific data column key identifier targeted as key map indicators. Defaults to false.
+ * @param string $link Database stream reference indicator global target name string. Defaults to 'db_link'.
+ * @return array Multi-dimensional associative parameters array block indexed by row key attributes.
  */
 function db_result_array_full_id($result, $id = false, $link = 'db_link') {
 	global $$link;
@@ -409,10 +571,11 @@ function db_result_array_full_id($result, $id = false, $link = 'db_link') {
 }
 
 /**
- * Return all rows of data
- * @param db result $result
- * @param db handler $link
- * @return array()
+ * Returns a sequential multi-dimensional associative parameters array tree containing all elements from database results.
+ *
+ * @param resource $result Active database statement execution handler tracking properties.
+ * @param string $link Connection instance variable tag identifier string name. Defaults to 'db_link'.
+ * @return array Sequential array map packing associative dataset rows.
  */
 function db_result_array_full($result, $link = 'db_link') {
    global $$link;
@@ -426,11 +589,11 @@ function db_result_array_full($result, $link = 'db_link') {
 }
 
 /**
- * Alias for db_result_array_full()
- * Return all rows of data
- * @param db result $result
- * @param db handler $link
- * @return array()
+ * Alias wrapper pointing directly onto db_result_array_full execution routines.
+ *
+ * @param resource $result Active database statement execution handler tracking properties.
+ * @param string $link Connection instance variable tag identifier string name. Defaults to 'db_link'.
+ * @return array Sequential array map packing associative dataset rows.
  */
 function db_result_array($result, $link = 'db_link') {
    global $$link;
@@ -438,13 +601,15 @@ function db_result_array($result, $link = 'db_link') {
    return db_result_array_full($result, $link);
 }
 
-
 /**
- * Return single row of data
- * @param db result $result
- * @param number $idx
- * @param db handler $link
- * @return array();
+ * Fetches a single associative data row parameters mapping dictionary out of statement execution structures.
+ *
+ * Allows seeking across target matrix lines through position indices settings parameters.
+ *
+ * @param resource $result Operational execution statement resource tracking parameters.
+ * @param int|string $idx Optional matrix location line offset indicator context to target. Defaults to ''.
+ * @param string $link Global database connector locator token name string. Defaults to 'db_link'.
+ * @return array|false Mapping array containing row parameters string values, or false when rows resolve empty.
  */
 function db_fetch_array($result, $idx = '', $link = 'db_link') {
    global $$link;
@@ -461,11 +626,12 @@ function db_fetch_array($result, $idx = '', $link = 'db_link') {
 }
 
 /**
- * return single column of single row
- * @param column name $name
- * @param db result $result
- * @param number $idx
- * @return string
+ * Extracts a single isolated cell context located at an intersection of rows indices and columns identifiers tags.
+ *
+ * @param string $name Targeted target column key property attribute designation descriptor name.
+ * @param resource $result Complete dataset query statement tracking handles context.
+ * @param int $idx Numerical row offset positioning setting target parameter. Defaults to 0.
+ * @return string Extracted data payload string value context matching chosen cell locations.
  */
 function db_fetch_result($name, $result, $idx = 0) {
    global $$link;

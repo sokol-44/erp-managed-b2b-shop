@@ -3,7 +3,7 @@
  * shop.php
  * Copyright Michał Sokołowski 2010
  *
- * @author Michał Sokołowski <msokolowski@example.com>
+ * @author Michał Sokołowski
  */
 
 if( !defined('_I_INIT') ) die();
@@ -55,7 +55,7 @@ if( !defined('_I_INIT') ) die();
             <?php echo $Page->put_left_column_html(); ?>
             </div>
         </div>
-      
+
         <div class="yui3-u-3-5" id="lmain">
             <div class="content">
              	<div class="content_info"><?php echo $Page->put_info_html(); ?></div>
@@ -63,7 +63,7 @@ if( !defined('_I_INIT') ) die();
                <?php echo $Page->put_component_html(); ?>
             </div>
         </div>
-      
+
         <div class="yui3-u-1-5" id="lextra">
             <div class="content right_menu">
                <!-- add your content here -->

@@ -3,10 +3,14 @@
  * init.php Global initialization file
  * Copyright Michał Sokołowski 2010
  *
- * @author Michał Sokołowski <msokolowski@example.com>
+ * @author Michał Sokołowski
+ * @license AGPL 3.0
  */
 
 //deactivate magic GPC
+/**
+ * @todo Remove magic quotes deactivation entirely. Functions `get_magic_quotes_runtime()` and `set_magic_quotes_runtime()` were deprecated in PHP 5.3 and completely removed in PHP 7.0.
+ */
 if( function_exists('get_magic_quotes_runtime') && get_magic_quotes_runtime() ) {
    // Deactivate
    if( function_exists('set_magic_quotes_runtime') )
@@ -26,6 +30,7 @@ unset($root);
 
 /**
  * root for www constant
+ * @todo Sanitize or replace fallback logic relying on non-standard headers like `SCRIPT_URL` and `REQUEST_URI` to prevent unexpected pathing setups, transitioning to framework-driven request abstractions.
  */
     if( isset($_SERVER['SCRIPT_URL']) ) $root_www = pathinfo($_SERVER['SCRIPT_URL'], PATHINFO_DIRNAME);
 elseif( isset($_SERVER['SCRIPT_NAME']) ) $root_www = pathinfo($_SERVER['SCRIPT_NAME'], PATHINFO_DIRNAME);
@@ -40,8 +45,9 @@ unset($root_www);
  * set init for blocking direct access
  */
 define('_I_INIT', 'YES');
+
 /**
- * define short directory separatos
+ * define short directory separators
  */
 define('DS', DIRECTORY_SEPARATOR );
 
@@ -54,6 +60,8 @@ include(_I_ROOT_DIR . DS . 'config.php');
 /**
  * Include global functions files:
  * database, session and other helpers
+ *
+ * @todo Migrated global structural function files into PSR-4 compliant namespaced utility classes or service providers.
  */
 include(DIR_INC_FUNCTIONS . DS . 'database.php');
 include(DIR_INC_FUNCTIONS . DS . 'session.php');
@@ -62,6 +70,8 @@ include(DIR_INC_FUNCTIONS . DS . 'global.php');
 /**
  * Include global classes files:
  * database, session and other helpers
+ *
+ * @todo Implement a standard PSR-4 Composer Autoloader (`vendor/autoload.php`) to completely replace this long list of hardcoded manual `include` commands.
  */
 include(DIR_INC_CLASSES . DS . 'Data_Contact.php');
 include(DIR_INC_CLASSES . DS . 'Data_Article.php');
@@ -110,6 +120,8 @@ gl_init();
 
 /**
  * Load data from session
+ *
+ * @todo Remove this code injection routine block entirely. The `register_globals` directive was completely removed in PHP 5.4. Unchecked variable extraction from session arrays using variable references introduces severe global state pollution and security liabilities.
  */
 if ( function_exists('ini_get') && (ini_get('register_globals') == false) ) {
    extract($_SESSION, EXTR_OVERWRITE+EXTR_REFS);
@@ -138,7 +150,7 @@ foreach($session_object as $var_name => $class_name ) {
 }
 
 /*
- * Needs Person
+ * Needed for Person load
  */
 $Data = new Data();
 
@@ -149,5 +161,3 @@ $Data = new Data();
 //
 //$Shopping_Basket->update_person();
 //$Shopping_Basket->restore_contents_db();
-
-?>

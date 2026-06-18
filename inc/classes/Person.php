@@ -3,23 +3,94 @@
  * Person.php Class for any person in the system (logged in or not)
  * Copyright Michał Sokołowski 2010
  *
- * @author Michał Sokołowski <msokolowski@example.com>
+ * @author Michał Sokołowski
+ * @license AGPL 3.0
  */
 
 if( !defined('_I_INIT') ) die();
 
 /**
- * Person holds and manipulates parameters of current user
+ * Class Person
+ *
+ * Person holds and manipulates parameters of the current user session and authentication state.
+ *
+ * @designPattern Singleton
+ *
+ * @todo Refactor obsolete 'var' keyword to modern visibility modifiers (public/protected/private).
+ * @todo Add strict type hinting to class properties and methods.
+ * @todo Implement Dependency Injection instead of relying on static global instances.
  */
-
 class Person {
+   /**
+    * @var Person|null Static instance of the Person class.
+    */
    static $class;
+
+   /**
+    * @var mixed Obsolete var declaration.
+    * @todo Replace 'var' with 'public', 'protected', or 'private'.
+    */
    var $all;
+
+   /**
+    * @var array Cache for person rights.
+    */
    static $person_rights_cache = array();
-   public $login, $logged_in, $roles, $id, $session_id;
-   public $data, $client_data, $address_list;
+
+   /**
+    * @var string|bool The login name of the user, or false if not logged in.
+    */
+   public $login;
+
+   /**
+    * @var bool True if the user is logged in, false otherwise.
+    */
+   public $logged_in;
+
+   /**
+    * @var array Array of roles assigned to the user.
+    */
+   public $roles;
+
+   /**
+    * @var int The user ID.
+    */
+   public $id;
+
+   /**
+    * @var string The current session ID.
+    */
+   public $session_id;
+
+   /**
+    * @var array Personal data of the user.
+    */
+   public $data;
+
+   /**
+    * @var array Client-specific data.
+    */
+   public $client_data;
+
+   /**
+    * @var array List of addresses associated with the user.
+    */
+   public $address_list;
+
+   /**
+    * @var array Custom attributes for the user.
+    */
    public $attributes;
 
+   /**
+    * Person constructor.
+    *
+    * Initializes default values for the current person session.
+    *
+    * @return void
+    *
+    * @todo Use modern constructor property promotion if upgrading to PHP 8.0+.
+    */
    function __construct() {
       $this->login = false;
       $this->logged_in = false;
@@ -33,6 +104,13 @@ class Person {
       $this->session_id = session_id();
    }
 
+   /**
+    * Returns the global static instance of the Person class (Singleton pattern).
+    *
+    * @return Person The static Person instance.
+    *
+    * @todo Implement a proper thread-safe Singleton pattern or dependency injection.
+    */
    static function g_global() {
       if(self::$class == false) {
          self::$class = new Person;
@@ -40,11 +118,25 @@ class Person {
       return self::$class;
    }
 
+   /**
+    * Magic method called during unserialization.
+    *
+    * Re-establishes the static instance and updates the session ID.
+    *
+    * @return void
+    */
    function __wakeup() {
       self::$class = $this;
       $this->session_id = session_id();
    }
 
+   /**
+    * Logs out the current person, resets all session data, and regenerates the session ID.
+    *
+    * @return void
+    *
+    * @todo Inject BackTrail dependency instead of using static global access.
+    */
    function logout() {
       $this->login = false;
       $this->logged_in = false;
@@ -60,8 +152,13 @@ class Person {
       session_regenerate_id();
    }
 
+   /**
+    * Retrieves a filtered array of public data for the current person.
+    *
+    * @return array Filtered public data.
+    */
    public function get_public_data() {
-      
+
       $ar_flt = array('id_client_user' => '', 'id_client' => '', 'name' => '', 'description' => '',
                       'login' => '', 'email' => '', 'phone' => '', 'phone_cell' => '');
       //array_intersect_key
@@ -73,19 +170,27 @@ class Person {
            'attributes' => $this->attributes,
            'data' => array_intersect_key($this->data, $ar_flt)
             );
-      
+
    }
-   
-   
+
+   /**
+    * Sets the person's data and roles upon successful login.
+    *
+    * @param array $P_data Personal data array.
+    * @param array $P_rights Array of roles/rights.
+    * @return void
+    *
+    * @todo Avoid direct manipulation of global session state inside entity classes.
+    */
    public function set_person_data(array $P_data, array $P_rights) {
 
       $this->logged_in = true;
 
       $this->id = $P_data['id_table'];
       $this->login = $P_data['login'];
-		
+
       $this->client = $P_data['CLIENT'];
-	  unset($P_data['CLIENT']);
+      unset($P_data['CLIENT']);
       $this->data = $P_data;
       unset($this->data['password']);
 
@@ -94,6 +199,14 @@ class Person {
       $this->session_id = session_id();
    }
 
+   /**
+    * Checks if the person has any of the specified roles.
+    *
+    * @param string|array $roles A comma-separated string or array of roles to check.
+    * @return bool True if the person has at least one of the roles, false otherwise.
+    *
+    * @todo Use in_array() instead of array_search() to avoid index 0 evaluating to false.
+    */
    public function check_roles($roles) {
 
       if( Framework::not_null($roles) ) {
@@ -111,6 +224,16 @@ class Person {
       return false;
    }
 
+   /**
+    * Updates the person's password if they are logged in and the old password is correct.
+    *
+    * @param string $old_password Current password.
+    * @param string $new_password New password.
+    * @param string $type User type (e.g., 'CLIENT', 'ADMIN').
+    * @return bool True on success, false on failure.
+    *
+    * @todo Inject Data dependency instead of calling static methods. Use modern password hashing (password_hash/password_verify).
+    */
    public function update_person_password($old_password, $new_password, $type) {
       if( $this->logged_in ) {
          $P_data = Data::get_login_data($this->login, $type);
@@ -128,10 +251,20 @@ class Person {
       }
    }
 
+   /**
+    * Authenticates a person using login, password, and user type.
+    *
+    * @param string $login User login.
+    * @param string $password User password.
+    * @param string $type User type (e.g., 'CLIENT').
+    * @return bool True if authentication succeeds, false otherwise.
+    *
+    * @todo Replace custom gl_check_password with PHP's native password_verify. Fix potential timing attacks.
+    */
    public function check_person_login($login, $password, $type) {
       $P_data = Data::get_login_data($login, $type);
       if( $P_data && $P_data['state'] == 'ACTIVE' ) {
-		 if( $type == 'CLIENT' && $P_data['CLIENT']['state'] != 'ACTIVE' ) return false; 
+         if( $type == 'CLIENT' && $P_data['CLIENT']['state'] != 'ACTIVE' ) return false;
          $res = gl_check_password($password, $P_data['password']);
          if( $res ) {
             $res_rights = Data::get_login_rights($P_data['id_table'], $type);
@@ -148,6 +281,11 @@ class Person {
 
    }
 
+   /**
+    * Checks if the current logged-in user has administrative privileges.
+    *
+    * @return bool True if the user is an admin, false otherwise.
+    */
    public function check_session_admin_login() {
       if($this->logged_in && isset($this->roles['2PANEL'])
       && (isset($this->roles['SUPER_ADMIN']) || isset($this->roles['ADMIN']))
@@ -158,66 +296,100 @@ class Person {
       }
    }
 
+   /**
+    * Retrieves a specific attribute for a client.
+    *
+    * @param int $id_client Client ID.
+    * @param string $name Attribute name.
+    * @return mixed Attribute value or false if not found.
+    *
+    * @todo Avoid static global calls to Framework and Person. Use dependency injection.
+    */
    static function get_client_attribute( $id_client, $name ) {
       $P = Person::g_global();
-   	$F = Framework::g_global();
-   	
-   	if( $P->logged_in && $P->client_data['id_client'] == $id_client ) {
-   		if( $F->is_null($P->attributes) || $F->is_null($P->attributes[$name]) ) {
-   			$P->attributes = Data_Person::get_client_attribute((int)$id_client);
-   		}
-   		$attributes = $P->attributes;
-   	} else {
-   		return Data_Person::get_client_attribute((int)$id_client, $name);
-   	}
-   	
-   	if( isset( $attributes[$name] ) ) return $attributes[$name];
-   	
-   	return false; 
+       $F = Framework::g_global();
+
+       if( $P->logged_in && $P->client_data['id_client'] == $id_client ) {
+           if( $F->is_null($P->attributes) || $F->is_null($P->attributes[$name]) ) {
+               $P->attributes = Data_Person::get_client_attribute((int)$id_client);
+           }
+           $attributes = $P->attributes;
+       } else {
+           return Data_Person::get_client_attribute((int)$id_client, $name);
+       }
+
+       if( isset( $attributes[$name] ) ) return $attributes[$name];
+
+       return false;
    }
-   
+
+   /**
+    * Retrieves a specific attribute for a client user.
+    *
+    * @param int $id_client Client ID.
+    * @param int $id_client_user Client User ID.
+    * @param string $name Attribute name.
+    * @return mixed Attribute value or false if not found.
+    *
+    * @todo Avoid static global calls. Use dependency injection.
+    */
    static function get_client_user_attribute( $id_client, $id_client_user, $name ) {
-   	$P = Person::g_global();
-   	$F = Framework::g_global();
-   	
-   	if( $P->logged_in && $P->client_data['id_client'] == $id_client && $P->id == $id_client_user ) {
-   		if( $F->is_null($P->client_data['attributes']) || $F->is_null($P->client_data['attributes'][$name]) ) {
-   			$P->client_data['attributes'] = Data_Person::get_client_user_attribute((int)$id_client, (int)$id_client_user);
-   		}
-   		$attributes = $P->client_data['attributes'];
-   	} else {
-   		return Data_Person::get_client_user_attribute((int)$id_client, (int)$id_client_user, $name);
-   	}
-   	
-   	if( isset( $attributes[$name] ) ) return  $attributes[$name];
-   	
-   	return false; 
+       $P = Person::g_global();
+       $F = Framework::g_global();
+
+       if( $P->logged_in && $P->client_data['id_client'] == $id_client && $P->id == $id_client_user ) {
+           if( $F->is_null($P->client_data['attributes']) || $F->is_null($P->client_data['attributes'][$name]) ) {
+               $P->client_data['attributes'] = Data_Person::get_client_user_attribute((int)$id_client, (int)$id_client_user);
+           }
+           $attributes = $P->client_data['attributes'];
+       } else {
+           return Data_Person::get_client_user_attribute((int)$id_client, (int)$id_client_user, $name);
+       }
+
+       if( isset( $attributes[$name] ) ) return  $attributes[$name];
+
+       return false;
    }
-   
-   
+
+   /**
+    * Registers a new client and an associated client user.
+    *
+    * @param array $post_data Input data from registration form.
+    * @return array Array containing 'id_client' and 'id_client_user'.
+    *
+    * @todo Validate and sanitize input data before processing. Avoid hardcoded rights IDs.
+    */
    static function add_new_client_and_user($post_data) {
-   	
-   	$data['name'] =  $post_data['rf_name'];
-   	$data['description'] =  $post_data['rf_contents'];
-   	$data['email'] =  $post_data['rf_email'];
-   	$data['phone'] =  $post_data['rf_telephone'];
-   	$data['state'] =  'NEW';
-    	$id_client = Data::insert_client_data($data);
 
-   	$data_u['id_client'] = (int)$id_client;
-   	$data_u['name'] =  $post_data['rf_uname'];
-   	$data_u['login'] =  $post_data['rf_ulname'];
-   	$data_u['email'] =  $post_data['rf_uemail'];
-   	$data_u['phone'] =  $post_data['rf_utelephone'];
-   	$data_u['new_password'] = $post_data['rf_upassword'];
-   	$data_u['state'] =  'NEW';
-   	$data_u['rights_ids'] = array(4,5,6,7,8,9);
-   	
-   	$id_client_user = Data::insert_person_data('CLIENT', $data_u);
+       $data['name'] =  $post_data['rf_name'];
+       $data['description'] =  $post_data['rf_contents'];
+       $data['email'] =  $post_data['rf_email'];
+       $data['phone'] =  $post_data['rf_telephone'];
+       $data['state'] =  'NEW';
+        $id_client = Data::insert_client_data($data);
 
-   	return array('id_client' => $id_client, 'id_client_user' => $id_client_user);
+       $data_u['id_client'] = (int)$id_client;
+       $data_u['name'] =  $post_data['rf_uname'];
+       $data_u['login'] =  $post_data['rf_ulname'];
+       $data_u['email'] =  $post_data['rf_uemail'];
+       $data_u['phone'] =  $post_data['rf_utelephone'];
+       $data_u['new_password'] = $post_data['rf_upassword'];
+       $data_u['state'] =  'NEW';
+       $data_u['rights_ids'] = array(4,5,6,7,8,9);
+
+       $id_client_user = Data::insert_person_data('CLIENT', $data_u);
+
+       return array('id_client' => $id_client, 'id_client_user' => $id_client_user);
    }
-    
+
+   /**
+    * Retrieves the email address and name of the account manager.
+    *
+    * @param bool|int $id_client Client ID or boolean flag. Defaults to false.
+    * @return array Array with 'email' and 'name' keys.
+    *
+    * @todo Fix undefined variable $P and $email_address in the method logic. Use strict type declarations.
+    */
    public function get_account_manager_address( $id_client = false ) {
 
       //TODO add field and data to client: account_manager
@@ -232,7 +404,7 @@ class Person {
          }
          if( $email_address ) return array('email' => $email_address,'name' =>  '');
       }
-      
+
       if( Framework::not_null($cfg_mail['default_to_address']) ) {
          return array('email' => $cfg_mail['default_to_address'], 'name' => $cfg_mail['default_to_name']);
       } elseif( Framework::not_null($cfg_mail['main_from_address']) ) {
@@ -242,224 +414,315 @@ class Person {
       }
    }
 
+   /**
+    * Retrieves the balance details for a client.
+    *
+    * @param int|bool $id_client Client ID, or false to use current logged-in client. Defaults to false.
+    * @return array Array containing 'credit_limit', 'free_credit', and 'punctuality'.
+    *
+    * @todo Use strict type hinting for parameters and return types.
+    */
    function get_client_balance( $id_client = false ) {
-   	$F = Framework::g_global();
-   	$balance = array('credit_limit' => 0, 'free_credit' => 0, 'punctuality' => '');
-   	
-   	if( $F->is_null($id_client) ) {
-   		if( $this->logged_in ) {
-   			$id_client = (int)$this->data['id_client'];
-   		} else {
-   			return $balance;
-   		}
-   	} else {
-   		$id_client = (int)$id_client;
-   	}
-   	
-   	$balance = array(
-   			'credit_limit' => (float)self::get_client_attribute($id_client, 'BALANCE_CREDIT_LIMIT'), 
-   			'free_credit'  => (float)self::get_client_attribute($id_client, 'BALANCE_FREE_CREDIT'), 
-   			'punctuality' => (string)self::get_client_attribute($id_client, 'BALANCE_PUNCTUALITY') );
+       $F = Framework::g_global();
+       $balance = array('credit_limit' => 0, 'free_credit' => 0, 'punctuality' => '');
 
-   	return $balance;
+       if( $F->is_null($id_client) ) {
+           if( $this->logged_in ) {
+               $id_client = (int)$this->data['id_client'];
+           } else {
+               return $balance;
+           }
+       } else {
+           $id_client = (int)$id_client;
+       }
+
+       $balance = array(
+               'credit_limit' => (float)self::get_client_attribute($id_client, 'BALANCE_CREDIT_LIMIT'),
+               'free_credit'  => (float)self::get_client_attribute($id_client, 'BALANCE_FREE_CREDIT'),
+               'punctuality' => (string)self::get_client_attribute($id_client, 'BALANCE_PUNCTUALITY') );
+
+       return $balance;
    }
-    
+
+   /**
+    * Retrieves the email address of a client.
+    *
+    * @param int|bool $id_client Client ID, or false to use current logged-in client. Defaults to false.
+    * @return string Client email address.
+    */
    public function get_client_email_address( $id_client = false ) {
       if( $id_client === false ) $id_client = (int)$this->data['id_client'];
-      
+
       $client_data = Data::get_client_data( (int)$id_client );
       return $client_data['email'];
    }
 
+   /**
+    * Retrieves data for a client.
+    *
+    * @param int|bool $id_client Client ID, or false to use current logged-in client. Defaults to false.
+    * @return array Client data.
+    */
    public function get_client_data( $id_client = false ) {
       if( $id_client === false ) $id_client = (int)$this->data['id_client'];
       else return Data::get_client_data( (int)$id_client );
-      
+
       if( Framework::is_null($this->client_data) ) $this->client_data = Data::get_client_data( (int)$id_client );
       return $this->client_data;
    }
-   
-   
+
+   /**
+    * Retrieves the address list for a client.
+    *
+    * @param int|bool $id_client Client ID, or false to use current logged-in client. Defaults to false.
+    * @return array List of addresses.
+    */
    public function get_client_address_list( $id_client = false ) {
-   	if( $id_client === false ) $id_client = (int)$this->data['id_client'];
-   	return $this->get_address_list($id_client);
+       if( $id_client === false ) $id_client = (int)$this->data['id_client'];
+       return $this->get_address_list($id_client);
    }
-   
+
+   /**
+    * Retrieves the address list for a client and optionally a specific user.
+    *
+    * @param int|bool $id_client Client ID, or false to use current logged-in client. Defaults to false.
+    * @param int|bool $id_client_user Client User ID, or false to use current logged-in user. Defaults to false.
+    * @return array List of addresses.
+    */
    public function get_address_list( $id_client = false, $id_client_user = false ) {
 
-   	if( $id_client === false ) {
-      	$id_client = (int)$this->data['id_client'];
-      	$id_client_user = (int)$this->id;
+       if( $id_client === false ) {
+          $id_client = (int)$this->data['id_client'];
+          $id_client_user = (int)$this->id;
       } else {
-      	return Data::get_address_list( (int)$id_client );
+          return Data::get_address_list( (int)$id_client );
       }
 
       $this->address_list = Data::get_address_list( (int)$id_client, (int)$id_client_user );
       return $this->address_list;
    }
 
+   /**
+    * Retrieves the address list suitable for placing an order, including special addresses.
+    *
+    * @return array List of order addresses.
+    *
+    * @todo Avoid using global constants like SHOP_BASKET_ORDER_ADDRESS_ADD. Use configuration objects.
+    */
    public function get_order_address_list() {
-   	$id_client = (int)$this->data['id_client'];
-   	$id_client_user = (int)$this->id;
-   
-   	$params = array('id_client' => $id_client, 'id_client_user' => $id_client_user);
-   
-   	$addres_list_tmp = array();
-   	if( defined('SHOP_BASKET_ORDER_ADDRESS_ADD') && constant('SHOP_BASKET_ORDER_ADDRESS_ADD') == 'true' ) {
-   		$adr = Data::additional_addreses('SHOP_BASKET_ORDER_ADDRESS_ADD', $params);
-   		$addres_list_tmp[$adr['id_address']] = $adr;
-   	}
-   	if( defined('SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION') &&
-   	constant('SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION') == 'true' ) {
-   		$adr = Data::additional_addreses('SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION', $params);
-   		$addres_list_tmp[$adr['id_address']] = $adr;
-   	}
-   	if( defined('SHOP_BASKET_ORDER_ADDRESS_DEFAULT') &&
-   	constant('SHOP_BASKET_ORDER_ADDRESS_DEFAULT') == 'true' ) {
-   		$adr = Data::additional_addreses('SHOP_BASKET_ORDER_ADDRESS_DEFAULT', $params);
-   		$addres_list_tmp[$adr['id_address']] = $adr;
-   	}
-   	return array_merge($addres_list_tmp, Data::get_address_list( (int)$id_client, (int)$id_client_user ));
+       $id_client = (int)$this->data['id_client'];
+       $id_client_user = (int)$this->id;
+
+       $params = array('id_client' => $id_client, 'id_client_user' => $id_client_user);
+
+       $addres_list_tmp = array();
+       if( defined('SHOP_BASKET_ORDER_ADDRESS_ADD') && constant('SHOP_BASKET_ORDER_ADDRESS_ADD') == 'true' ) {
+           $adr = Data::additional_addreses('SHOP_BASKET_ORDER_ADDRESS_ADD', $params);
+           $addres_list_tmp[$adr['id_address']] = $adr;
+       }
+       if( defined('SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION') &&
+       constant('SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION') == 'true' ) {
+           $adr = Data::additional_addreses('SHOP_BASKET_ORDER_ADDRESS_PERSONAL_COLLECTION', $params);
+           $addres_list_tmp[$adr['id_address']] = $adr;
+       }
+       if( defined('SHOP_BASKET_ORDER_ADDRESS_DEFAULT') &&
+       constant('SHOP_BASKET_ORDER_ADDRESS_DEFAULT') == 'true' ) {
+           $adr = Data::additional_addreses('SHOP_BASKET_ORDER_ADDRESS_DEFAULT', $params);
+           $addres_list_tmp[$adr['id_address']] = $adr;
+       }
+       return array_merge($addres_list_tmp, Data::get_address_list( (int)$id_client, (int)$id_client_user ));
    }
 
-   
+   /**
+    * Retrieves the default address ID for a client or client user.
+    *
+    * @param int|bool $id_client Client ID, or false to use current logged-in client. Defaults to false.
+    * @param int|bool $id_client_user Client User ID, or false to use current logged-in user. Defaults to false.
+    * @return int Default address ID, or -3 if not found.
+    */
    public function get_default_address_id( $id_client = false, $id_client_user = false ) {
-   	$F = Framework::g_global();
-   
-   	if( $id_client === false) {
-   		$id_client = (int)$this->data['id_client'];
-   		$id_client_user = (int)$this->id;
-   	}
+       $F = Framework::g_global();
 
-   	$id_res = self::get_client_attribute($id_client, 'ADDRESS_DEFAULT_ID');
-   	
-   	if( $F->not_null( $id_res ) ) return $id_res;
-   	
-   	$id_res = self::get_client_user_attribute($id_client, $id_client_user, 'ADDRESS_DEFAULT_ID');
-   	
-   	if( $F->not_null( $id_res ) ) return $id_res;
-   	
-   	return -3;
+       if( $id_client === false) {
+           $id_client = (int)$this->data['id_client'];
+           $id_client_user = (int)$this->id;
+       }
+
+       $id_res = self::get_client_attribute($id_client, 'ADDRESS_DEFAULT_ID');
+
+       if( $F->not_null( $id_res ) ) return $id_res;
+
+       $id_res = self::get_client_user_attribute($id_client, $id_client_user, 'ADDRESS_DEFAULT_ID');
+
+       if( $F->not_null( $id_res ) ) return $id_res;
+
+       return -3;
    }
-    
-   
+
+   /**
+    * Retrieves the list of account managers for the current client and user.
+    *
+    * @return array List of account managers.
+    *
+    * @todo Declare property $account_maneger_list (or fix typo to $account_manager_list) in the class properties.
+    * @todo Fix spelling.
+    */
    public function get_account_manager_list() {
-   	$id_client = (int)$this->data['id_client'];
-   	$id_client_user = (int)$this->id;
-   
-   	$params = array('id_client' => $id_client, 'id_client_user' => $id_client_user);
-		
-   	$this->account_maneger_list = Data::get_account_manage_list( (int)$id_client, (int)$id_client_user );
-   	return $this->account_maneger_list;
+       $id_client = (int)$this->data['id_client'];
+       $id_client_user = (int)$this->id;
+
+       $params = array('id_client' => $id_client, 'id_client_user' => $id_client_user);
+
+       $this->account_maneger_list = Data::get_account_manage_list( (int)$id_client, (int)$id_client_user );
+       return $this->account_maneger_list;
    }
-        
+
+   /**
+    * Retrieves the list of account managers suitable for placing an order.
+    *
+    * @return array List of order account managers.
+    *
+    * @todo Avoid using global constants like SHOP_ACCOUNT_MANAGER_DEFAULT. Use configuration objects.
+    */
    public function get_order_account_manager_list() {
-   	$id_client = (int)$this->data['id_client'];
+       $id_client = (int)$this->data['id_client'];
       $id_client_user = (int)$this->id;
- 	
+
       $params = array('id_client' => $id_client, 'id_client_user' => $id_client_user);
-      
-   	$account_manager_list_tmp = array();
-   	if( defined('SHOP_ACCOUNT_MANAGER_DEFAULT') && 
-   		constant('SHOP_ACCOUNT_MANAGER_DEFAULT') == 'true' ) {
-   		$aqmg = Data::additional_account_manager('SHOP_ACCOUNT_MANAGER_DEFAULT', $params);
-   		$account_manager_list_tmp[$aqmg['id_account_manager']] = $aqmg;
-   	}
-   	return array_merge($account_manager_list_tmp, Data::get_account_manage_list( (int)$id_client, (int)$id_client_user ));
+
+       $account_manager_list_tmp = array();
+       if( defined('SHOP_ACCOUNT_MANAGER_DEFAULT') &&
+           constant('SHOP_ACCOUNT_MANAGER_DEFAULT') == 'true' ) {
+           $aqmg = Data::additional_account_manager('SHOP_ACCOUNT_MANAGER_DEFAULT', $params);
+           $account_manager_list_tmp[$aqmg['id_account_manager']] = $aqmg;
+       }
+       return array_merge($account_manager_list_tmp, Data::get_account_manage_list( (int)$id_client, (int)$id_client_user ));
    }
 
+   /**
+    * Retrieves the default account manager ID for a client or client user.
+    *
+    * @param int|bool $id_client Client ID, or false to use current logged-in client. Defaults to false.
+    * @param int|bool $id_client_user Client User ID, or false to use current logged-in user. Defaults to false.
+    * @return int Default manager ID, or -3 if not found.
+    */
    public function get_default_manager_id( $id_client = false, $id_client_user = false ) {
-   	$F = Framework::g_global();
-   	 
-   	if( $id_client === false) {
-   		$id_client = (int)$this->data['id_client'];
-   		$id_client_user = (int)$this->id;
-   	}
-   
-   	$id_res = self::get_client_attribute($id_client, 'ACCOUNT_MANAGER_DEFAULT_ID');
-   
-   	if( $F->not_null( $id_res ) ) return $id_res;
-   
-   	$id_res = self::get_client_user_attribute($id_client, $id_client_user, 'ACCOUNT_MANAGER_DEFAULT_ID');
-   
-   	if( $F->not_null( $id_res ) ) return $id_res;
-   	
-   	return -3;
-   }   
-   
-   static public function get_address( $id_address ) {
-   	return Data::get_address( (int)$id_address );
+       $F = Framework::g_global();
+
+       if( $id_client === false) {
+           $id_client = (int)$this->data['id_client'];
+           $id_client_user = (int)$this->id;
+       }
+
+       $id_res = self::get_client_attribute($id_client, 'ACCOUNT_MANAGER_DEFAULT_ID');
+
+       if( $F->not_null( $id_res ) ) return $id_res;
+
+       $id_res = self::get_client_user_attribute($id_client, $id_client_user, 'ACCOUNT_MANAGER_DEFAULT_ID');
+
+       if( $F->not_null( $id_res ) ) return $id_res;
+
+       return -3;
    }
 
+   /**
+    * Retrieves a specific address by its ID.
+    *
+    * @param int $id_address Address ID.
+    * @return array Address data.
+    */
+   static public function get_address( $id_address ) {
+       return Data::get_address( (int)$id_address );
+   }
+
+   /**
+    * Retrieves client user data, utilizing a static cache.
+    *
+    * @param int $id User ID.
+    * @param string $table Table name, defaults to 'CLIENT'.
+    * @return array Client user data.
+    */
    static public function get_client_user_data( $id, $table = 'CLIENT') {
       //'CLIENT', 'ADMIN'
       $idx=$id.'.'.$table;
       if( isset(self::$person_rights_cache[$idx]) ) $client_client_data = self::$person_rights_cache[$idx];
       else {
-      	
+
          $client_client_data = Data::get_person_data( $table, $id );
-   		if( Framework::not_null($client_client_data))
-   			self::$person_rights_cache[$idx] = $client_client_data;
+           if( Framework::not_null($client_client_data))
+               self::$person_rights_cache[$idx] = $client_client_data;
       }
 
       return $client_client_data;
    }
 
+   /**
+    * Retrieves the first client user data for a client, utilizing a static cache.
+    *
+    * @param int $id_client Client ID.
+    * @param mixed $right Optional rights filter. Defaults to false.
+    * @return array Client user data.
+    *
+    * @todo Fix typo in variable name $righ (should be $right) passed to Data::get_client_first_client_user_data.
+    */
    static public function get_client_first_client_user_data( $id_client, $right = false ) {
-   	//'CLIENT', 'ADMIN'
-   	$idx=(int)$id_client.'.CLIENT';
-   	if( isset(self::$person_rights_cache[$idx]) ) $client_client_data = self::$person_rights_cache[$idx];
-   	else {
-   		$client_client_data = Data::get_client_first_client_user_data( (int)$id_client, $righ ) ;
-   		if( Framework::not_null($client_client_data))
-   			self::$person_rights_cache[$idx] = $client_client_data;
-   	}
-   	 
-   	return $client_client_data;
-   }
-      
-   static public function get_client_user_short_text( $data ) {
-      $F = Framework::g_global();
-   	
-      $st = '';
-   	
-   	if( $F->not_null($data['name']) ) {
-   		$st = $data['name'];
-   	} elseif ( $F->not_null($data['login']) ) {
-   		$st = $data['login'];
-   	}
-   	
-   	if( $F->not_null($data['id_client_user']) ) {
-   		$st .= ' (' . $data['id_client_user'] . ')';
-   	} elseif ( $F->not_null($data['id_admin']) ) {
-   		$st .= ' (' . $data['id_admin'] . ')';
-   	}
-   	return $st;
+       //'CLIENT', 'ADMIN'
+       $idx=(int)$id_client.'.CLIENT';
+       if( isset(self::$person_rights_cache[$idx]) ) $client_client_data = self::$person_rights_cache[$idx];
+       else {
+           $client_client_data = Data::get_client_first_client_user_data( (int)$id_client, $righ ) ;
+           if( Framework::not_null($client_client_data))
+               self::$person_rights_cache[$idx] = $client_client_data;
+       }
+
+       return $client_client_data;
    }
 
+   /**
+    * Generates a short text representation of a client user.
+    *
+    * @param array $data Client user data.
+    * @return string Short text representation.
+    */
+   static public function get_client_user_short_text( $data ) {
+      $F = Framework::g_global();
+
+      $st = '';
+
+       if( $F->not_null($data['name']) ) {
+           $st = $data['name'];
+       } elseif ( $F->not_null($data['login']) ) {
+           $st = $data['login'];
+       }
+
+       if( $F->not_null($data['id_client_user']) ) {
+           $st .= ' (' . $data['id_client_user'] . ')';
+       } elseif ( $F->not_null($data['id_admin']) ) {
+           $st .= ' (' . $data['id_admin'] . ')';
+       }
+       return $st;
+   }
+
+   /**
+    * Debug method to output the current person's ID.
+    *
+    * @return void
+    * @todo Remove debug echo statements from production code.
+    */
    public function check_pass() {
       //
       echo '#' . $this->id . '#';
 
    }
 
+   /**
+    * Placeholder method.
+    *
+    * @return void
+    * @todo Implement or remove this placeholder method.
+    */
    public function function_name() {
 
    }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-?>

@@ -1,14 +1,12 @@
 <?php
 /**
- * index.php Administrator Panel
+ * ajax.php Ajax helper
  * Copyright Michał Sokołowski 2010
  *
- * @author Micha� Soko�owski <msokolowski@example.com>
+ * @author Michał Sokołowski
+ * @license AGPL 3.0
  */
 /**
  * Include global init file
  */
 include('init.php');
-
-
-?>
