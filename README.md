@@ -1,4 +1,4 @@
-# erp-managed-b2b-shop
+# ERP managed B2B shop
 
 A custom-built B2B E-commerce engine originally architected in 2010-2014. Designed for specialized business workflows, this project uses direct database control and ERP/warehouse systems integration over heavy framework abstractions.
 
