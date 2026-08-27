@@ -24,7 +24,7 @@ The `erp-managed-b2b-shop` is a B2B solution developed to function as a speciali
 
 ## Database & Infrastructure
 
-The database schema has been designed to handle relational B2B data. Source files for the schema, including the original MySQL Workbench models, are located in the `/Models` directory. 
+The database schema has been designed to handle relational B2B data. Source files for the schema, including the original MySQL Workbench models, are located in the `/Models` directory.
 
 *Note: While the primary implementation targets MySQL, the data access layer was designed with potential PostgreSQL compatibility in mind.*
 
@@ -37,6 +37,22 @@ As of 2026, my roadmap for this repository includes:
 *   **Translate:** Most of the code is in English, but there is some Polish comments and variable naming.
 *   **Codebase Archiving:** Cleaning up the existing codebase and ensuring its integrity.
 *   **AI-Assisted Revitalization:** I am leveraging modern AI tools to accelerate the documentation and refactoring processes. To ensure high-quality standards, every AI-generated contribution is carefully verified, tested, and curated to maintain the architectural intent of the original system.
+
+## Architecture Notes
+
+A set of architecture-focused reference documents has been added under the [doc](doc) folder to help map the legacy runtime flow and file relationships.
+
+### Included documentation
+
+*   [doc/README.md](doc/README.md) — documentation index and reading order
+*   [doc/object-flow-and-call-map.md](doc/object-flow-and-call-map.md) — main object initialization and reverse-call map
+*   [doc/data-layer-mapping.md](doc/data-layer-mapping.md) — mapping between domain objects, `Data` facade, and the concrete `Data_*` files
+*   [doc/request-template-class-flow.md](doc/request-template-class-flow.md) — request-to-page-to-class-to-template tracing for a representative page type
+*   [doc/basket-order-lifecycle.md](doc/basket-order-lifecycle.md) — basket state transitions and order creation lifecycle
+*   [doc/design-patterns.md](doc/design-patterns.md) — summary of the project’s main design patterns and how they are implemented in code
+*   [doc/rationale.md](doc/rationale.md) — project background, business intent, and the original ERP-first design rationale
+
+These notes were created to document the actual runtime structure of the project rather than to describe an idealized modern architecture. They are especially useful when tracing how request values, global singletons, and database access are connected in this legacy PHP codebase, and why the system was built around ERP-driven data ownership, catalog synchronization, and SOAP-mediated integration.
 
 ## License
 
