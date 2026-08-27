@@ -1,0 +1,43 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# PHP / runtime
+vendor/
+composer.phar
+*.log
+*.pid
+*.sock
+cache/
+tmp/
+logs/
+session/
+
+# Generated or local data
+build/
+dist/
+coverage/
+*.cache
+*.tmp
+uploads/
+upload/
+storage/
+media/cache/
+
+# Local environment / secrets
+.env
+.env.*
+config.local.php
+config.local.ini
+*.sqlite
+*.sqlite3
+
+# Keep the project docs and source tracked
+!README.md
+!doc/
